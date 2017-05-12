@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Get Help" Height="auto" Width="613" 
+        Title="Foreclosures" Height="auto" Width="613" 
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True" SizeToContent="Height" 
