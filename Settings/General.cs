@@ -18,7 +18,6 @@ namespace Cliver.Foreclosures
 
         public class GeneralSettings : Cliver.Settings
         {
-            public string[] Subjects = new string[] { "test", "test2" };
             public System.Windows.Input.Key TicketKey = System.Windows.Input.Key.F8;
             public System.Windows.Input.ModifierKeys TicketModifierKey1 = System.Windows.Input.ModifierKeys.None;
             public System.Windows.Input.ModifierKeys TicketModifierKey2 = System.Windows.Input.ModifierKeys.None;
@@ -26,10 +25,6 @@ namespace Cliver.Foreclosures
             public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
-            public string[] Counties = new string[] { "Cook", "Dupage", "Kane", "Kendall", "Lake", "Will", "McHenry" };
-            public string County = null;
-            public string City = null;
-            public string ZipCode = null;
             public DateTime LastRefreshDbTime = DateTime.MinValue;
             //public string ZipCodesFile = "illinois_postal_codes.csv";
 

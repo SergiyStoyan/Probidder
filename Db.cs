@@ -6,11 +6,80 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 using System.IO;
+using System.Data.SQLite;
 
 namespace Cliver.Foreclosures
 {
     class Db
     {
+        public class Foreclosures
+        {
+            static public Foreclosure Back()
+            {
+                return null;
+            }
+
+            static public Foreclosure Forward()
+            {
+                return null;
+            }
+
+            static public void Save(Foreclosure foreclosure)
+            {
+            }
+
+            static public void Delete(Foreclosure foreclosure)
+            {
+            }
+            
+            static public int Count()
+            {
+                return 0;
+            }
+
+            public class Foreclosure
+            {
+                public string TYPE_OF_EN;
+                public string COUNTY;
+                public string CASE_N;
+                public string FILING_DATE;
+                public string AUCTION_DATE;
+                public string AUCTION_TIME;
+                public string SALE_LOC;
+                public string ENTRY_DATE;
+                public string LENDOR;
+                public string ORIGINAL_MTG;
+                public string DOCUMENT_N;
+                public string ORIGINAL_I;
+                public string LEGAL_D;
+                public string ADDRESS;
+                public string CITY;
+                public string ZIP;
+                public string PIN;
+                public string DATE_OF_CA;
+                public string LAST_PAY_DATE;
+                public string BALANCE_DU;
+                public string PER_DIEM_I;
+                public string CURRENT_OW;
+                public string IS_ORG;
+                public string DECEASED;
+                public string OWNER_ROLE;
+                public string OTHER_LIENS;
+                public string ADDL_DEF;
+                public string PUB_COMMENTS;
+                public string INT_COMMENTS;
+                public string ATTY;
+                public string ATTORNEY_S;
+                public string TYPE_OF_MO;
+                public string PROP_DESC;
+                public string INTEREST_R;
+                public string MONTHLY_PAY;
+                public string TERM_OF_MTG;
+                public string DEF_ADDRESS;
+                public string DEF_PHONE;
+            }
+        }
+
         //static Db()
         //{
         //    BeginRefresh();
@@ -48,7 +117,7 @@ namespace Cliver.Foreclosures
                 tasks.Add(t);
                 t = new Task(() =>
                 {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney", "attornies");
+                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney", "attorneys");
                 });
                 t.Start();
                 tasks.Add(t);
@@ -188,7 +257,7 @@ namespace Cliver.Foreclosures
 
         static string get_normalized(string s)
         {
-           return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ");
+            return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ");
         }
 
         public static List<string> GetZipCodes(string county, string city)
