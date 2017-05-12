@@ -8,8 +8,8 @@
     <ProjectGuid>{99BD0A06-0D5E-4EC0-BFE2-B88BEEBB9568}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cliver.ZendeskClient</RootNamespace>
-    <AssemblyName>ZendeskClient</AssemblyName>
+    <RootNamespace>Cliver.Foreclosures</RootNamespace>
+    <AssemblyName>Foreclosures</AssemblyName>
     <StartupObject>
     </StartupObject>
     <ApplicationIcon>3RINGS~1.ICO</ApplicationIcon>

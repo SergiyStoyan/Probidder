@@ -23,9 +23,13 @@ namespace Cliver.Foreclosures
             public System.Windows.Input.ModifierKeys TicketModifierKey1 = System.Windows.Input.ModifierKeys.None;
             public System.Windows.Input.ModifierKeys TicketModifierKey2 = System.Windows.Input.ModifierKeys.None;
             public int InfoToastLifeTimeInSecs = 5;
-            public string InfoSoundFile = "alert.wav";
+            public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
+            public string[] Counties = new string[] { "Cook", "Dupage", "Kane", "Kendall", "Lake", "Will", "McHenry" };
+            public string County = null;
+            public string City = null;
+            public DateTime LastRefreshDbTime = DateTime.MinValue;
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;

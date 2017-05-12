@@ -55,6 +55,8 @@ namespace Cliver.Foreclosures
 
                 Service.Running = true;
 
+                Db.BeginRefresh();
+
                 Application.Run(SysTray.This);
             }
             catch (Exception e)
