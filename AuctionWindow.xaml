@@ -5,15 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Foreclosures" Height="auto" Width="613" 
+        Title="Foreclosures" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
-        Background="#ffffff" Topmost="False" ShowInTaskbar="True" SizeToContent="Height" 
+        Background="#ffffff" Topmost="False" ShowInTaskbar="True"
         FontFamily="Microsoft Sans Serif"
         MinHeight="400" MinWidth="500"
          AllowDrop="True" Drop="Window_Drop"
             >
-    <Grid Background="#ffffff">
+    <Grid Background="Beige">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -31,13 +31,15 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0">Listing Code</Label>
         <TextBox Grid.Column="1" Grid.Row="0" Name="ListingCode">fdsf</TextBox>
         <Label Grid.Column="2" Grid.Row="0">County</Label>
         <ListBox Grid.Column="3" Grid.Row="0" Name="County">fdsf</ListBox>
-        <Label Grid.Column="4" Grid.Row="0">Current Owners</Label>
-        <TextBox Grid.Column="5" Grid.Row="0" Name="CurrentOwners">fdsf</TextBox>
         <Label Grid.Column="0" Grid.Row="1">Case #</Label>
         <TextBox Grid.Column="1" Grid.Row="1" Name="CaseId">fdsf</TextBox>
         <Label Grid.Column="2" Grid.Row="1">Filling Date</Label>
@@ -58,7 +60,50 @@
         <ListBox Grid.Column="1" Grid.Row="7" Name="City">fdsf</ListBox>
         <Label Grid.Column="0" Grid.Row="8">ZIP</Label>
         <ListBox Grid.Column="1" Grid.Row="8" Name="ZipCode">fdsf</ListBox>
-        <Label Grid.Column="0" Grid.Row="0">PIN</Label>
-        <TextBox Grid.Column="1" Grid.Row="0" Name="Pin">fdsf</TextBox>
+        <Label Grid.Column="0" Grid.Row="9">PIN</Label>
+        <TextBox Grid.Column="1" Grid.Row="9" Name="Pin">fdsf</TextBox>
+        <Label Grid.Column="0" Grid.Row="10">Date of Calcul</Label>
+        <DatePicker Grid.Column="1" Grid.Row="10" Name="CalculationDate"></DatePicker>
+        <Label Grid.Column="2" Grid.Row="10">Last Pay Date</Label>
+        <DatePicker Grid.Column="3" Grid.Row="10" Name="LastPayDate"></DatePicker>
+        <Label Grid.Column="0" Grid.Row="11">Balance Due</Label>
+            <TextBox Grid.Column="1" Grid.Row="11" Name="BalanceDue">fdsf</TextBox>
+        <Label Grid.Column="2" Grid.Row="11">Inter Per Diem</Label>
+        <TextBox Grid.Column="3" Grid.Row="11" Name="InterPerDiem">fdsf</TextBox>
+
+        <Label Grid.Column="4" Grid.Row="0">Current Owners</Label>
+        <TextBox Grid.Column="5" Grid.Row="0" Name="CurrentOwners">fdsf</TextBox>
+        <StackPanel Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <CheckBox Name="IS_ORG"></CheckBox>
+            <CheckBox Name="Decreased"></CheckBox>
+            <Label >Owner Role</Label>
+            <ListBox Name="OwnerRole">fdsf</ListBox>
+        </StackPanel>
+        <Label Grid.Column="4" Grid.Row="2">Other Liens</Label>
+        <TextBox Grid.Column="5" Grid.Row="2" Name="OtherLiens">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="4">Addl Deff</Label>
+        <TextBox Grid.Column="5" Grid.Row="4" Name="AddlDeff">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="5">Client Comment</Label>
+        <TextBox Grid.Column="5" Grid.Row="5" Name="ClientComment">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="6">ilFLS Comments</Label>
+        <TextBox Grid.Column="5" Grid.Row="6" Name="ilFLSComments">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="7">Attorney Code</Label>
+        <ListBox Grid.Column="5" Grid.Row="7" Name="AttorneyCode">fdsf</ListBox>
+        <Label Grid.Column="4" Grid.Row="8">Attorney Ph</Label>
+        <ListBox Grid.Column="5" Grid.Row="8" Name="AttorneyPh">fdsf</ListBox>
+        <Label Grid.Column="4" Grid.Row="9">Att. Phone</Label>
+        <TextBox Grid.Column="5" Grid.Row="9" Name="AttPhone">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="10">MTG Codes</Label>
+        <ListBox Grid.Column="5" Grid.Row="10" Name="MTGCodes">fdsf</ListBox>
+        <Label Grid.Column="4" Grid.Row="9">Interest</Label>
+        <TextBox Grid.Column="5" Grid.Row="9" Name="Interest">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="8">Property Type</Label>
+        <ListBox Grid.Column="5" Grid.Row="8" Name="PropertyType">fdsf</ListBox>
+        <Label Grid.Column="4" Grid.Row="9">Monthly Payments</Label>
+        <TextBox Grid.Column="5" Grid.Row="9" Name="MonthlyPayments">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="9">MTG Term</Label>
+        <TextBox Grid.Column="5" Grid.Row="9" Name="MTGTerm">fdsf</TextBox>
+        <Label Grid.Column="4" Grid.Row="9">Deff. Served Address</Label>
+        <TextBox Grid.Column="5" Grid.Row="9" Name="DeffServedAddress">fdsf</TextBox>
     </Grid>
 </Window>
