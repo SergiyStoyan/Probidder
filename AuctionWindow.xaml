@@ -13,6 +13,8 @@
          AllowDrop="True" Drop="Window_Drop"
             >
     <Grid Background="Beige">
+        <StackPanel Orientation="Vertical">
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -20,10 +22,12 @@
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -41,7 +45,7 @@
         <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Listing Code</Label>
         <TextBox Grid.Column="1" Grid.Row="0" Name="ListingCode">fdsf</TextBox>
         <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">County</Label>
-        <ComboBox Grid.Column="3" Grid.Row="0" Name="County" IsReadOnly="True">fdsf</ComboBox>
+        <ComboBox Grid.Column="3" Grid.Row="0" Name="County" IsReadOnly="True" SelectionChanged="County_SelectionChanged">fdsf</ComboBox>
         <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Case #</Label>
         <TextBox Grid.Column="1" Grid.Row="1" Name="CaseId">fdsf</TextBox>
         <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
@@ -59,9 +63,9 @@
         <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right">Address</Label>
         <TextBox Grid.Column="1" Grid.Row="6" Name="Address" Grid.ColumnSpan="3">fdsf</TextBox>
         <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
-        <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="City" Grid.ColumnSpan="3">fdsf</ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="City" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged">fdsf</ComboBox>
         <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-        <ComboBox Grid.Column="1" Grid.Row="8" Name="ZipCode">fdsf</ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="8" Name="ZipCode" SelectionChanged="ZipCode_SelectionChanged">fdsf</ComboBox>
         <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
         <TextBox Grid.Column="1" Grid.Row="9" Name="Pin">fdsf</TextBox>
         <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
@@ -107,5 +111,11 @@
         <TextBox Grid.Column="7" Grid.Row="11" Name="MonthlyPayments">fdsf</TextBox>
         <Label Grid.Column="6" Grid.Row="12" HorizontalAlignment="Right">MTG Term</Label>
         <TextBox Grid.Column="7" Grid.Row="12" Name="MTGTerm">fdsf</TextBox>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Name="Save" Margin="10,10,10,10" Click="Save_Click">Save</Button>
+            <Button Margin="0,10,10,10" Name="Cancel" Click="Cancel_Click">Cancel</Button>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

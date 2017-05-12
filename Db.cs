@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
+using System.IO;
 
 namespace Cliver.Foreclosures
 {
@@ -31,33 +32,41 @@ namespace Cliver.Foreclosures
 
                 HttpClientHandler handler = new HttpClientHandler();
                 http_client = new HttpClient(handler);
-                
+
                 List<Task> tasks = new List<Task>();
-                var t = new Task(() => {
+                var t = new Task(() =>
+                {
                     refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=mortgage_type", "mortgage_types");
                 });
                 t.Start();
                 tasks.Add(t);
-                t = new Task(() => {
+                t = new Task(() =>
+                {
                     refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney_phone", "attorney_phones");
                 });
                 t.Start();
                 tasks.Add(t);
-                t = new Task(() => {
+                t = new Task(() =>
+                {
                     refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney", "attornies");
                 });
                 t.Start();
                 tasks.Add(t);
-                t = new Task(() => {
+                t = new Task(() =>
+                {
                     refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city", "cities");
                 });
                 t.Start();
                 tasks.Add(t);
-                t = new Task(() => {
+                t = new Task(() =>
+                {
                     refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff", "plaintiffs");
                 });
                 t.Start();
                 tasks.Add(t);
+
+                string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
+                File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
@@ -88,7 +97,7 @@ namespace Cliver.Foreclosures
                 if (rm.Content == null)
                     throw new Exception("Response content is null.");
                 string s = await rm.Content.ReadAsStringAsync();
-                System.IO.File.WriteAllText(db_dir + "\\" + table + ".json", s);
+                System.IO.File.WriteAllText(db_dir + "\\" + table + ".json", get_normalized(s));
             }
             catch(Exception e)
             {
@@ -155,13 +164,17 @@ namespace Cliver.Foreclosures
 
         public static List<string> GetValuesFromTable(string table, string field, Dictionary<string, string> keys2value)
         {
-            List<string> vs = new List<string>();
+            Dictionary<string, string> ks2v = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> k2v in keys2value)
+                ks2v[k2v.Key] = get_normalized(k2v.Value);
+
+                List<string> vs = new List<string>();
             string s = System.IO.File.ReadAllText(db_dir + "\\" + table + ".json");
             dynamic json = SerializationRoutines.Json.Deserialize<dynamic>(s);
             foreach (dynamic d in (dynamic)json)
             {
                 bool found = true;
-                foreach (KeyValuePair<string, string> k2v in keys2value)
+                foreach (KeyValuePair<string, string> k2v in ks2v)
                     if (k2v.Value != null && d[k2v.Key] != k2v.Value)
                     {
                         found = false;
@@ -173,10 +186,25 @@ namespace Cliver.Foreclosures
             return vs;
         }
 
-        //public static List<string> GetZipCodes(string county, string city = null)
-        //{
-        //    return null;
-        //}
+        static string get_normalized(string s)
+        {
+           return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ");
+        }
+
+        public static List<string> GetZipCodes(string county, string city)
+        {
+            county = county.ToLower();
+            city = city.ToLower();
+            List<string> vs = new List<string>();
+            string[] ss = File.ReadAllLines(db_dir + "\\illinois_postal_codes.csv");
+            foreach (string s in ss)
+            {
+                string[] fs = s.Split(',');
+                if (fs[1] == city && fs[3] == county)
+                    vs.Add(fs[0]);
+            }
+            return vs;
+        }
 
         //public static List<string> GetMortgageTypes()
         //{

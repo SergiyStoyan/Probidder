@@ -63,35 +63,8 @@ namespace Cliver.Foreclosures
             foreach (string c in Settings.General.Counties)
                 County.Items.Add(c);
             County.SelectedItem = Settings.General.County;
-
-            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", "KANE" } }))
-                City.Items.Add(c);
-            City.SelectedItem = Settings.General.City;            
         }
-        
-        //readonly HttpClient http_client;
-        
-        void submit(object sender, EventArgs e)
-        {
-            try
-            {
-                //if (string.IsNullOrWhiteSpace(subject.Text))
-                //    throw new Exception("Subject is empty.");
-                //if (string.IsNullOrWhiteSpace(this.description.Text))
-                //    throw new Exception("Description is empty
-
-                //if (!ok.IsEnabled)
-                //    return;
-                //ok.IsEnabled = false;
-               // Cursor = Cursors.Wait;
-              
-            }
-            catch (Exception ex)
-            {
-                Message.Exclaim(ex.Message);
-            }
-        }
-        
+               
         private void Window_Drop(object sender, DragEventArgs e)
         {
             //error.Visibility = Visibility.Collapsed;
@@ -99,6 +72,43 @@ namespace Cliver.Foreclosures
             //    return;
             //foreach (string file in (string[])e.Data.GetData(DataFormats.FileDrop))
             //    add_attachment(file);
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            //if (string.IsNullOrWhiteSpace(subject.Text))
+            //    throw new Exception("Subject is empty.");
+            //if (string.IsNullOrWhiteSpace(this.description.Text))
+            //    throw new Exception("Description is empty
+
+        }
+
+        private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", (string)County.SelectedItem }}))
+                City.Items.Add(c);
+            City.SelectedItem = Settings.General.City;
+        }
+
+        private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (string c in Db.GetZipCodes((string)County.SelectedItem , (string)City.SelectedItem))
+                ZipCode.Items.Add(c);
+            ZipCode.SelectedItem = Settings.General.ZipCode;
+        }
+
+        private void ZipCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        void fill_cities()
+        {
         }
     }
 }

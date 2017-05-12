@@ -29,7 +29,9 @@ namespace Cliver.Foreclosures
             public string[] Counties = new string[] { "Cook", "Dupage", "Kane", "Kendall", "Lake", "Will", "McHenry" };
             public string County = null;
             public string City = null;
+            public string ZipCode = null;
             public DateTime LastRefreshDbTime = DateTime.MinValue;
+            //public string ZipCodesFile = "illinois_postal_codes.csv";
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;
