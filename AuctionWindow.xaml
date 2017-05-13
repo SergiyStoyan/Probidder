@@ -69,7 +69,7 @@
         <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
                 <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged"></ComboBox>
         <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-                <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" SelectionChanged="ZipCode_SelectionChanged" Height="24" VerticalAlignment="Top"></ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" Height="24" VerticalAlignment="Top"></ComboBox>
         <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
                 <TextBox Grid.Column="1" Grid.Row="9" Name="PIN"></TextBox>
         <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>

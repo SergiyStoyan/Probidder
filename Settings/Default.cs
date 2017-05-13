@@ -19,13 +19,13 @@ namespace Cliver.Foreclosures
         public class DefaultSettings : Cliver.Settings
         {
             public string[] Counties = new string[] { "Cook", "Dupage", "Kane", "Kendall", "Lake", "Will", "McHenry" };
-            public string County = null;
-            public string City = null;
-            public string ZipCode = null;
-            public string Plaintiff = null;
-            public string Attorney = null;
-            public string AttorneyPhone = null;
-            public string MortgageType = null;
+            //public string County = null;
+            //public string City = null;
+            //public string ZipCode = null;
+            //public string Plaintiff = null;
+            //public string Attorney = null;
+            //public string AttorneyPhone = null;
+            //public string MortgageType = null;
         }
     }
 }

@@ -79,12 +79,26 @@ namespace Cliver.Foreclosures
 
             static public Foreclosure Back(Foreclosure current)
             {
+                if (current == null)
+                    current = GetLast();
                 return foreclosures.Find(x => x._id < current._id).OrderByDescending(x => x._id).FirstOrDefault();
             }
 
             static public Foreclosure Forward(Foreclosure current)
             {
+                if (current == null)
+                    current = GetFirst();
                 return foreclosures.Find(x => x._id > current._id).OrderBy(x => x._id).FirstOrDefault();
+            }
+
+            static public Foreclosure GetFirst()
+            {
+                return foreclosures.FindAll().OrderBy(x => x._id).FirstOrDefault();
+            }
+
+            static public Foreclosure GetLast()
+            {
+                return foreclosures.FindAll().OrderByDescending(x => x._id).FirstOrDefault();
             }
 
             static public void Save(Foreclosure foreclosure)
@@ -101,44 +115,7 @@ namespace Cliver.Foreclosures
             {
                 return foreclosures.Count();
             }
-            ;
-             ;
-             ;
-             FILING_DATE;
-             AUCTION_DATE;
-             AUCTION_TIME;
-             SALE_LOC;
-             ENTRY_DATE;
-             LENDOR;
-             ORIGINAL_MTG;
-             DOCUMENT_N;
-             ORIGINAL_I;
-             LEGAL_D;
-             ADDRESS;
-             CITY;
-             ZIP;
-             PIN;
-             DATE_OF_CA;
-             LAST_PAY_DATE;
-             BALANCE_DU;
-             PER_DIEM_I;
-             CURRENT_OW;
-             IS_ORG;
-             DECEASED;
-             OWNER_ROLE;
-             OTHER_LIENS;
-             ADDL_DEF;
-             PUB_COMMENTS;
-             INT_COMMENTS;
-             ATTY;
-             ATTORNEY_S;
-             TYPE_OF_MO;
-             PROP_DESC;
-             INTEREST_R;
-             MONTHLY_PAY;
-             TERM_OF_MTG;
-             DEF_ADDRESS;
-             DEF_PHONE;
+         
             public class Foreclosure
             {
                 public ObjectId _id;

@@ -61,12 +61,17 @@ namespace Cliver.Foreclosures
             };
 
             foreach (string c in Settings.Default.Counties)
-                County.Items.Add(c);
-            County.SelectedItem = Settings.Default.County;
+                COUNTY.Items.Add(c);
 
             foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
-                MortgageType.Items.Add(c);
-            MortgageType.SelectedItem = Settings.Default.MortgageType;
+                TYPE_OF_MO.Items.Add(c);
+
+            Db.Foreclosures.Foreclosure f = Db.Foreclosures.GetLast();
+            if (f != null)
+            {
+                COUNTY.SelectedItem = f.COUNTY;
+                TYPE_OF_MO.SelectedItem = f.TYPE_OF_MO;
+            }
         }
                
         private void Window_Drop(object sender, DragEventArgs e)
@@ -78,12 +83,18 @@ namespace Cliver.Foreclosures
             //    add_attachment(file);
         }
 
+        Db.Foreclosures.Foreclosure current_foreclosure = null;
+
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            current_foreclosure = Db.Foreclosures.Back(current_foreclosure);
+            set_foreclosure(current_foreclosure);
         }
 
         private void Forward_Click(object sender, RoutedEventArgs e)
         {
+            current_foreclosure = Db.Foreclosures.Forward(current_foreclosure);
+            set_foreclosure(current_foreclosure);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -100,50 +111,110 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(subject.Text))
             //    throw new Exception("Subject is empty.");
             //if (string.IsNullOrWhiteSpace(this.description.Text))
-            //    throw new Exception("Description is empty
+            //    throw new Exception("Description is empty    
 
-            Settings.Default.County = (string)County.SelectedItem;
-            Settings.Default.MortgageType = (string)MortgageType.SelectedItem;
-            Settings.Default.City = (string)City.SelectedItem;
-            Settings.Default.Plaintiff = (string)Plaintiff.SelectedItem;
-            Settings.Default.Attorney = (string)Attorney.SelectedItem;
-            Settings.Default.AttorneyPhone = (string)AttorneyPhone.SelectedItem;
-            Settings.Default.Save();
+            Db.Foreclosures.Foreclosure f = current_foreclosure;
+            if (f == null)
+                f = new Db.Foreclosures.Foreclosure();
+            f.TYPE_OF_EN = TYPE_OF_EN.Text;
+            f.COUNTY = COUNTY.Text;
+            f.CASE_N = CASE_N.Text;
+            f.FILING_DATE = FILING_DATE.Text;
+            f.ENTRY_DATE = ENTRY_DATE.Text;
+            f.LENDOR = LENDOR.Text;
+            f.ORIGINAL_MTG = ORIGINAL_MTG.Text;
+            f.DOCUMENT_N = DOCUMENT_N.Text;
+            f.ORIGINAL_I = ORIGINAL_I.Text;
+            f.LEGAL_D = LEGAL_D.Text;
+            f.ADDRESS = ADDRESS.Text;
+            f.CITY = CITY.Text;
+            f.ZIP = ZIP.Text;
+            f.PIN = PIN.Text;
+            f.DATE_OF_CA = DATE_OF_CA.Text;
+            f.LAST_PAY_DATE = LAST_PAY_DATE.Text;
+            f.BALANCE_DU = BALANCE_DU.Text;
+            f.PER_DIEM_I = PER_DIEM_I.Text;
+            f.CURRENT_OW = CURRENT_OW.Text;
+            f.IS_ORG = IS_ORG.IsChecked == true;
+            f.DECEASED = DECEASED.IsChecked == true;
+            f.OWNER_ROLE = OWNER_ROLE.Text;
+            f.OTHER_LIENS = OTHER_LIENS.Text;
+            f.ADDL_DEF = ADDL_DEF.Text;
+            f.PUB_COMMENTS = PUB_COMMENTS.Text;
+            f.INT_COMMENTS = INT_COMMENTS.Text;
+            f.ATTY = ATTY.Text;
+            f.ATTORNEY_S = ATTORNEY_S.Text;
+            f.TYPE_OF_MO = TYPE_OF_MO.Text;
+            f.INTEREST_R = INTEREST_R.Text;
+            f.PROP_DESC = PROP_DESC.Text;
+            f.MONTHLY_PAY = MONTHLY_PAY.Text;
+            f.TERM_OF_MTG = TERM_OF_MTG.Text;
+            f.DEF_ADDRESS = DEF_ADDRESS.Text;
+            f.DEF_PHONE = DEF_PHONE.Text;
+            Db.Foreclosures.Save(f);
         }
 
         private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", (string)County.SelectedItem } }))
-                City.Items.Add(c);
-            City.SelectedItem = Settings.Default.City;
+            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
+                CITY.Items.Add(c);
 
-            foreach (string c in Db.GetValuesFromTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", (string)County.SelectedItem } }))
-                Plaintiff.Items.Add(c);
-            Plaintiff.SelectedItem = Settings.Default.Plaintiff;
+            foreach (string c in Db.GetValuesFromTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
+                LENDOR.Items.Add(c);
 
-            foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", (string)County.SelectedItem } }))
-                Attorney.Items.Add(c);
-            Attorney.SelectedItem = Settings.Default.Attorney;
+            foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
+                ATTY.Items.Add(c);
 
-            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)County.SelectedItem }, { "attorney", (string)Attorney.SelectedItem } }))
-                AttorneyPhone.Items.Add(c);
-            AttorneyPhone.SelectedItem = Settings.Default.AttorneyPhone;
+            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
+                ATTORNEY_S.Items.Add(c);
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (string c in Db.GetZipCodes((string)County.SelectedItem , (string)City.SelectedItem))
-                ZipCode.Items.Add(c);
-            ZipCode.SelectedItem = Settings.Default.ZipCode;
-        }
-
-        private void ZipCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            foreach (string c in Db.GetZipCodes((string)COUNTY.SelectedItem , (string)CITY.SelectedItem))
+                ZIP.Items.Add(c);
         }
 
         void set_foreclosure(Db.Foreclosures.Foreclosure f)
         {
+            if(f==null)
+            {
+                TYPE_OF_EN.Text = null;
+                COUNTY.Text = null;
+                CASE_N.Text = null;
+                FILING_DATE.Text = null;
+                ENTRY_DATE.Text = null;
+                LENDOR.Text = null;
+                ORIGINAL_MTG.Text = null;
+                DOCUMENT_N.Text = null;
+                ORIGINAL_I.Text = null;
+                LEGAL_D.Text = null;
+                ADDRESS.Text = null;
+                CITY.Text = null;
+                ZIP.Text = null;
+                PIN.Text = null;
+                DATE_OF_CA.Text = null;
+                LAST_PAY_DATE.Text = null;
+                BALANCE_DU.Text = null;
+                PER_DIEM_I.Text = null;
+                CURRENT_OW.Text = null;
+                IS_ORG.IsChecked = null;
+                DECEASED.IsChecked = null;
+                OWNER_ROLE.Text = null;
+                OTHER_LIENS.Text = null;
+                ADDL_DEF.Text = null;
+                PUB_COMMENTS.Text = null;
+                INT_COMMENTS.Text = null;
+                ATTY.Text = null;
+                ATTORNEY_S.Text = null;
+                TYPE_OF_MO.Text = null;
+                INTEREST_R.Text = null;
+                PROP_DESC.Text = null;
+                MONTHLY_PAY.Text = null;
+                TERM_OF_MTG.Text = null;
+                DEF_ADDRESS.Text = null;
+                DEF_PHONE.Text = null;
+            }
             TYPE_OF_EN.Text = f.TYPE_OF_EN;
             COUNTY.Text = f.COUNTY;
             CASE_N.Text = f.CASE_N;
