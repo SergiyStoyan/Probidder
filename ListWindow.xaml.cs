@@ -31,6 +31,9 @@ namespace Cliver.Foreclosures
 
         public static void ItemSaved(Db.Foreclosures.Foreclosure f)
         {
+            if (lw == null || !lw.IsLoaded)
+                return;
+
             for (int i = lw.list.Items.Count - 1; i >= 0; i--)
             {
                 Item t = (Item)lw.list.Items[i];
@@ -47,6 +50,9 @@ namespace Cliver.Foreclosures
 
         public static void ItemDeleted(int foreclosure_id)
         {
+            if (lw == null || !lw.IsLoaded)
+                return;
+
             for (int i = lw.list.Items.Count - 1; i >= 0; i--)
             {
                 Item t = (Item)lw.list.Items[i];
