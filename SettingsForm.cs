@@ -72,9 +72,9 @@ namespace Cliver.Foreclosures
 
                 Close();
 
-                bool running = Service.Running;
-                Service.Running = false;
-                Service.Running = running;
+                //bool running = Service.Running;
+                //Service.Running = false;
+                //Service.Running = running;
             }
             catch (Exception ex)
             {

@@ -53,7 +53,7 @@ namespace Cliver.Foreclosures
             {
                 ProcessRoutines.RunSingleProcessOnly();
 
-                Service.Running = true;
+                //Service.Running = true;
 
                 Db.BeginRefresh();
 
