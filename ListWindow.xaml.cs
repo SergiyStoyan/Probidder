@@ -29,22 +29,22 @@ namespace Cliver.Foreclosures
             lw.Show();
         }
 
-        public static void SaveItem(Db.Foreclosures.Foreclosure f)
+        public static void ItemSaved(Db.Foreclosures.Foreclosure f)
         {
         }
 
-        public static void DeleteItem(Db.Foreclosures.Foreclosure f)
+        public static void ItemDeleted(Db.Foreclosures.Foreclosure f)
         {
         }
 
-        static ListWindow lw = null; 
-           
+        static ListWindow lw = null;
+
         ListWindow()
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
-            
+
             foreach (Db.Foreclosures.Foreclosure f in Db.Foreclosures.GetAll())
                 list.Items.Add(new Item { Text = f.FILING_DATE, Id = f.Id });
 
@@ -59,12 +59,13 @@ namespace Cliver.Foreclosures
             };
         }
 
-       public class Item
+        public class Item
         {
-            public string Text;
-            public int Id;
+            public string Text { get; set; }
+            public int Id { get; set; }
+            public AuctionWindow Aw = null;
         }
-        
+
         private void close_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -78,6 +79,15 @@ namespace Cliver.Foreclosures
         {
             AuctionWindow aw = new AuctionWindow();
             aw.Show();
+        }
+
+        private void show_Click(object sender, RoutedEventArgs e)
+        {
+            Item i = (Item)((Button)e.Source).DataContext;
+            if (i.Aw == null || !i.Aw.IsLoaded)
+                i.Aw = new AuctionWindow(i.Id);
+            i.Aw.Show();
+            //i.Aw.BringIntoView();//.Activate();
         }
     }
 }

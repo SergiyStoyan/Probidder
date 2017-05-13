@@ -22,17 +22,18 @@ namespace Cliver.Foreclosures
 {
     public partial class AuctionWindow : Window
     {
-        public AuctionWindow(Db.Foreclosures.Foreclosure f = null)
+        public AuctionWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
             
             Icon = AssemblyRoutines.GetAppIconImageSource();
-
-            foreclosure = f;
-            if (f != null)
+            
+            if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
                 Save.Visibility = Visibility.Collapsed;
+                Delete.Visibility = Visibility.Collapsed;
+                Edit.Visibility = Visibility.Visible;
             }
 
             foreach (string c in Settings.Default.Counties)
@@ -41,21 +42,30 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
                 TYPE_OF_MO.Items.Add(c);
 
-            set_foreclosure(f);
+            if (foreclosure_id != null)
+                set_foreclosure(Db.Foreclosures.GetById((int)foreclosure_id));
+            else
+                set_foreclosure(null);
         }
-        Db.Foreclosures.Foreclosure foreclosure = null;
+        int? foreclosure_id = null;
 
-        private void Window_Drop(object sender, DragEventArgs e)
+        private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
+                return;
+            if (foreclosure_id != null)
+                Db.Foreclosures.Delete((int)foreclosure_id);
+            Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            if(fields.IsEnabled)
+            if (fields.IsEnabled)
                 Close();
             else
             {
                 Edit.Visibility = Visibility.Visible;
+                Delete.Visibility = Visibility.Collapsed;
                 Save.Visibility = Visibility.Collapsed;
                 fields.IsEnabled = false;
             }
@@ -65,6 +75,7 @@ namespace Cliver.Foreclosures
         {
             Edit.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Visible;
+            Delete.Visibility = Visibility.Visible;
             fields.IsEnabled = true;
         }
 
@@ -75,8 +86,10 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(this.description.Text))
             //    throw new Exception("Description is empty    
 
-            Db.Foreclosures.Foreclosure f = foreclosure;
-            if (f == null)
+            Db.Foreclosures.Foreclosure f;
+            if (foreclosure_id != null)
+                f = Db.Foreclosures.GetById((int)foreclosure_id);
+            else
                 f = new Db.Foreclosures.Foreclosure();
             f.TYPE_OF_EN = TYPE_OF_EN.Text;
             f.COUNTY = COUNTY.Text;
@@ -113,7 +126,9 @@ namespace Cliver.Foreclosures
             f.TERM_OF_MTG = TERM_OF_MTG.Text;
             f.DEF_ADDRESS = DEF_ADDRESS.Text;
             f.DEF_PHONE = DEF_PHONE.Text;
-            Db.Foreclosures.Save(f);
+            foreclosure_id = Db.Foreclosures.Save(f);
+
+            ListWindow.ItemSaved(f);
         }
 
         private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)

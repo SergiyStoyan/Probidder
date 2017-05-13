@@ -10,7 +10,7 @@
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
         FontFamily="Microsoft Sans Serif"
-         AllowDrop="True" Drop="Window_Drop"
+         AllowDrop="True"
             >
     <Grid Background="Beige">
         <StackPanel Orientation="Vertical">
@@ -121,6 +121,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Name="Edit" Margin="0,10,10,10" Click="Edit_Click" Visibility="Collapsed">Edit</Button>
                 <Button Name="Save" Margin="0,10,10,10" Click="Save_Click">Save</Button>
+                <Button Margin="0,10,10,10" Name="Delete" Click="Delete_Click">Delete</Button>
                 <Button Margin="0,10,10,10" Name="Cancel" Click="Cancel_Click">Cancel</Button>
             </StackPanel>
         </StackPanel>

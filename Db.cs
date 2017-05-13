@@ -111,17 +111,20 @@ namespace Cliver.Foreclosures
                 return foreclosures.FindAll().OrderBy(x => x.FILING_DATE).ToList();
             }
 
-            static public void Save(Foreclosure foreclosure)
+            static public int Save(Foreclosure foreclosure)
             {
                 if (foreclosure.Id == 0)
-                    foreclosures.Insert(foreclosure);
-                else
-                    foreclosures.Update(foreclosure);
+                {
+                    var b = foreclosures.Insert(foreclosure);
+                    return b.AsInt32;
+                }
+                foreclosures.Update(foreclosure);
+                return foreclosure.Id;
             }
 
-            static public void Delete(Foreclosure foreclosure)
+            static public void Delete(int id)
             {
-                foreclosures.Delete(foreclosure.Id);
+                foreclosures.Delete(id);
             }
 
             static public int Count()
