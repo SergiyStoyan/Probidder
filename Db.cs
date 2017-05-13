@@ -108,7 +108,7 @@ namespace Cliver.Foreclosures
 
             static public List<Foreclosure> GetAll()
             {
-                return foreclosures.FindAll().OrderBy(x => x.FILING_DATE).ToList();
+                return foreclosures.FindAll().OrderBy(x => x.Id).ToList();
             }
 
             static public int Save(Foreclosure foreclosure)

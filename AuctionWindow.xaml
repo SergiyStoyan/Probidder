@@ -58,9 +58,9 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
                     <DatePicker Name="ORIGINAL_MTG"></DatePicker>
                     <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
-                    <TextBox Grid.Column="3" Grid.Row="4" Name="DOCUMENT_N"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="4" MinWidth="50" Name="DOCUMENT_N"></TextBox>
                     <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Or Loan $</Label>
-                    <TextBox Grid.Column="3" Grid.Row="4" Name="ORIGINAL_I"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="4" MinWidth="50" Name="ORIGINAL_I"></TextBox>
                 </StackPanel>
                 <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right">Legal Descr</Label>
                 <TextBox Grid.Column="1" Grid.Row="5" Name="LEGAL_D" Grid.ColumnSpan="3"></TextBox>

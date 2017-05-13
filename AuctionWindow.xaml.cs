@@ -159,8 +159,8 @@ namespace Cliver.Foreclosures
                 TYPE_OF_EN.Text = null;
                 COUNTY.Text = null;
                 CASE_N.Text = null;
-                FILING_DATE.Text = null;
-                ENTRY_DATE.Text = null;
+                FILING_DATE.Text = DateTime.Now.ToString();
+                ENTRY_DATE.Text = DateTime.Now.ToString();
                 LENDOR.Text = null;
                 ORIGINAL_MTG.Text = null;
                 DOCUMENT_N.Text = null;
@@ -242,6 +242,8 @@ namespace Cliver.Foreclosures
         {
             foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
                 ATTORNEY_S.Items.Add(c);
+            if (ATTORNEY_S.Items.Count == 1)
+                ATTORNEY_S.SelectedIndex = 0;
         }
     }
 }

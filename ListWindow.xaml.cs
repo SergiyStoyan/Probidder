@@ -102,9 +102,32 @@ namespace Cliver.Foreclosures
             aw.Show();
         }
 
-        private void show_Click(object sender, RoutedEventArgs e)
+        //private void show_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Item i = (Item)((Button)e.Source).DataContext;
+        //    if (i.Aw == null || !i.Aw.IsLoaded)
+        //    {
+        //        i.Aw = new AuctionWindow(i.Foreclosure.Id);
+        //        System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(i.Aw);
+        //        i.Aw.Show();
+        //    }
+        //    else
+        //    {
+        //        i.Aw.BringIntoView();
+        //        i.Aw.Activate();
+        //    }
+        //}
+
+        private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Item i = (Item)((Button)e.Source).DataContext;
+            foreach (Item i in e.AddedItems)
+            {
+                show_AuctionWindow(i);
+            }
+        }
+
+        void show_AuctionWindow(Item i)
+        {
             if (i.Aw == null || !i.Aw.IsLoaded)
             {
                 i.Aw = new AuctionWindow(i.Foreclosure.Id);
@@ -116,6 +139,18 @@ namespace Cliver.Foreclosures
                 i.Aw.BringIntoView();
                 i.Aw.Activate();
             }
+        }
+
+        private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ListViewItem lvi = sender as ListViewItem;
+            if (lvi == null)
+                return;
+            Item i = (Item)lvi.Content;
+            if (i == null)
+                return;
+            show_AuctionWindow(i);
+            e.Handled = true;
         }
     }
 }
