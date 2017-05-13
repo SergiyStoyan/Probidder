@@ -141,5 +141,44 @@ namespace Cliver.Foreclosures
         {
 
         }
+
+        void set_foreclosure(Db.Foreclosures.Foreclosure f)
+        {
+            TYPE_OF_EN.Text = f.TYPE_OF_EN;
+            COUNTY.Text = f.COUNTY;
+            CASE_N.Text = f.CASE_N;
+            FILING_DATE.Text = f.FILING_DATE;
+            ENTRY_DATE.Text = f.ENTRY_DATE;
+            LENDOR.Text = f.LENDOR;
+            ORIGINAL_MTG.Text = f.ORIGINAL_MTG;
+            DOCUMENT_N.Text = f.DOCUMENT_N;
+            ORIGINAL_I.Text = f.ORIGINAL_I;
+            LEGAL_D.Text = f.LEGAL_D;
+            ADDRESS.Text = f.ADDRESS;
+            CITY.Text = f.CITY;
+            ZIP.Text = f.ZIP;
+            PIN.Text = f.PIN;
+            DATE_OF_CA.Text = f.DATE_OF_CA;
+            LAST_PAY_DATE.Text = f.LAST_PAY_DATE;
+            BALANCE_DU.Text = f.BALANCE_DU;
+            PER_DIEM_I.Text = f.PER_DIEM_I;
+            CURRENT_OW.Text = f.CURRENT_OW;
+            IS_ORG.IsChecked = f.IS_ORG;
+            DECEASED.IsChecked = f.DECEASED;
+            OWNER_ROLE.Text = f.OWNER_ROLE;
+            OTHER_LIENS.Text = f.OTHER_LIENS;
+            ADDL_DEF.Text = f.ADDL_DEF;
+            PUB_COMMENTS.Text = f.PUB_COMMENTS;
+            INT_COMMENTS.Text = f.INT_COMMENTS;
+            ATTY.Text = f.ATTY;
+            ATTORNEY_S.Text = f.ATTORNEY_S;
+            TYPE_OF_MO.Text = f.TYPE_OF_MO;
+            INTEREST_R.Text = f.INTEREST_R;
+            PROP_DESC.Text = f.PROP_DESC;
+            MONTHLY_PAY.Text = f.MONTHLY_PAY;
+            TERM_OF_MTG.Text = f.TERM_OF_MTG;
+            DEF_ADDRESS.Text = f.DEF_ADDRESS;
+            DEF_PHONE.Text = f.DEF_PHONE;
+        }
     }
 }

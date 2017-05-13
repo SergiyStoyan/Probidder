@@ -7,6 +7,9 @@ using System.Threading;
 using System.Net.Http;
 using System.IO;
 using System.Data.SQLite;
+//using MongoDB.Bson;
+//using MongoDB.Driver;
+using LiteDB;
 
 namespace Cliver.Foreclosures
 {
@@ -14,31 +17,131 @@ namespace Cliver.Foreclosures
     {
         public class Foreclosures
         {
-            static public Foreclosure Back()
+            //static SQLiteConnection dbc;
+            //static readonly string db_file = Db.db_dir + "\\db.sqlite";
+            static readonly string db_file = Db.db_dir + "\\db.litedb";
+            static LiteCollection<Foreclosure> foreclosures;
+
+            static Foreclosures()
             {
-                return null;
+                LiteDatabase db = new LiteDatabase("db_file");
+                foreclosures = db.GetCollection<Foreclosure>("foreclosures");
+
+
+
+                //                SQLiteConnection.CreateFile(db_file);
+                //                dbc = new SQLiteConnection("Data Source=" + db_file + "; Version=3;");
+                //                dbc.Open();
+                //                SQLiteCommand c = new SQLiteCommand(@"CREATE TABLE foreclosures (
+                //TYPE_OF_EN VARCHAR(20), 
+                //COUNTY VARCHAR(20), 
+                //CASE_N VARCHAR(20), 
+                //FILING_DATE VARCHAR(20), 
+                //AUCTION_DATE VARCHAR(20), 
+                //AUCTION_TIME VARCHAR(20), 
+                //SALE_LOC;
+                //                public string ENTRY_DATE;
+                //                public string LENDOR;
+                //                public string ORIGINAL_MTG;
+                //                public string DOCUMENT_N;
+                //                public string ORIGINAL_I;
+                //                public string LEGAL_D;
+                //                public string ADDRESS;
+                //                public string CITY;
+                //                public string ZIP;
+                //                public string PIN;
+                //                public string DATE_OF_CA;
+                //                public string LAST_PAY_DATE;
+                //                public string BALANCE_DU;
+                //                public string PER_DIEM_I;
+                //                public string CURRENT_OW;
+                //                public string IS_ORG;
+                //                public string DECEASED;
+                //                public string OWNER_ROLE;
+                //                public string OTHER_LIENS;
+                //                public string ADDL_DEF;
+                //                public string PUB_COMMENTS;
+                //                public string INT_COMMENTS;
+                //                public string ATTY;
+                //                public string ATTORNEY_S;
+                //                public string TYPE_OF_MO;
+                //                public string PROP_DESC;
+                //                public string INTEREST_R;
+                //                public string MONTHLY_PAY;
+                //                public string TERM_OF_MTG;
+                //                public string DEF_ADDRESS;
+                //                public string DEF_PHONE;                    
+
+
+                //                    VARCHAR(20), score INT)
+                //", dbc);
             }
 
-            static public Foreclosure Forward()
+            static public Foreclosure Back(Foreclosure current)
             {
-                return null;
+                return foreclosures.Find(x => x._id < current._id).OrderByDescending(x => x._id).FirstOrDefault();
+            }
+
+            static public Foreclosure Forward(Foreclosure current)
+            {
+                return foreclosures.Find(x => x._id > current._id).OrderBy(x => x._id).FirstOrDefault();
             }
 
             static public void Save(Foreclosure foreclosure)
             {
+                foreclosures.Upsert(foreclosure);
             }
 
             static public void Delete(Foreclosure foreclosure)
             {
+                foreclosures.Delete(foreclosure._id);
             }
             
             static public int Count()
             {
-                return 0;
+                return foreclosures.Count();
             }
-
+            ;
+             ;
+             ;
+             FILING_DATE;
+             AUCTION_DATE;
+             AUCTION_TIME;
+             SALE_LOC;
+             ENTRY_DATE;
+             LENDOR;
+             ORIGINAL_MTG;
+             DOCUMENT_N;
+             ORIGINAL_I;
+             LEGAL_D;
+             ADDRESS;
+             CITY;
+             ZIP;
+             PIN;
+             DATE_OF_CA;
+             LAST_PAY_DATE;
+             BALANCE_DU;
+             PER_DIEM_I;
+             CURRENT_OW;
+             IS_ORG;
+             DECEASED;
+             OWNER_ROLE;
+             OTHER_LIENS;
+             ADDL_DEF;
+             PUB_COMMENTS;
+             INT_COMMENTS;
+             ATTY;
+             ATTORNEY_S;
+             TYPE_OF_MO;
+             PROP_DESC;
+             INTEREST_R;
+             MONTHLY_PAY;
+             TERM_OF_MTG;
+             DEF_ADDRESS;
+             DEF_PHONE;
             public class Foreclosure
             {
+                public ObjectId _id;
                 public string TYPE_OF_EN;
                 public string COUNTY;
                 public string CASE_N;
@@ -61,8 +164,8 @@ namespace Cliver.Foreclosures
                 public string BALANCE_DU;
                 public string PER_DIEM_I;
                 public string CURRENT_OW;
-                public string IS_ORG;
-                public string DECEASED;
+                public bool IS_ORG;
+                public bool DECEASED;
                 public string OWNER_ROLE;
                 public string OTHER_LIENS;
                 public string ADDL_DEF;

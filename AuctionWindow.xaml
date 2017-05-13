@@ -43,74 +43,80 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Listing Code</Label>
-        <TextBox Grid.Column="1" Grid.Row="0" Name="ListingCode">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="0" Name="TYPE_OF_EN"></TextBox>
         <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">County</Label>
-        <ComboBox Grid.Column="3" Grid.Row="0" Name="County" IsReadOnly="True" SelectionChanged="County_SelectionChanged">fdsf</ComboBox>
+                <ComboBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" SelectionChanged="County_SelectionChanged"></ComboBox>
         <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Case #</Label>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="CaseId">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="1" Name="CASE_N"></TextBox>
         <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
-        <DatePicker Grid.Column="3" Grid.Row="1" Name="FillingDate"></DatePicker>
+                <DatePicker Grid.Column="3" Grid.Row="1" Name="FILING_DATE"></DatePicker>
         <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Entry Date</Label>
-        <DatePicker Grid.Column="1" Grid.Row="2" Name="EntryDate"></DatePicker>
+                <DatePicker Grid.Column="1" Grid.Row="2" Name="ENTRY_DATE"></DatePicker>
         <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">Plaintiff Code</Label>
-        <ComboBox Grid.Column="1" Grid.Row="3" Name="Plaintiff" Grid.ColumnSpan="3">fdsf</ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" Grid.ColumnSpan="3"></ComboBox>
         <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
-        <TextBox Grid.Column="1" Grid.Row="4" Name="MTG_D">fdsf</TextBox>
-        <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
-        <TextBox Grid.Column="3" Grid.Row="4" Name="DocId">fdsf</TextBox>
-        <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right">Legal Descr</Label>
-        <TextBox Grid.Column="1" Grid.Row="5" Name="LegalDescr" Grid.ColumnSpan="3">fdsf</TextBox>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
+                    <DatePicker Name="ORIGINAL_MTG"></DatePicker>
+                    <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
+                    <TextBox Grid.Column="3" Grid.Row="4" Name="DOCUMENT_N"></TextBox>
+                    <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Or Loan $</Label>
+                    <TextBox Grid.Column="3" Grid.Row="4" Name="ORIGINAL_I"></TextBox>
+                </StackPanel>
+                <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right">Legal Descr</Label>
+                <TextBox Grid.Column="1" Grid.Row="5" Name="LEGAL_D" Grid.ColumnSpan="3"></TextBox>
         <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right">Address</Label>
-        <TextBox Grid.Column="1" Grid.Row="6" Name="Address" Grid.ColumnSpan="3">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="6" Name="ADDRESS" Grid.ColumnSpan="3"></TextBox>
         <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
-        <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="City" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged">fdsf</ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged"></ComboBox>
         <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-        <ComboBox Grid.Column="1" Grid.Row="8" Name="ZipCode" SelectionChanged="ZipCode_SelectionChanged">fdsf</ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" SelectionChanged="ZipCode_SelectionChanged" Height="24" VerticalAlignment="Top"></ComboBox>
         <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
-        <TextBox Grid.Column="1" Grid.Row="9" Name="Pin">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="9" Name="PIN"></TextBox>
         <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
-        <DatePicker Grid.Column="1" Grid.Row="10" Name="CalculationDate"></DatePicker>
+                <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"></DatePicker>
         <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right">Last Pay Date</Label>
-        <DatePicker Grid.Column="3" Grid.Row="10" Name="LastPayDate"></DatePicker>
+                <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE"></DatePicker>
         <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
-            <TextBox Grid.Column="1" Grid.Row="11" Name="BalanceDue">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU"></TextBox>
         <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
-        <TextBox Grid.Column="3" Grid.Row="11" Name="InterPerDiem">fdsf</TextBox>
+                <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I"></TextBox>
         <Label Grid.Column="0" Grid.Row="12" HorizontalAlignment="Right">Deff. Served Address</Label>
-        <TextBox Grid.Column="1" Grid.Row="12" Name="DeffServedAddress">fdsf</TextBox>
+                <TextBox Grid.Column="1" Grid.Row="12" Name="DEF_ADDRESS"></TextBox>
+                <Label Grid.Column="2" Grid.Row="12" HorizontalAlignment="Right">Deff. Phone</Label>
+                <TextBox Grid.Column="3" Grid.Row="12" Name="DEF_PHONE"></TextBox>
 
-        <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
-        <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CurrentOwners">fdsf</TextBox>
+                <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
+                <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW"></TextBox>
         <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <CheckBox Name="IS_ORG">IS ORG</CheckBox>
-            <CheckBox Name="Decreased">Decreased</CheckBox>
+            <CheckBox Name="IS_ORG" VerticalAlignment="Center">IS ORG</CheckBox>
+                    <CheckBox Name="DECEASED" VerticalAlignment="Center">Decreased</CheckBox>
             <Label >Owner Role</Label>
-            <ComboBox Name="OwnerRole">fdsf</ComboBox>
+                    <ComboBox Name="OWNER_ROLE"></ComboBox>
         </StackPanel>
         <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>
-        <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" Grid.RowSpan="2"  Name="OtherLiens">fdsf</TextBox>
+                <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" Grid.RowSpan="2"  Name="OTHER_LIENS"></TextBox>
         <Label Grid.Column="4" Grid.Row="4" HorizontalAlignment="Right">Addl Deff</Label>
-        <TextBox Grid.Column="5" Grid.Row="4"  Grid.ColumnSpan="3" Name="AddlDeff">fdsf</TextBox>
+                <TextBox Grid.Column="5" Grid.Row="4"  Grid.ColumnSpan="3" Name="ADDL_DEF"></TextBox>
         <Label Grid.Column="4" Grid.Row="5" HorizontalAlignment="Right">Client Comment</Label>
-        <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  Name="ClientComment">fdsf</TextBox>
+                <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  Name="PUB_COMMENTS"></TextBox>
         <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right">ilFLS Comments</Label>
-        <TextBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3"  Name="ilFLSComments">fdsf</TextBox>
+                <TextBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3"  Name="INT_COMMENTS"></TextBox>
         <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right">Attorney Code</Label>
-        <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3"  Name="Attorney">fdsf</ComboBox>
+                <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3"  Name="ATTY"></ComboBox>
         <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right">Attorney Phone</Label>
-        <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3"  Name="AttorneyPhone">fdsf</ComboBox>
+                <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3"  Name="ATTORNEY_S"></ComboBox>
         <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">Att. Phone</Label>
-        <TextBox Grid.Column="5" Grid.Row="9" Name="AttPhone">fdsf</TextBox>
+                <TextBox Grid.Column="5" Grid.Row="9" Name="AttPhone">needed??</TextBox>
         <Label Grid.Column="4" Grid.Row="10" HorizontalAlignment="Right">MTG Codes</Label>
-        <ComboBox Grid.Column="5" Grid.Row="10" Name="MortgageType">fdsf</ComboBox>
+                <ComboBox Grid.Column="5" Grid.Row="10" Name="TYPE_OF_MO"></ComboBox>
         <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right">Interest</Label>
-        <TextBox Grid.Column="7" Grid.Row="10" Name="Interest">fdsf</TextBox>
+                <TextBox Grid.Column="7" Grid.Row="10" Name="INTEREST_R"></TextBox>
         <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right">Property Type</Label>
-        <ComboBox Grid.Column="5" Grid.Row="11" Name="PropertyType">fdsf</ComboBox>
+                <ComboBox Grid.Column="5" Grid.Row="11" Name="PROP_DESC"></ComboBox>
         <Label Grid.Column="6" Grid.Row="11" HorizontalAlignment="Right">Monthly Payments</Label>
-        <TextBox Grid.Column="7" Grid.Row="11" Name="MonthlyPayments">fdsf</TextBox>
+                <TextBox Grid.Column="7" Grid.Row="11" Name="MONTHLY_PAY"></TextBox>
         <Label Grid.Column="6" Grid.Row="12" HorizontalAlignment="Right">MTG Term</Label>
-        <TextBox Grid.Column="7" Grid.Row="12" Name="MTGTerm">fdsf</TextBox>
+                <TextBox Grid.Column="7" Grid.Row="12" Name="TERM_OF_MTG"></TextBox>
         </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Name="Back" Margin="0,10,10,10" Click="Back_Click">&lt; &lt;</Button>
