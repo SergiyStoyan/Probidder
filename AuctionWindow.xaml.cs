@@ -40,7 +40,7 @@ namespace Cliver.Foreclosures
             //        }
             //        catch { }
 
-           // HttpClientHandler handler = new HttpClientHandler();
+            // HttpClientHandler handler = new HttpClientHandler();
             //handler.Credentials = new System.Net.NetworkCredential(Settings.General.ZendeskUser, Settings.General.ZendeskPassword);
             //http_client = new HttpClient(handler);
 
@@ -73,7 +73,7 @@ namespace Cliver.Foreclosures
                 TYPE_OF_MO.SelectedItem = f.TYPE_OF_MO;
             }
         }
-               
+
         private void Window_Drop(object sender, DragEventArgs e)
         {
             //error.Visibility = Visibility.Collapsed;
@@ -164,20 +164,17 @@ namespace Cliver.Foreclosures
 
             foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
                 ATTY.Items.Add(c);
-
-            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
-                ATTORNEY_S.Items.Add(c);
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (string c in Db.GetZipCodes((string)COUNTY.SelectedItem , (string)CITY.SelectedItem))
+            foreach (string c in Db.GetZipCodes((string)COUNTY.SelectedItem, (string)CITY.SelectedItem))
                 ZIP.Items.Add(c);
         }
 
         void set_foreclosure(Db.Foreclosures.Foreclosure f)
         {
-            if(f==null)
+            if (f == null)
             {
                 TYPE_OF_EN.Text = null;
                 COUNTY.Text = null;
@@ -214,6 +211,7 @@ namespace Cliver.Foreclosures
                 TERM_OF_MTG.Text = null;
                 DEF_ADDRESS.Text = null;
                 DEF_PHONE.Text = null;
+                return;
             }
             TYPE_OF_EN.Text = f.TYPE_OF_EN;
             COUNTY.Text = f.COUNTY;
@@ -250,6 +248,12 @@ namespace Cliver.Foreclosures
             TERM_OF_MTG.Text = f.TERM_OF_MTG;
             DEF_ADDRESS.Text = f.DEF_ADDRESS;
             DEF_PHONE.Text = f.DEF_PHONE;
+        }
+
+        private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
+                ATTORNEY_S.Items.Add(c);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Cliver.Foreclosures
 
             static Foreclosures()
             {
-                LiteDatabase db = new LiteDatabase("db_file");
+                LiteDatabase db = new LiteDatabase(db_file);
                 foreclosures = db.GetCollection<Foreclosure>("foreclosures");
 
 
@@ -81,82 +81,85 @@ namespace Cliver.Foreclosures
             {
                 if (current == null)
                     current = GetLast();
-                return foreclosures.Find(x => x._id < current._id).OrderByDescending(x => x._id).FirstOrDefault();
+                return foreclosures.Find(x => x.Id < current.Id).OrderByDescending(x => x.Id).FirstOrDefault();
             }
 
             static public Foreclosure Forward(Foreclosure current)
             {
                 if (current == null)
                     current = GetFirst();
-                return foreclosures.Find(x => x._id > current._id).OrderBy(x => x._id).FirstOrDefault();
+                return foreclosures.Find(x => x.Id > current.Id).OrderBy(x => x.Id).FirstOrDefault();
             }
 
             static public Foreclosure GetFirst()
             {
-                return foreclosures.FindAll().OrderBy(x => x._id).FirstOrDefault();
+                return foreclosures.FindAll().OrderBy(x => x.Id).FirstOrDefault();
             }
 
             static public Foreclosure GetLast()
             {
-                return foreclosures.FindAll().OrderByDescending(x => x._id).FirstOrDefault();
+                return foreclosures.FindAll().OrderByDescending(x => x.Id).FirstOrDefault();
             }
 
             static public void Save(Foreclosure foreclosure)
             {
-                foreclosures.Upsert(foreclosure);
+                if (foreclosure.Id == 0)
+                    foreclosures.Insert(foreclosure);
+                else
+                    foreclosures.Update(foreclosure);
             }
 
             static public void Delete(Foreclosure foreclosure)
             {
-                foreclosures.Delete(foreclosure._id);
+                foreclosures.Delete(foreclosure.Id);
             }
-            
+
             static public int Count()
             {
                 return foreclosures.Count();
             }
-         
+
             public class Foreclosure
             {
-                public ObjectId _id;
-                public string TYPE_OF_EN;
-                public string COUNTY;
-                public string CASE_N;
-                public string FILING_DATE;
-                public string AUCTION_DATE;
-                public string AUCTION_TIME;
-                public string SALE_LOC;
-                public string ENTRY_DATE;
-                public string LENDOR;
-                public string ORIGINAL_MTG;
-                public string DOCUMENT_N;
-                public string ORIGINAL_I;
-                public string LEGAL_D;
-                public string ADDRESS;
-                public string CITY;
-                public string ZIP;
-                public string PIN;
-                public string DATE_OF_CA;
-                public string LAST_PAY_DATE;
-                public string BALANCE_DU;
-                public string PER_DIEM_I;
-                public string CURRENT_OW;
-                public bool IS_ORG;
-                public bool DECEASED;
-                public string OWNER_ROLE;
-                public string OTHER_LIENS;
-                public string ADDL_DEF;
-                public string PUB_COMMENTS;
-                public string INT_COMMENTS;
-                public string ATTY;
-                public string ATTORNEY_S;
-                public string TYPE_OF_MO;
-                public string PROP_DESC;
-                public string INTEREST_R;
-                public string MONTHLY_PAY;
-                public string TERM_OF_MTG;
-                public string DEF_ADDRESS;
-                public string DEF_PHONE;
+                public int Id { get; set; }
+                public string TYPE_OF_EN { get; set; }
+                public string COUNTY { get; set; }
+                public string CASE_N { get; set; }
+                public string FILING_DATE { get; set; }
+                public string AUCTION_DATE { get; set; }
+                public string AUCTION_TIME { get; set; }
+                public string SALE_LOC { get; set; }
+                public string ENTRY_DATE { get; set; }
+                public string LENDOR { get; set; }
+                public string ORIGINAL_MTG { get; set; }
+                public string DOCUMENT_N { get; set; }
+                public string ORIGINAL_I { get; set; }
+                public string LEGAL_D { get; set; }
+                public string ADDRESS { get; set; }
+                public string CITY { get; set; }
+                public string ZIP { get; set; }
+                public string PIN { get; set; }
+                public string DATE_OF_CA { get; set; }
+                public string LAST_PAY_DATE { get; set; }
+                public string BALANCE_DU { get; set; }
+                public string PER_DIEM_I { get; set; }
+                public string CURRENT_OW { get; set; }
+                public bool IS_ORG { get; set; }
+                public bool DECEASED { get; set; }
+                public string OWNER_ROLE { get; set; }
+                public string OTHER_LIENS { get; set; }
+                public string ADDL_DEF { get; set; }
+                public string PUB_COMMENTS { get; set; }
+                public string INT_COMMENTS { get; set; }
+                public string ATTY { get; set; }
+                public string ATTORNEY_S { get; set; }
+                public string TYPE_OF_MO { get; set; }
+                public string PROP_DESC { get; set; }
+                public string INTEREST_R { get; set; }
+                public string MONTHLY_PAY { get; set; }
+                public string TERM_OF_MTG { get; set; }
+                public string DEF_ADDRESS { get; set; }
+                public string DEF_PHONE { get; set; }
             }
         }
 
@@ -337,6 +340,8 @@ namespace Cliver.Foreclosures
 
         static string get_normalized(string s)
         {
+            if (s == null)
+                return null;
             return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ");
         }
 

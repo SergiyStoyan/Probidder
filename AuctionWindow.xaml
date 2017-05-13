@@ -102,7 +102,7 @@
         <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right">ilFLS Comments</Label>
                 <TextBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3"  Name="INT_COMMENTS"></TextBox>
         <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right">Attorney Code</Label>
-                <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3"  Name="ATTY"></ComboBox>
+                <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3"  Name="ATTY" SelectionChanged="ATTY_SelectionChanged"></ComboBox>
         <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right">Attorney Phone</Label>
                 <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3"  Name="ATTORNEY_S"></ComboBox>
         <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">Att. Phone</Label>
