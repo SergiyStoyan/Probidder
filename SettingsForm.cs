@@ -35,6 +35,7 @@ namespace Cliver.Foreclosures
             TicketModifierKey2.SelectedItem = Settings.General.TicketModifierKey2;
 
             DbRefreshPeriodInSecs.Text = Settings.General.DbRefreshPeriodInSecs.ToString();
+            DbRefreshRetryPeriodInSecs.Text = Settings.General.DbRefreshRetryPeriodInSecs.ToString();
         }
 
         //public class EncodingItem
@@ -64,11 +65,20 @@ namespace Cliver.Foreclosures
                 Settings.General.TicketKey = (System.Windows.Input.Key)TicketKey.SelectedItem;
                 Settings.General.TicketModifierKey1 = (System.Windows.Input.ModifierKeys)TicketModifierKey1.SelectedItem;
                 Settings.General.TicketModifierKey2 = (System.Windows.Input.ModifierKeys)TicketModifierKey2.SelectedItem;
+
                 int secs = int.Parse(DbRefreshPeriodInSecs.Text);
                 if (secs <= 0)
                     throw new Exception("Db Refresh Period must be positive.");
                 if (secs > Int32.MaxValue)
                     throw new Exception("Db Refresh Period is too big.");
+                Settings.General.DbRefreshPeriodInSecs = secs;
+
+                secs = int.Parse(DbRefreshRetryPeriodInSecs.Text);
+                if (secs <= 0)
+                    throw new Exception("Db Refresh Retry Period must be positive.");
+                if (secs > Int32.MaxValue)
+                    throw new Exception("Db Refresh Retry Period is too big.");
+                Settings.General.DbRefreshRetryPeriodInSecs = secs;
 
                 Settings.General.Save();
                 Config.Reload();

@@ -33,8 +33,8 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newAuctionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.List = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.workDirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -46,7 +46,7 @@
             // 
             this.notifyIcon.ContextMenuStrip = this.RightClickMenu;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "Zendesk Help Client";
+            this.notifyIcon.Text = "Foreclosures";
             this.notifyIcon.Visible = true;
             this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
@@ -63,7 +63,7 @@
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.RightClickMenu.Name = "Menu";
-            this.RightClickMenu.Size = new System.Drawing.Size(156, 164);
+            this.RightClickMenu.Size = new System.Drawing.Size(156, 142);
             // 
             // newAuctionToolStripMenuItem
             // 
@@ -73,6 +73,13 @@
             this.newAuctionToolStripMenuItem.Text = "New Auction";
             this.newAuctionToolStripMenuItem.Click += new System.EventHandler(this.newAuctionToolStripMenuItem_Click);
             // 
+            // List
+            // 
+            this.List.Name = "List";
+            this.List.Size = new System.Drawing.Size(155, 22);
+            this.List.Text = "Saved Auctions";
+            this.List.Click += new System.EventHandler(this.List_Click);
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -80,13 +87,6 @@
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // List
-            // 
-            this.List.Name = "List";
-            this.List.Size = new System.Drawing.Size(155, 22);
-            this.List.Text = "Saved Auctions";
-            this.List.Click += new System.EventHandler(this.List_Click);
             // 
             // workDirToolStripMenuItem
             // 

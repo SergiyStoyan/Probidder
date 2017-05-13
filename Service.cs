@@ -75,8 +75,13 @@ namespace Cliver.Foreclosures
                 {
                     if (next_db_refresh_time <= DateTime.Now)
                     {
-                        next_db_refresh_time = DateTime.Now.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
-                        Db.BeginRefresh();
+                        DateTime start_db_refresh_time = DateTime.Now;
+                        Thread t = Db.BeginRefresh();
+                        t.Join();
+                        if (Db.RefreshTime >= start_db_refresh_time)
+                            next_db_refresh_time = start_db_refresh_time.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
+                        else
+                            next_db_refresh_time = start_db_refresh_time.AddSeconds(Settings.General.DbRefreshRetryPeriodInSecs);
                     }
                     if (stop.WaitOne(10000))
                         return;

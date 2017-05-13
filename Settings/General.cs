@@ -27,6 +27,7 @@ namespace Cliver.Foreclosures
             public int InfoToastRight = 0;
             //public DateTime LastRefreshDbTime = DateTime.MinValue;
             public int DbRefreshPeriodInSecs = 60 * 60 * 24;
+            public int DbRefreshRetryPeriodInSecs = 60 * 60;
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;

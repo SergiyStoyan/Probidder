@@ -27,10 +27,10 @@ namespace Cliver.Foreclosures
         //{
         //}
 
-        public static void BeginRefresh()
+        public static Thread BeginRefresh()
         {
             if (refresh_t != null && refresh_t.IsAlive)
-                return;
+                return refresh_t;
 
             refresh_t = ThreadRoutines.StartTry(() =>
             {
@@ -61,15 +61,15 @@ namespace Cliver.Foreclosures
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
-                {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city", "cities");
-                });
+               {
+                   refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city", "cities");
+               });
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
-                {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff", "plaintiffs");
-                });
+               {
+                   refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff", "plaintiffs");
+               });
                 t.Start();
                 tasks.Add(t);
 
@@ -88,39 +88,43 @@ namespace Cliver.Foreclosures
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
-                InfoWindow.Create("Foreclosures", "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Green);
+                refresh_time = DateTime.Now;
+                InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
             },
             (Exception e) =>
             {
                 Log.Error(e);
                 Log.Error("Could not refresh db.");
-                InfoWindow.Create("Foreclosures: database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);
+                InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);
             },
             () =>
             {
             }
             );
+            return refresh_t;
         }
         static Thread refresh_t = null;
         static HttpClient http_client;
+        static DateTime refresh_time = DateTime.MinValue;
 
-        static async void refresh_table(string url, string table)
+        static public DateTime RefreshTime
         {
-            try
+            get
             {
-                Log.Main.Inform("Refreshing table: " + table);
-                HttpResponseMessage rm = await http_client.GetAsync(url);
-                if (!rm.IsSuccessStatusCode)
-                    throw new Exception("Could not refresh table: " + rm.ReasonPhrase);
-                if (rm.Content == null)
-                    throw new Exception("Response content is null.");
-                string s = await rm.Content.ReadAsStringAsync();
-                System.IO.File.WriteAllText(db_dir + "\\" + table + ".json", s);
+                return refresh_time;
             }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
+        }
+
+        static void refresh_table(string url, string table)
+        {
+            Log.Main.Inform("Refreshing table: " + table);
+            HttpResponseMessage rm = http_client.GetAsync(url).Result;
+            if (!rm.IsSuccessStatusCode)
+                throw new Exception("Could not refresh table: " + rm.ReasonPhrase);
+            if (rm.Content == null)
+                throw new Exception("Response content is null.");
+            string s = rm.Content.ReadAsStringAsync().Result;
+            System.IO.File.WriteAllText(db_dir + "\\" + table + ".json", s);
         }
 
         public class MortgageType

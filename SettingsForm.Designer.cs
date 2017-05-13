@@ -39,13 +39,15 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.DbRefreshPeriodInSecs = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.DbRefreshRetryPeriodInSecs = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bOk
             // 
             this.bOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOk.Location = new System.Drawing.Point(116, 156);
+            this.bOk.Location = new System.Drawing.Point(116, 203);
             this.bOk.Name = "bOk";
             this.bOk.Size = new System.Drawing.Size(75, 23);
             this.bOk.TabIndex = 0;
@@ -56,7 +58,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(197, 156);
+            this.bCancel.Location = new System.Drawing.Point(197, 203);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 9;
@@ -152,11 +154,29 @@
             this.label4.TabIndex = 18;
             this.label4.Text = "Db Refresh Period (secs):";
             // 
+            // DbRefreshRetryPeriodInSecs
+            // 
+            this.DbRefreshRetryPeriodInSecs.Location = new System.Drawing.Point(25, 152);
+            this.DbRefreshRetryPeriodInSecs.Name = "DbRefreshRetryPeriodInSecs";
+            this.DbRefreshRetryPeriodInSecs.Size = new System.Drawing.Size(138, 20);
+            this.DbRefreshRetryPeriodInSecs.TabIndex = 21;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(22, 136);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(156, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Db Refresh Retry Period (secs):";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(284, 191);
+            this.ClientSize = new System.Drawing.Size(284, 238);
+            this.Controls.Add(this.DbRefreshRetryPeriodInSecs);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.DbRefreshPeriodInSecs);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox1);
@@ -184,5 +204,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox DbRefreshPeriodInSecs;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox DbRefreshRetryPeriodInSecs;
+        private System.Windows.Forms.Label label1;
     }
 }
