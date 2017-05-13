@@ -13,8 +13,11 @@
          AllowDrop="True"
             >
     <Grid Background="Beige">
-        <DockPanel>
-            <ListView DockPanel.Dock="Top" MinHeight="100" Height="300" Name="list" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+            <ListView Grid.Row="0" MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
@@ -25,7 +28,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="show"                       Content="Show"                       Margin="0"                       VerticalAlignment="Center"                       Click="show_Click" />
+                                        <Button Name="show" Content="Show" Margin="0" VerticalAlignment="Center" Click="show_Click" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -33,11 +36,10 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Margin="0,10,10,10" Name="new" Click="new_Click">New</Button>
                 <Button Margin="0,10,10,10" Name="export" Click="export_Click">Export</Button>
                 <Button Margin="0,10,10,10" Name="close" Click="close_Click">Close</Button>
             </StackPanel>
-        </DockPanel>
     </Grid>
 </Window>
