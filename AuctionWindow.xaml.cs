@@ -27,7 +27,8 @@ namespace Cliver.Foreclosures
             InitializeComponent();
             
             Icon = AssemblyRoutines.GetAppIconImageSource();
-            
+
+            this.foreclosure_id = foreclosure_id;
             if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
@@ -54,7 +55,10 @@ namespace Cliver.Foreclosures
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
             if (foreclosure_id != null)
+            {
                 Db.Foreclosures.Delete((int)foreclosure_id);
+                ListWindow.ItemDeleted((int)foreclosure_id);
+            }
             Close();
         }
 
@@ -86,11 +90,9 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(this.description.Text))
             //    throw new Exception("Description is empty    
 
-            Db.Foreclosures.Foreclosure f;
+            Db.Foreclosures.Foreclosure f = new Db.Foreclosures.Foreclosure();
             if (foreclosure_id != null)
-                f = Db.Foreclosures.GetById((int)foreclosure_id);
-            else
-                f = new Db.Foreclosures.Foreclosure();
+                f.Id = (int)foreclosure_id;
             f.TYPE_OF_EN = TYPE_OF_EN.Text;
             f.COUNTY = COUNTY.Text;
             f.CASE_N = CASE_N.Text;
@@ -129,6 +131,7 @@ namespace Cliver.Foreclosures
             foreclosure_id = Db.Foreclosures.Save(f);
 
             ListWindow.ItemSaved(f);
+            Close();
         }
 
         private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)

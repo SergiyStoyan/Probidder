@@ -18,9 +18,9 @@
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
-                            <GridViewColumn Header="1" Width="Auto" DisplayMemberBinding="{Binding Path=Text}" />
-                            <GridViewColumn Header="2" Width="50" DisplayMemberBinding="{Binding Path=Id}" />
-                            <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Id}" >
+                            <GridViewColumn Header="1" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE}" />
+                            <GridViewColumn Header="2" Width="50" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" />
+                            <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" >
                             </GridViewColumn>
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>

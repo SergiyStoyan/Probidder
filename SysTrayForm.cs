@@ -92,6 +92,7 @@ namespace Cliver.Foreclosures
         private void newAuctionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AuctionWindow aw = new AuctionWindow();
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
             aw.Show();
         }
     }

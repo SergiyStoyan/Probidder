@@ -84,17 +84,10 @@ namespace Cliver.Foreclosures
                 var hotKey = key_manager.Register(Settings.General.TicketKey, mks);
                 key_manager.KeyPressed += delegate (object sender, KeyPressedEventArgs e)
                 {
-                    CreateTicket();
+                   // CreateTicket();
                 };
             }
         }
         static HotKeyManager key_manager = null;
-
-        static public void CreateTicket()
-        {
-            AuctionWindow tw = new AuctionWindow();
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(tw);
-            tw.Show();
-        }
     }
 }

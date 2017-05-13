@@ -31,10 +31,31 @@ namespace Cliver.Foreclosures
 
         public static void ItemSaved(Db.Foreclosures.Foreclosure f)
         {
+            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
+            {
+                Item t = (Item)lw.list.Items[i];
+                if (f.Id == t.Foreclosure.Id)
+                {
+                    t.Foreclosure = f;
+                    lw.list.Items.Refresh();
+                    return;
+                }
+            }
+            lw.list.Items.Add(new Item { Foreclosure = f });
+            lw.list.Items.Refresh();
         }
 
-        public static void ItemDeleted(Db.Foreclosures.Foreclosure f)
+        public static void ItemDeleted(int foreclosure_id)
         {
+            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
+            {
+                Item t = (Item)lw.list.Items[i];
+                if (foreclosure_id == t.Foreclosure.Id)
+                {
+                    lw.list.Items.Remove(t);
+                    return;
+                }
+            }
         }
 
         static ListWindow lw = null;
@@ -46,7 +67,7 @@ namespace Cliver.Foreclosures
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             foreach (Db.Foreclosures.Foreclosure f in Db.Foreclosures.GetAll())
-                list.Items.Add(new Item { Text = f.FILING_DATE, Id = f.Id });
+                list.Items.Add(new Item { Foreclosure = f });
 
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
@@ -61,8 +82,7 @@ namespace Cliver.Foreclosures
 
         public class Item
         {
-            public string Text { get; set; }
-            public int Id { get; set; }
+            public Db.Foreclosures.Foreclosure Foreclosure { get; set; }
             public AuctionWindow Aw = null;
         }
 
@@ -78,6 +98,7 @@ namespace Cliver.Foreclosures
         private void new_Click(object sender, RoutedEventArgs e)
         {
             AuctionWindow aw = new AuctionWindow();
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
             aw.Show();
         }
 
@@ -85,9 +106,16 @@ namespace Cliver.Foreclosures
         {
             Item i = (Item)((Button)e.Source).DataContext;
             if (i.Aw == null || !i.Aw.IsLoaded)
-                i.Aw = new AuctionWindow(i.Id);
-            i.Aw.Show();
-            //i.Aw.BringIntoView();//.Activate();
+            {
+                i.Aw = new AuctionWindow(i.Foreclosure.Id);
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(i.Aw);
+                i.Aw.Show();
+            }
+            else
+            {
+                i.Aw.BringIntoView();
+                i.Aw.Activate();
+            }
         }
     }
 }
