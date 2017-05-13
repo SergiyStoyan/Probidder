@@ -45,6 +45,10 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
                 TYPE_OF_MO.Items.Add(c);
 
+            PROP_DESC.Items.Clear();
+            foreach (string c in Db.GetPropertyCodes())
+                PROP_DESC.Items.Add(c);
+
             if (foreclosure_id != null)
                 set_foreclosure(Db.Foreclosures.GetById((int)foreclosure_id));
             else

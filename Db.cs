@@ -70,8 +70,13 @@ namespace Cliver.Foreclosures
                 t.Start();
                 tasks.Add(t);
 
-                string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
-                File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
+                if (!File.Exists(db_dir + "\\illinois_postal_codes.csv"))
+                {
+                    string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
+                    File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
+                }
+                if (!File.Exists(db_dir + "\\property_codes.csv"))
+                    File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
@@ -187,6 +192,18 @@ namespace Cliver.Foreclosures
                 string[] fs = s.Split(',');
                 if (fs[1] == city && fs[3] == county)
                     vs.Add(fs[0]);
+            }
+            return vs;
+        }
+
+        public static List<string> GetPropertyCodes()
+        {
+            List<string> vs = new List<string>();
+            string[] ss = File.ReadAllLines(db_dir + "\\property_codes.csv");
+            foreach (string s in ss)
+            {
+                string[] fs = s.Split(',');
+                vs.Add(fs[0]);
             }
             return vs;
         }
