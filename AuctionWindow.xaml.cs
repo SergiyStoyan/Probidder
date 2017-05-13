@@ -22,43 +22,18 @@ namespace Cliver.Foreclosures
 {
     public partial class AuctionWindow : Window
     {
-        public AuctionWindow()
+        public AuctionWindow(Db.Foreclosures.Foreclosure f = null)
         {
             InitializeComponent();
-
+            
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
-            //WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            //string temp_dir = Path.GetTempPath() + "\\" + ProgramRoutines.GetAppName();
-            //DateTime delete_time = DateTime.Now.AddDays(-3);
-            //foreach (FileInfo fi in (new DirectoryInfo(temp_dir)).GetFiles())
-            //    if (fi.LastWriteTime < delete_time)
-            //        try
-            //        {
-            //            fi.Delete();
-            //        }
-            //        catch { }
-
-            // HttpClientHandler handler = new HttpClientHandler();
-            //handler.Credentials = new System.Net.NetworkCredential(Settings.General.ZendeskUser, Settings.General.ZendeskPassword);
-            //http_client = new HttpClient(handler);
-
-            Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
+            foreclosure = f;
+            if (f != null)
             {
-                //if (Message.YesNo("Posting the ticket is in progress. Do you want to cancel it?"))
-                //{
-                //    create_ticket_t = null;
-                //    http_client.CancelPendingRequests();
-                //    Log.Main.Inform("Cancelling...");
-                //}
-                //e.Cancel = true;
-            };
-
-            Closed += delegate
-            {
-                //http_client.CancelPendingRequests();
-            };
+                fields.IsEnabled = false;
+                Save.Visibility = Visibility.Collapsed;
+            }
 
             foreach (string c in Settings.Default.Counties)
                 COUNTY.Items.Add(c);
@@ -66,44 +41,31 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
                 TYPE_OF_MO.Items.Add(c);
 
-            Db.Foreclosures.Foreclosure f = Db.Foreclosures.GetLast();
-            if (f != null)
-            {
-                COUNTY.SelectedItem = f.COUNTY;
-                TYPE_OF_MO.SelectedItem = f.TYPE_OF_MO;
-            }
+            set_foreclosure(f);
         }
+        Db.Foreclosures.Foreclosure foreclosure = null;
 
         private void Window_Drop(object sender, DragEventArgs e)
         {
-            //error.Visibility = Visibility.Collapsed;
-            //if (!e.Data.GetDataPresent(DataFormats.FileDrop))
-            //    return;
-            //foreach (string file in (string[])e.Data.GetData(DataFormats.FileDrop))
-            //    add_attachment(file);
-        }
-
-        Db.Foreclosures.Foreclosure current_foreclosure = null;
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            current_foreclosure = Db.Foreclosures.Back(current_foreclosure);
-            set_foreclosure(current_foreclosure);
-        }
-
-        private void Forward_Click(object sender, RoutedEventArgs e)
-        {
-            current_foreclosure = Db.Foreclosures.Forward(current_foreclosure);
-            set_foreclosure(current_foreclosure);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            if(fields.IsEnabled)
+                Close();
+            else
+            {
+                Edit.Visibility = Visibility.Visible;
+                Save.Visibility = Visibility.Collapsed;
+                fields.IsEnabled = false;
+            }
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private void Edit_Click(object sender, RoutedEventArgs e)
         {
+            Edit.Visibility = Visibility.Collapsed;
+            Save.Visibility = Visibility.Visible;
+            fields.IsEnabled = true;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -113,7 +75,7 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(this.description.Text))
             //    throw new Exception("Description is empty    
 
-            Db.Foreclosures.Foreclosure f = current_foreclosure;
+            Db.Foreclosures.Foreclosure f = foreclosure;
             if (f == null)
                 f = new Db.Foreclosures.Foreclosure();
             f.TYPE_OF_EN = TYPE_OF_EN.Text;
@@ -195,8 +157,8 @@ namespace Cliver.Foreclosures
                 BALANCE_DU.Text = null;
                 PER_DIEM_I.Text = null;
                 CURRENT_OW.Text = null;
-                IS_ORG.IsChecked = null;
-                DECEASED.IsChecked = null;
+                IS_ORG.IsChecked = false;
+                DECEASED.IsChecked = false;
                 OWNER_ROLE.Text = null;
                 OTHER_LIENS.Text = null;
                 ADDL_DEF.Text = null;
@@ -211,6 +173,14 @@ namespace Cliver.Foreclosures
                 TERM_OF_MTG.Text = null;
                 DEF_ADDRESS.Text = null;
                 DEF_PHONE.Text = null;
+
+                f = Db.Foreclosures.GetLast();
+                if (f != null)
+                {
+                    COUNTY.SelectedItem = f.COUNTY;
+                    TYPE_OF_MO.SelectedItem = f.TYPE_OF_MO;
+                }
+
                 return;
             }
             TYPE_OF_EN.Text = f.TYPE_OF_EN;

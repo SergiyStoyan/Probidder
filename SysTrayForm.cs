@@ -42,7 +42,7 @@ namespace Cliver.Foreclosures
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            newTicketToolStripMenuItem_Click(null, null);
+            newAuctionToolStripMenuItem_Click(null, null);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,10 +70,10 @@ namespace Cliver.Foreclosures
         {
         }
 
-        private void StartStop_CheckedChanged(object sender, EventArgs e)
-        {
-            Service.Running = StartStop.Checked;
-        }
+        //private void StartStop_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Service.Running = List.Checked;
+        //}
 
         private void workDirToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -83,10 +83,16 @@ namespace Cliver.Foreclosures
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
         }
-
-        private void newTicketToolStripMenuItem_Click(object sender, EventArgs e)
+        
+        private void List_Click(object sender, EventArgs e)
         {
-            Service.CreateTicket();
-        }        
+            ListWindow.Open();
+        }
+
+        private void newAuctionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AuctionWindow aw = new AuctionWindow();
+            aw.Show();
+        }
     }
 }

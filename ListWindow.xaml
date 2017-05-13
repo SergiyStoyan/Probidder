@@ -1,0 +1,42 @@
+﻿<Window x:Class="Cliver.Foreclosures.ListWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Cliver.Foreclosures"
+             mc:Ignorable="d" 
+        Title="Foreclosures" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        WindowStyle="SingleBorderWindow" 
+        ResizeMode="CanResize" 
+        Background="#ffffff" Topmost="False" ShowInTaskbar="True"
+        FontFamily="Microsoft Sans Serif"
+         AllowDrop="True"
+            >
+    <Grid Background="Beige">
+        <StackPanel Orientation="Vertical">
+            <ListBox MinHeight="100" Height="300" Name="list">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Column1"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Column2"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Column3"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Assumes MVVM and you wish to bind to properties and commands -->
+                            <TextBlock Grid.Column="0" Text="{Binding Text}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Text}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Text}"/>
+                            <Button Content="Show" Command="{Binding ButtonExecutionCommand}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Margin="0,10,10,10" Name="new" Click="new_Click">New</Button>
+                <Button Margin="0,10,10,10" Name="export" Click="export_Click">Export</Button>
+                <Button Margin="0,10,10,10" Name="close" Click="close_Click">Close</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

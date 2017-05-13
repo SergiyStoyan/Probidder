@@ -145,6 +145,9 @@
     <Compile Include="AttachmentControl.xaml.cs">
       <DependentUpon>AttachmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListWindow.xaml.cs">
+      <DependentUpon>ListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Db.cs" />
     <Compile Include="InfoControl.xaml.cs" />
     <Compile Include="InfoWindow.xaml.cs" />
@@ -216,6 +219,10 @@
     <Page Include="AttachmentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="InfoControl.xaml">
       <Generator>MSBuild:Compile</Generator>

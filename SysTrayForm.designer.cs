@@ -32,9 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SysTray));
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.newTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newAuctionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.StartStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.List = new System.Windows.Forms.ToolStripMenuItem();
             this.workDirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -55,63 +55,62 @@
             // RightClickMenu
             // 
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newTicketToolStripMenuItem,
+            this.newAuctionToolStripMenuItem,
+            this.List,
             this.settingsToolStripMenuItem,
-            this.StartStop,
             this.workDirToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.RightClickMenu.Name = "Menu";
-            this.RightClickMenu.Size = new System.Drawing.Size(139, 142);
+            this.RightClickMenu.Size = new System.Drawing.Size(156, 164);
             // 
-            // newTicketToolStripMenuItem
+            // newAuctionToolStripMenuItem
             // 
-            this.newTicketToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.newTicketToolStripMenuItem.Name = "newTicketToolStripMenuItem";
-            this.newTicketToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.newTicketToolStripMenuItem.Text = "New Ticket";
-            this.newTicketToolStripMenuItem.Click += new System.EventHandler(this.newTicketToolStripMenuItem_Click);
+            this.newAuctionToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.newAuctionToolStripMenuItem.Name = "newAuctionToolStripMenuItem";
+            this.newAuctionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.newAuctionToolStripMenuItem.Text = "New Auction";
+            this.newAuctionToolStripMenuItem.Click += new System.EventHandler(this.newAuctionToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
-            // StartStop
+            // List
             // 
-            this.StartStop.CheckOnClick = true;
-            this.StartStop.Name = "StartStop";
-            this.StartStop.Size = new System.Drawing.Size(138, 22);
-            this.StartStop.Text = "Run On...";
-            this.StartStop.CheckedChanged += new System.EventHandler(this.StartStop_CheckedChanged);
+            this.List.Name = "List";
+            this.List.Size = new System.Drawing.Size(155, 22);
+            this.List.Text = "Saved Auctions";
+            this.List.Click += new System.EventHandler(this.List_Click);
             // 
             // workDirToolStripMenuItem
             // 
             this.workDirToolStripMenuItem.Name = "workDirToolStripMenuItem";
-            this.workDirToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.workDirToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.workDirToolStripMenuItem.Text = "Work Dir";
             this.workDirToolStripMenuItem.Click += new System.EventHandler(this.workDirToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -140,8 +139,8 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem StartStop;
+        private System.Windows.Forms.ToolStripMenuItem List;
         private System.Windows.Forms.ToolStripMenuItem workDirToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newTicketToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newAuctionToolStripMenuItem;
     }
 }

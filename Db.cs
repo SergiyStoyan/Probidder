@@ -13,7 +13,7 @@ using LiteDB;
 
 namespace Cliver.Foreclosures
 {
-    class Db
+  public  class Db
     {
         public class Foreclosures
         {
@@ -99,6 +99,16 @@ namespace Cliver.Foreclosures
             static public Foreclosure GetLast()
             {
                 return foreclosures.FindAll().OrderByDescending(x => x.Id).FirstOrDefault();
+            }
+
+            static public Foreclosure GetById(int id)
+            {
+                return foreclosures.FindById(id);
+            }
+
+            static public List<Foreclosure> GetAll()
+            {
+                return foreclosures.FindAll().OrderBy(x => x.FILING_DATE).ToList();
             }
 
             static public void Save(Foreclosure foreclosure)
