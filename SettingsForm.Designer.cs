@@ -37,17 +37,15 @@
             this.TicketModifierKey2 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.MaxUpTime = new System.Windows.Forms.TextBox();
+            this.DbRefreshPeriodInSecs = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.UserEmail = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bOk
             // 
             this.bOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOk.Location = new System.Drawing.Point(116, 194);
+            this.bOk.Location = new System.Drawing.Point(116, 156);
             this.bOk.Name = "bOk";
             this.bOk.Size = new System.Drawing.Size(75, 23);
             this.bOk.TabIndex = 0;
@@ -58,7 +56,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(197, 194);
+            this.bCancel.Location = new System.Drawing.Point(197, 156);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 9;
@@ -136,48 +134,30 @@
             this.groupBox1.Size = new System.Drawing.Size(258, 69);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Ticket Key Combination";
+            this.groupBox1.Text = "New Entry Key Combination";
             // 
-            // MaxUpTime
+            // DbRefreshPeriodInSecs
             // 
-            this.MaxUpTime.Location = new System.Drawing.Point(25, 111);
-            this.MaxUpTime.Name = "MaxUpTime";
-            this.MaxUpTime.Size = new System.Drawing.Size(138, 20);
-            this.MaxUpTime.TabIndex = 19;
+            this.DbRefreshPeriodInSecs.Location = new System.Drawing.Point(25, 111);
+            this.DbRefreshPeriodInSecs.Name = "DbRefreshPeriodInSecs";
+            this.DbRefreshPeriodInSecs.Size = new System.Drawing.Size(138, 20);
+            this.DbRefreshPeriodInSecs.TabIndex = 19;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(22, 95);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(141, 13);
+            this.label4.Size = new System.Drawing.Size(128, 13);
             this.label4.TabIndex = 18;
-            this.label4.Text = "System Max Up Time (secs):";
-            // 
-            // UserEmail
-            // 
-            this.UserEmail.Location = new System.Drawing.Point(25, 156);
-            this.UserEmail.Name = "UserEmail";
-            this.UserEmail.Size = new System.Drawing.Size(235, 20);
-            this.UserEmail.TabIndex = 21;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 140);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 13);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "User Email:";
+            this.label4.Text = "Db Refresh Period (secs):";
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(284, 229);
-            this.Controls.Add(this.UserEmail);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.MaxUpTime);
+            this.ClientSize = new System.Drawing.Size(284, 191);
+            this.Controls.Add(this.DbRefreshPeriodInSecs);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bCancel);
@@ -202,9 +182,7 @@
         private System.Windows.Forms.ComboBox TicketModifierKey2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox MaxUpTime;
+        private System.Windows.Forms.TextBox DbRefreshPeriodInSecs;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox UserEmail;
-        private System.Windows.Forms.Label label1;
     }
 }

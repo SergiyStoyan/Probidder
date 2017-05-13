@@ -32,7 +32,7 @@ namespace Cliver.Foreclosures
         static System.Windows.Threading.Dispatcher dispatcher = null;
         static object lock_object = new object();
 
-        public static InfoWindow Create(string title, string text, string image_url, string action_name, Action action)
+        public static InfoWindow Create(string title, string text, string image_url, string action_name, Action action, Brush box_brush, Brush button_brush)
         {
             lock (lock_object)
             {
@@ -41,6 +41,7 @@ namespace Cliver.Foreclosures
                 Action a = () =>
                 {
                     w = new InfoWindow(title, text, image_url, action_name, action);
+                    w.SetAppearance(box_brush, button_brush);
                     WindowInteropHelper h = new WindowInteropHelper(w);
                     h.EnsureHandle();
                     w.Show();
@@ -88,6 +89,14 @@ namespace Cliver.Foreclosures
             InitializeComponent();
         }
 
+        internal void SetAppearance(Brush box_brush, Brush button_brush)
+        {
+            //InfoControl ic = (InfoControl)FindName("InfoControl");
+            InfoControl ic = (InfoControl)grid.Children[0]; 
+            ic.box.Background = box_brush;
+            ic.button.Background = button_brush;
+        }
+
         InfoWindow(string title, string text, string image_url, string action_name, Action action)
         {
             InitializeComponent();
@@ -107,7 +116,9 @@ namespace Cliver.Foreclosures
             Topmost = true;
             Owner = invisible_owner_w;
 
-            this.grid.Children.Add(new InfoControl(title, text, image_url, action_name, action, true));
+            InfoControl ic = new InfoControl(title, text, image_url, action_name, action, true);
+            ic.Name = "InfoControl";
+            grid.Children.Add(ic);
 
             //LayoutTransform = new ScaleTransform(0.1, 0.1);
             //UpdateLayout();

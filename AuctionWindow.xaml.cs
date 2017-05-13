@@ -49,6 +49,10 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetPropertyCodes())
                 PROP_DESC.Items.Add(c);
 
+            OWNER_ROLE.Items.Clear();
+            foreach (string c in Db.GetOwnerRole())
+                OWNER_ROLE.Items.Add(c);
+
             if (foreclosure_id != null)
                 set_foreclosure(Db.Foreclosures.GetById((int)foreclosure_id));
             else

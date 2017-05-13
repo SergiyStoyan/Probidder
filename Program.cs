@@ -22,7 +22,12 @@ using Cliver;
 using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
-
+/*
+ - when saving, which fields are obligatory and the user should be notified if they are empty?
+ - AUCTION_DATE, AUCTION_TIME are not used in the access form so they are empty now. Let me know what to do with them?
+ - 
+     
+     */
 namespace Cliver.Foreclosures
 {
     public class Program
@@ -53,9 +58,8 @@ namespace Cliver.Foreclosures
             {
                 ProcessRoutines.RunSingleProcessOnly();
 
-                //Service.Running = true;
-
-                Db.BeginRefresh();
+                Service.Running = true;
+                //Db.BeginRefresh();
 
                 Application.Run(SysTray.This);
             }

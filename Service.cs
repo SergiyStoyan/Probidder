@@ -41,7 +41,9 @@ namespace Cliver.Foreclosures
             set
             {
                 set_hot_keys(value);
+                set_db_refresher(value);
                 StateChanged?.Invoke();
+                Log.Inform("Service: " + value);
             }
             get
             {
@@ -50,15 +52,38 @@ namespace Cliver.Foreclosures
         }
 
         static ManualResetEvent stop = new ManualResetEvent(false);
-                
-        static void StartShutDown(string param)
+
+        static void set_db_refresher(bool on)
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "cmd";
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.Arguments = "/C shutdown " + param;
-            Process.Start(psi);
+            if (!on)
+            {
+                if (db_refresher_t != null && db_refresher_t.IsAlive)
+                {
+                    stop.Set();
+                    if (!db_refresher_t.Join(1000))
+                        db_refresher_t.Abort();
+                }
+                return;
+            }
+            if (db_refresher_t != null && db_refresher_t.IsAlive)
+                return;
+            stop.Reset();
+            db_refresher_t = ThreadRoutines.StartTry(() =>
+            {
+                DateTime next_db_refresh_time = DateTime.Now;
+                while (true)
+                {
+                    if (next_db_refresh_time <= DateTime.Now)
+                    {
+                        next_db_refresh_time = DateTime.Now.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
+                        Db.BeginRefresh();
+                    }
+                    if (stop.WaitOne(10000))
+                        return;
+                }
+            });
         }
+        static Thread db_refresher_t = null;
 
         static void set_hot_keys(bool listen)
         {

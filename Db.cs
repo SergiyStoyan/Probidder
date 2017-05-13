@@ -29,6 +29,9 @@ namespace Cliver.Foreclosures
 
         public static void BeginRefresh()
         {
+            if (refresh_t != null && refresh_t.IsAlive)
+                return;
+
             refresh_t = ThreadRoutines.StartTry(() =>
             {
                 Log.Inform("Refreshing db.");
@@ -75,18 +78,23 @@ namespace Cliver.Foreclosures
                     string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
                     File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
                 }
+
                 if (!File.Exists(db_dir + "\\property_codes.csv"))
                     File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
+
+                if (!File.Exists(db_dir + "\\owner_role.csv"))
+                    File.Copy(Log.AppDir + "\\owner_role.csv", db_dir + "\\owner_role.csv");
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
-                InfoWindow.Create("Foreclosures", "Database has been refreshed successfully.", null, "OK", null);
+                InfoWindow.Create("Foreclosures", "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Green);
             },
             (Exception e) =>
             {
                 Log.Error(e);
                 Log.Error("Could not refresh db.");
+                InfoWindow.Create("Foreclosures: database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);
             },
             () =>
             {
@@ -200,6 +208,18 @@ namespace Cliver.Foreclosures
         {
             List<string> vs = new List<string>();
             string[] ss = File.ReadAllLines(db_dir + "\\property_codes.csv");
+            foreach (string s in ss)
+            {
+                string[] fs = s.Split(',');
+                vs.Add(fs[0]);
+            }
+            return vs;
+        }
+
+        public static List<string> GetOwnerRole()
+        {
+            List<string> vs = new List<string>();
+            string[] ss = File.ReadAllLines(db_dir + "\\owner_role.csv");
             foreach (string s in ss)
             {
                 string[] fs = s.Split(',');

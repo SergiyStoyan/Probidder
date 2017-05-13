@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace Cliver.Foreclosures
 {
-    public partial class SettingsForm : BaseForm// Form// 
+    public partial class SettingsForm : Form
     {
         public SettingsForm()
         {
             InitializeComponent();
+            this.Icon = AssemblyRoutines.GetAppIcon();
 
             FormClosed += delegate
               {
@@ -32,6 +33,8 @@ namespace Cliver.Foreclosures
             foreach (System.Windows.Input.ModifierKeys k in Enum.GetValues(typeof(System.Windows.Input.ModifierKeys)))
                 TicketModifierKey2.Items.Add(k);
             TicketModifierKey2.SelectedItem = Settings.General.TicketModifierKey2;
+
+            DbRefreshPeriodInSecs.Text = Settings.General.DbRefreshPeriodInSecs.ToString();
         }
 
         //public class EncodingItem
@@ -61,11 +64,11 @@ namespace Cliver.Foreclosures
                 Settings.General.TicketKey = (System.Windows.Input.Key)TicketKey.SelectedItem;
                 Settings.General.TicketModifierKey1 = (System.Windows.Input.ModifierKeys)TicketModifierKey1.SelectedItem;
                 Settings.General.TicketModifierKey2 = (System.Windows.Input.ModifierKeys)TicketModifierKey2.SelectedItem;
-                int secs = int.Parse(MaxUpTime.Text);
+                int secs = int.Parse(DbRefreshPeriodInSecs.Text);
                 if (secs <= 0)
-                    throw new Exception("Max Up Time must be positive.");
+                    throw new Exception("Db Refresh Period must be positive.");
                 if (secs > Int32.MaxValue)
-                    throw new Exception("Max Up Time is too big.");
+                    throw new Exception("Db Refresh Period is too big.");
 
                 Settings.General.Save();
                 Config.Reload();

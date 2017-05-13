@@ -25,8 +25,8 @@ namespace Cliver.Foreclosures
             public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
-            public DateTime LastRefreshDbTime = DateTime.MinValue;
-            //public string ZipCodesFile = "illinois_postal_codes.csv";
+            //public DateTime LastRefreshDbTime = DateTime.MinValue;
+            public int DbRefreshPeriodInSecs = 60 * 60 * 24;
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;
