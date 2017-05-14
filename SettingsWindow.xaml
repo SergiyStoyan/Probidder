@@ -17,16 +17,18 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <GroupBox Grid.Row="0" Header="DataBase"  Margin="10,10,10,10" Padding="10">
-            <StackPanel>
-                <Label>Db Refresh Period (secs):</Label>
-                <TextBox Name="DbRefreshPeriodInSecs"></TextBox>
-                <Label>Db Refresh Retry Period (secs):</Label>
-                <TextBox Name="DbRefreshRetryPeriodInSecs"></TextBox>
-                <Label>Next Db Refresh Time:</Label>
-                <xctk:DateTimePicker Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False" />
-            </StackPanel>
-        </GroupBox>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <GroupBox Grid.Row="0" Header="DataBase"  Margin="10,10,10,10" Padding="10">
+                <StackPanel>
+                    <Label>Db Refresh Period (secs):</Label>
+                    <TextBox Name="DbRefreshPeriodInSecs"></TextBox>
+                    <Label>Db Refresh Retry Period (secs):</Label>
+                    <TextBox Name="DbRefreshRetryPeriodInSecs"></TextBox>
+                    <Label>Next Db Refresh Time:</Label>
+                    <xctk:DateTimePicker Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False" />
+                </StackPanel>
+            </GroupBox>
+        </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">
             <UniformGrid HorizontalAlignment="Right" Rows="1">
                 <Button Name="ok" Click="ok_Click" Margin="10,0,0,0" >OK</Button>
