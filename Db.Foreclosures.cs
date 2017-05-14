@@ -18,61 +18,12 @@ namespace Cliver.Foreclosures
         {
             //static SQLiteConnection dbc;
             //static readonly string db_file = Db.db_dir + "\\db.sqlite";
+            static LiteDatabase db = new LiteDatabase(Db.db_file);
             static LiteCollection<Foreclosure> foreclosures;
 
             static Foreclosures()
             {
-                LiteDatabase db = new LiteDatabase(Db.db_file);
                 foreclosures = db.GetCollection<Foreclosure>("foreclosures");
-
-
-
-                //                SQLiteConnection.CreateFile(db_file);
-                //                dbc = new SQLiteConnection("Data Source=" + db_file + "; Version=3;");
-                //                dbc.Open();
-                //                SQLiteCommand c = new SQLiteCommand(@"CREATE TABLE foreclosures (
-                //TYPE_OF_EN VARCHAR(20), 
-                //COUNTY VARCHAR(20), 
-                //CASE_N VARCHAR(20), 
-                //FILING_DATE VARCHAR(20), 
-                //AUCTION_DATE VARCHAR(20), 
-                //AUCTION_TIME VARCHAR(20), 
-                //SALE_LOC;
-                //                public string ENTRY_DATE;
-                //                public string LENDOR;
-                //                public string ORIGINAL_MTG;
-                //                public string DOCUMENT_N;
-                //                public string ORIGINAL_I;
-                //                public string LEGAL_D;
-                //                public string ADDRESS;
-                //                public string CITY;
-                //                public string ZIP;
-                //                public string PIN;
-                //                public string DATE_OF_CA;
-                //                public string LAST_PAY_DATE;
-                //                public string BALANCE_DU;
-                //                public string PER_DIEM_I;
-                //                public string CURRENT_OW;
-                //                public string IS_ORG;
-                //                public string DECEASED;
-                //                public string OWNER_ROLE;
-                //                public string OTHER_LIENS;
-                //                public string ADDL_DEF;
-                //                public string PUB_COMMENTS;
-                //                public string INT_COMMENTS;
-                //                public string ATTY;
-                //                public string ATTORNEY_S;
-                //                public string TYPE_OF_MO;
-                //                public string PROP_DESC;
-                //                public string INTEREST_R;
-                //                public string MONTHLY_PAY;
-                //                public string TERM_OF_MTG;
-                //                public string DEF_ADDRESS;
-                //                public string DEF_PHONE;                    
-
-
-                //                    VARCHAR(20), score INT)
-                //", dbc);
             }
 
             static public Foreclosure Back(Foreclosure current)
@@ -123,6 +74,11 @@ namespace Cliver.Foreclosures
             static public void Delete(int id)
             {
                 foreclosures.Delete(id);
+            }
+
+            static public void Drop()
+            {
+                db.DropCollection("foreclosures");
             }
 
             static public int Count()
