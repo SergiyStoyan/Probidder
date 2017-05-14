@@ -70,8 +70,11 @@ namespace Cliver.Foreclosures
                 if (!File.Exists(db_dir + "\\property_codes.csv"))
                     File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
 
-                if (!File.Exists(db_dir + "\\owner_role.csv"))
-                    File.Copy(Log.AppDir + "\\owner_role.csv", db_dir + "\\owner_role.csv");
+                if (!File.Exists(db_dir + "\\owner_roles.csv"))
+                    File.Copy(Log.AppDir + "\\owner_roles.csv", db_dir + "\\owner_roles.csv");
+
+                if (!File.Exists(db_dir + "\\counties.csv"))
+                    File.Copy(Log.AppDir + "\\counties.csv", db_dir + "\\counties.csv");
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
@@ -169,10 +172,22 @@ namespace Cliver.Foreclosures
             return vs;
         }
 
-        public static List<string> GetOwnerRole()
+        public static List<string> GetOwnerRoles()
         {
             List<string> vs = new List<string>();
-            string[] ss = File.ReadAllLines(db_dir + "\\owner_role.csv");
+            string[] ss = File.ReadAllLines(db_dir + "\\owner_roles.csv");
+            foreach (string s in ss)
+            {
+                string[] fs = s.Split(',');
+                vs.Add(fs[0]);
+            }
+            return vs;
+        }
+
+        public static List<string> GetCounties()
+        {
+            List<string> vs = new List<string>();
+            string[] ss = File.ReadAllLines(db_dir + "\\counties.csv");
             foreach (string s in ss)
             {
                 string[] fs = s.Split(',');

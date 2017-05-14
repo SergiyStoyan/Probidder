@@ -12,22 +12,22 @@ using LiteDB;
 
 namespace Cliver.Foreclosures
 {
-    public partial class Db
-    {
-        public class Cities : Db.Table<City>
-        {
-            public List<City> GetBy(string county)
-            {
-                county = get_normalized(county);
-                return table.Find(x => get_normalized(x.county) == county).ToList();
-            }
-        }
+    //public partial class Db
+    //{
+    //    public class Cities : Db.Table<City>
+    //    {
+    //        public List<City> GetBy(string county)
+    //        {
+    //            county = get_normalized(county);
+    //            return table.Find(x => get_normalized(x.county) == county).ToList();
+    //        }
+    //    }
 
-        public class City : Document
-        {
-            public string city { get; set; }
-            public string county { get; set; }
-            public string count { get; set; }
-        }
-    }
+    //    public class City : Document
+    //    {
+    //        public string city { get; set; }
+    //        public string county { get; set; }
+    //        public string count { get; set; }
+    //    }
+    //}
 }

@@ -38,7 +38,7 @@ namespace Cliver.Foreclosures
             }
 
             COUNTY.Items.Clear();
-            foreach (string c in Settings.Default.Counties)
+            foreach (string c in Db.GetCounties())
                 COUNTY.Items.Add(c);
 
             TYPE_OF_MO.Items.Clear();
@@ -50,7 +50,7 @@ namespace Cliver.Foreclosures
                 PROP_DESC.Items.Add(c);
 
             OWNER_ROLE.Items.Clear();
-            foreach (string c in Db.GetOwnerRole())
+            foreach (string c in Db.GetOwnerRoles())
                 OWNER_ROLE.Items.Add(c);
 
             if (foreclosure_id != null)

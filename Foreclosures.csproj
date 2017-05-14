@@ -158,7 +158,6 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Default.cs" />
     <Compile Include="Settings\General.cs" />
     <Compile Include="SysTrayForm.cs">
       <SubType>Form</SubType>
