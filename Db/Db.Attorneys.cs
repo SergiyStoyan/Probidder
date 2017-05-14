@@ -14,20 +14,20 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
-        public class Attorneys : Db.Table<Attorney>
-        {
-            public List<Attorney> GetBy(string county)
-            {
-                county = get_normalized(county);
-                return table.Find(x => get_normalized(x.county) == county).ToList();
-            }
-        }
+        //public class Attorneys : Db.Table<Attorney>
+        //{
+        //    public List<Attorney> GetBy(string county)
+        //    {
+        //        county = get_normalized(county);
+        //        return table.Find(x => get_normalized(x.county) == county).ToList();
+        //    }
+        //}
 
-        public class Attorney : Document
-        {
-            public string attorney { get; set; }
-            public string county { get; set; }
-            public string count { get; set; }
-        }
+        //public class Attorney : Document
+        //{
+        //    public string attorney { get; set; }
+        //    public string county { get; set; }
+        //    public string count { get; set; }
+        //}
     }
 }

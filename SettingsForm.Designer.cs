@@ -43,7 +43,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.NextDbRefreshTime = new System.Windows.Forms.DateTimePicker();
-            this.RefreshDb = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -191,19 +190,8 @@
             this.NextDbRefreshTime.Size = new System.Drawing.Size(200, 20);
             this.NextDbRefreshTime.TabIndex = 24;
             // 
-            // RefreshDb
-            // 
-            this.RefreshDb.Location = new System.Drawing.Point(18, 143);
-            this.RefreshDb.Name = "RefreshDb";
-            this.RefreshDb.Size = new System.Drawing.Size(75, 23);
-            this.RefreshDb.TabIndex = 25;
-            this.RefreshDb.Text = "Refresh DataBase";
-            this.RefreshDb.UseVisualStyleBackColor = true;
-            this.RefreshDb.Click += new System.EventHandler(this.RefreshDb_Click);
-            // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.RefreshDb);
             this.groupBox2.Controls.Add(this.NextDbRefreshTime);
             this.groupBox2.Controls.Add(this.DbRefreshPeriodInSecs);
             this.groupBox2.Controls.Add(this.label2);
@@ -212,7 +200,7 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Location = new System.Drawing.Point(12, 90);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(260, 178);
+            this.groupBox2.Size = new System.Drawing.Size(260, 150);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "DataBase";
@@ -253,7 +241,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker NextDbRefreshTime;
-        private System.Windows.Forms.Button RefreshDb;
         private System.Windows.Forms.GroupBox groupBox2;
     }
 }

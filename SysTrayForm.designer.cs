@@ -39,6 +39,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RightClickMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,26 +58,27 @@
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newAuctionToolStripMenuItem,
             this.List,
+            this.refreshDatabaseToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.workDirToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.RightClickMenu.Name = "Menu";
-            this.RightClickMenu.Size = new System.Drawing.Size(156, 142);
+            this.RightClickMenu.Size = new System.Drawing.Size(165, 186);
             // 
             // newAuctionToolStripMenuItem
             // 
             this.newAuctionToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.newAuctionToolStripMenuItem.Name = "newAuctionToolStripMenuItem";
-            this.newAuctionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.newAuctionToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.newAuctionToolStripMenuItem.Text = "New Auction";
             this.newAuctionToolStripMenuItem.Click += new System.EventHandler(this.newAuctionToolStripMenuItem_Click);
             // 
             // List
             // 
             this.List.Name = "List";
-            this.List.Size = new System.Drawing.Size(155, 22);
+            this.List.Size = new System.Drawing.Size(164, 22);
             this.List.Text = "Saved Auctions";
             this.List.Click += new System.EventHandler(this.List_Click);
             // 
@@ -84,35 +86,42 @@
             // 
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // workDirToolStripMenuItem
             // 
             this.workDirToolStripMenuItem.Name = "workDirToolStripMenuItem";
-            this.workDirToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.workDirToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.workDirToolStripMenuItem.Text = "Work Dir";
             this.workDirToolStripMenuItem.Click += new System.EventHandler(this.workDirToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // refreshDatabaseToolStripMenuItem
+            // 
+            this.refreshDatabaseToolStripMenuItem.Name = "refreshDatabaseToolStripMenuItem";
+            this.refreshDatabaseToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.refreshDatabaseToolStripMenuItem.Text = "Refresh Database";
+            this.refreshDatabaseToolStripMenuItem.Click += new System.EventHandler(this.refreshDatabaseToolStripMenuItem_Click);
             // 
             // SysTray
             // 
@@ -142,5 +151,6 @@
         private System.Windows.Forms.ToolStripMenuItem List;
         private System.Windows.Forms.ToolStripMenuItem workDirToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newAuctionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshDatabaseToolStripMenuItem;
     }
 }

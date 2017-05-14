@@ -44,8 +44,8 @@ namespace Cliver.Foreclosures
                     stop.Reset();
                 else
                     stop.Set();
-                set_hot_keys(value);
-                //set_db_refresher(value);
+                //set_hot_keys(value);
+                set_db_refresher(value);
                 StateChanged?.Invoke();
                 Log.Inform("Service: " + value);
             }
@@ -72,17 +72,12 @@ namespace Cliver.Foreclosures
                 return;
             db_refresher_t = ThreadRoutines.StartTry(() =>
             {
-                while (true)
+                do
                 {
                     if (Settings.General.NextDbRefreshTime <= DateTime.Now)
-                    {
-                        DateTime start_db_refresh_time = DateTime.Now;
-                        Thread t = Db.BeginRefresh();
-                        t.Join();
-                    }
-                    if (stop.WaitOne(10000))
-                        return;
+                        Db.BeginRefresh().Join();
                 }
+                while (!stop.WaitOne(10000));
             });
         }
         static Thread db_refresher_t = null;

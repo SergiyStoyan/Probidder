@@ -97,10 +97,5 @@ namespace Cliver.Foreclosures
                 Message.Exclaim(ex.Message);
             }
         }
-
-        private void RefreshDb_Click(object sender, EventArgs e)
-        {
-            Db.BeginRefresh();
-        }
     }
 }
