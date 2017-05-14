@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foreclosures", "Foreclosure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalHotKey", "GlobalHotKey\GlobalHotKey.csproj", "{309C707F-4DFA-4412-9F54-4C0627B626AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "CliverRoutines\CliverRoutines.csproj", "{ACA94788-BED1-4B8E-94EF-E54293E8D139}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj", "{ACA94788-BED1-4B8E-94EF-E54293E8D139}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
