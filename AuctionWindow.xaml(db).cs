@@ -42,8 +42,11 @@ namespace Cliver.Foreclosures
                 COUNTY.Items.Add(c);
 
             TYPE_OF_MO.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
-                TYPE_OF_MO.Items.Add(c);
+            using (Db.MortgageTypes t = new Db.MortgageTypes())
+            {
+                foreach (Db.MortgageType c in t.GetAll())
+                    TYPE_OF_MO.Items.Add(c.mortgage_type);
+            }
 
             PROP_DESC.Items.Clear();
             foreach (string c in Db.GetPropertyCodes())
@@ -153,16 +156,25 @@ namespace Cliver.Foreclosures
         private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CITY.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                CITY.Items.Add(c);
+            {
+                Db.Cities t = new Db.Cities();
+                foreach (Db.City d in t.GetBy((string)COUNTY.SelectedItem))
+                    CITY.Items.Add(d.city);
+            }
 
             LENDOR.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                LENDOR.Items.Add(c);
+            {
+                Db.Plaintiffs t = new Db.Plaintiffs();
+                foreach (Db.Plaintiff d in t.GetBy((string)COUNTY.SelectedItem))
+                    LENDOR.Items.Add(d.plaintiff);
+            }
 
             ATTY.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                ATTY.Items.Add(c);
+            {
+                Db.Attorneys t = new Db.Attorneys();
+                foreach (Db.Attorney d in t.GetBy((string)COUNTY.SelectedItem))
+                    ATTY.Items.Add(d.attorney);
+            }
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -175,8 +187,9 @@ namespace Cliver.Foreclosures
         private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ATTORNEY_S.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
-                ATTORNEY_S.Items.Add(c);
+            Db.AttorneyPhones t = new Db.AttorneyPhones();
+            foreach (Db.AttorneyPhone d in t.GetBy((string)COUNTY.SelectedItem, (string)ATTY.SelectedItem))
+                ATTORNEY_S.Items.Add(d.attorney_phone);
             if (ATTORNEY_S.Items.Count == 1)
                 ATTORNEY_S.SelectedIndex = 0;
         }

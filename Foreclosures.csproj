@@ -109,11 +109,17 @@
     <Compile Include="AttachmentControl.xaml.cs">
       <DependentUpon>AttachmentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Db.Foreclosures.cs" />
+    <Compile Include="Db\Db.Cities.cs" />
+    <Compile Include="Db\Db.AttorneyPhones.cs" />
+    <Compile Include="Db\Db.cs" />
+    <Compile Include="Db\Db.Foreclosures.cs" />
+    <Compile Include="Db\Db.Attorneys.cs" />
+    <Compile Include="Db\Db.Plaintiffs.cs" />
+    <Compile Include="Db\Db.refresh.cs" />
     <Compile Include="ListWindow.xaml.cs">
       <DependentUpon>ListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Db.cs" />
+    <Compile Include="Db\Db.MortgageTypes.cs" />
     <Compile Include="InfoControl.xaml.cs" />
     <Compile Include="InfoWindow.xaml.cs" />
     <Compile Include="Service.cs" />

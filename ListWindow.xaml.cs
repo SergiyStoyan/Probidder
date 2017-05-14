@@ -81,13 +81,15 @@ namespace Cliver.Foreclosures
             Closed += delegate
             {
                 lw = null;
+                foreclosures.Dispose();
             };
         }
+        Db.Foreclosures foreclosures = new Db.Foreclosures();
 
         void fill()
         {
             list.Items.Clear();
-            foreach (Db.Foreclosures.Foreclosure f in Db.Foreclosures.GetAll())
+            foreach (Db.Foreclosures.Foreclosure f in foreclosures.GetAll())
                 list.Items.Add(new Item { Foreclosure = f });
         }
 
@@ -117,13 +119,13 @@ namespace Cliver.Foreclosures
             {
                 TextWriter tw = new StreamWriter(file);
                 tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosures.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
-                foreach (Db.Foreclosures.Foreclosure f in Db.Foreclosures.GetAll())
+                foreach (Db.Foreclosures.Foreclosure f in foreclosures.GetAll())
                     tw.WriteLine(FieldPreparation.GetCsvLine(f, FieldPreparation.FieldSeparator.COMMA));
                 tw.Close();
 
                 if (Message.YesNo("Data has been exported succesfully to " + file + "\r\n\r\nClean up the database?"))
                 {
-                    Db.Foreclosures.Drop();
+                    foreclosures.Drop();
                     fill();
                 }
             }

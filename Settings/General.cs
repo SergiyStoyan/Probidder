@@ -25,9 +25,9 @@ namespace Cliver.Foreclosures
             public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
-            //public DateTime LastRefreshDbTime = DateTime.MinValue;
             public int DbRefreshPeriodInSecs = 60 * 60 * 24;
             public int DbRefreshRetryPeriodInSecs = 60 * 60;
+            public DateTime NextDbRefreshTime = DateTime.MinValue;
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;

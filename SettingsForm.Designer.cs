@@ -41,13 +41,18 @@
             this.label4 = new System.Windows.Forms.Label();
             this.DbRefreshRetryPeriodInSecs = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.NextDbRefreshTime = new System.Windows.Forms.DateTimePicker();
+            this.RefreshDb = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bOk
             // 
             this.bOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOk.Location = new System.Drawing.Point(116, 203);
+            this.bOk.Location = new System.Drawing.Point(116, 290);
             this.bOk.Name = "bOk";
             this.bOk.Size = new System.Drawing.Size(75, 23);
             this.bOk.TabIndex = 0;
@@ -58,7 +63,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(197, 203);
+            this.bCancel.Location = new System.Drawing.Point(197, 290);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 9;
@@ -140,7 +145,7 @@
             // 
             // DbRefreshPeriodInSecs
             // 
-            this.DbRefreshPeriodInSecs.Location = new System.Drawing.Point(25, 111);
+            this.DbRefreshPeriodInSecs.Location = new System.Drawing.Point(18, 35);
             this.DbRefreshPeriodInSecs.Name = "DbRefreshPeriodInSecs";
             this.DbRefreshPeriodInSecs.Size = new System.Drawing.Size(138, 20);
             this.DbRefreshPeriodInSecs.TabIndex = 19;
@@ -148,7 +153,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 95);
+            this.label4.Location = new System.Drawing.Point(15, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(128, 13);
             this.label4.TabIndex = 18;
@@ -156,7 +161,7 @@
             // 
             // DbRefreshRetryPeriodInSecs
             // 
-            this.DbRefreshRetryPeriodInSecs.Location = new System.Drawing.Point(25, 152);
+            this.DbRefreshRetryPeriodInSecs.Location = new System.Drawing.Point(18, 76);
             this.DbRefreshRetryPeriodInSecs.Name = "DbRefreshRetryPeriodInSecs";
             this.DbRefreshRetryPeriodInSecs.Size = new System.Drawing.Size(138, 20);
             this.DbRefreshRetryPeriodInSecs.TabIndex = 21;
@@ -164,21 +169,60 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 136);
+            this.label1.Location = new System.Drawing.Point(15, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(156, 13);
             this.label1.TabIndex = 20;
             this.label1.Text = "Db Refresh Retry Period (secs):";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 101);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(115, 13);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Next Db Refresh Time:";
+            // 
+            // NextDbRefreshTime
+            // 
+            this.NextDbRefreshTime.Location = new System.Drawing.Point(18, 117);
+            this.NextDbRefreshTime.Name = "NextDbRefreshTime";
+            this.NextDbRefreshTime.Size = new System.Drawing.Size(200, 20);
+            this.NextDbRefreshTime.TabIndex = 24;
+            // 
+            // RefreshDb
+            // 
+            this.RefreshDb.Location = new System.Drawing.Point(18, 143);
+            this.RefreshDb.Name = "RefreshDb";
+            this.RefreshDb.Size = new System.Drawing.Size(75, 23);
+            this.RefreshDb.TabIndex = 25;
+            this.RefreshDb.Text = "Refresh DataBase";
+            this.RefreshDb.UseVisualStyleBackColor = true;
+            this.RefreshDb.Click += new System.EventHandler(this.RefreshDb_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.RefreshDb);
+            this.groupBox2.Controls.Add(this.NextDbRefreshTime);
+            this.groupBox2.Controls.Add(this.DbRefreshPeriodInSecs);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.DbRefreshRetryPeriodInSecs);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Location = new System.Drawing.Point(12, 90);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(260, 178);
+            this.groupBox2.TabIndex = 26;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "DataBase";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(284, 238);
-            this.Controls.Add(this.DbRefreshRetryPeriodInSecs);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.DbRefreshPeriodInSecs);
-            this.Controls.Add(this.label4);
+            this.ClientSize = new System.Drawing.Size(284, 325);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOk);
@@ -186,8 +230,9 @@
             this.Text = "Settings";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -206,5 +251,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox DbRefreshRetryPeriodInSecs;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DateTimePicker NextDbRefreshTime;
+        private System.Windows.Forms.Button RefreshDb;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }

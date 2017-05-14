@@ -14,81 +14,106 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
-        public class Foreclosures
+        public class Foreclosures : Db
         {
-            //static SQLiteConnection dbc;
-            //static readonly string db_file = Db.db_dir + "\\db.sqlite";
-            static LiteDatabase db = new LiteDatabase(Db.db_file);
-            static LiteCollection<Foreclosure> foreclosures;
-
-            static Foreclosures()
+            public Foreclosures()
             {
-                foreclosures = db.GetCollection<Foreclosure>("foreclosures");
+                table = db.GetCollection<Foreclosure>("foreclosures");
             }
+            LiteCollection<Foreclosure> table = null;
 
-            static public Foreclosure Back(Foreclosure current)
+            public Foreclosure Back(Foreclosure current)
             {
-                if (current == null)
-                    current = GetLast();
-                return foreclosures.Find(x => x.Id < current.Id).OrderByDescending(x => x.Id).FirstOrDefault();
-            }
-
-            static public Foreclosure Forward(Foreclosure current)
-            {
-                if (current == null)
-                    current = GetFirst();
-                return foreclosures.Find(x => x.Id > current.Id).OrderBy(x => x.Id).FirstOrDefault();
-            }
-
-            static public Foreclosure GetFirst()
-            {
-                return foreclosures.FindAll().OrderBy(x => x.Id).FirstOrDefault();
-            }
-
-            static public Foreclosure GetLast()
-            {
-                return foreclosures.FindAll().OrderByDescending(x => x.Id).FirstOrDefault();
-            }
-
-            static public Foreclosure GetById(int id)
-            {
-                return foreclosures.FindById(id);
-            }
-
-            static public List<Foreclosure> GetAll()
-            {
-                return foreclosures.FindAll().OrderBy(x => x.Id).ToList();
-            }
-
-            static public int Save(Foreclosure foreclosure)
-            {
-                if (foreclosure.Id == 0)
+                lock (db)
                 {
-                    var b = foreclosures.Insert(foreclosure);
-                    return b.AsInt32;
+                    if (current == null)
+                        current = GetLast();
+                    return table.Find(x => x.Id < current.Id).OrderByDescending(x => x.Id).FirstOrDefault();
                 }
-                foreclosures.Update(foreclosure);
-                return foreclosure.Id;
             }
 
-            static public void Delete(int id)
+            public Foreclosure Forward(Foreclosure current)
             {
-                foreclosures.Delete(id);
+                lock (db)
+                {
+                    if (current == null)
+                        current = GetFirst();
+                    return table.Find(x => x.Id > current.Id).OrderBy(x => x.Id).FirstOrDefault();
+                }
             }
 
-            static public void Drop()
+            public Foreclosure GetFirst()
             {
-                db.DropCollection("foreclosures");
+                lock (db)
+                {
+                    return table.FindAll().OrderBy(x => x.Id).FirstOrDefault();
+                }
             }
 
-            static public int Count()
+            public Foreclosure GetLast()
             {
-                return foreclosures.Count();
+                lock (db)
+                {
+                    return table.FindAll().OrderByDescending(x => x.Id).FirstOrDefault();
+                }
             }
 
-            public class Foreclosure
+            public Foreclosure GetById(int id)
             {
-                public int Id { get; set; }
+                lock (db)
+                {
+                    return table.FindById(id);
+                }
+            }
+
+            public List<Foreclosure> GetAll()
+            {
+                lock (db)
+                {
+                    return table.FindAll().OrderBy(x => x.Id).ToList();
+                }
+            }
+
+            public int Save(Foreclosure foreclosure)
+            {
+                lock (db)
+                {
+                    if (foreclosure.Id == 0)
+                    {
+                        var b = table.Insert(foreclosure);
+                        return b.AsInt32;
+                    }
+                    table.Update(foreclosure);
+                    return foreclosure.Id;
+                }
+            }
+
+            public void Delete(int id)
+            {
+                lock (db)
+                {
+                    table.Delete(id);
+                }
+            }
+
+            public void Drop()
+            {
+                lock (db)
+                {
+                    db.DropCollection("foreclosures");
+                }
+            }
+
+            public int Count()
+            {
+                lock (db)
+                {
+                    return table.Count();
+                }
+            }
+
+            public class Foreclosure: Document
+            {
                 public string TYPE_OF_EN { get; set; }
                 public string COUNTY { get; set; }
                 public string CASE_N { get; set; }

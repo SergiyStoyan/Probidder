@@ -36,6 +36,7 @@ namespace Cliver.Foreclosures
 
             DbRefreshPeriodInSecs.Text = Settings.General.DbRefreshPeriodInSecs.ToString();
             DbRefreshRetryPeriodInSecs.Text = Settings.General.DbRefreshRetryPeriodInSecs.ToString();
+            NextDbRefreshTime.Value = Settings.General.NextDbRefreshTime;
         }
 
         //public class EncodingItem
@@ -80,6 +81,8 @@ namespace Cliver.Foreclosures
                     throw new Exception("Db Refresh Retry Period is too big.");
                 Settings.General.DbRefreshRetryPeriodInSecs = secs;
 
+                Settings.General.NextDbRefreshTime = NextDbRefreshTime.Value;
+
                 Settings.General.Save();
                 Config.Reload();
 
@@ -93,6 +96,11 @@ namespace Cliver.Foreclosures
             {
                 Message.Exclaim(ex.Message);
             }
+        }
+
+        private void RefreshDb_Click(object sender, EventArgs e)
+        {
+            Db.BeginRefresh();
         }
     }
 }

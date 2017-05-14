@@ -40,14 +40,18 @@ namespace Cliver.Foreclosures
         {
             set
             {
+                if(value)
+                    stop.Reset();
+                else
+                    stop.Set();
                 set_hot_keys(value);
-                set_db_refresher(value);
+                //set_db_refresher(value);
                 StateChanged?.Invoke();
                 Log.Inform("Service: " + value);
             }
             get
             {
-                return key_manager != null;
+                return !stop.WaitOne(0);
             }
         }
 
@@ -59,7 +63,6 @@ namespace Cliver.Foreclosures
             {
                 if (db_refresher_t != null && db_refresher_t.IsAlive)
                 {
-                    stop.Set();
                     if (!db_refresher_t.Join(1000))
                         db_refresher_t.Abort();
                 }
@@ -67,21 +70,15 @@ namespace Cliver.Foreclosures
             }
             if (db_refresher_t != null && db_refresher_t.IsAlive)
                 return;
-            stop.Reset();
             db_refresher_t = ThreadRoutines.StartTry(() =>
             {
-                DateTime next_db_refresh_time = DateTime.Now;
                 while (true)
                 {
-                    if (next_db_refresh_time <= DateTime.Now)
+                    if (Settings.General.NextDbRefreshTime <= DateTime.Now)
                     {
                         DateTime start_db_refresh_time = DateTime.Now;
                         Thread t = Db.BeginRefresh();
                         t.Join();
-                        if (Db.RefreshTime >= start_db_refresh_time)
-                            next_db_refresh_time = start_db_refresh_time.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
-                        else
-                            next_db_refresh_time = start_db_refresh_time.AddSeconds(Settings.General.DbRefreshRetryPeriodInSecs);
                     }
                     if (stop.WaitOne(10000))
                         return;
