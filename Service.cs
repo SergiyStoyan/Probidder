@@ -23,7 +23,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Windows.Input;
-using GlobalHotKey;
+//using GlobalHotKey;
 
 namespace Cliver.Foreclosures
 {
@@ -84,32 +84,32 @@ namespace Cliver.Foreclosures
 
         static void set_hot_keys(bool listen)
         {
-            if (key_manager != null)
-            {
-                key_manager.Dispose();
-                key_manager = null;
-            }
-            if (!listen)
-                return;
-            if (Settings.General.TicketKey != System.Windows.Input.Key.None)
-            {
-                key_manager = new HotKeyManager();
-                System.Windows.Input.ModifierKeys mks;
-                if (Settings.General.TicketModifierKey1 != ModifierKeys.None)
-                {
-                    mks = Settings.General.TicketModifierKey1;
-                    if (Settings.General.TicketModifierKey2 != ModifierKeys.None)
-                        mks |= Settings.General.TicketModifierKey2;
-                }
-                else
-                    mks = ModifierKeys.None;
-                var hotKey = key_manager.Register(Settings.General.TicketKey, mks);
-                key_manager.KeyPressed += delegate (object sender, KeyPressedEventArgs e)
-                {
-                   // CreateTicket();
-                };
-            }
+            //if (key_manager != null)
+            //{
+            //    key_manager.Dispose();
+            //    key_manager = null;
+            //}
+            //if (!listen)
+            //    return;
+            //if (Settings.General.TicketKey != System.Windows.Input.Key.None)
+            //{
+            //    key_manager = new HotKeyManager();
+            //    System.Windows.Input.ModifierKeys mks;
+            //    if (Settings.General.TicketModifierKey1 != ModifierKeys.None)
+            //    {
+            //        mks = Settings.General.TicketModifierKey1;
+            //        if (Settings.General.TicketModifierKey2 != ModifierKeys.None)
+            //            mks |= Settings.General.TicketModifierKey2;
+            //    }
+            //    else
+            //        mks = ModifierKeys.None;
+            //    var hotKey = key_manager.Register(Settings.General.TicketKey, mks);
+            //    key_manager.KeyPressed += delegate (object sender, KeyPressedEventArgs e)
+            //    {
+            //       // CreateTicket();
+            //    };
+            //}
         }
-        static HotKeyManager key_manager = null;
+        //static HotKeyManager key_manager = null;
     }
 }
