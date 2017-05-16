@@ -124,7 +124,7 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(this.description.Text))
             //    throw new Exception("Description is empty    
 
-            Db.Foreclosures.Foreclosure f = new Db.Foreclosures.Foreclosure();
+            Db.Foreclosure f = new Db.Foreclosure();
             if (foreclosure_id != null)
                 f.Id = (int)foreclosure_id;
             f.TYPE_OF_EN = TYPE_OF_EN.Text;
@@ -188,7 +188,7 @@ namespace Cliver.Foreclosures
                 ATTORNEY_S.SelectedIndex = 0;
         }
 
-        void set_foreclosure(Db.Foreclosures.Foreclosure f)
+        void set_foreclosure(Db.Foreclosure f)
         {
             if (f == null)
             {

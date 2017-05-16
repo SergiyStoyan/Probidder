@@ -79,7 +79,7 @@
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right">Last Pay Date</Label>
                     <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE"></DatePicker>
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
-                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU"></TextBox>
+                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU"  Text="{Binding  Path=Double, StringFormat=F3}"></TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
                     <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I"></TextBox>
 

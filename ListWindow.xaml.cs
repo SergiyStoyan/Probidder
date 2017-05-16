@@ -32,7 +32,7 @@ namespace Cliver.Foreclosures
             lw.ShowDialog();
         }
 
-        public static void ItemSaved(Db.Foreclosures.Foreclosure f)
+        public static void ItemSaved(Db.Foreclosure f)
         {
             if (lw == null || !lw.IsLoaded)
                 return;
@@ -117,13 +117,13 @@ namespace Cliver.Foreclosures
         void fill()
         {
             list.Items.Clear();
-            foreach (Db.Foreclosures.Foreclosure f in foreclosures.GetAll())
+            foreach (Db.Foreclosure f in foreclosures.GetAll())
                 list.Items.Add(new Item { Foreclosure = f });
         }
 
         public class Item
         {
-            public Db.Foreclosures.Foreclosure Foreclosure { get; set; }
+            public Db.Foreclosure Foreclosure { get; set; }
             public AuctionWindow Aw = null;
         }
 
@@ -146,8 +146,8 @@ namespace Cliver.Foreclosures
             try
             {
                 TextWriter tw = new StreamWriter(file);
-                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosures.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
-                foreach (Db.Foreclosures.Foreclosure f in foreclosures.GetAll())
+                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
+                foreach (Db.Foreclosure f in foreclosures.GetAll())
                     tw.WriteLine(FieldPreparation.GetCsvLine(f, FieldPreparation.FieldSeparator.COMMA));
                 tw.Close();
 
@@ -240,6 +240,21 @@ namespace Cliver.Foreclosures
         private void refresh_db_LostFocus(object sender, RoutedEventArgs e)
         {
             refresh_db_last_time0.IsOpen = false;
+        }
+
+        private void login_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow.OpenDialog();
+        }
+
+        private void database_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseWindow.OpenDialog();
+        }
+
+        private void location_Click(object sender, RoutedEventArgs e)
+        {
+            LocationWindow.OpenDialog();
         }
     }
 }

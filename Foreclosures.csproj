@@ -130,23 +130,23 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AboutForm.Designer.cs" />
-    <Compile Include="AttachmentControl.xaml.cs">
-      <DependentUpon>AttachmentControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Db\Db.Cities.cs" />
     <Compile Include="Db\Db.AttorneyPhones.cs" />
-    <Compile Include="Db\Db.cs" />
-    <Compile Include="Db\Db.Foreclosures.cs" />
+    <Compile Include="Db\Table.cs" />
+    <Compile Include="Db\Foreclosures.cs" />
     <Compile Include="Db\Db.Attorneys.cs" />
     <Compile Include="Db\Db.Plaintiffs.cs" />
     <Compile Include="Db\Db.refresh.cs" />
-    <Compile Include="LocationWindow.xaml.cs">
+    <Compile Include="Settings\DatabaseWindow.xaml.cs">
+      <DependentUpon>DatabaseWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\LocationWindow.xaml.cs">
       <DependentUpon>LocationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginWindow.xaml.cs">
+    <Compile Include="Settings\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ListWindow.xaml.cs">
@@ -206,19 +206,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AttachmentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LocationWindow.xaml">
+    <Page Include="Settings\DatabaseWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LoginWindow.xaml">
+    <Page Include="Settings\LocationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Settings\LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Settings\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

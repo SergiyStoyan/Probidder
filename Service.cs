@@ -47,7 +47,7 @@ namespace Cliver.Foreclosures
                 //set_hot_keys(value);
                 set_db_refresher(value);
                 StateChanged?.Invoke();
-                Log.Inform("Service: " + value);
+                Log.Main.Inform("Service: " + value);
             }
             get
             {

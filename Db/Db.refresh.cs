@@ -34,7 +34,7 @@ namespace Cliver.Foreclosures
             refresh_t = ThreadRoutines.StartTry(() =>
             {
                 RefreshStateChanged?.BeginInvoke(null, null);
-                Log.Inform("Refreshing db.");
+                Log.Main.Inform("Refreshing db.");
 
                 //InfoWindow iw = InfoWindow.Create("Foreclosures", "Refreshing database... Please wait for completion.", null, "OK", null);
 
@@ -99,8 +99,8 @@ namespace Cliver.Foreclosures
             },
             (Exception e) =>
             {
-                Log.Error(e);
-                Log.Error("Could not refresh db.");
+                Log.Main.Error(e);
+                Log.Main.Error("Could not refresh db.");
                 if (Settings.General.DbRefreshRetryPeriodInSecs > 0)
                     Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshRetryPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);

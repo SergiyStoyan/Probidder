@@ -15,7 +15,7 @@
     <Grid Background="Beige">
         <DockPanel Background="Beige"> 
             <Popup Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
-                        <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="#efc" FontStyle="Italic">Refreshed at: ?</TextBlock>
+                        <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
                     </Popup>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Command">
@@ -28,10 +28,12 @@
                 <MenuItem Header="New" Click="new_Click">
                 </MenuItem>
                 <MenuItem Header="Settings">
-                    <MenuItem Header="Settings" Name="settings" Click="settings_Click"/>
-                    <MenuItem Header="Work Dir" Name="work_dir" Click="work_dir_Click"/>
+                    <MenuItem Header="Login" Name="login" Click="login_Click"/>
+                    <MenuItem Header="Location" Name="location" Click="location_Click"/>
+                    <MenuItem Header="Database" Name="database" Click="database_Click"/>
                 </MenuItem>
                 <MenuItem Header="Help">
+                    <MenuItem Header="Logs" Name="work_dir" Click="work_dir_Click"/>
                     <MenuItem Header="About" Name="about" Click="about_Click"/>
                 </MenuItem>
             </Menu>
@@ -49,9 +51,10 @@
                             </GridViewColumn.CellTemplate>
                             </-->
                             <GridViewColumn Header="Id" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" />
-                            <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE}" />
-                            <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.ADDRESS}" />
-                        </GridView.Columns>
+                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE}" />
+                                    <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.CITY}" />
+                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.ADDRESS}" />
+                                </GridView.Columns>
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
