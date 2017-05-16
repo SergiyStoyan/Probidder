@@ -132,6 +132,7 @@
     <Compile Include="AboutForm.Designer.cs" />
     <Compile Include="Db\Db.Cities.cs" />
     <Compile Include="Db\Db.AttorneyPhones.cs" />
+    <Compile Include="Db\Db.cs" />
     <Compile Include="Db\Table.cs" />
     <Compile Include="Db\Foreclosures.cs" />
     <Compile Include="Db\Db.Attorneys.cs" />
