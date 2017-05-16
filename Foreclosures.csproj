@@ -140,6 +140,9 @@
     <Compile Include="Db\Db.Attorneys.cs" />
     <Compile Include="Db\Db.Plaintiffs.cs" />
     <Compile Include="Db\Db.refresh.cs" />
+    <Compile Include="LocationWindow.xaml.cs">
+      <DependentUpon>LocationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -206,6 +209,10 @@
     <Page Include="AttachmentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

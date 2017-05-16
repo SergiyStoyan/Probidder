@@ -30,6 +30,7 @@ namespace Cliver.Foreclosures
             public DateTime NextDbRefreshTime = DateTime.MinValue;
             public string UserName = "";
             public string EncryptedPassword = "";
+            public string County = null;
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;

@@ -63,8 +63,13 @@ namespace Cliver.Foreclosures
                 if (string.IsNullOrWhiteSpace(Settings.General.UserName) || string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
                     LoginWindow.OpenDialog();
 
+                if (string.IsNullOrWhiteSpace(Settings.General.County))
+                    LocationWindow.OpenDialog();
+
                 Service.Running = true;
                 //Db.BeginRefresh();
+
+                ListWindow.Open();
 
                 Application.Run(SysTray.This);
             }

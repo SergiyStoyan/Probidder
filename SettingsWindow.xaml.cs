@@ -77,6 +77,11 @@ namespace Cliver.Foreclosures
             UserName.Text = Settings.General.UserName;
             if (!string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
                 Password.Password = Settings.General.Decrypt(Settings.General.EncryptedPassword);
+
+            County.Items.Clear();
+            foreach (string c in Db.GetCounties())
+                County.Items.Add(c);
+            County.SelectedItem = Settings.General.County;
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -123,6 +128,10 @@ namespace Cliver.Foreclosures
                 if (string.IsNullOrWhiteSpace(Password.Password))
                     throw new Exception("Password is not set.");
                 Settings.General.EncryptedPassword = Settings.General.Encrypt(Password.Password);
+
+                if (County.SelectedItem == null)
+                    throw new Exception("No county chosen.");
+                Settings.General.County = County.SelectedItem.ToString();
 
                 Settings.General.Save();
                 Config.Reload();
