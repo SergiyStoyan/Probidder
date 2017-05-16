@@ -22,14 +22,7 @@ using Cliver;
 using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
-/*
- - when saving, which fields are obligatory and the user should be notified if they are empty?
- - AUCTION_DATE, AUCTION_TIME are not used in the access form so they are empty now. Let me know what to do with them?
- - application icon can be customized. Let me know if have any one.
- - write correct labels to the fields in the form and group fields as you want
- - some cities have wrong county that's why for some sities no code found
-     
-     */
+
 namespace Cliver.Foreclosures
 {
     public class Program
@@ -69,9 +62,9 @@ namespace Cliver.Foreclosures
                 Service.Running = true;
                 //Db.BeginRefresh();
 
-                ListWindow.Open();
+                ListWindow.OpenDialog();
 
-                Application.Run(SysTray.This);
+                //Application.Run(SysTray.This);
             }
             catch (Exception e)
             {

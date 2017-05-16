@@ -22,14 +22,14 @@ namespace Cliver.Foreclosures
 {
     public partial class ListWindow : Window
     {
-        public static void Open()
+        public static void OpenDialog()
         {
             if (lw == null || !lw.IsLoaded)
             {
                 lw = new ListWindow();
                 System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(lw);
             }
-            lw.Show();
+            lw.ShowDialog();
         }
 
         public static void ItemSaved(Db.Foreclosures.Foreclosure f)
@@ -69,6 +69,14 @@ namespace Cliver.Foreclosures
 
         static ListWindow lw = null;
 
+        public static ListWindow This
+        {
+            get
+            {
+                return lw;
+            }
+        }
+
         ListWindow()
         {
             InitializeComponent();
@@ -85,6 +93,23 @@ namespace Cliver.Foreclosures
             {
                 lw = null;
                 foreclosures.Dispose();
+            };
+
+            Db.RefreshStateChanged += delegate
+            {
+                refresh_db.Dispatcher.Invoke(() =>
+                {
+                    if (Db.RefreshRuns)
+                    {
+                        refresh_db.Header = "Refreshing...";
+                        refresh_db.IsEnabled = false;
+                    }
+                    else
+                    {
+                        refresh_db.Header = "Refresh Database";
+                        refresh_db.IsEnabled = true;
+                    }
+                });
             };
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
@@ -143,22 +168,6 @@ namespace Cliver.Foreclosures
             AuctionWindow.OpenNew();
         }
 
-        //private void show_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Item i = (Item)((Button)e.Source).DataContext;
-        //    if (i.Aw == null || !i.Aw.IsLoaded)
-        //    {
-        //        i.Aw = new AuctionWindow(i.Foreclosure.Id);
-        //        System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(i.Aw);
-        //        i.Aw.Show();
-        //    }
-        //    else
-        //    {
-        //        i.Aw.BringIntoView();
-        //        i.Aw.Activate();
-        //    }
-        //}
-
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (Item i in e.AddedItems)
@@ -192,6 +201,45 @@ namespace Cliver.Foreclosures
                 return;
             show_AuctionWindow(i);
             e.Handled = true;
+        }
+
+        private void refresh_db_Click(object sender, RoutedEventArgs e)
+        {
+            Db.BeginRefresh();
+        }
+
+        private void settings_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow.Open();
+        }
+
+        private void work_dir_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Log.WorkDir);
+        }
+
+        private void about_Click(object sender, RoutedEventArgs e)
+        {
+            AboutForm.Open();
+        }
+
+        private void exit_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void refresh_db_last_time_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (Settings.General.LastDbRefreshTime > DateTime.MinValue)
+            {
+                refresh_db_last_time.Text = "Refreshed at " + Settings.General.LastDbRefreshTime.ToString();
+                refresh_db_last_time0.IsOpen = true;
+            }
+        }
+
+        private void refresh_db_LostFocus(object sender, RoutedEventArgs e)
+        {
+            refresh_db_last_time0.IsOpen = false;
         }
     }
 }

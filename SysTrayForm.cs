@@ -47,7 +47,6 @@ namespace Cliver.Foreclosures
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //SettingsForm.Open();
             SettingsWindow.Open();
         }
 
@@ -87,7 +86,7 @@ namespace Cliver.Foreclosures
         
         private void List_Click(object sender, EventArgs e)
         {
-            ListWindow.Open();
+            //ListWindow.Open();
         }
 
         private void newAuctionToolStripMenuItem_Click(object sender, EventArgs e)

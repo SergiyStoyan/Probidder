@@ -11,6 +11,7 @@
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
         FontFamily="Microsoft Sans Serif"
          AllowDrop="True"
+        PreviewMouseDown="Window_PreviewMouseDown" PreviewKeyDown="Window_PreviewKeyDown"
             >
     <Grid Background="Beige">
             <StackPanel Orientation="Vertical">

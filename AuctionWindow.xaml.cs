@@ -165,9 +165,10 @@ namespace Cliver.Foreclosures
             foreclosure_id = foreclosures.Save(f);
 
             ListWindow.ItemSaved(f);
-            //!!!
             foreclosure_id = null;
             set_foreclosure(null);
+            Save.IsEnabled = false;
+            Delete.IsEnabled = false;
             //Close();
         }
 
@@ -264,6 +265,20 @@ namespace Cliver.Foreclosures
             TERM_OF_MTG.Text = f.TERM_OF_MTG;
             DEF_ADDRESS.Text = f.DEF_ADDRESS;
             DEF_PHONE.Text = f.DEF_PHONE;
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (fields.IsEnabled)
+            {
+                Save.IsEnabled = true;
+                Delete.IsEnabled = true;
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            Window_PreviewMouseDown(null, null);
         }
     }
 }

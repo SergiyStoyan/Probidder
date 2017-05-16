@@ -14,6 +14,17 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
+        public static bool RefreshRuns
+        {
+            get
+            {
+                return (refresh_t != null && refresh_t.IsAlive);
+            }
+        }
+
+        public delegate void OnRefreshStateChanged();
+        public static event OnRefreshStateChanged RefreshStateChanged = null;
+
         public static Thread BeginRefresh()
         {
             if (refresh_t != null && refresh_t.IsAlive)
@@ -22,6 +33,7 @@ namespace Cliver.Foreclosures
             DateTime refresh_started = DateTime.Now;
             refresh_t = ThreadRoutines.StartTry(() =>
             {
+                RefreshStateChanged?.BeginInvoke(null, null);
                 Log.Inform("Refreshing db.");
 
                 //InfoWindow iw = InfoWindow.Create("Foreclosures", "Refreshing database... Please wait for completion.", null, "OK", null);
@@ -79,8 +91,9 @@ namespace Cliver.Foreclosures
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
-                refresh_time = DateTime.Now;
-                if(Settings.General.DbRefreshPeriodInSecs > 0)
+                Settings.General.LastDbRefreshTime = DateTime.Now;
+                Settings.General.Save();
+                if (Settings.General.DbRefreshPeriodInSecs > 0)
                     Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
             },
@@ -95,21 +108,13 @@ namespace Cliver.Foreclosures
             () =>
             {
                 Settings.General.Save();
+                RefreshStateChanged?.BeginInvoke(null, null);
             }
             );
             return refresh_t;
         }
         static Thread refresh_t = null;
         static HttpClient http_client;
-        static DateTime refresh_time = DateTime.MinValue;
-
-        static public DateTime RefreshTime
-        {
-            get
-            {
-                return refresh_time;
-            }
-        }
 
         static void refresh_table(string url, string table)
         {
