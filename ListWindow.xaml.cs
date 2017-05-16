@@ -25,7 +25,10 @@ namespace Cliver.Foreclosures
         public static void Open()
         {
             if (lw == null || !lw.IsLoaded)
+            {
                 lw = new ListWindow();
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(lw);
+            }
             lw.Show();
         }
 
@@ -137,9 +140,7 @@ namespace Cliver.Foreclosures
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            AuctionWindow aw = new AuctionWindow();
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
-            aw.Show();
+            AuctionWindow.OpenNew();
         }
 
         //private void show_Click(object sender, RoutedEventArgs e)
@@ -170,7 +171,7 @@ namespace Cliver.Foreclosures
         {
             if (i.Aw == null || !i.Aw.IsLoaded)
             {
-                i.Aw = new AuctionWindow(i.Foreclosure.Id);
+                i.Aw = AuctionWindow.OpenNew(i.Foreclosure.Id);
                 System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(i.Aw);
                 i.Aw.Show();
             }

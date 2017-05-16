@@ -80,14 +80,16 @@ namespace Cliver.Foreclosures
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
                 refresh_time = DateTime.Now;
-                Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
+                if(Settings.General.DbRefreshPeriodInSecs > 0)
+                    Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
             },
             (Exception e) =>
             {
                 Log.Error(e);
                 Log.Error("Could not refresh db.");
-                Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
+                if (Settings.General.DbRefreshRetryPeriodInSecs > 0)
+                    Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshRetryPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);
             },
             () =>

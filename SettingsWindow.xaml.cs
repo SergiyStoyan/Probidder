@@ -24,31 +24,56 @@ namespace Cliver.Foreclosures
     {
         public static void Open()
         {
-            if (lw == null || !lw.IsLoaded)
-                lw = new SettingsWindow();
-            lw.Show();
+            if (w == null || !w.IsLoaded)
+            {
+                w = new SettingsWindow();
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
+            }
+            w.Show();
         }
-        static SettingsWindow lw = null;
+        static SettingsWindow w = null;
 
         SettingsWindow()
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
-            
+
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
             };
 
             Closed += delegate
             {
-                lw = null;
+                w = null;
             };
 
-            DbRefreshPeriodInSecs.Text = Settings.General.DbRefreshPeriodInSecs.ToString();
-            DbRefreshRetryPeriodInSecs.Text = Settings.General.DbRefreshRetryPeriodInSecs.ToString();
+            //Dictionary<string, int> texts2period = new Dictionary<string, int> {
+            //    { "1 day", 24 * 60 * 60 },
+            //    { "3 days", 3 * 24 * 60 * 60 },
+            //    { "7 days", 7*24 * 60 * 60 },
+            //    { "Never", -1 }
+            //};
+            if (Settings.General.DbRefreshPeriodInSecs > 0)
+            {
+                DbRefreshPeriodInDays.Text = ((float)Settings.General.DbRefreshPeriodInSecs / (24 * 60 * 60)).ToString();
+                DoRefresh.IsChecked = true;
+            }
+            else
+                DoRefresh.IsChecked = false;
+            DoRefresh_Checked(null, null);
+
+            if (Settings.General.DbRefreshRetryPeriodInSecs > 0)
+            {
+                DbRefreshRetryPeriodInSecs.Text = Settings.General.DbRefreshRetryPeriodInSecs.ToString();
+                DoRefreshRetry.IsChecked = true;
+            }
+            else
+                DoRefreshRetry.IsChecked = false;
+            DoRefreshRetry_Checked(null, null);
+
             NextDbRefreshTime.Value = Settings.General.NextDbRefreshTime;
-            
+
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -60,19 +85,29 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                int secs = int.Parse(DbRefreshPeriodInSecs.Text);
-                if (secs <= 0)
-                    throw new Exception("Db Refresh Period must be positive.");
-                if (secs > Int32.MaxValue)
-                    throw new Exception("Db Refresh Period is too big.");
-                Settings.General.DbRefreshPeriodInSecs = secs;
+                if (DoRefresh.IsChecked == true)
+                {
+                    float days = float.Parse(DbRefreshPeriodInDays.Text);
+                    int secs = (int)(days * 24 * 60 * 60);
+                    if (secs <= 0)
+                        throw new Exception("Db Refresh Period must be positive.");
+                    if (secs > Int32.MaxValue)
+                        throw new Exception("Db Refresh Period is too big.");
+                    Settings.General.DbRefreshPeriodInSecs = secs;
+                }
+                else
+                    Settings.General.DbRefreshPeriodInSecs = -1;
 
-                secs = int.Parse(DbRefreshRetryPeriodInSecs.Text);
-                if (secs <= 0)
-                    throw new Exception("Db Refresh Retry Period must be positive.");
-                if (secs > Int32.MaxValue)
-                    throw new Exception("Db Refresh Retry Period is too big.");
-                Settings.General.DbRefreshRetryPeriodInSecs = secs;
+                if (DoRefreshRetry.IsChecked == true)
+                {
+                    int secs = int.Parse(DbRefreshRetryPeriodInSecs.Text);
+                    if (secs <= 0)
+                        throw new Exception("Db Refresh Retry Period must be positive.");
+                    if (secs > Int32.MaxValue)
+                        throw new Exception("Db Refresh Retry Period is too big.");
+                    Settings.General.DbRefreshRetryPeriodInSecs = secs;
+                }
+                Settings.General.DbRefreshRetryPeriodInSecs = -1;
 
                 if (NextDbRefreshTime.Value == null)
                     throw new Exception("Next Db Refresh Time is not set.");
@@ -91,6 +126,36 @@ namespace Cliver.Foreclosures
             {
                 Message.Exclaim(ex.Message);
             }
+        }
+
+        private void DoRefresh_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+            lDbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            DbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            DoRefreshRetry.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            DoRefreshRetry_Checked(null, null);
+            lNextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            NextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void DoRefreshRetry_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+            lDbRefreshRetryPeriodInSecs.Visibility = DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            DbRefreshRetryPeriodInSecs.Visibility = DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void DoRefresh_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DoRefresh_Checked(sender, e);
+        }
+
+        private void DoRefreshRetry_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DoRefreshRetry_Checked(sender, e);
         }
     }
 }

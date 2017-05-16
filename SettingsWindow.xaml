@@ -18,16 +18,28 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
             <GroupBox Grid.Row="0" Header="DataBase"  Margin="10,10,10,10" Padding="10">
                 <StackPanel>
-                    <Label>Db Refresh Period (secs):</Label>
-                    <TextBox Name="DbRefreshPeriodInSecs"></TextBox>
-                    <Label>Db Refresh Retry Period (secs):</Label>
-                    <TextBox Name="DbRefreshRetryPeriodInSecs"></TextBox>
-                    <Label>Next Db Refresh Time:</Label>
+                        <CheckBox Name="DoRefresh" IsChecked="True" Checked="DoRefresh_Checked" Unchecked="DoRefresh_Unchecked">Refresh</CheckBox>
+                        <Label Name="lDbRefreshPeriodInDays">Refresh Period (days):</Label>
+                        <TextBox Name="DbRefreshPeriodInDays"></TextBox>
+                        <CheckBox Name="DoRefreshRetry" IsChecked="True" Checked="DoRefreshRetry_Checked" Unchecked="DoRefreshRetry_Unchecked">Refresh Retry If Fault</CheckBox>
+                        <Label Name="lDbRefreshRetryPeriodInSecs">Retry Period (secs):</Label>
+                        <TextBox Name="DbRefreshRetryPeriodInSecs"></TextBox>
+                        <Label Name="lNextDbRefreshTime">Next Db Refresh Time:</Label>
                     <xctk:DateTimePicker Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False" />
                 </StackPanel>
+            </GroupBox>                
+            <GroupBox Grid.Row="0" Header="Server"  Margin="10,10,10,10" Padding="10">
+                <StackPanel>
+                        <Label>User Name:</Label>
+                    <TextBox Name="UserName"></TextBox>
+                        <Label>Password:</Label>
+                        <PasswordBox Name="Password"></PasswordBox>
+                </StackPanel>
             </GroupBox>
+            </StackPanel>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">
             <UniformGrid HorizontalAlignment="Right" Rows="1">

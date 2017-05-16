@@ -22,7 +22,15 @@ namespace Cliver.Foreclosures
 {
     public partial class AuctionWindow : Window
     {
-        public AuctionWindow(int? foreclosure_id = null)
+        public static AuctionWindow OpenNew(int? foreclosure_id = null)
+        {
+            AuctionWindow w = new AuctionWindow(foreclosure_id);
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
+            w.Show();
+            return w;
+        }
+
+        AuctionWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
             
