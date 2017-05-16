@@ -107,7 +107,8 @@ namespace Cliver.Foreclosures
                         throw new Exception("Db Refresh Retry Period is too big.");
                     Settings.General.DbRefreshRetryPeriodInSecs = secs;
                 }
-                Settings.General.DbRefreshRetryPeriodInSecs = -1;
+                else
+                    Settings.General.DbRefreshRetryPeriodInSecs = -1;
 
                 if (NextDbRefreshTime.Value == null)
                     throw new Exception("Next Db Refresh Time is not set.");
@@ -144,8 +145,8 @@ namespace Cliver.Foreclosures
         {
             if (!IsInitialized)
                 return;
-            lDbRefreshRetryPeriodInSecs.Visibility = DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            DbRefreshRetryPeriodInSecs.Visibility = DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            lDbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            DbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void DoRefresh_Unchecked(object sender, RoutedEventArgs e)

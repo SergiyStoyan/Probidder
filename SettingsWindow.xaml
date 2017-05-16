@@ -18,28 +18,41 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel>
             <GroupBox Grid.Row="0" Header="DataBase"  Margin="10,10,10,10" Padding="10">
                 <StackPanel>
-                        <CheckBox Name="DoRefresh" IsChecked="True" Checked="DoRefresh_Checked" Unchecked="DoRefresh_Unchecked">Refresh</CheckBox>
-                        <Label Name="lDbRefreshPeriodInDays">Refresh Period (days):</Label>
-                        <TextBox Name="DbRefreshPeriodInDays"></TextBox>
-                        <CheckBox Name="DoRefreshRetry" IsChecked="True" Checked="DoRefreshRetry_Checked" Unchecked="DoRefreshRetry_Unchecked">Refresh Retry If Fault</CheckBox>
-                        <Label Name="lDbRefreshRetryPeriodInSecs">Retry Period (secs):</Label>
-                        <TextBox Name="DbRefreshRetryPeriodInSecs"></TextBox>
-                        <Label Name="lNextDbRefreshTime">Next Db Refresh Time:</Label>
-                    <xctk:DateTimePicker Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False" />
+                            <CheckBox  Margin="5,0,10,0"   Name="DoRefresh" IsChecked="True" Checked="DoRefresh_Checked" Unchecked="DoRefresh_Unchecked">Refresh Periodically</CheckBox>
+                            <Label  Margin="10,0,10,0"  Name="lDbRefreshPeriodInDays">Refresh Period (days):</Label>
+                            <TextBox  Margin="10,0,10,10"   Name="DbRefreshPeriodInDays"></TextBox>
+                            <CheckBox  Margin="10,10,10,0"  Name="DoRefreshRetry" IsChecked="True" Checked="DoRefreshRetry_Checked" Unchecked="DoRefreshRetry_Unchecked">Retry If Refresh Faulted</CheckBox>
+                            <Label  Margin="10,0,10,0"  Name="lDbRefreshRetryPeriodInSecs">Retry Period (secs):</Label>
+                            <TextBox   Margin="10,0,10,10"   Name="DbRefreshRetryPeriodInSecs"></TextBox>
+                            <Label  Margin="10,0,10,0"   Name="lNextDbRefreshTime">Next Db Refresh Time:</Label>
+                            <xctk:DateTimePicker  Margin="10,0,10,10"  Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False" />
                 </StackPanel>
             </GroupBox>                
             <GroupBox Grid.Row="0" Header="Server"  Margin="10,10,10,10" Padding="10">
                 <StackPanel>
-                        <Label>User Name:</Label>
-                    <TextBox Name="UserName"></TextBox>
-                        <Label>Password:</Label>
-                        <PasswordBox Name="Password"></PasswordBox>
+                            <Label Margin="10,0,10,0" >User Name:</Label>
+                            <TextBox  Margin="10,0,10,0" Name="UserName"></TextBox>
+                            <Label Margin="10,10,10,0" >Password:</Label>
+                            <PasswordBox  Margin="10,0,10,0" Name="Password"></PasswordBox>
                 </StackPanel>
             </GroupBox>
             </StackPanel>
+            </Grid>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">
             <UniformGrid HorizontalAlignment="Right" Rows="1">
