@@ -45,9 +45,19 @@ namespace Cliver.Foreclosures
                 Edit.Visibility = Visibility.Visible;
             }
 
-            COUNTY.Items.Clear();
-            foreach (string c in Db.GetCounties())
-                COUNTY.Items.Add(c);
+            COUNTY.Text = Settings.General.County;
+
+            CITY.Items.Clear();
+            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", Settings.General.County } }))
+                CITY.Items.Add(c);
+
+            LENDOR.Items.Clear();
+            foreach (string c in Db.GetValuesFromTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", Settings.General.County } }))
+                LENDOR.Items.Add(c);
+
+            ATTY.Items.Clear();
+            foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", Settings.General.County } }))
+                ATTY.Items.Add(c);
 
             TYPE_OF_MO.Items.Clear();
             foreach (string c in Db.GetValuesFromTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
@@ -155,35 +165,23 @@ namespace Cliver.Foreclosures
             foreclosure_id = foreclosures.Save(f);
 
             ListWindow.ItemSaved(f);
-            Close();
-        }
-
-        private void County_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CITY.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("cities", "city", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                CITY.Items.Add(c);
-
-            LENDOR.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                LENDOR.Items.Add(c);
-
-            ATTY.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem } }))
-                ATTY.Items.Add(c);
+            //!!!
+            foreclosure_id = null;
+            set_foreclosure(null);
+            //Close();
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ZIP.Items.Clear();
-            foreach (string c in Db.GetZipCodes((string)COUNTY.SelectedItem, (string)CITY.SelectedItem))
+            foreach (string c in Db.GetZipCodes(Settings.General.County, (string)CITY.SelectedItem))
                 ZIP.Items.Add(c);
         }
 
         private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ATTORNEY_S.Items.Clear();
-            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", (string)COUNTY.SelectedItem }, { "attorney", (string)ATTY.SelectedItem } }))
+            foreach (string c in Db.GetValuesFromTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
                 ATTORNEY_S.Items.Add(c);
             if (ATTORNEY_S.Items.Count == 1)
                 ATTORNEY_S.SelectedIndex = 0;
@@ -194,7 +192,7 @@ namespace Cliver.Foreclosures
             if (f == null)
             {
                 TYPE_OF_EN.Text = null;
-                COUNTY.Text = null;
+                COUNTY.Text = Settings.General.County;
                 CASE_N.Text = null;
                 FILING_DATE.Text = DateTime.Now.ToString();
                 ENTRY_DATE.Text = DateTime.Now.ToString();
@@ -228,13 +226,6 @@ namespace Cliver.Foreclosures
                 TERM_OF_MTG.Text = null;
                 DEF_ADDRESS.Text = null;
                 DEF_PHONE.Text = null;
-
-                f = foreclosures.GetLast();
-                if (f != null)
-                {
-                    COUNTY.SelectedItem = f.COUNTY;
-                    TYPE_OF_MO.SelectedItem = f.TYPE_OF_MO;
-                }
 
                 return;
             }
