@@ -74,6 +74,9 @@ namespace Cliver.Foreclosures
 
             NextDbRefreshTime.Value = Settings.General.NextDbRefreshTime;
 
+            UserName.Text = Settings.General.UserName;
+            if (!string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
+                Password.Password = Settings.General.Decrypt(Settings.General.EncryptedPassword);
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -113,6 +116,13 @@ namespace Cliver.Foreclosures
                 if (NextDbRefreshTime.Value == null)
                     throw new Exception("Next Db Refresh Time is not set.");
                 Settings.General.NextDbRefreshTime = (DateTime)NextDbRefreshTime.Value;
+
+                if (string.IsNullOrWhiteSpace(UserName.Text))
+                    throw new Exception("User Name is not set.");
+                Settings.General.UserName = UserName.Text;
+                if (string.IsNullOrWhiteSpace(Password.Password))
+                    throw new Exception("Password is not set.");
+                Settings.General.EncryptedPassword = Settings.General.Encrypt(Password.Password);
 
                 Settings.General.Save();
                 Config.Reload();

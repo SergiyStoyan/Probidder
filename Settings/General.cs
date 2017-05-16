@@ -28,6 +28,8 @@ namespace Cliver.Foreclosures
             public int DbRefreshPeriodInSecs = 60 * 60 * 24;
             public int DbRefreshRetryPeriodInSecs = 60 * 60;
             public DateTime NextDbRefreshTime = DateTime.MinValue;
+            public string UserName = "";
+            public string EncryptedPassword = "";
 
             //[Newtonsoft.Json.JsonIgnore]
             //public System.Text.Encoding Encoding = System.Text.Encoding.Unicode;
@@ -36,10 +38,27 @@ namespace Cliver.Foreclosures
             {
             }
 
-            //public override void Saving()
-            //{
-            //    UserEmail = string.IsNullOrWhiteSpace(UserEmail) ? null : UserEmail.Trim();
-            //}
+            public override void Saving()
+            {
+            }
+
+            public string Decrypt(string s)
+            {
+                try
+                {
+                    return c.Decrypt(s);
+                }
+                catch(Exception e)
+                {
+                    Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
+                }
+                return null;
+            }
+            public string Encrypt(string s)
+            {
+                return c.Encrypt(s);
+            }
+            CryptoRijndael c = new CryptoRijndael("poiuytrewq");
         }
     }
 }

@@ -60,6 +60,9 @@ namespace Cliver.Foreclosures
             {
                 ProcessRoutines.RunSingleProcessOnly();
 
+                if (string.IsNullOrWhiteSpace(Settings.General.UserName) || string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
+                    LoginWindow.OpenDialog();
+
                 Service.Running = true;
                 //Db.BeginRefresh();
 
