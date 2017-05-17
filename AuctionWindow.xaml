@@ -55,7 +55,7 @@
                     <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Entry Date</Label>
                     <DatePicker Grid.Column="1" Grid.Row="2" Name="ENTRY_DATE" VerticalAlignment="Top" ></DatePicker>
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">Plaintiff Code</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" Grid.ColumnSpan="3"  VerticalAlignment="Top"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
                         <DatePicker Name="ORIGINAL_MTG"></DatePicker>
@@ -69,9 +69,9 @@
                     <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right">Address</Label>
                     <TextBox Grid.Column="1" Grid.Row="6" Name="ADDRESS" Grid.ColumnSpan="3"></TextBox>
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="7" IsReadOnly="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="7" IsEditable="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" Height="24" VerticalAlignment="Top"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" IsEditable="True" Height="24" VerticalAlignment="Top"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
                     <TextBox Grid.Column="1" Grid.Row="9" Name="PIN"></TextBox>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
@@ -100,11 +100,11 @@
                     <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right">ilFLS Comments</Label>
                     <TextBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3"  Name="INT_COMMENTS"></TextBox>
                     <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right">Attorney Code</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3"  Name="ATTY" SelectionChanged="ATTY_SelectionChanged"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3" IsEditable="True" Name="ATTY" SelectionChanged="ATTY_SelectionChanged"></ComboBox>
                     <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right">Attorney Phone</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3"  Name="ATTORNEY_S"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3" IsEditable="True" Name="ATTORNEY_S"></ComboBox>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">MTG Codes</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="9" Name="TYPE_OF_MO"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="9" IsEditable="True" Name="TYPE_OF_MO"></ComboBox>
                     <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right">Interest</Label>
                     <TextBox Grid.Column="7" Grid.Row="9" Name="INTEREST_R" MinWidth="30"></TextBox>
                     <Label Grid.Column="4" Grid.Row="10" HorizontalAlignment="Right">Property Type</Label>

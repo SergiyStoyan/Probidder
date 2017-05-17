@@ -184,8 +184,10 @@ namespace Cliver.Foreclosures
             ATTORNEY_S.Items.Clear();
             foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
                 ATTORNEY_S.Items.Add(c);
-            if (ATTORNEY_S.Items.Count == 1)
-                ATTORNEY_S.SelectedIndex = 0;
+
+            if (foreclosure_id == null)
+                if (ATTORNEY_S.Items.Count == 1)
+                    ATTORNEY_S.SelectedIndex = 0;
         }
 
         void set_foreclosure(Db.Foreclosure f)
