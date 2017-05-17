@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,7 +34,7 @@ namespace Cliver.Foreclosures
         AuctionWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
-            
+
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             this.foreclosure_id = foreclosure_id;
@@ -281,6 +282,59 @@ namespace Cliver.Foreclosures
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             Window_PreviewMouseDown(null, null);
+        }
+
+        private void PIN_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (PIN.Text.Length > 17)
+            {
+                Console.Beep(5000, 200);
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Text == "-")
+            {
+                if (PIN.CaretIndex == 2
+                    || PIN.CaretIndex == 5
+                    || PIN.CaretIndex == 9
+                    || PIN.CaretIndex == 13
+                    )
+                {
+                    e.Handled = false;
+                    return;
+                }
+                Console.Beep(5000, 200);
+                e.Handled = true;
+                return;
+            }
+
+            int cursor = PIN.CaretIndex;
+            string t = PIN.Text.Insert(PIN.CaretIndex, e.Text);
+            cursor++;
+            for (int i = cursor - 1; i >= 0; i--)
+                if (t[i] == '-')
+                    cursor--;
+            t = Regex.Replace(t, "-", "");
+            ensure_separator(ref t, ref cursor, 2, "-");
+            ensure_separator(ref t, ref cursor, 5, "-");
+            ensure_separator(ref t, ref cursor, 9, "-");
+            ensure_separator(ref t, ref cursor, 13, "-");
+            PIN.Text = t;
+            PIN.CaretIndex = cursor;
+            e.Handled = true;
+        }
+
+        void ensure_separator(ref string t, ref int cursor, int position, string separator = "-")
+        {
+            if (t.Length < position)
+                return;
+            if (t.Length == position)
+                t = t + separator;
+            else
+                t = t.Insert(position, separator);
+            if (cursor >= position)
+                cursor++;
         }
     }
 }
