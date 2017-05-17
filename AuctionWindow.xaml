@@ -1,4 +1,4 @@
-﻿<Window x:Class="Cliver.Foreclosures.AuctionWindow"
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="Cliver.Foreclosures.AuctionWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -58,7 +58,7 @@
                     <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
-                        <DatePicker Name="ORIGINAL_MTG"></DatePicker>
+                        <DatePicker Name="ORIGINAL_MTG" LostFocus="ORIGINAL_MTG_LostFocus"></DatePicker>
                         <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
                         <TextBox Grid.Column="3" Grid.Row="4" MinWidth="50" Name="DOCUMENT_N"></TextBox>
                         <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Or Loan $</Label>
@@ -75,14 +75,42 @@
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
                     <TextBox Grid.Column="1" Grid.Row="9" Name="PIN" PreviewTextInput="PIN_PreviewTextInput"></TextBox>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"></DatePicker>
+                    <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA" LostFocus="DATE_OF_CA_LostFocus" KeyDown="DATE_OF_CA_KeyDown"
+                                IsManipulationEnabled="True"
+                                >
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <TextBox x:Name="PART_TextBox"
+     Text="{Binding Path=SelectedDate, StringFormat = {}{0:MMddyy}, Mode=TwoWay, 
+     RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DatePicker.Resources>
+
+
+                    </DatePicker>
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right">Last Pay Date</Label>
-                    <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE"></DatePicker>
+                    
+                    <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE"                                
+                                SelectedDate="{Binding Path=SelectedDate, StringFormat = {}{0:MMddyy}, Mode=TwoWay, 
+     RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}"                                 
+            Text = "{Binding Path=SelectedDate, StringFormat={}{0:MMddyy}, Mode=TwoWay,    
+            UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, 
+            TargetNullValue=''}"
+                                
+                                
+                                />
+                    
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
                     <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU"  Text="{Binding  Path=Double, StringFormat=F3}"></TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
                     <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I"></TextBox>
-
+                    
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW"></TextBox>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">

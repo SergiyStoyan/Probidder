@@ -28,7 +28,7 @@ namespace Cliver.Foreclosures
             public int DbRefreshPeriodInSecs = 60 * 60 * 24;
             public int DbRefreshRetryPeriodInSecs = 60 * 60;
             public DateTime NextDbRefreshTime = DateTime.MinValue;
-            public DateTime LastDbRefreshTime = DateTime.MinValue;
+            public DateTime? LastDbRefreshTime = null;
             public string UserName = "";
             public string EncryptedPassword = "";
             public string County = null;

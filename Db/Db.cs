@@ -29,7 +29,36 @@ namespace Cliver.Foreclosures
             dynamic json;
             if (!table_names2json_table.TryGetValue(table, out json))
             {
-                string s = System.IO.File.ReadAllText(db_dir + "\\" + table + ".json");
+                string file = db_dir + "\\" + table + ".json";
+                if (!File.Exists(file))
+                {
+                    if (!Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
+                        Environment.Exit(0);
+                    Thread t = Db.BeginRefresh();
+                    MessageForm mf = null;
+                    Thread tm = ThreadRoutines.StartTry(() =>
+                    {
+                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
+                        mf.ShowDialog();
+                    });
+                    t.Join();
+                    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
+                        Log.Main.Exit("SleepRoutines.WaitForObject got null");
+                    mf.Invoke(() => {
+                        try
+                        {
+                            mf.Close();
+                        }
+                        catch { }//if closed already
+                    });
+                    if (!File.Exists(file))
+                    {
+                        Message.Error("Unfrotunately the required data has not been downloaded. Please try later.");
+                        return new List<string>();
+                    }
+                }
+
+                string s = System.IO.File.ReadAllText(file);
                 json = SerializationRoutines.Json.Deserialize<dynamic>(s);
                 table_names2json_table[table] = json;
             }

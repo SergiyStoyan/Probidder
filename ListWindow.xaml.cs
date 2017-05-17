@@ -230,7 +230,7 @@ namespace Cliver.Foreclosures
 
         private void refresh_db_last_time_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (Settings.General.LastDbRefreshTime > DateTime.MinValue)
+            if (Settings.General.LastDbRefreshTime != null)
             {
                 refresh_db_last_time.Text = "Refreshed at " + Settings.General.LastDbRefreshTime.ToString();
                 refresh_db_last_time0.IsOpen = true;

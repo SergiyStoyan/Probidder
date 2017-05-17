@@ -23,11 +23,11 @@ namespace Cliver.Foreclosures
             public string TYPE_OF_EN { get; set; }
             public string COUNTY { get; set; }
             public string CASE_N { get; set; }
-            public string FILING_DATE { get; set; }
-            public string AUCTION_DATE { get; set; }
-            public string AUCTION_TIME { get; set; }
+            public DateTime? FILING_DATE { get; set; }
+            public DateTime? AUCTION_DATE { get; set; }
+            public DateTime? AUCTION_TIME { get; set; }
             public string SALE_LOC { get; set; }
-            public string ENTRY_DATE { get; set; }
+            public DateTime? ENTRY_DATE { get; set; }
             public string LENDOR { get; set; }
             public string ORIGINAL_MTG { get; set; }
             public string DOCUMENT_N { get; set; }
@@ -37,8 +37,8 @@ namespace Cliver.Foreclosures
             public string CITY { get; set; }
             public string ZIP { get; set; }
             public string PIN { get; set; }
-            public string DATE_OF_CA { get; set; }
-            public string LAST_PAY_DATE { get; set; }
+            public DateTime? DATE_OF_CA { get; set; }
+            public DateTime? LAST_PAY_DATE { get; set; }
             public string BALANCE_DU { get; set; }
             public string PER_DIEM_I { get; set; }
             public string CURRENT_OW { get; set; }

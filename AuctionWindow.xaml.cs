@@ -37,6 +37,11 @@ namespace Cliver.Foreclosures
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
+            System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture(System.Globalization.CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "MMddyy";
+            ci.DateTimeFormat.LongDatePattern = "MMddyy";
+            Thread.CurrentThread.CurrentCulture = ci;
+
             this.foreclosure_id = foreclosure_id;
             if (foreclosure_id != null)
             {
@@ -131,8 +136,8 @@ namespace Cliver.Foreclosures
             f.TYPE_OF_EN = TYPE_OF_EN.Text;
             f.COUNTY = COUNTY.Text;
             f.CASE_N = CASE_N.Text;
-            f.FILING_DATE = FILING_DATE.Text;
-            f.ENTRY_DATE = ENTRY_DATE.Text;
+            f.FILING_DATE = FILING_DATE.SelectedDate;
+            f.ENTRY_DATE = ENTRY_DATE.SelectedDate;
             f.LENDOR = LENDOR.Text;
             f.ORIGINAL_MTG = ORIGINAL_MTG.Text;
             f.DOCUMENT_N = DOCUMENT_N.Text;
@@ -142,8 +147,8 @@ namespace Cliver.Foreclosures
             f.CITY = CITY.Text;
             f.ZIP = ZIP.Text;
             f.PIN = PIN.Text;
-            f.DATE_OF_CA = DATE_OF_CA.Text;
-            f.LAST_PAY_DATE = LAST_PAY_DATE.Text;
+            f.DATE_OF_CA = DATE_OF_CA.SelectedDate;
+            f.LAST_PAY_DATE = LAST_PAY_DATE.SelectedDate;
             f.BALANCE_DU = BALANCE_DU.Text;
             f.PER_DIEM_I = PER_DIEM_I.Text;
             f.CURRENT_OW = CURRENT_OW.Text;
@@ -236,8 +241,8 @@ namespace Cliver.Foreclosures
             TYPE_OF_EN.Text = f.TYPE_OF_EN;
             COUNTY.Text = f.COUNTY;
             CASE_N.Text = f.CASE_N;
-            FILING_DATE.Text = f.FILING_DATE;
-            ENTRY_DATE.Text = f.ENTRY_DATE;
+            FILING_DATE.SelectedDate = f.FILING_DATE;
+            ENTRY_DATE.SelectedDate = f.ENTRY_DATE;
             LENDOR.Text = f.LENDOR;
             ORIGINAL_MTG.Text = f.ORIGINAL_MTG;
             DOCUMENT_N.Text = f.DOCUMENT_N;
@@ -247,8 +252,8 @@ namespace Cliver.Foreclosures
             CITY.Text = f.CITY;
             ZIP.Text = f.ZIP;
             PIN.Text = f.PIN;
-            DATE_OF_CA.Text = f.DATE_OF_CA;
-            LAST_PAY_DATE.Text = f.LAST_PAY_DATE;
+            DATE_OF_CA.SelectedDate = f.DATE_OF_CA;
+            LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
             BALANCE_DU.Text = f.BALANCE_DU;
             PER_DIEM_I.Text = f.PER_DIEM_I;
             CURRENT_OW.Text = f.CURRENT_OW;
@@ -335,6 +340,69 @@ namespace Cliver.Foreclosures
                 t = t.Insert(position, separator);
             if (cursor >= position)
                 cursor++;
+        }
+
+        private void DATE_OF_CA_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (Regex.IsMatch(e.Text, @"[^\d]"))
+            {
+                Console.Beep(5000, 200);
+                e.Handled = true;
+            }
+        }
+
+        private void DATE_OF_CA_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            //DATE_OF_CA.SelectedDate = calendar_input(e.Text);
+        }
+
+        private DateTime? calendar_input(string text)
+        {
+            if(text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
+            {
+                //Console.Beep(5000, 200);
+                Message.Error("Date is incorrect.");
+                return null;
+            }
+            Match m = Regex.Match(text, @"(\d{2})(\d{2})(\d{2})");
+            if (!m.Success)
+            {
+                //Console.Beep(5000, 200);
+                Message.Error("Date is incorrect.");
+                return null;
+            }
+            return new DateTime(2000 + int.Parse(m.Groups[3].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+        }
+
+        private void DATE_OF_CA_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void DATE_OF_CA_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void DATE_OF_CA_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
+        {
+
+        }
+
+        private void DATE_OF_CA_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //DATE_OF_CA.SelectedDate = calendar_input(DATE_OF_CA.Text);
+        }
+
+        private void DATE_OF_CA_KeyDown(object sender, KeyEventArgs e)
+        {
+            //if(e.Key == Key.Enter)
+            //    DATE_OF_CA.SelectedDate = calendar_input(DATE_OF_CA.Text);
+        }
+
+        private void ORIGINAL_MTG_LostFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
