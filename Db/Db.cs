@@ -14,20 +14,31 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
-        public void Put2Memory()
-        {
-        }
-        static Dictionary<string, string> table_names2table_content = new Dictionary<string, string>();
+        static Dictionary<string, List<string[]>> table_names2csv_table = new Dictionary<string, List<string[]>>();
+        static Dictionary<string, dynamic> table_names2json_table = new Dictionary<string, dynamic>();
 
-        public static List<string> GetValuesFromTable(string table, string field, Dictionary<string, string> keys2value)
+        static string get_normalized(string s)
         {
+            if (s == null)
+                return null;
+            return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ").Trim();
+        }
+
+        public static List<string> GetValuesFromJsonTable(string table, string field, Dictionary<string, string> keys2value)
+        {            
+            dynamic json;
+            if (!table_names2json_table.TryGetValue(table, out json))
+            {
+                string s = System.IO.File.ReadAllText(db_dir + "\\" + table + ".json");
+                json = SerializationRoutines.Json.Deserialize<dynamic>(s);
+                table_names2json_table[table] = json;
+            }
+            
             Dictionary<string, string> ks2v = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> k2v in keys2value)
                 ks2v[k2v.Key] = get_normalized(k2v.Value);
 
             List<string> vs = new List<string>();
-            string s = System.IO.File.ReadAllText(db_dir + "\\" + table + ".json");
-            dynamic json = SerializationRoutines.Json.Deserialize<dynamic>(s);
             foreach (dynamic d in (dynamic)json)
             {
                 bool found = true;
@@ -43,55 +54,115 @@ namespace Cliver.Foreclosures
             return vs;
         }
 
-        public static List<string> GetZipCodes(string county, string city)
+        public static List<string> GetValuesFromCsvTable(string table, string field, Dictionary<string, string> keys2value)
         {
-            county = get_normalized(county);
-            city = get_normalized(city);
-            List<string> vs = new List<string>();
-            string[] ss = File.ReadAllLines(db_dir + "\\illinois_postal_codes.csv");
-            foreach (string s in ss)
+            List<string[]> ls;
+            if (!table_names2csv_table.TryGetValue(table, out ls))
             {
-                string[] fs = s.Split(',');
-                if (fs[1] == city && fs[3] == county)
-                    vs.Add(fs[0]);
+                ls = new List<string[]>();
+                foreach (string s in File.ReadAllLines(Log.AppDir + "\\" + table + ".csv"))
+                    ls.Add(s.Split(','));
+                table_names2csv_table[table] = ls;
+            }
+            
+            int field_i = -1;
+            for (int i = 0; i < ls[0].Length; i++)
+                if (ls[0][i] == field)
+                    field_i = i;
+            
+            Dictionary<int, string> ks2v = new Dictionary<int, string>();
+            foreach (KeyValuePair<string, string> k2v in keys2value)
+                for (int i = 0; i < ls[0].Length; i++)
+                    if (ls[0][i] == k2v.Key)
+                        ks2v[i] = k2v.Value;
+
+            List<string> vs = new List<string>();
+            for (int i = 1; i < ls.Count; i++)
+            {
+                bool found = true;
+                foreach (KeyValuePair<int, string> k2v in ks2v)
+                    if (k2v.Value != null && get_normalized(ls[i][k2v.Key]) != k2v.Value)
+                    {
+                        found = false;
+                        break;
+                    }
+                if (found)
+                    vs.Add(ls[i][field_i]);
             }
             return vs;
         }
 
-        public static List<string> GetPropertyCodes()
-        {
-            List<string> vs = new List<string>();
-            string[] ss = File.ReadAllLines(db_dir + "\\property_codes.csv");
-            foreach (string s in ss)
-            {
-                string[] fs = s.Split(',');
-                vs.Add(fs[0]);
-            }
-            return vs;
-        }
+        //public static List<string> GetZipCodes(string county, string city)
+        //{
+        //    string table_name = "illinois_postal_codes";
+        //    List<string> vs;
+        //    if (!table_names2csv_table.TryGetValue(table_name, out vs))
+        //    {
+        //        vs = new List<string>();
+        //        string[] ss = File.ReadAllLines(Log.AppDir + "\\" + table_name + ".csv");
+        //        foreach (string s in ss)
+        //        {
+        //            string[] fs = get_normalized(s).Split(',');
+        //            if (fs[1] == city && fs[3] == county)
+        //                vs.Add(fs[0]);
+        //        }
+        //        table_names2csv_table[table_name] = vs;
+        //    }
+        //    return vs;
+        //}
 
-        public static List<string> GetOwnerRoles()
-        {
-            List<string> vs = new List<string>();
-            string[] ss = File.ReadAllLines(db_dir + "\\owner_roles.csv");
-            foreach (string s in ss)
-            {
-                string[] fs = s.Split(',');
-                vs.Add(fs[0]);
-            }
-            return vs;
-        }
+        //public static List<string> GetPropertyCodes()
+        //{
+        //    string table_name = "property_codes";
+        //    List<string> vs;
+        //    if (!table_names2csv_table.TryGetValue(table_name, out vs))
+        //    {
+        //        vs = new List<string>();
+        //        string[] ss = File.ReadAllLines(Log.AppDir + "\\" + table_name + ".csv");
+        //        foreach (string s in ss)
+        //        {
+        //            string[] fs = s.Split(',');
+        //            vs.Add(fs[0]);
+        //        }
+        //        table_names2csv_table[table_name] = vs;
+        //    }
+        //    return vs;
+        //}
 
-        public static List<string> GetCounties()
-        {
-            List<string> vs = new List<string>();
-            string[] ss = File.ReadAllLines(db_dir + "\\counties.csv");
-            foreach (string s in ss)
-            {
-                string[] fs = s.Split(',');
-                vs.Add(fs[0]);
-            }
-            return vs;
-        }
+        //public static List<string> GetOwnerRoles()
+        //{
+        //    string table_name = "owner_roles";
+        //    List<string> vs;
+        //    if (!table_names2csv_table.TryGetValue(table_name, out vs))
+        //    {
+        //        vs = new List<string>();
+        //        string[] ss = File.ReadAllLines(Log.AppDir + "\\" + table_name + ".csv");
+        //        foreach (string s in ss)
+        //        {
+        //            string[] fs = s.Split(',');
+        //            vs.Add(fs[0]);
+        //        }
+        //        table_names2csv_table[table_name] = vs;
+        //    }
+        //    return vs;
+        //}
+
+        //public static List<string> GetCounties()
+        //{
+        //    string table_name = "counties";
+        //    List<string> vs;
+        //    if (!table_names2csv_table.TryGetValue(table_name, out vs))
+        //    {
+        //        vs = new List<string>();
+        //        string[] ss = File.ReadAllLines(Log.AppDir + "\\" + table_name + ".csv");
+        //        foreach (string s in ss)
+        //        {
+        //            string[] fs = s.Split(',');
+        //            vs.Add(fs[0]);
+        //        }
+        //        table_names2csv_table[table_name] = vs;
+        //    }
+        //    return vs;
+        //}
     }
 }

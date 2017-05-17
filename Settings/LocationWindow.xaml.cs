@@ -44,7 +44,7 @@ namespace Cliver.Foreclosures
             };
 
             County.Items.Clear();
-            foreach (string c in Db.GetCounties())
+            foreach (string c in Db.GetValuesFromCsvTable("counties", "county", new Dictionary<string, string>() { }))
                 County.Items.Add(c);
             County.SelectedItem = Settings.General.County;
         }

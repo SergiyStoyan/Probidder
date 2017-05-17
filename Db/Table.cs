@@ -17,13 +17,6 @@ namespace Cliver.Foreclosures
         static readonly string db_dir = Log.GetAppCommonDataDir();
         static readonly string db_file = db_dir + "\\db.litedb";
 
-        static string get_normalized(string s)
-        {
-            if (s == null)
-                return null;
-            return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ").Trim();
-        }
-
         public class Document
         {
             public int Id { get; set; }

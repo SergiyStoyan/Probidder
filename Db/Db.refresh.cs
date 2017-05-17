@@ -73,20 +73,20 @@ namespace Cliver.Foreclosures
                 t.Start();
                 tasks.Add(t);
 
-                if (!File.Exists(db_dir + "\\illinois_postal_codes.csv"))
-                {
-                    string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
-                    File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
-                }
+                //if (!File.Exists(db_dir + "\\illinois_postal_codes.csv"))
+                //{
+                //    string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
+                //    File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
+                //}
 
-                if (!File.Exists(db_dir + "\\property_codes.csv"))
-                    File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
+                //if (!File.Exists(db_dir + "\\property_codes.csv"))
+                //    File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
 
-                if (!File.Exists(db_dir + "\\owner_roles.csv"))
-                    File.Copy(Log.AppDir + "\\owner_roles.csv", db_dir + "\\owner_roles.csv");
+                //if (!File.Exists(db_dir + "\\owner_roles.csv"))
+                //    File.Copy(Log.AppDir + "\\owner_roles.csv", db_dir + "\\owner_roles.csv");
 
-                if (!File.Exists(db_dir + "\\counties.csv"))
-                    File.Copy(Log.AppDir + "\\counties.csv", db_dir + "\\counties.csv");
+                //if (!File.Exists(db_dir + "\\counties.csv"))
+                //    File.Copy(Log.AppDir + "\\counties.csv", db_dir + "\\counties.csv");
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
