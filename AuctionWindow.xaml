@@ -105,7 +105,7 @@
             TargetNullValue=''}"/>                    
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
                     <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" 
-                             Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='{}{0:#,#.}'}">                        
+                             Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}">                        
                     </TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
                     <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" 
