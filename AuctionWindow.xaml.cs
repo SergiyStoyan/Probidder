@@ -164,16 +164,16 @@ namespace Cliver.Foreclosures
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
-                COUNTY.Text = Settings.General.County;
-                FILING_DATE.Text = DateTime.Now.ToString();
-                ENTRY_DATE.Text = DateTime.Now.ToString();
-                IS_ORG.IsChecked = false;
-                DECEASED.IsChecked = false;
+                f.COUNTY = Settings.General.County;
+                f.FILING_DATE = DateTime.Now;
+                f.ENTRY_DATE = DateTime.Now;
+                f.IS_ORG = false;
+                f.DECEASED = false;
 
                 return;
             }
-            DATE_OF_CA.SelectedDate = f.DATE_OF_CA;
-            LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
+            //DATE_OF_CA.SelectedDate = f.DATE_OF_CA;
+            //LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
         }
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -193,19 +193,18 @@ namespace Cliver.Foreclosures
         private DateTime? calendar_input(string text)
         {
             if (text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
-            {
-                //Console.Beep(5000, 200);
-                //Message.Error("Date is incorrect.");
                 return null;
-            }
             Match m = Regex.Match(text, @"(\d{2})(\d{2})(\d{2})");
             if (!m.Success)
+                return null;
+            try
             {
-                //Console.Beep(5000, 200);
-                //Message.Error("Date is incorrect.");
+                return new DateTime(2000 + int.Parse(m.Groups[3].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+            }
+            catch
+            {
                 return null;
             }
-            return new DateTime(2000 + int.Parse(m.Groups[3].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
         }
 
         void set_DatePicker(DatePicker dp, string date)

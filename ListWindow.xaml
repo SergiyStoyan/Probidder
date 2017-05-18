@@ -51,7 +51,7 @@
                             </GridViewColumn.CellTemplate>
                             </-->
                             <GridViewColumn Header="Id" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" />
-                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE}" />
+                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE, StringFormat=MM-dd-yy}" />
                                     <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.CITY}" />
                                     <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.ADDRESS}" />
                                 </GridView.Columns>

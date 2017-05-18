@@ -72,7 +72,7 @@ namespace Cliver.Foreclosures
             {
                 bool found = true;
                 foreach (KeyValuePair<string, string> k2v in ks2v)
-                    if (k2v.Value != null && get_normalized((string)d[k2v.Key]) != k2v.Value)
+                    if (get_normalized((string)d[k2v.Key]) != k2v.Value)
                     {
                         found = false;
                         break;
@@ -103,14 +103,14 @@ namespace Cliver.Foreclosures
             foreach (KeyValuePair<string, string> k2v in keys2value)
                 for (int i = 0; i < ls[0].Length; i++)
                     if (ls[0][i] == k2v.Key)
-                        ks2v[i] = k2v.Value;
+                        ks2v[i] = get_normalized(k2v.Value);
 
             List<string> vs = new List<string>();
             for (int i = 1; i < ls.Count; i++)
             {
                 bool found = true;
                 foreach (KeyValuePair<int, string> k2v in ks2v)
-                    if (k2v.Value != null && get_normalized(ls[i][k2v.Key]) != k2v.Value)
+                    if (get_normalized(ls[i][k2v.Key]) != k2v.Value)
                     {
                         found = false;
                         break;
