@@ -129,44 +129,7 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(subject.Text))
             //    throw new Exception("Subject is empty.");
             //if (string.IsNullOrWhiteSpace(this.description.Text))
-            //    throw new Exception("Description is empty    
-
-            //f.TYPE_OF_EN = TYPE_OF_EN.Text;
-            //f.COUNTY = COUNTY.Text;
-            //f.CASE_N = CASE_N.Text;
-            //f.FILING_DATE = FILING_DATE.SelectedDate;
-            //f.ENTRY_DATE = ENTRY_DATE.SelectedDate;
-            //f.LENDOR = LENDOR.Text;
-            //f.ORIGINAL_MTG = ORIGINAL_MTG.Text;
-            //f.DOCUMENT_N = DOCUMENT_N.Text;
-            //f.ORIGINAL_I = ORIGINAL_I.Text;
-            //f.LEGAL_D = LEGAL_D.Text;
-            //f.ADDRESS = ADDRESS.Text;
-            //f.CITY = CITY.Text;
-            //f.ZIP = ZIP.Text;
-            ////f.PIN = PIN.Text;
-            //f.DATE_OF_CA = DATE_OF_CA.SelectedDate;
-            //f.LAST_PAY_DATE = LAST_PAY_DATE.SelectedDate;
-            //f.BALANCE_DU = BALANCE_DU.Text;
-            //f.PER_DIEM_I = PER_DIEM_I.Text;
-            //f.CURRENT_OW = CURRENT_OW.Text;
-            //f.IS_ORG = IS_ORG.IsChecked == true;
-            //f.DECEASED = DECEASED.IsChecked == true;
-            //f.OWNER_ROLE = OWNER_ROLE.Text;
-            //f.OTHER_LIENS = OTHER_LIENS.Text;
-            //f.ADDL_DEF = ADDL_DEF.Text;
-            //f.PUB_COMMENTS = PUB_COMMENTS.Text;
-            //f.INT_COMMENTS = INT_COMMENTS.Text;
-            //f.ATTY = ATTY.Text;
-            //f.ATTORNEY_S = ATTORNEY_S.Text;
-            //f.TYPE_OF_MO = TYPE_OF_MO.Text;
-            //f.INTEREST_R = INTEREST_R.Text;
-            //f.PROP_DESC = PROP_DESC.Text;
-            //f.MONTHLY_PAY = MONTHLY_PAY.Text;
-            //f.TERM_OF_MTG = TERM_OF_MTG.Text;
-            //f.DEF_ADDRESS = DEF_ADDRESS.Text;
-            //f.DEF_PHONE = DEF_PHONE.Text;
-
+            //    throw new Exception("Description is empty 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             foreclosures.Save(f);
 

@@ -39,8 +39,8 @@ namespace Cliver.Foreclosures
             public string PIN { get; set; }
             public DateTime? DATE_OF_CA { get; set; }
             public DateTime? LAST_PAY_DATE { get; set; }
-            public string BALANCE_DU { get; set; }
-            public string PER_DIEM_I { get; set; }
+            public int BALANCE_DU { get; set; }
+            public decimal PER_DIEM_I { get; set; }
             public string CURRENT_OW { get; set; }
             public bool IS_ORG { get; set; }
             public bool DECEASED { get; set; }

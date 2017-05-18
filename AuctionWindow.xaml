@@ -104,9 +104,13 @@
             Text = "{Binding LAST_PAY_DATE, StringFormat={}{0:MMddyy}, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, 
             TargetNullValue=''}"/>                    
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
-                    <xctk:MaskedTextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></xctk:MaskedTextBox>
+                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" 
+                             Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='{}{0:#,#.}'}">                        
+                    </TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
-                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" 
+                             Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='{}{0:F2}'}">                        
+                    </TextBox>
                     
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
