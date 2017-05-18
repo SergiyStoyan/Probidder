@@ -37,11 +37,11 @@ namespace Cliver.Foreclosures
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
-            System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture(System.Globalization.CultureInfo.CurrentCulture.Name);
-            ci.DateTimeFormat.ShortDatePattern = "MMddyy";
-            ci.DateTimeFormat.LongDatePattern = "MMddyy";
-            Thread.CurrentThread.CurrentCulture = ci;
-            
+            //System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture(System.Globalization.CultureInfo.CurrentCulture.Name);
+            //ci.DateTimeFormat.ShortDatePattern = "MMddyy";
+            //ci.DateTimeFormat.LongDatePattern = "MMddyy";
+            //Thread.CurrentThread.CurrentCulture = ci;
+
             if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
@@ -176,12 +176,6 @@ namespace Cliver.Foreclosures
             LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
         }
 
-        class test
-        {
-            public string Value { get; set; }
-            public string PIN { get; set; }
-        }
-
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (fields.IsEnabled)
@@ -196,130 +190,78 @@ namespace Cliver.Foreclosures
             Window_PreviewMouseDown(null, null);
         }
 
-        private void PIN_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (PIN.Text.Length > 17)
-            {
-                Console.Beep(5000, 200);
-                e.Handled = true;
-                return;
-            }
-
-            if (e.Text == "-")
-            {
-                if (PIN.CaretIndex == 2
-                    || PIN.CaretIndex == 5
-                    || PIN.CaretIndex == 9
-                    || PIN.CaretIndex == 13
-                    )
-                {
-                    e.Handled = false;
-                    return;
-                }
-                Console.Beep(5000, 200);
-                e.Handled = true;
-                return;
-            }
-
-            int cursor = PIN.CaretIndex;
-            string t = PIN.Text.Insert(PIN.CaretIndex, e.Text);
-            cursor++;
-            for (int i = cursor - 1; i >= 0; i--)
-                if (t[i] == '-')
-                    cursor--;
-            t = Regex.Replace(t, "-", "");
-            ensure_separator(ref t, ref cursor, 2, "-");
-            ensure_separator(ref t, ref cursor, 5, "-");
-            ensure_separator(ref t, ref cursor, 9, "-");
-            ensure_separator(ref t, ref cursor, 13, "-");
-            PIN.Text = t;
-            PIN.CaretIndex = cursor;
-            e.Handled = true;
-        }
-
-        void ensure_separator(ref string t, ref int cursor, int position, string separator = "-")
-        {
-            if (t.Length < position)
-                return;
-            if (t.Length == position)
-                t = t + separator;
-            else
-                t = t.Insert(position, separator);
-            if (cursor >= position)
-                cursor++;
-        }
-
-        private void DATE_OF_CA_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (Regex.IsMatch(e.Text, @"[^\d]"))
-            {
-                Console.Beep(5000, 200);
-                e.Handled = true;
-            }
-        }
-
-        private void DATE_OF_CA_TextInput(object sender, TextCompositionEventArgs e)
-        {
-            //DATE_OF_CA.SelectedDate = calendar_input(e.Text);
-        }
-
         private DateTime? calendar_input(string text)
         {
-            if(text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
+            if (text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
             {
                 //Console.Beep(5000, 200);
-                Message.Error("Date is incorrect.");
+                //Message.Error("Date is incorrect.");
                 return null;
             }
             Match m = Regex.Match(text, @"(\d{2})(\d{2})(\d{2})");
             if (!m.Success)
             {
                 //Console.Beep(5000, 200);
-                Message.Error("Date is incorrect.");
+                //Message.Error("Date is incorrect.");
                 return null;
             }
             return new DateTime(2000 + int.Parse(m.Groups[3].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
         }
 
-        private void DATE_OF_CA_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        void set_DatePicker(DatePicker dp, string date)
         {
-
+            var h = calendar_input(date);
+            if (h == null)
+                return;
+            else
+                dp.SelectedDate = h;
         }
 
-        private void DATE_OF_CA_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void ENTRY_DATE_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            set_DatePicker(ENTRY_DATE, ((TextBox)sender).Text);
         }
 
-        private void DATE_OF_CA_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
+        private void DATE_OF_CA_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            set_DatePicker(DATE_OF_CA, ((TextBox)sender).Text);
         }
 
-        private void DATE_OF_CA_LostFocus(object sender, RoutedEventArgs e)
+        private void FILING_DATE_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //DATE_OF_CA.SelectedDate = calendar_input(DATE_OF_CA.Text);
+            set_DatePicker(FILING_DATE, ((TextBox)sender).Text);
         }
 
-        private void DATE_OF_CA_KeyDown(object sender, KeyEventArgs e)
+        private void LAST_PAY_DATE_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //if(e.Key == Key.Enter)
-            //    DATE_OF_CA.SelectedDate = calendar_input(DATE_OF_CA.Text);
+            set_DatePicker(LAST_PAY_DATE, ((TextBox)sender).Text);
         }
 
-        private void ORIGINAL_MTG_LostFocus(object sender, RoutedEventArgs e)
+        private void ORIGINAL_MTG_TextChanged(object sender, TextChangedEventArgs e)
         {
-
-        }
-
-        private void PIN_Error(object sender, ValidationErrorEventArgs e)
-        {
-
-        }
-
-        private void DATE_OF_CA_Error(object sender, ValidationErrorEventArgs e)
-        {
-
+            set_DatePicker(ORIGINAL_MTG, ((TextBox)sender).Text);
         }
     }
+
+    //public class MyCustomDateConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        if (value == null)
+    //            return null;
+    //        return ((DateTime)value).ToString("MMddyy", culture);
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        //try
+    //        //{
+    //            return DateTime.ParseExact((string)value, "MMddyy", culture);
+    //        //}
+    //        //catch
+    //        //{
+    //        //    return null;
+    //        //}
+    //    }
+    //}
 }
