@@ -87,8 +87,7 @@
                     <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  Text="{Binding LENDOR, Mode=TwoWay}"
                               VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
-                        <DatePicker Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
+                        <DatePicker Grid.Column="1" Grid.Row="4"  Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
                             <DatePicker.Resources>
                                 <Style TargetType="{x:Type DatePickerTextBox}">
                                     <Setter Property="Control.Template">
@@ -102,7 +101,8 @@
                                     </Setter>
                                 </Style>
                             </DatePicker.Resources>
-                        </DatePicker>
+                    </DatePicker>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Right">
                         <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
                         <TextBox Grid.Column="3" Grid.Row="4" MinWidth="50" Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay}"></TextBox>
                         <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Or Loan $</Label>
@@ -166,9 +166,9 @@
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">IS ORG</CheckBox>
+                        <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="0,0,5,0">IS ORG</CheckBox>
                         <CheckBox Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">Deceased</CheckBox>
-                        <Label >Owner Role</Label>
+                        <Label VerticalAlignment="Center" >Owner Role</Label>
                         <ComboBox Name="OWNER_ROLE" MinWidth="30" Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>

@@ -211,9 +211,7 @@ namespace Cliver.Foreclosures
         void set_DatePicker(DatePicker dp, string date)
         {
             var h = calendar_input(date);
-            if (h == null)
-                return;
-            else
+            if (h != null)
                 dp.SelectedDate = h;
         }
 

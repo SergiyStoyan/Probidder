@@ -23,6 +23,10 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
+/*
+ - form validation
+     */
+
 namespace Cliver.Foreclosures
 {
     public class Program
