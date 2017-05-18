@@ -115,7 +115,7 @@
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
                     <ComboBox Grid.Column="1" Grid.Row="7" IsEditable="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged" Text="{Binding CITY, Mode=TwoWay}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" IsEditable="True" Height="24" VerticalAlignment="Top" Text="{Binding ZIP, Mode=TwoWay}"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" IsEditable="True" Height="24" VerticalAlignment="Top" Text="{Binding ZIP, Mode=TwoWay}" PreviewTextInput="ZIP_TextInput"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
                     <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" Name="PIN" 
                                         Text="{Binding PIN, Mode=TwoWay}" 

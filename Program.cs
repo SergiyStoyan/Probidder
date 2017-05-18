@@ -25,6 +25,7 @@ using Microsoft.Win32;
 
 /*
  - form validation
+ -The last thing we want to change is the count of the attorney name, city and mtg codes. As you already saw, there is a "count" parameter in the APIs. Please, set the count parameter to 10 for the fields: Attorney, City and MTG codes. 
      */
 
 namespace Cliver.Foreclosures

@@ -239,6 +239,15 @@ namespace Cliver.Foreclosures
         {
             set_DatePicker(ORIGINAL_MTG, ((TextBox)sender).Text);
         }
+
+        private void ZIP_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (Regex.IsMatch(e.Text, @"[^\d]") || ((ComboBox)sender).Text?.Length >= 5)
+            {
+                Console.Beep(5000, 200);
+                e.Handled = true;
+            }
+        }
     }
 
     //public class MyCustomDateConverter : IValueConverter
