@@ -41,8 +41,7 @@ namespace Cliver.Foreclosures
             ci.DateTimeFormat.ShortDatePattern = "MMddyy";
             ci.DateTimeFormat.LongDatePattern = "MMddyy";
             Thread.CurrentThread.CurrentCulture = ci;
-
-            this.foreclosure_id = foreclosure_id;
+            
             if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
@@ -77,27 +76,29 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetValuesFromCsvTable("owner_roles", "role", new Dictionary<string, string>() { }))
                 OWNER_ROLE.Items.Add(c);
 
+            Db.Foreclosure f;
             if (foreclosure_id != null)
-                set_foreclosure(foreclosures.GetById((int)foreclosure_id));
+                f = foreclosures.GetById((int)foreclosure_id);
             else
-                set_foreclosure(null);
+                f = new Db.Foreclosure();
+            fields.DataContext = f;
 
             Closed += delegate
             {
                 foreclosures.Dispose();
             };
         }
-        int? foreclosure_id = null;
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
-            if (foreclosure_id != null)
+            Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+            if (f.Id != 0)
             {
-                foreclosures.Delete((int)foreclosure_id);
-                ListWindow.ItemDeleted((int)foreclosure_id);
+                foreclosures.Delete(f.Id);
+                ListWindow.ItemDeleted(f.Id);
             }
             Close();
         }
@@ -130,49 +131,47 @@ namespace Cliver.Foreclosures
             //if (string.IsNullOrWhiteSpace(this.description.Text))
             //    throw new Exception("Description is empty    
 
-            Db.Foreclosure f = new Db.Foreclosure();
-            if (foreclosure_id != null)
-                f.Id = (int)foreclosure_id;
-            f.TYPE_OF_EN = TYPE_OF_EN.Text;
-            f.COUNTY = COUNTY.Text;
-            f.CASE_N = CASE_N.Text;
-            f.FILING_DATE = FILING_DATE.SelectedDate;
-            f.ENTRY_DATE = ENTRY_DATE.SelectedDate;
-            f.LENDOR = LENDOR.Text;
-            f.ORIGINAL_MTG = ORIGINAL_MTG.Text;
-            f.DOCUMENT_N = DOCUMENT_N.Text;
-            f.ORIGINAL_I = ORIGINAL_I.Text;
-            f.LEGAL_D = LEGAL_D.Text;
-            f.ADDRESS = ADDRESS.Text;
-            f.CITY = CITY.Text;
-            f.ZIP = ZIP.Text;
-            f.PIN = PIN.Text;
-            f.DATE_OF_CA = DATE_OF_CA.SelectedDate;
-            f.LAST_PAY_DATE = LAST_PAY_DATE.SelectedDate;
-            f.BALANCE_DU = BALANCE_DU.Text;
-            f.PER_DIEM_I = PER_DIEM_I.Text;
-            f.CURRENT_OW = CURRENT_OW.Text;
-            f.IS_ORG = IS_ORG.IsChecked == true;
-            f.DECEASED = DECEASED.IsChecked == true;
-            f.OWNER_ROLE = OWNER_ROLE.Text;
-            f.OTHER_LIENS = OTHER_LIENS.Text;
-            f.ADDL_DEF = ADDL_DEF.Text;
-            f.PUB_COMMENTS = PUB_COMMENTS.Text;
-            f.INT_COMMENTS = INT_COMMENTS.Text;
-            f.ATTY = ATTY.Text;
-            f.ATTORNEY_S = ATTORNEY_S.Text;
-            f.TYPE_OF_MO = TYPE_OF_MO.Text;
-            f.INTEREST_R = INTEREST_R.Text;
-            f.PROP_DESC = PROP_DESC.Text;
-            f.MONTHLY_PAY = MONTHLY_PAY.Text;
-            f.TERM_OF_MTG = TERM_OF_MTG.Text;
-            f.DEF_ADDRESS = DEF_ADDRESS.Text;
-            f.DEF_PHONE = DEF_PHONE.Text;
-            foreclosure_id = foreclosures.Save(f);
+            //f.TYPE_OF_EN = TYPE_OF_EN.Text;
+            //f.COUNTY = COUNTY.Text;
+            //f.CASE_N = CASE_N.Text;
+            //f.FILING_DATE = FILING_DATE.SelectedDate;
+            //f.ENTRY_DATE = ENTRY_DATE.SelectedDate;
+            //f.LENDOR = LENDOR.Text;
+            //f.ORIGINAL_MTG = ORIGINAL_MTG.Text;
+            //f.DOCUMENT_N = DOCUMENT_N.Text;
+            //f.ORIGINAL_I = ORIGINAL_I.Text;
+            //f.LEGAL_D = LEGAL_D.Text;
+            //f.ADDRESS = ADDRESS.Text;
+            //f.CITY = CITY.Text;
+            //f.ZIP = ZIP.Text;
+            ////f.PIN = PIN.Text;
+            //f.DATE_OF_CA = DATE_OF_CA.SelectedDate;
+            //f.LAST_PAY_DATE = LAST_PAY_DATE.SelectedDate;
+            //f.BALANCE_DU = BALANCE_DU.Text;
+            //f.PER_DIEM_I = PER_DIEM_I.Text;
+            //f.CURRENT_OW = CURRENT_OW.Text;
+            //f.IS_ORG = IS_ORG.IsChecked == true;
+            //f.DECEASED = DECEASED.IsChecked == true;
+            //f.OWNER_ROLE = OWNER_ROLE.Text;
+            //f.OTHER_LIENS = OTHER_LIENS.Text;
+            //f.ADDL_DEF = ADDL_DEF.Text;
+            //f.PUB_COMMENTS = PUB_COMMENTS.Text;
+            //f.INT_COMMENTS = INT_COMMENTS.Text;
+            //f.ATTY = ATTY.Text;
+            //f.ATTORNEY_S = ATTORNEY_S.Text;
+            //f.TYPE_OF_MO = TYPE_OF_MO.Text;
+            //f.INTEREST_R = INTEREST_R.Text;
+            //f.PROP_DESC = PROP_DESC.Text;
+            //f.MONTHLY_PAY = MONTHLY_PAY.Text;
+            //f.TERM_OF_MTG = TERM_OF_MTG.Text;
+            //f.DEF_ADDRESS = DEF_ADDRESS.Text;
+            //f.DEF_PHONE = DEF_PHONE.Text;
+
+            Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+            foreclosures.Save(f);
 
             ListWindow.ItemSaved(f);
-            foreclosure_id = null;
-            set_foreclosure(null);
+            fields.DataContext = new Db.Foreclosure();
             Save.IsEnabled = false;
             Delete.IsEnabled = false;
             //Close();
@@ -191,88 +190,33 @@ namespace Cliver.Foreclosures
             foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
                 ATTORNEY_S.Items.Add(c);
 
-            if (foreclosure_id == null)
+            Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+            if (f.Id == 0)
                 if (ATTORNEY_S.Items.Count == 1)
                     ATTORNEY_S.SelectedIndex = 0;
         }
 
-        void set_foreclosure(Db.Foreclosure f)
+        private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (f == null)
+            Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
+            if (f.Id == 0)
             {
-                TYPE_OF_EN.Text = null;
                 COUNTY.Text = Settings.General.County;
-                CASE_N.Text = null;
                 FILING_DATE.Text = DateTime.Now.ToString();
                 ENTRY_DATE.Text = DateTime.Now.ToString();
-                LENDOR.Text = null;
-                ORIGINAL_MTG.Text = null;
-                DOCUMENT_N.Text = null;
-                ORIGINAL_I.Text = null;
-                LEGAL_D.Text = null;
-                ADDRESS.Text = null;
-                CITY.Text = null;
-                ZIP.Text = null;
-                PIN.Text = null;
-                DATE_OF_CA.Text = null;
-                LAST_PAY_DATE.Text = null;
-                BALANCE_DU.Text = null;
-                PER_DIEM_I.Text = null;
-                CURRENT_OW.Text = null;
                 IS_ORG.IsChecked = false;
                 DECEASED.IsChecked = false;
-                OWNER_ROLE.Text = null;
-                OTHER_LIENS.Text = null;
-                ADDL_DEF.Text = null;
-                PUB_COMMENTS.Text = null;
-                INT_COMMENTS.Text = null;
-                ATTY.Text = null;
-                ATTORNEY_S.Text = null;
-                TYPE_OF_MO.Text = null;
-                INTEREST_R.Text = null;
-                PROP_DESC.Text = null;
-                MONTHLY_PAY.Text = null;
-                TERM_OF_MTG.Text = null;
-                DEF_ADDRESS.Text = null;
-                DEF_PHONE.Text = null;
 
                 return;
             }
-            TYPE_OF_EN.Text = f.TYPE_OF_EN;
-            COUNTY.Text = f.COUNTY;
-            CASE_N.Text = f.CASE_N;
-            FILING_DATE.SelectedDate = f.FILING_DATE;
-            ENTRY_DATE.SelectedDate = f.ENTRY_DATE;
-            LENDOR.Text = f.LENDOR;
-            ORIGINAL_MTG.Text = f.ORIGINAL_MTG;
-            DOCUMENT_N.Text = f.DOCUMENT_N;
-            ORIGINAL_I.Text = f.ORIGINAL_I;
-            LEGAL_D.Text = f.LEGAL_D;
-            ADDRESS.Text = f.ADDRESS;
-            CITY.Text = f.CITY;
-            ZIP.Text = f.ZIP;
-            PIN.Text = f.PIN;
             DATE_OF_CA.SelectedDate = f.DATE_OF_CA;
             LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
-            BALANCE_DU.Text = f.BALANCE_DU;
-            PER_DIEM_I.Text = f.PER_DIEM_I;
-            CURRENT_OW.Text = f.CURRENT_OW;
-            IS_ORG.IsChecked = f.IS_ORG;
-            DECEASED.IsChecked = f.DECEASED;
-            OWNER_ROLE.Text = f.OWNER_ROLE;
-            OTHER_LIENS.Text = f.OTHER_LIENS;
-            ADDL_DEF.Text = f.ADDL_DEF;
-            PUB_COMMENTS.Text = f.PUB_COMMENTS;
-            INT_COMMENTS.Text = f.INT_COMMENTS;
-            ATTY.Text = f.ATTY;
-            ATTORNEY_S.Text = f.ATTORNEY_S;
-            TYPE_OF_MO.Text = f.TYPE_OF_MO;
-            INTEREST_R.Text = f.INTEREST_R;
-            PROP_DESC.Text = f.PROP_DESC;
-            MONTHLY_PAY.Text = f.MONTHLY_PAY;
-            TERM_OF_MTG.Text = f.TERM_OF_MTG;
-            DEF_ADDRESS.Text = f.DEF_ADDRESS;
-            DEF_PHONE.Text = f.DEF_PHONE;
+        }
+
+        class test
+        {
+            public string Value { get; set; }
+            public string PIN { get; set; }
         }
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -401,6 +345,16 @@ namespace Cliver.Foreclosures
         }
 
         private void ORIGINAL_MTG_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PIN_Error(object sender, ValidationErrorEventArgs e)
+        {
+
+        }
+
+        private void DATE_OF_CA_Error(object sender, ValidationErrorEventArgs e)
         {
 
         }

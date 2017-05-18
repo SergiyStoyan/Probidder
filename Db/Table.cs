@@ -64,17 +64,16 @@ namespace Cliver.Foreclosures
                 }
             }
 
-            public virtual int Save(D document)
+            public virtual void Save(D document)
             {
                 lock (db)
                 {
                     if (document.Id == 0)
                     {
                         var b = table.Insert(document);
-                        return b.AsInt32;
+                        document.Id = b.AsInt32;
                     }
                     table.Update(document);
-                    return document.Id;
                 }
             }
 
