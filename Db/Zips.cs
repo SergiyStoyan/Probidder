@@ -16,13 +16,18 @@ namespace Cliver.Foreclosures
     {
         public class Zips : Db.Json.Table<Zip>
         {
+            static public void RefreshFile()
+            {
+                refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=zip");
+            }
+
             public List<Zip> GetBy(string county, string city)
             {
                 lock (table)
                 {
                     county = GetNormalized(county);
                     city = GetNormalized(city);
-                    return table.Where(x => GetNormalized(x.city) == city && GetNormalized(x.county) == county).ToList();
+                    return table.Where(x => GetNormalized(x.city) == city && GetNormalized(x.county) == county).OrderBy(x => x.zip).ToList();
                 }
             }
         }

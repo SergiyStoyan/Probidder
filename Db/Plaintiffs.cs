@@ -16,6 +16,11 @@ namespace Cliver.Foreclosures
     {
         public class Plaintiffs : Db.Json.Table<Plaintiff>
         {
+            static public void RefreshFile()
+            {
+                refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff");
+            }
+
             public List<Plaintiff> GetBy(string county)
             {
                 lock (table)

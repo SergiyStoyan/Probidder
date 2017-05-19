@@ -44,11 +44,24 @@ namespace Cliver.Foreclosures
                 {
                     lock (table_types2collection)
                     {
-                        table_types2collection.Remove(GetType());
-                        if (table_types2collection.Count < 1 && db != null)
+                        //table_types2collection.Remove(GetType());
+                        //if (table_types2collection.Count < 1 && db != null)
+                        //{
+                        //    db.Dispose();
+                        //    db = null;
+                        //}
+                        lock (tables)
                         {
-                            db.Dispose();
-                            db = null;
+                            tables.Remove(this);
+                            if (tables.Count < 1 && !keep_open)
+                            {
+                                table_types2collection.Clear();
+                                if (db != null)
+                                {
+                                    db.Dispose();
+                                    db = null;
+                                }
+                            }
                         }
                     }
                 }

@@ -166,6 +166,12 @@ namespace Cliver.Foreclosures
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
+                f.TYPE_OF_EN = "CHA";
+                //f.CASE_N = 
+                f.OWNER_ROLE = "OWNER";
+                f.TYPE_OF_MO = "CNV";
+                f.PROP_DESC = "SINGLE FAMILY";
+                f.TERM_OF_MTG = 30;
                 f.COUNTY = Settings.Location.County;
                 f.FILING_DATE = DateTime.Now;
                 f.ENTRY_DATE = DateTime.Now;
@@ -201,7 +207,12 @@ namespace Cliver.Foreclosures
                 return null;
             try
             {
-                return new DateTime(2000 + int.Parse(m.Groups[3].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                int y = int.Parse(m.Groups[3].Value);
+                if (y < 30)
+                    y += 2000;
+                else
+                    y += 1900;
+                return new DateTime(y, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
             }
             catch
             {

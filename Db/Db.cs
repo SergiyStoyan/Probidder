@@ -15,12 +15,41 @@ namespace Cliver.Foreclosures
         static readonly string db_dir = Log.GetAppCommonDataDir();
         static readonly string db_file = db_dir + "\\db.litedb";
 
+        static readonly HashSet<object> tables = new HashSet<object>();//to monitor count of opened db tables 
+
+        static Db()
+        {
+        }
+
+        static public bool KeepOpen
+        {
+            set
+            {
+                keep_open = value;
+            }
+            get
+            {
+                return keep_open;
+            }
+        }
+        static bool keep_open = false;
+
+        static public void Close()
+        {
+            lock (tables)
+            {
+                bool kp = keep_open;
+                keep_open = false;
+                foreach (dynamic t in tables)
+                    t.Dispose();
+                keep_open = kp;
+            }
+        }
+
         public class Document
         {
             public int Id { get; set; }
         }
-
-        static readonly Dictionary<string, List<string[]>> table_names2csv_table = new Dictionary<string, List<string[]>>();
 
         public static string GetNormalized(string s)
         {

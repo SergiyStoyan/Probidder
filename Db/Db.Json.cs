@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 using System.IO;
-//using MongoDB.Bson;
-//using MongoDB.Driver;
-using LiteDB;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
@@ -18,6 +16,12 @@ namespace Cliver.Foreclosures
         {
             public abstract class Table<D> where D : Document
             {
+                //public static T Get<T>() where T: Table<D>, new()
+                //{
+                //    T y = new T();
+                //    return null;
+                //}
+
                 public Table()
                 {
                     lock (table_types2list)
@@ -77,13 +81,57 @@ namespace Cliver.Foreclosures
                 {
                     lock (table_types2list)
                     {
-                        table_types2list.Remove(GetType());
+                        //table_types2list.Remove(GetType());
+                        lock (tables)
+                        {
+                            tables.Remove(this);
+                            if (tables.Count < 1 && !keep_open)
+                                table_types2list.Clear();
+                        }
                     }
                 }
 
                 public List<D> GetAll()
                 {
                     return table;
+                }
+
+                //abstract public void Refresh();
+
+                protected static void refresh_json_file_by_request(string url)
+                {
+                    Type t = MethodBase.GetCurrentMethod().DeclaringType;
+                    Log.Main.Inform("Refreshing table: " + t.Name);
+                    HttpResponseMessage rm = http_client.GetAsync(url).Result;
+                    if (!rm.IsSuccessStatusCode)
+                        throw new Exception("Could not refresh table: " + rm.ReasonPhrase);
+                    if (rm.Content == null)
+                        throw new Exception("Response content is null.");
+                    string s = rm.Content.ReadAsStringAsync().Result;
+                    System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
+                }
+
+                protected static void refresh_json_file_by_file<D>(string file) where D : Document, new()
+                {
+                    Type t = MethodBase.GetCurrentMethod().DeclaringType;
+                    Log.Main.Inform("Refreshing table: " + t.Name);
+                    string[] ls = File.ReadAllLines(file);
+                    string[] hs = ls[0].Split(',');
+                    Dictionary<string, int> hs2i = new Dictionary<string, int>();
+                    for (int i = 0; i < hs.Length; i++)
+                        hs2i[hs[i]] = i;
+                    PropertyInfo[] pis = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                    List<D> ds = new List<D>();
+                    for (int i = 1; i < ls.Length; i++)
+                    {
+                        string[] vs = ls[i].Split(',');
+                        D d = new D();
+                        foreach (PropertyInfo pi in pis)
+                            pi.SetValue(d, vs[hs2i[pi.Name]]);
+                        ds.Add(d);
+                    }
+                    string s = SerializationRoutines.Json.Serialize(ds);
+                    File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
                 }
             }
         }

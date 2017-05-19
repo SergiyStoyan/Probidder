@@ -13,10 +13,10 @@
          AllowDrop="True"
         PreviewMouseDown="Window_PreviewMouseDown" PreviewKeyDown="Window_PreviewKeyDown"
             >
-    
+
     <Grid Background="Beige">
-            <StackPanel Orientation="Vertical">
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid Name="fields" Margin="0,10,0,0" DataContextChanged="fields_DataContextChanged">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -87,20 +87,20 @@
                     <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  Text="{Binding LENDOR, Mode=TwoWay}"
                               VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
-                        <DatePicker Grid.Column="1" Grid.Row="4"  Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
-                            <DatePicker.Resources>
-                                <Style TargetType="{x:Type DatePickerTextBox}">
-                                    <Setter Property="Control.Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <TextBox TextChanged="ORIGINAL_MTG_TextChanged"
+                    <DatePicker Grid.Column="1" Grid.Row="4"  Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
+                        <DatePicker.Resources>
+                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <TextBox TextChanged="ORIGINAL_MTG_TextChanged"
                                                 Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </DatePicker.Resources>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DatePicker.Resources>
                     </DatePicker>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Right">
                         <Label Grid.Column="2" Grid.Row="4" HorizontalAlignment="Right">Doc_#</Label>
@@ -120,8 +120,8 @@
                     <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" Name="PIN" 
                                         Text="{Binding PIN, Mode=TwoWay}" 
                                         Mask="&amp;&amp;-&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;&amp;">
-                        </xctk:MaskedTextBox>
-                        <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
+                    </xctk:MaskedTextBox>
+                    <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
                     <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"  SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
@@ -156,13 +156,13 @@
                     </DatePicker>
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
                     <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" 
-                             Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}">                        
+                             Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}">
                     </TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
                     <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" 
-                             Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='{}{0:F2}'}">                        
+                             Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='{}{0:F2}'}">
                     </TextBox>
-                    
+
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -185,8 +185,8 @@
                     <ComboBox Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="3" IsEditable="True" Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">MTG Codes</Label>
                     <ComboBox Grid.Column="5" Grid.Row="9" IsEditable="True" Name="TYPE_OF_MO" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
-                    <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right">Interest</Label>
-                    <TextBox Grid.Column="7" Grid.Row="9" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
+                    <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right">Interest</Label>
+                    <TextBox Grid.Column="5" Grid.Row="11" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                     <Label Grid.Column="4" Grid.Row="10" HorizontalAlignment="Right">Property Type</Label>
                     <ComboBox Grid.Column="5" Grid.Row="10" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
                     <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right">Monthly Payments</Label>
@@ -198,13 +198,13 @@
                     <Label Grid.Column="6" Grid.Row="12" HorizontalAlignment="Right">Deff. Phone</Label>
                     <TextBox Grid.Column="7" Grid.Row="12" Name="DEF_PHONE" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                 </Grid>
-        </ScrollViewer>
-                <UniformGrid HorizontalAlignment="Right" Rows="1" Margin="0,10,10,10">
-                    <Button Name="Edit" Margin="10,0,0,0" Click="Edit_Click" Visibility="Collapsed" Grid.Column="0">Edit</Button>
-                    <Button Name="Save" Margin="10,0,0,0" Click="Save_Click">Save</Button>
-                    <Button Margin="10,0,0,0" Name="Delete" Click="Delete_Click">Delete</Button>
-                    <Button Margin="10,0,0,0" Name="Cancel" Click="Cancel_Click">Cancel</Button>
-                </UniformGrid>
-            </StackPanel>
+            </ScrollViewer>
+            <UniformGrid HorizontalAlignment="Right" Rows="1" Margin="0,10,10,10">
+                <Button Name="Edit" Margin="10,0,0,0" Click="Edit_Click" Visibility="Collapsed" Grid.Column="0">Edit</Button>
+                <Button Name="Save" Margin="10,0,0,0" Click="Save_Click">Save</Button>
+                <Button Margin="10,0,0,0" Name="Delete" Click="Delete_Click">Delete</Button>
+                <Button Margin="10,0,0,0" Name="Cancel" Click="Cancel_Click">Cancel</Button>
+            </UniformGrid>
+        </StackPanel>
     </Grid>
 </Window>

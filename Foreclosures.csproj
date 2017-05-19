@@ -134,6 +134,7 @@
     <Compile Include="Db\OwnerRoles.cs" />
     <Compile Include="Db\Counties.cs" />
     <Compile Include="Db\Db.Json.cs" />
+    <Compile Include="Db\CaseNumbers.cs" />
     <Compile Include="Settings\Login.cs" />
     <Compile Include="Settings\Location.cs" />
     <Compile Include="Db\Zips.cs" />

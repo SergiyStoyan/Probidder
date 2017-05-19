@@ -16,6 +16,11 @@ namespace Cliver.Foreclosures
     {
         public class MortgageTypes : Db.Json.Table<MortgageType>
         {
+            static public void RefreshFile()
+            {
+                refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=mortgage_type");
+            }
+
             public List<MortgageType> Get()
             {
                 lock (table)

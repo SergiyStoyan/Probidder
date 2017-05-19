@@ -55,7 +55,7 @@ namespace Cliver.Foreclosures
             public string PROP_DESC { get; set; }
             public string INTEREST_R { get; set; }
             public string MONTHLY_PAY { get; set; }
-            public string TERM_OF_MTG { get; set; }
+            public int TERM_OF_MTG { get; set; }
             public string DEF_ADDRESS { get; set; }
             public string DEF_PHONE { get; set; }
         }

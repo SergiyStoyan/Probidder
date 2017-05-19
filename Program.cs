@@ -23,6 +23,13 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
+/*
+ - validation (control red border)
+ - masks
+     
+     
+     */
+
 namespace Cliver.Foreclosures
 {
     public class Program
@@ -58,6 +65,8 @@ namespace Cliver.Foreclosures
 
                 if (string.IsNullOrWhiteSpace(Settings.Location.County))
                     LocationWindow.OpenDialog();
+
+                Db.KeepOpen = true;
 
                 Service.Running = true;
                 //Db.BeginRefresh();
