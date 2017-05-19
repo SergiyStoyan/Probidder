@@ -23,14 +23,6 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-/*
- - form validation
- -The last thing we want to change is the count of the attorney name, city and mtg codes. As you already saw, there is a "count" parameter in the APIs. Please, set the count parameter to 10 for the fields: Attorney, City and MTG codes. 
-  - About missing zip codes for some cities. 
-  It happens because of descripancy between your API https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city and zip code list I loaded from internet. For instance, in my list county Cook does not have sity ADDISON opposite to your API. 
-  So, when the app ties to file codes for Cook+ADDISON it gets nothing. Let me know how to resolve it.
-     *    */
-
 namespace Cliver.Foreclosures
 {
     public class Program
@@ -61,10 +53,10 @@ namespace Cliver.Foreclosures
             {
                 ProcessRoutines.RunSingleProcessOnly();
 
-                if (string.IsNullOrWhiteSpace(Settings.General.UserName) || string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
+                if (string.IsNullOrWhiteSpace(Settings.Login.UserName) || string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
                     LoginWindow.OpenDialog();
 
-                if (string.IsNullOrWhiteSpace(Settings.General.County))
+                if (string.IsNullOrWhiteSpace(Settings.Location.County))
                     LocationWindow.OpenDialog();
 
                 Service.Running = true;
