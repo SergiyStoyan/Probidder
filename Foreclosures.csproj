@@ -130,30 +130,35 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AboutForm.Designer.cs" />
-    <Compile Include="Db\Db.Cities.cs" />
-    <Compile Include="Db\Db.AttorneyPhones.cs" />
+    <Compile Include="Db\PropertyCodes.cs" />
+    <Compile Include="Db\OwnerRoles.cs" />
+    <Compile Include="Db\Counties.cs" />
+    <Compile Include="Db\Db.Json.cs" />
+    <Compile Include="Settings\Login.cs" />
+    <Compile Include="Settings\Location.cs" />
+    <Compile Include="Db\Zips.cs" />
+    <Compile Include="Db\Cities.cs" />
+    <Compile Include="Db\AttorneyPhones.cs" />
     <Compile Include="Db\Db.cs" />
-    <Compile Include="Db\Table.cs" />
+    <Compile Include="Db\Db.LightDb.cs" />
     <Compile Include="Db\Foreclosures.cs" />
-    <Compile Include="Db\Db.Attorneys.cs" />
-    <Compile Include="Db\Db.Plaintiffs.cs" />
+    <Compile Include="Db\Attorneys.cs" />
+    <Compile Include="Db\Plaintiffs.cs" />
     <Compile Include="Db\Db.refresh.cs" />
     <Compile Include="Settings\DatabaseWindow.xaml.cs">
       <DependentUpon>DatabaseWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Database.cs" />
     <Compile Include="Settings\LocationWindow.xaml.cs">
       <DependentUpon>LocationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ListWindow.xaml.cs">
       <DependentUpon>ListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Db\Db.MortgageTypes.cs" />
+    <Compile Include="Db\MortgageTypes.cs" />
     <Compile Include="InfoControl.xaml.cs" />
     <Compile Include="InfoWindow.xaml.cs" />
     <Compile Include="Service.cs" />
@@ -216,10 +221,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Settings\LoginWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Settings\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

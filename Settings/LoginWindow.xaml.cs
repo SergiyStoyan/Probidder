@@ -43,9 +43,9 @@ namespace Cliver.Foreclosures
             {
             };
 
-            UserName.Text = Settings.General.UserName;
-            if (!string.IsNullOrWhiteSpace(Settings.General.EncryptedPassword))
-                Password.Password = Settings.General.Decrypt(Settings.General.EncryptedPassword);
+            UserName.Text = Settings.Login.UserName;
+            if (!string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
+                Password.Password = Settings.Login.Decrypt(Settings.Login.EncryptedPassword);
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -59,12 +59,12 @@ namespace Cliver.Foreclosures
             {
                 if (string.IsNullOrWhiteSpace(UserName.Text))
                     throw new Exception("User Name is not set.");
-                Settings.General.UserName = UserName.Text;
+                Settings.Login.UserName = UserName.Text;
                 if (string.IsNullOrWhiteSpace(Password.Password))
                     throw new Exception("Password is not set.");
-                Settings.General.EncryptedPassword = Settings.General.Encrypt(Password.Password);
+                Settings.Login.EncryptedPassword = Settings.Login.Encrypt(Password.Password);
 
-                Settings.General.Save();
+                Settings.Login.Save();
                 Config.Reload();
 
                 Close();

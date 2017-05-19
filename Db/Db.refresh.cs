@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 using System.IO;
-//using MongoDB.Bson;
-//using MongoDB.Driver;
 using LiteDB;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
@@ -44,70 +43,71 @@ namespace Cliver.Foreclosures
                 List<Task> tasks = new List<Task>();
                 var t = new Task(() =>
                 {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=mortgage_type", "mortgage_types");
+                    refresh_json_file_by_request<Plaintiffs>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff");
+                    //refresh_table<Db.Plaintiffs, Db.Plaintiff>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff");
                 });
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
                 {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney_phone", "attorney_phones");
+                    refresh_json_file_by_request<AttorneyPhones>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney_phone");
+                    //refresh_table<Db.AttorneyPhones, Db.AttorneyPhone>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney_phone");
                 });
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
                 {
-                    refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney", "attorneys");
+                    refresh_json_file_by_request<Attorneys>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney");
+                    //refresh_table<Db.Attorneys, Db.Attorney>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney");
+                });
+                t.Start();
+                tasks.Add(t);
+                t = new Task(() =>
+                {
+                    refresh_json_file_by_request<MortgageTypes>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=mortgage_type");
+                    //refresh_table<Db.MortgageTypes, Db.MortgageType>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=mortgage_type");
                 });
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
                {
-                   refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city", "cities");
+                   refresh_json_file_by_request<Cities>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city");
+                   //refresh_table<Db.Cities, Db.City>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city");
                });
                 t.Start();
                 tasks.Add(t);
                 t = new Task(() =>
-               {
-                   refresh_table("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=plaintiff", "plaintiffs");
-               });
+                {
+                    refresh_json_file_by_request<Zips>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=zip");
+                    //refresh_table<Db.Zips, Db.Zip>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=zip");
+                });
                 t.Start();
                 tasks.Add(t);
 
-                //if (!File.Exists(db_dir + "\\illinois_postal_codes.csv"))
-                //{
-                //    string s = File.ReadAllText(Log.AppDir + "\\illinois_postal_codes.csv");
-                //    File.WriteAllText(db_dir + "\\illinois_postal_codes.csv", get_normalized(s));
-                //}
-
-                //if (!File.Exists(db_dir + "\\property_codes.csv"))
-                //    File.Copy(Log.AppDir + "\\property_codes.csv", db_dir + "\\property_codes.csv");
-
-                //if (!File.Exists(db_dir + "\\owner_roles.csv"))
-                //    File.Copy(Log.AppDir + "\\owner_roles.csv", db_dir + "\\owner_roles.csv");
-
-                //if (!File.Exists(db_dir + "\\counties.csv"))
-                //    File.Copy(Log.AppDir + "\\counties.csv", db_dir + "\\counties.csv");
+                refresh_json_file_by_file<Counties, County>(Log.AppDir + "\\counties.csv");
+                refresh_json_file_by_file<OwnerRoles, OwnerRole>(Log.AppDir + "\\owner_roles.csv");
+                refresh_json_file_by_file<PropertyCodes, PropertyCode>(Log.AppDir + "\\property_codes.csv");
 
                 Task.WaitAll(tasks.ToArray());
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
-                Settings.General.LastDbRefreshTime = DateTime.Now;
+                Settings.Database.LastRefreshTime = DateTime.Now;
                 Settings.General.Save();
-                if (Settings.General.DbRefreshPeriodInSecs > 0)
-                    Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshPeriodInSecs);
+                if (Settings.Database.RefreshPeriodInSecs > 0)
+                    Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
             },
             (Exception e) =>
             {
                 Log.Main.Error(e);
                 Log.Main.Error("Could not refresh db.");
-                if (Settings.General.DbRefreshRetryPeriodInSecs > 0)
-                    Settings.General.NextDbRefreshTime = refresh_started.AddSeconds(Settings.General.DbRefreshRetryPeriodInSecs);
+                if (Settings.Database.RefreshRetryPeriodInSecs > 0)
+                    Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshRetryPeriodInSecs);
                 InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.Beige, System.Windows.Media.Brushes.Red);
             },
             () =>
             {
-                Settings.General.Save();
+                Settings.Database.Save();
                 RefreshStateChanged?.BeginInvoke(null, null);
             }
             );
@@ -116,16 +116,52 @@ namespace Cliver.Foreclosures
         static Thread refresh_t = null;
         static HttpClient http_client;
 
-        static void refresh_table(string url, string table)
+        static void refresh_json_file_by_request<T>(string url)
         {
-            Log.Main.Inform("Refreshing table: " + table);
+            Log.Main.Inform("Refreshing table: " + typeof(T).Name);
             HttpResponseMessage rm = http_client.GetAsync(url).Result;
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not refresh table: " + rm.ReasonPhrase);
             if (rm.Content == null)
                 throw new Exception("Response content is null.");
             string s = rm.Content.ReadAsStringAsync().Result;
-            System.IO.File.WriteAllText(db_dir + "\\" + table + ".json", s);
+            System.IO.File.WriteAllText(db_dir + "\\" + typeof(T).Name + ".json", s);
         }
+
+        static void refresh_json_file_by_file<T, D>(string file) where T : Json.Table<D> where D : Document
+        {
+            Log.Main.Inform("Refreshing table: " + typeof(T).Name);
+            string[] ls = File.ReadAllLines(file);
+            string[] hs = ls[0].Split(',');
+            Dictionary<string, int> hs2i = new Dictionary<string, int>();
+            for (int i = 0; i < hs.Length; i++)
+                hs2i[hs[i]] = i;
+            PropertyInfo[] pis = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.Instance| BindingFlags.DeclaredOnly);
+            List<D> ds = new List<D>();
+            for (int i = 1; i < ls.Length; i++)
+            {
+                string[] vs = ls[i].Split(',');
+                D d = Activator.CreateInstance<D>();
+                foreach (PropertyInfo pi in pis)
+                    pi.SetValue(d, vs[hs2i[pi.Name]]);
+                ds.Add(d);
+            }
+            string s = SerializationRoutines.Json.Serialize(ds);
+            File.WriteAllText(db_dir + "\\" + typeof(T).Name + ".json", s);
+        }
+
+        //static void refresh_table<T, D>(string url) where T : Table<D> where D : Document
+        //{
+        //    Log.Main.Inform("Refreshing table: " + typeof(T).Name);
+        //    HttpResponseMessage rm = http_client.GetAsync(url).Result;
+        //    if (!rm.IsSuccessStatusCode)
+        //        throw new Exception("Could not refresh table: " + rm.ReasonPhrase);
+        //    if (rm.Content == null)
+        //        throw new Exception("Response content is null.");
+        //    string s = rm.Content.ReadAsStringAsync().Result;
+        //    T t = Activator.CreateInstance<T>();
+        //    foreach (D d in SerializationRoutines.Json.Deserialize<dynamic>(s))
+        //        t.Save(d);
+        //}
     }
 }

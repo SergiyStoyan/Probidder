@@ -47,7 +47,7 @@ namespace Cliver.Foreclosures
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsWindow.Open();
+            //SettingsWindow.Open();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

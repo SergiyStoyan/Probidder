@@ -208,11 +208,6 @@ namespace Cliver.Foreclosures
             Db.BeginRefresh();
         }
 
-        private void settings_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow.Open();
-        }
-
         private void work_dir_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(Log.WorkDir);
@@ -230,9 +225,9 @@ namespace Cliver.Foreclosures
 
         private void refresh_db_last_time_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (Settings.General.LastDbRefreshTime != null)
+            if (Settings.Database.LastRefreshTime != null)
             {
-                refresh_db_last_time.Text = "Refreshed at " + Settings.General.LastDbRefreshTime.ToString();
+                refresh_db_last_time.Text = "Refreshed at " + Settings.Database.LastRefreshTime.ToString();
                 refresh_db_last_time0.IsOpen = true;
             }
         }
@@ -255,6 +250,12 @@ namespace Cliver.Foreclosures
         private void location_Click(object sender, RoutedEventArgs e)
         {
             LocationWindow.OpenDialog();
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            if (Message.YesNo("This will reset all the settings to their initial values. Proceed?"))
+                Config.Reset();
         }
     }
 }

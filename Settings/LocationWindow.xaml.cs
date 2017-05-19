@@ -44,9 +44,9 @@ namespace Cliver.Foreclosures
             };
 
             County.Items.Clear();
-            foreach (string c in Db.GetValuesFromCsvTable("counties", "county", new Dictionary<string, string>() { }))
-                County.Items.Add(c);
-            County.SelectedItem = Settings.General.County;
+            foreach (Db.County c in (new Db.Counties()).GetAll())
+                County.Items.Add(c.county);
+            County.SelectedItem = Settings.Location.County;
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -60,9 +60,9 @@ namespace Cliver.Foreclosures
             {
                 if (County.SelectedItem == null)
                     throw new Exception("No county chosen.");
-                Settings.General.County = County.SelectedItem.ToString();
+                Settings.Location.County = County.SelectedItem.ToString();
 
-                Settings.General.Save();
+                Settings.Location.Save();
                 Config.Reload();
 
                 Close();

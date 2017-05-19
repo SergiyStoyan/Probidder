@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="Database Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
@@ -35,12 +35,12 @@
 
                                 <CheckBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Margin="0,0,0,7"   Name="DoRefresh" IsChecked="True" Checked="DoRefresh_Checked" Unchecked="DoRefresh_Unchecked">Refresh Periodically</CheckBox>
                     <Label  Grid.Column="0" Grid.Row="1"  Margin="0,0,0,5"  Name="lDbRefreshPeriodInDays" HorizontalAlignment="Right">Refresh Period (days):</Label>
-                    <TextBox  Grid.Column="1" Grid.Row="1"  Margin="0,0,0,5"   Name="DbRefreshPeriodInDays" MinWidth="20" HorizontalAlignment="Left"></TextBox>
+                    <TextBox  Grid.Column="1" Grid.Row="1"  Margin="0,0,0,5"   Name="RefreshPeriodInDays" MinWidth="20" HorizontalAlignment="Left"></TextBox>
                     <Label  Grid.Column="0" Grid.Row="2"  Margin="0,0,0,5"   Name="lNextDbRefreshTime" HorizontalAlignment="Right">Next Db Refresh Time:</Label>
-                    <xctk:DateTimePicker  Grid.Column="1" Grid.Row="2"  Margin="0,0,0,5"  Name="NextDbRefreshTime" Format="FullDateTime" IsReadOnly="False"  HorizontalAlignment="Left"/>
+                    <xctk:DateTimePicker  Grid.Column="1" Grid.Row="2"  Margin="0,0,0,5"  Name="NextRefreshTime" Format="FullDateTime" IsReadOnly="False"  HorizontalAlignment="Left"/>
                     <CheckBox  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"   Margin="0,2,0,7"  Name="DoRefreshRetry" IsChecked="True" Checked="DoRefreshRetry_Checked" Unchecked="DoRefreshRetry_Unchecked">Retry If Refresh Faulted</CheckBox>
                     <Label  Grid.Column="0" Grid.Row="4"  Margin="0,0,0,5"  Name="lDbRefreshRetryPeriodInSecs" HorizontalAlignment="Right">Retry Period (secs):</Label>
-                    <TextBox  Grid.Column="1" Grid.Row="4"   Margin="0,0,0,5"   Name="DbRefreshRetryPeriodInSecs" MinWidth="20" HorizontalAlignment="Left"></TextBox>
+                    <TextBox  Grid.Column="1" Grid.Row="4"   Margin="0,0,0,5"   Name="RefreshRetryPeriodInSecs" MinWidth="20" HorizontalAlignment="Left"></TextBox>
 
                 </Grid>
             </ScrollViewer>

@@ -14,7 +14,7 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
-        public class Foreclosures : Table<Foreclosure>
+        public class Foreclosures : Db.LiteDb.Table<Foreclosure>
         {
         }
 

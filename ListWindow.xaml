@@ -31,6 +31,8 @@
                     <MenuItem Header="Login" Name="login" Click="login_Click"/>
                     <MenuItem Header="Location" Name="location" Click="location_Click"/>
                     <MenuItem Header="Database" Name="database" Click="database_Click"/>
+                    <Separator></Separator>
+                    <MenuItem Header="Reset All" Name="reset" Click="reset_Click"/>
                 </MenuItem>
                 <MenuItem Header="Help">
                     <MenuItem Header="Logs" Name="work_dir" Click="work_dir_Click"/>

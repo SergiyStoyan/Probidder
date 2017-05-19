@@ -43,25 +43,25 @@ namespace Cliver.Foreclosures
             {
             };
 
-            if (Settings.General.DbRefreshPeriodInSecs > 0)
+            if (Settings.Database.RefreshPeriodInSecs > 0)
             {
-                DbRefreshPeriodInDays.Text = ((float)Settings.General.DbRefreshPeriodInSecs / (24 * 60 * 60)).ToString();
+                RefreshPeriodInDays.Text = ((float)Settings.Database.RefreshPeriodInSecs / (24 * 60 * 60)).ToString();
                 DoRefresh.IsChecked = true;
             }
             else
                 DoRefresh.IsChecked = false;
             DoRefresh_Checked(null, null);
 
-            if (Settings.General.DbRefreshRetryPeriodInSecs > 0)
+            if (Settings.Database.RefreshRetryPeriodInSecs > 0)
             {
-                DbRefreshRetryPeriodInSecs.Text = Settings.General.DbRefreshRetryPeriodInSecs.ToString();
+                RefreshRetryPeriodInSecs.Text = Settings.Database.RefreshRetryPeriodInSecs.ToString();
                 DoRefreshRetry.IsChecked = true;
             }
             else
                 DoRefreshRetry.IsChecked = false;
             DoRefreshRetry_Checked(null, null);
 
-            NextDbRefreshTime.Value = Settings.General.NextDbRefreshTime;
+            NextRefreshTime.Value = Settings.Database.NextRefreshTime;
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -75,34 +75,34 @@ namespace Cliver.Foreclosures
             {
                 if (DoRefresh.IsChecked == true)
                 {
-                    float days = float.Parse(DbRefreshPeriodInDays.Text);
+                    float days = float.Parse(RefreshPeriodInDays.Text);
                     int secs = (int)(days * 24 * 60 * 60);
                     if (secs <= 0)
                         throw new Exception("Db Refresh Period must be positive.");
                     if (secs > Int32.MaxValue)
                         throw new Exception("Db Refresh Period is too big.");
-                    Settings.General.DbRefreshPeriodInSecs = secs;
+                    Settings.Database.RefreshPeriodInSecs = secs;
                 }
                 else
-                    Settings.General.DbRefreshPeriodInSecs = -1;
+                    Settings.Database.RefreshPeriodInSecs = -1;
 
                 if (DoRefreshRetry.IsChecked == true)
                 {
-                    int secs = int.Parse(DbRefreshRetryPeriodInSecs.Text);
+                    int secs = int.Parse(RefreshRetryPeriodInSecs.Text);
                     if (secs <= 0)
                         throw new Exception("Db Refresh Retry Period must be positive.");
                     if (secs > Int32.MaxValue)
                         throw new Exception("Db Refresh Retry Period is too big.");
-                    Settings.General.DbRefreshRetryPeriodInSecs = secs;
+                    Settings.Database.RefreshRetryPeriodInSecs = secs;
                 }
                 else
-                    Settings.General.DbRefreshRetryPeriodInSecs = -1;
+                    Settings.Database.RefreshRetryPeriodInSecs = -1;
 
-                if (NextDbRefreshTime.Value == null)
+                if (NextRefreshTime.Value == null)
                     throw new Exception("Next Db Refresh Time is not set.");
-                Settings.General.NextDbRefreshTime = (DateTime)NextDbRefreshTime.Value;
+                Settings.Database.NextRefreshTime = (DateTime)NextRefreshTime.Value;
 
-                Settings.General.Save();
+                Settings.Database.Save();
                 Config.Reload();
 
                 Close();
@@ -118,11 +118,11 @@ namespace Cliver.Foreclosures
             if (!IsInitialized)
                 return;
             lDbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            DbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            RefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
             DoRefreshRetry.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
             DoRefreshRetry_Checked(null, null);
             lNextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            NextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            NextRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void DoRefreshRetry_Checked(object sender, RoutedEventArgs e)
@@ -130,7 +130,7 @@ namespace Cliver.Foreclosures
             if (!IsInitialized)
                 return;
             lDbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            DbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            RefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void DoRefresh_Unchecked(object sender, RoutedEventArgs e)

@@ -50,31 +50,31 @@ namespace Cliver.Foreclosures
                 Edit.Visibility = Visibility.Visible;
             }
 
-            COUNTY.Text = Settings.General.County;
+            COUNTY.Text = Settings.Location.County;
 
             CITY.Items.Clear();
-            foreach (string c in Db.GetValuesFromJsonTable("cities", "city", new Dictionary<string, string>() { { "county", Settings.General.County } }))
-                CITY.Items.Add(c);
+            foreach (Db.City c in (new Db.Cities()).GetBy(Settings.Location.County))
+                CITY.Items.Add(c.city);
 
             LENDOR.Items.Clear();
-            foreach (string c in Db.GetValuesFromJsonTable("plaintiffs", "plaintiff", new Dictionary<string, string>() { { "county", Settings.General.County } }))
-                LENDOR.Items.Add(c);
+            foreach (Db.Plaintiff c in (new Db.Plaintiffs()).GetBy(Settings.Location.County))
+                LENDOR.Items.Add(c.plaintiff);
 
             ATTY.Items.Clear();
-            foreach (string c in Db.GetValuesFromJsonTable("attorneys", "attorney", new Dictionary<string, string>() { { "county", Settings.General.County } }))
-                ATTY.Items.Add(c);
+            foreach (Db.Attorney c in (new Db.Attorneys()).GetBy(Settings.Location.County))
+                ATTY.Items.Add(c.attorney);
 
             TYPE_OF_MO.Items.Clear();
-            foreach (string c in Db.GetValuesFromJsonTable("mortgage_types", "mortgage_type", new Dictionary<string, string>() { }))
-                TYPE_OF_MO.Items.Add(c);
+            foreach (Db.MortgageType c in (new Db.MortgageTypes()).Get())
+                TYPE_OF_MO.Items.Add(c.mortgage_type);
 
             PROP_DESC.Items.Clear();
-            foreach (string c in Db.GetValuesFromCsvTable("property_codes", "type", new Dictionary<string, string>() { }))
-                PROP_DESC.Items.Add(c);
+            foreach (Db.PropertyCode c in (new Db.PropertyCodes()).GetAll())
+                PROP_DESC.Items.Add(c.type);
 
             OWNER_ROLE.Items.Clear();
-            foreach (string c in Db.GetValuesFromCsvTable("owner_roles", "role", new Dictionary<string, string>() { }))
-                OWNER_ROLE.Items.Add(c);
+            foreach (Db.OwnerRole c in (new Db.OwnerRoles()).GetAll())
+                OWNER_ROLE.Items.Add(c.role);
 
             Db.Foreclosure f;
             if (foreclosure_id != null)
@@ -143,15 +143,19 @@ namespace Cliver.Foreclosures
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ZIP.Items.Clear();
-            foreach (string c in Db.GetValuesFromCsvTable("illinois_postal_codes", "postalcode", new Dictionary<string, string> { { "county", Settings.General.County }, { "placename", (string)CITY.SelectedItem } }))
-                ZIP.Items.Add(c);
+            //foreach (string c in Db.GetValuesFromCsvTable("illinois_postal_codes", "postalcode", new Dictionary<string, string> { { "county", Settings.General.County }, { "placename", (string)CITY.SelectedItem } }))
+            //ZIP.Items.Add(c);
+            foreach (Db.Zip c in (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem))
+                ZIP.Items.Add(c.zip);
         }
 
         private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ATTORNEY_S.Items.Clear();
-            foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
-                ATTORNEY_S.Items.Add(c);
+            //foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
+            //ATTORNEY_S.Items.Add(c);
+            foreach (Db.AttorneyPhone c in (new Db.AttorneyPhones()).GetBy((string)ATTY.SelectedItem, Settings.Location.County))
+                ATTORNEY_S.Items.Add(c.attorney_phone);
 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             if (f.Id == 0)
@@ -164,7 +168,7 @@ namespace Cliver.Foreclosures
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
-                f.COUNTY = Settings.General.County;
+                f.COUNTY = Settings.Location.County;
                 f.FILING_DATE = DateTime.Now;
                 f.ENTRY_DATE = DateTime.Now;
                 f.IS_ORG = false;
@@ -241,11 +245,11 @@ namespace Cliver.Foreclosures
 
         private void ZIP_TextInput(object sender, TextCompositionEventArgs e)
         {
-            if (Regex.IsMatch(e.Text, @"[^\d]") || ((ComboBox)sender).Text?.Length >= 5)
-            {
-                Console.Beep(5000, 200);
-                e.Handled = true;
-            }
+            //if (Regex.IsMatch(e.Text, @"[^\d]") || ((ComboBox)sender).Text?.Length >= 5)
+            //{
+            //    Console.Beep(5000, 200);
+            //    e.Handled = true;
+            //}
         }
     }
 

@@ -14,14 +14,13 @@ namespace Cliver.Foreclosures
 {
     public partial class Db
     {
-        //public class MortgageTypes : Db.Table<MortgageType>
-        //{
-        //}
+        public class OwnerRoles : Db.Json.Table<OwnerRole>
+        {
+        }
 
-        //public class MortgageType : Document
-        //{
-        //    public string mortgage_type { get; set; }
-        //    public string count { get; set; }
-        //}
+        public class OwnerRole : Document
+        {
+            public string role { get; set; }
+        }
     }
 }
