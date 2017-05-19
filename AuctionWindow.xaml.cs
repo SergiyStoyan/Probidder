@@ -105,15 +105,13 @@ namespace Cliver.Foreclosures
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            if (fields.IsEnabled)
-                Close();
-            else
-            {
-                Edit.Visibility = Visibility.Visible;
-                Delete.Visibility = Visibility.Collapsed;
-                Save.Visibility = Visibility.Collapsed;
-                fields.IsEnabled = false;
-            }
+            Close();
+            //{
+            //    Edit.Visibility = Visibility.Visible;
+            //    Delete.Visibility = Visibility.Collapsed;
+            //    Save.Visibility = Visibility.Collapsed;
+            //    fields.IsEnabled = false;
+            //}
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
