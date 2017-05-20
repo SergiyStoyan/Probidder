@@ -28,7 +28,7 @@ namespace Cliver.Foreclosures
                 {
                     case Modes.CLOSE_TABLE_ON_DISPOSE:
                         break;
-                    case Modes.KEEP_ALL_OPEN_TABLES_EVER:
+                    case Modes.KEEP_ALL_OPEN_TABLES_FOREVER:
                         break;
                     case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
                         break;
@@ -45,7 +45,7 @@ namespace Cliver.Foreclosures
 
         public enum Modes
         {
-            KEEP_ALL_OPEN_TABLES_EVER,
+            KEEP_ALL_OPEN_TABLES_FOREVER,//requires explicite call Close()
             KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE,
             CLOSE_TABLE_ON_DISPOSE,
         }
@@ -129,7 +129,7 @@ namespace Cliver.Foreclosures
                             if (ti.Count < 1)
                                 table_types2table_info.Remove(GetType());
                             break;
-                        case Modes.KEEP_ALL_OPEN_TABLES_EVER:
+                        case Modes.KEEP_ALL_OPEN_TABLES_FOREVER:
                             break;
                         case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
                             foreach (TableInfo t in table_types2table_info.Values)

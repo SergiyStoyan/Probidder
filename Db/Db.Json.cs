@@ -18,7 +18,6 @@ namespace Cliver.Foreclosures
                 public Table()
                 {
                 }
-
                 protected List<D> table
                 {
                     get
@@ -26,6 +25,20 @@ namespace Cliver.Foreclosures
                         return (List<D>)get_table_info().Core;
                     }
                 }
+                //protected List<D> table
+                //{
+                //    get
+                //    {
+                //        List<D> v;
+                //        if (!t.TryGetTarget(out v))
+                //        {
+                //            v = (List<D>)get_table_info().Core;
+                //            t.SetTarget(v);
+                //        }
+                //        return v;
+                //    }
+                //}
+                //WeakReference<List<D>> t = new WeakReference<List<D>>(null);
 
                 protected override object create_table_core()
                 {
