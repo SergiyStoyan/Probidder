@@ -205,7 +205,7 @@ namespace Cliver.Foreclosures
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
         {
-            Db.BeginRefresh();
+            Db.BeginRefresh(true);
         }
 
         private void work_dir_Click(object sender, RoutedEventArgs e)

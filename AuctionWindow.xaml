@@ -169,7 +169,7 @@
                         <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="0,0,5,0">IS ORG</CheckBox>
                         <CheckBox Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">Deceased</CheckBox>
                         <Label VerticalAlignment="Center" >Owner Role</Label>
-                        <ComboBox Name="OWNER_ROLE" MinWidth="30" Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
+                        <ComboBox Name="OWNER_ROLE" MinWidth="30" Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" IsEditable="True"></ComboBox>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>
                     <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" Grid.RowSpan="2"  Name="OTHER_LIENS" AcceptsReturn="True" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
@@ -188,7 +188,7 @@
                     <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right">Interest</Label>
                     <TextBox Grid.Column="5" Grid.Row="11" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                     <Label Grid.Column="4" Grid.Row="10" HorizontalAlignment="Right">Property Type</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="10" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="10" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" IsEditable="True"></ComboBox>
                     <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right">Monthly Payments</Label>
                     <TextBox Grid.Column="7" Grid.Row="10" Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                     <Label Grid.Column="6" Grid.Row="11" HorizontalAlignment="Right">MTG Term</Label>

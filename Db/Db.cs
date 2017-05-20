@@ -52,11 +52,9 @@ namespace Cliver.Foreclosures
 
         static public void Close()
         {
-            lock (tables)
+            lock (table_types2table_info)
             {
-                foreach (dynamic t in tables)
-                    t.Dispose();
-                table_types2table_core.Clear();
+                table_types2table_info.Clear();
             }
         }
         
@@ -65,17 +63,52 @@ namespace Cliver.Foreclosures
             public int Id { get; set; }
         }
 
-        public abstract class Table:IDisposable
+        public abstract class Table : IDisposable
         {
             public Table()
             {
                 Name = GetType().Name;
-                lock (tables)
-                {
-                    tables.Add(this);
-                }
+                get_table_info().Count++;
             }
             public readonly string Name;
+
+            protected TableInfo get_table_info()
+            { 
+                lock (table_types2table_info)
+                {
+                    TableInfo ti;
+                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
+                    {
+                        ti = new TableInfo { Count = 0, Core = create_table_core() };
+                        table_types2table_info[GetType()] = ti;
+                    }
+                    return ti;
+                }
+            }
+
+            protected abstract object create_table_core();
+
+            //protected object table_core
+            //{
+            //    get
+            //    {
+            //        lock (table_types2table_core)
+            //        {
+            //            object tc;
+            //            if (table_types2table_core.TryGetValue(GetType(), out tc))
+            //                return tc;
+            //            else
+            //                return null;
+            //        }
+            //    }
+            //    set
+            //    {
+            //        lock (table_types2table_core)
+            //        {
+            //            table_types2table_core[GetType()] = value;
+            //        }
+            //    }
+            //}
 
             ~Table()
             {
@@ -84,36 +117,38 @@ namespace Cliver.Foreclosures
 
             virtual public void Dispose()
             {
-                lock (table_types2table_core)
+                lock (table_types2table_info)
                 {
-                    lock (tables)
-                    {
-                        tables.Remove(this);
-                    }
+                    TableInfo ti;
+                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
+                        return;
+                    ti.Count--;
                     switch (mode)
                     {
                         case Modes.CLOSE_TABLE_ON_DISPOSE:
-                            table_types2table_core.Remove(GetType());
+                            if (ti.Count < 1)
+                                table_types2table_info.Remove(GetType());
                             break;
                         case Modes.KEEP_ALL_OPEN_TABLES_EVER:
                             break;
                         case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
-                            if (tables.Count < 1)
-                                table_types2table_core.Clear();
+                            foreach (TableInfo t in table_types2table_info.Values)
+                                if (t.Count > 0)
+                                    return;
+                            table_types2table_info.Clear();
                             break;
                         default:
                             throw new Exception("No option: " + mode);
                     }
                 }
             }
-
-            static public void RefreshFile()
-            {
-                throw new Exception("Not implemented");
-            }
         }
-        static readonly HashSet<object> tables = new HashSet<object>();//to monitor count of opened db tables 
-        static readonly Dictionary<Type, object> table_types2table_core = new Dictionary<Type, object>();
+        public class TableInfo
+        {
+            public int Count = 0;
+            public object Core = null;
+        }
+        static readonly Dictionary<Type, TableInfo> table_types2table_info = new Dictionary<Type, TableInfo>();
 
         public static string GetNormalized(string s)
         {

@@ -16,7 +16,7 @@ namespace Cliver.Foreclosures
     {
         public class OwnerRoles : Db.Json.Table<OwnerRole>
         {
-            static public void RefreshFile()
+            new static public void RefreshFile()
             {
                 refresh_json_file_by_file(Log.AppDir + "\\owner_roles.csv");
             }

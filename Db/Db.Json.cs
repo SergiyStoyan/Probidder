@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 using System.IO;
@@ -18,56 +17,35 @@ namespace Cliver.Foreclosures
             {
                 public Table()
                 {
-                    lock (table_types2table_core)
-                    {
-                        object tc;
-                        if (!table_types2table_core.TryGetValue(GetType(), out tc))
-                        {
-                            string file = db_dir + "\\" + Name + ".json";
-                            if (!File.Exists(file))
-                            {
-                                if (!Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
-                                    Environment.Exit(0);
-                                Thread t = Db.BeginRefresh();
-                                MessageForm mf = null;
-                                Thread tm = ThreadRoutines.StartTry(() =>
-                                {
-                                    mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
-                                    mf.ShowDialog();
-                                });
-                                t.Join();
-                                if (SleepRoutines.WaitForObject(() =>
-                                {
-                                    return mf;
-                                }, 10000) == null)
-                                    Log.Main.Exit("SleepRoutines.WaitForObject got null");
-                                mf.Invoke(() =>
-                                {
-                                    try
-                                    {
-                                        mf.Close();
-                                    }
-                                    catch { }//if closed already
-                                });
-                                if (!File.Exists(file))
-                                {
-                                    Message.Error("Unfrotunately the required data has not been downloaded. Please try later.");
-                                    table = new List<D>();
-                                }
-                            }
+                }
 
-                            string s = System.IO.File.ReadAllText(file);
-                            table = SerializationRoutines.Json.Deserialize<List<D>>(s);
-                            table_types2table_core[GetType()] = table;
-                        }
-                        else
-                        {
-                            table = (List<D>)tc;
-                        }
+                protected List<D> table
+                {
+                    get
+                    {
+                        return (List<D>)get_table_info().Core;
                     }
                 }
-                protected readonly List<D> table = null;
-                
+
+                protected override object create_table_core()
+                {
+                    string file = db_dir + "\\" + Name + ".json";
+                    if (!File.Exists(file))
+                    {
+                        if (!Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
+                            Environment.Exit(0);
+                        BeginRefresh(true);
+                        if (!File.Exists(file))
+                        {
+                            Message.Error("Unfrotunately the required data has not been downloaded. Please try later.");
+                            return new List<D>();
+                        }
+                    }
+
+                    string s = System.IO.File.ReadAllText(file);
+                    return SerializationRoutines.Json.Deserialize<List<D>>(s);
+                }
+
                 public List<D> GetAll()
                 {
                     lock (table)
@@ -82,6 +60,11 @@ namespace Cliver.Foreclosures
                     {
                         return table.Where(query).ToList();
                     }
+                }
+
+                static public void RefreshFile()
+                {
+                    throw new Exception("Not implemented");
                 }
 
                 protected static void refresh_json_file_by_request(string url)

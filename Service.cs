@@ -75,7 +75,7 @@ namespace Cliver.Foreclosures
                 do
                 {
                     if (Settings.Database.RefreshRetryPeriodInSecs > 0 && Settings.Database.NextRefreshTime <= DateTime.Now)
-                        Db.BeginRefresh().Join();
+                        Db.BeginRefresh(false).Join();
                 }
                 while (!stop.WaitOne(10000));
             });

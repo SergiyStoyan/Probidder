@@ -96,7 +96,7 @@ namespace Cliver.Foreclosures
 
         private void refreshDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Db.BeginRefresh();
+            Db.BeginRefresh(true);
         }
     }
 }

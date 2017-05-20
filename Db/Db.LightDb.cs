@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Net.Http;
 using System.IO;
-//using MongoDB.Bson;
-//using MongoDB.Driver;
 using LiteDB;
 
 namespace Cliver.Foreclosures
@@ -20,31 +15,31 @@ namespace Cliver.Foreclosures
             {
                 public Table()
                 {
-                    lock (table_types2table_core)
+                   
+                }
+
+                protected LiteCollection<D> table
+                {
+                    get
                     {
-                        if (db == null)
-                            db = new LiteDatabase(db_file);
-                        object tc;
-                        if (!table_types2table_core.TryGetValue(GetType(), out tc))
-                        {
-                            table = db.GetCollection<D>(GetType().Name);
-                            table_types2table_core[GetType()] = table;
-                        }
-                        else
-                        {
-                            table = (LiteCollection<D>)tc;
-                        }
+                        return (LiteCollection<D>)get_table_info().Core;
                     }
                 }
-                protected readonly LiteCollection<D> table = null;
+
+                protected override object create_table_core()
+                {
+                    if (db == null)
+                        db = new LiteDatabase(db_file);
+                    return db.GetCollection<D>(GetType().Name);
+                }
                 protected static LiteDatabase db = null;
 
                 override public void Dispose()
                 {
-                    lock (table_types2table_core)
+                    lock (table_types2table_info)
                     {
                         base.Dispose();
-                        if (table_types2table_core.Count < 1 && db != null)
+                        if (table_types2table_info.Count < 1 && db != null)
                         {
                             db.Dispose();
                             db = null;

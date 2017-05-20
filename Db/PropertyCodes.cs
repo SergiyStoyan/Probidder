@@ -16,7 +16,7 @@ namespace Cliver.Foreclosures
     {
         public class PropertyCodes : Db.Json.Table<PropertyCode>
         {
-            static public void RefreshFile()
+            new static public void RefreshFile()
             {
                 refresh_json_file_by_file(Log.AppDir + "\\property_codes.csv");
             }

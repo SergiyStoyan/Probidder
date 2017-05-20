@@ -16,7 +16,7 @@ namespace Cliver.Foreclosures
     {
         public class Counties : Db.Json.Table<County>
         {
-            static public void RefreshFile()
+            new static public void RefreshFile()
             {
                 refresh_json_file_by_file(Log.AppDir + "\\counties.csv");
             }
