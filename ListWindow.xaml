@@ -12,6 +12,26 @@
         FontFamily="Microsoft Sans Serif"
          AllowDrop="True"
             >
+    <Window.Resources>
+        <DataTemplate x:Key="ArrowUp">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding}" />
+                <Path VerticalAlignment="Center"
+                      Fill="Black"
+                      Data="M 5,5 15,5 10,0 5,5" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ArrowDown">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding}" />
+                <Path VerticalAlignment="Center"
+                      Fill="Black"
+                      Data="M 5,0 10,5 15,0 5,0" />
+            </DockPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid Background="Beige">
         <DockPanel Background="Beige"> 
             <Popup Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
@@ -41,7 +61,7 @@
             </Menu>
             <StackPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged">
+                    <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click">
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
@@ -52,7 +72,8 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                             </-->
-                            <GridViewColumn Header="Id" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" />
+                                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" >
+                                    </GridViewColumn>
                                     <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE, StringFormat=MM-dd-yy}" />
                                     <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.CITY}" />
                                     <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.ADDRESS}" />

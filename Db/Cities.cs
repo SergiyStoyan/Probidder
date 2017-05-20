@@ -16,7 +16,7 @@ namespace Cliver.Foreclosures
     {
         public class Cities : Db.Json.Table<City>
         {
-            static public void RefreshFile()
+            new static public void RefreshFile()
             {
                 refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=city");
             }

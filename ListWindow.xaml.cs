@@ -17,6 +17,8 @@ using System.Net;
 using System.IO;
 using System.Management;
 using System.Threading;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace Cliver.Foreclosures
 {
@@ -111,14 +113,19 @@ namespace Cliver.Foreclosures
                     }
                 });
             };
+
+            //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            //view.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Descending));
+            //view.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
         void fill()
         {
-            list.Items.Clear();
-            foreach (Db.Foreclosure f in foreclosures.GetAll())
-                list.Items.Add(new Item { Foreclosure = f });
+            list.ItemsSource = foreclosures.GetAll().Select(x => new Item { Foreclosure = x });
+            //list.Items.Clear();
+            //foreach (Db.Foreclosure f in foreclosures.GetAll())
+            //    list.Items.Add(new Item { Foreclosure = f });
         }
 
         public class Item
@@ -157,7 +164,7 @@ namespace Cliver.Foreclosures
                     fill();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogMessage.Error(ex);
             }
@@ -257,5 +264,44 @@ namespace Cliver.Foreclosures
             if (Message.YesNo("This will reset all the settings to their initial values. Proceed?"))
                 Config.Reset();
         }
+        
+        private void list_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = e.OriginalSource as GridViewColumnHeader;
+            if (column == null)
+                return;
+
+            if (_sortColumn == column)
+                _sortDirection = _sortDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else
+            {
+                if (_sortColumn != null)
+                {
+                    _sortColumn.Column.HeaderTemplate = null;
+                    _sortColumn.Column.Width = _sortColumn.ActualWidth - 20;
+                }
+                _sortColumn = column;
+                _sortDirection = ListSortDirection.Ascending;
+                column.Column.Width = column.ActualWidth + 20;
+            }
+
+            if (_sortDirection == ListSortDirection.Ascending)
+                column.Column.HeaderTemplate = Resources["ArrowUp"] as DataTemplate;
+            else
+                column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
+
+            string header;
+            Binding b = _sortColumn.Column.DisplayMemberBinding as Binding;
+            if (b != null)
+                header = b.Path.Path;
+            else
+                header = (string)_sortColumn.Column.Header;
+
+            ICollectionView resultDataView = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            resultDataView.SortDescriptions.Clear();
+            resultDataView.SortDescriptions.Add(new SortDescription(header, _sortDirection));
+        }
+        private ListSortDirection _sortDirection;
+        private GridViewColumnHeader _sortColumn;
     }
 }
