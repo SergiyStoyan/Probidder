@@ -52,6 +52,10 @@ namespace Cliver.Foreclosures
 
             COUNTY.Text = Settings.Location.County;
 
+            CASE_N.Items.Clear();
+            foreach (string c in (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns)
+                CASE_N.Items.Add(c);
+
             CITY.Items.Clear();
             foreach (Db.City c in (new Db.Cities()).GetBy(Settings.Location.County))
                 CITY.Items.Add(c.city);

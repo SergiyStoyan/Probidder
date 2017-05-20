@@ -50,6 +50,12 @@ namespace Cliver.Foreclosures
                 tasks.Add(t);
                 t = new Task(() =>
                 {
+                    CaseNumbers.RefreshFile();
+                });
+                t.Start();
+                tasks.Add(t);
+                t = new Task(() =>
+                {
                     AttorneyPhones.RefreshFile();
                     //refresh_table<Db.AttorneyPhones, Db.AttorneyPhone>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney_phone");
                 });
@@ -81,12 +87,6 @@ namespace Cliver.Foreclosures
                     Zips.RefreshFile();
                     //refresh_table<Db.Zips, Db.Zip>("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=zip");
                 });
-                t.Start();
-                tasks.Add(t);
-                t = new Task(() =>
-                {
-                    CaseNumbers.RefreshFile();
-                });                
                 t.Start();
                 tasks.Add(t);
 

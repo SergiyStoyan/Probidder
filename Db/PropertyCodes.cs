@@ -18,7 +18,7 @@ namespace Cliver.Foreclosures
         {
             static public void RefreshFile()
             {
-                refresh_json_file_by_file<PropertyCode>(Log.AppDir + "\\property_codes.csv");
+                refresh_json_file_by_file(Log.AppDir + "\\property_codes.csv");
             }
         }
 

@@ -16,52 +16,38 @@ namespace Cliver.Foreclosures
     {
         public class LiteDb
         {
-            public abstract class Table<D> where D : Document
+            public abstract class Table<D> : Db.Table where D : Document, new()
             {
                 public Table()
                 {
-                    lock (table_types2collection)
+                    lock (table_types2table_core)
                     {
                         if (db == null)
                             db = new LiteDatabase(db_file);
-                        if (!table_types2collection.TryGetValue(GetType(), out table))
+                        object tc;
+                        if (!table_types2table_core.TryGetValue(GetType(), out tc))
                         {
                             table = db.GetCollection<D>(GetType().Name);
-                            table_types2collection[GetType()] = table;
+                            table_types2table_core[GetType()] = table;
+                        }
+                        else
+                        {
+                            table = (LiteCollection<D>)tc;
                         }
                     }
                 }
                 protected readonly LiteCollection<D> table = null;
                 protected static LiteDatabase db = null;
-                static readonly Dictionary<Type, LiteCollection<D>> table_types2collection = new Dictionary<Type, LiteCollection<D>>();
 
-                ~Table()
+                override public void Dispose()
                 {
-                    Dispose();
-                }
-
-                public void Dispose()
-                {
-                    lock (table_types2collection)
+                    lock (table_types2table_core)
                     {
-                        //table_types2collection.Remove(GetType());
-                        //if (table_types2collection.Count < 1 && db != null)
-                        //{
-                        //    db.Dispose();
-                        //    db = null;
-                        //}
-                        lock (tables)
+                        base.Dispose();
+                        if (table_types2table_core.Count < 1 && db != null)
                         {
-                            tables.Remove(this);
-                            if (tables.Count < 1 && !keep_open)
-                            {
-                                table_types2collection.Clear();
-                                if (db != null)
-                                {
-                                    db.Dispose();
-                                    db = null;
-                                }
-                            }
+                            db.Dispose();
+                            db = null;
                         }
                     }
                 }

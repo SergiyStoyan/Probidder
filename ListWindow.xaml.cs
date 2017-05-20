@@ -227,7 +227,7 @@ namespace Cliver.Foreclosures
         {
             if (Settings.Database.LastRefreshTime != null)
             {
-                refresh_db_last_time.Text = "Refreshed at " + Settings.Database.LastRefreshTime.ToString();
+                refresh_db_last_time.Text = "Last refreshed at: " + Settings.Database.LastRefreshTime.ToString();
                 refresh_db_last_time0.IsOpen = true;
             }
         }

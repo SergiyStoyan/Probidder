@@ -14,20 +14,14 @@ namespace Cliver.Foreclosures
     {
         public class Json
         {
-            public abstract class Table<D> where D : Document
+            public abstract class Table<D>: Db.Table where D : Document, new()
             {
-                //public static T Get<T>() where T: Table<D>, new()
-                //{
-                //    T y = new T();
-                //    return null;
-                //}
-
                 public Table()
                 {
-                    lock (table_types2list)
+                    lock (table_types2table_core)
                     {
-                        Name = GetType().Name;
-                        if (!table_types2list.TryGetValue(GetType(), out table))
+                        object tc;
+                        if (!table_types2table_core.TryGetValue(GetType(), out tc))
                         {
                             string file = db_dir + "\\" + Name + ".json";
                             if (!File.Exists(file))
@@ -64,43 +58,35 @@ namespace Cliver.Foreclosures
 
                             string s = System.IO.File.ReadAllText(file);
                             table = SerializationRoutines.Json.Deserialize<List<D>>(s);
-                            table_types2list[GetType()] = table;
+                            table_types2table_core[GetType()] = table;
+                        }
+                        else
+                        {
+                            table = (List<D>)tc;
                         }
                     }
                 }
                 protected readonly List<D> table = null;
-                static readonly Dictionary<Type, List<D>> table_types2list = new Dictionary<Type, List<D>>();
-                public readonly string Name;
-
-                ~Table()
+                
+                public List<D> GetAll()
                 {
-                    Dispose();
-                }
-
-                public void Dispose()
-                {
-                    lock (table_types2list)
+                    lock (table)
                     {
-                        //table_types2list.Remove(GetType());
-                        lock (tables)
-                        {
-                            tables.Remove(this);
-                            if (tables.Count < 1 && !keep_open)
-                                table_types2list.Clear();
-                        }
+                        return table.ToList();
                     }
                 }
 
-                public List<D> GetAll()
+                public List<D> Get(Func<D, bool> query)
                 {
-                    return table;
+                    lock (table)
+                    {
+                        return table.Where(query).ToList();
+                    }
                 }
-
-                //abstract public void Refresh();
 
                 protected static void refresh_json_file_by_request(string url)
                 {
-                    Type t = MethodBase.GetCurrentMethod().DeclaringType;
+                    Type t = new System.Diagnostics.StackFrame(1).GetMethod().DeclaringType;
                     Log.Main.Inform("Refreshing table: " + t.Name);
                     HttpResponseMessage rm = http_client.GetAsync(url).Result;
                     if (!rm.IsSuccessStatusCode)
@@ -111,9 +97,9 @@ namespace Cliver.Foreclosures
                     System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
                 }
 
-                protected static void refresh_json_file_by_file<D>(string file) where D : Document, new()
+                protected static void refresh_json_file_by_file(string file)
                 {
-                    Type t = MethodBase.GetCurrentMethod().DeclaringType;
+                    Type t = new System.Diagnostics.StackFrame(1).GetMethod().DeclaringType;
                     Log.Main.Inform("Refreshing table: " + t.Name);
                     string[] ls = File.ReadAllLines(file);
                     string[] hs = ls[0].Split(',');
