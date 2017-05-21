@@ -103,7 +103,7 @@ namespace Cliver.Foreclosures
                 //Log.Inform("Db has been refreshed.");
                 //iw.Dispatcher.Invoke(iw.Close);
                 Settings.Database.LastRefreshTime = DateTime.Now;
-                Settings.General.Save();
+                Settings.Database.Save();
                 if (Settings.Database.RefreshPeriodInSecs > 0)
                     Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshPeriodInSecs);
                 Db.Close();

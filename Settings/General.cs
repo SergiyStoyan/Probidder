@@ -22,6 +22,7 @@ namespace Cliver.Foreclosures
             public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
+            public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.DarkOrange;
 
             public override void Loaded()
             {

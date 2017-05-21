@@ -387,7 +387,7 @@ namespace Cliver.Foreclosures
                 if (match)
                 {
                     Run r = new Run(item);
-                    r.Background = Brushes.Orange;
+                    r.Background = Settings.General.SearchHighlightColor;
                     tb.Inlines.Add(r);
                 }
                 else
