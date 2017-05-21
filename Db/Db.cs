@@ -147,6 +147,20 @@ namespace Cliver.Foreclosures
         {
             public int Count = 0;
             public object Core = null;
+
+            public delegate void OnSaved(Document document, bool inserted);
+            public event OnSaved Saved = null;
+            public void InvokeSaved(Document document, bool inserted)
+            {
+                Saved?.Invoke(document, inserted);
+            }
+
+            public delegate void OnDeleted(int document_id, bool sucess);
+            public event OnDeleted Deleted = null;
+            public void InvokeDeleted(int document_id, bool sucess)
+            {
+                Deleted?.Invoke(document_id, sucess);
+            }
         }
         static readonly Dictionary<Type, TableInfo> table_types2table_info = new Dictionary<Type, TableInfo>();
 

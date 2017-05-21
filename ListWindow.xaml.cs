@@ -80,8 +80,8 @@ namespace Cliver.Foreclosures
                 });
             };
 
-            foreclosures.Saved += Foreclosures_Saved;
-            foreclosures.Deleted += Foreclosures_Deleted;
+            foreclosures.SetOnSaved(Foreclosures_Saved);
+            foreclosures.SetOnDeleted(Foreclosures_Deleted);
         }
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
@@ -89,30 +89,32 @@ namespace Cliver.Foreclosures
             if (lw == null || !lw.IsLoaded)
                 return;
 
-            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
-            {
-                Db.Foreclosure d = (Db.Foreclosure)lw.list.Items[i];
-                if (document_id == d.Id)
-                {
-                    lw.list.Items.Remove(d);
-                    return;
-                }
-            }
+            //for (int i = lw.list.Items.Count - 1; i >= 0; i--)
+            //{
+            //    Db.Foreclosure d = (Db.Foreclosure)lw.list.Items[i];
+            //    if (document_id == d.Id)
+            //    {
+            //        lw.list.Items.Remove(d);
+            //        return;
+            //    }
+            //}
+            fill();
         }
 
-        private void Foreclosures_Saved(Db.Foreclosure document, bool inserted)
+        private void Foreclosures_Saved(Db.Document document, bool inserted)
         {
             if (lw == null || !lw.IsLoaded)
                 return;
 
-            int i = lw.list.Items.IndexOf(document);
-            if (i >= 0)
-            {
-                lw.list.Items.Refresh();
-                return;
-            }
-            lw.list.Items.Add(document);
-            lw.list.Items.Refresh();
+            //int i = lw.list.Items.IndexOf(document);
+            //if (i >= 0)
+            //{
+            //    lw.list.Items.Refresh();
+            //    return;
+            //}
+            //lw.list.Items.Add(document);
+            //lw.list.Items.Refresh();
+            fill();
         }
 
         Db.Foreclosures foreclosures = new Db.Foreclosures();
@@ -121,6 +123,8 @@ namespace Cliver.Foreclosures
         {
             //list.ItemsSource = foreclosures.GetAll().Select(x => new Item { Foreclosure = x });
             list.ItemsSource = foreclosures.GetAll();
+            filter();
+            sort();
 
             //string k = keyword.Text;
             //foreach (GridViewColumn c in ((GridView)list.View).Columns)
@@ -294,6 +298,19 @@ namespace Cliver.Foreclosures
             if (column == null)
                 return;
 
+            {//should be removed if multi-column sort
+                List<System.Collections.DictionaryEntry> cs = sorted_columns2direction.Cast<System.Collections.DictionaryEntry>().ToList();
+                for (int i = cs.Count - 1; i >= 0; i--)
+                {
+                    GridViewColumnHeader c = (GridViewColumnHeader)cs[i].Key;
+                    if (c == column)
+                        continue;
+                    sorted_columns2direction.Remove(c);
+                    c.Column.HeaderTemplate = null;
+                    c.Column.Width = c.ActualWidth - 20;
+                }
+            }
+
             ListSortDirection direction;
             if (sorted_columns2direction.Contains(column))
             {
@@ -303,11 +320,6 @@ namespace Cliver.Foreclosures
             }
             else
             {
-                foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)//should be removed if multi-column sort
-                {
-                    c.Column.HeaderTemplate = null;
-                    c.Column.Width = c.ActualWidth - 20;
-                }
                 direction = ListSortDirection.Ascending;
                 sorted_columns2direction.Add(column, direction);
                 column.Column.Width = column.ActualWidth + 20;
@@ -318,6 +330,11 @@ namespace Cliver.Foreclosures
             else
                 column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
 
+            sort();
+        }
+
+        void sort()
+        {
             ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
             cv.SortDescriptions.Clear();
             foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)
@@ -337,18 +354,19 @@ namespace Cliver.Foreclosures
         {
             show_search.IsChecked = !show_search.IsChecked;
             search.Visibility = ((MenuItem)e.Source).IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void close_search_Click(object sender, RoutedEventArgs e)
-        {
-            //search0.Visibility = Visibility.Visible;
+            filter();
         }
 
         private void keyword_TextChanged(object sender, TextChangedEventArgs e)
         {
+            filter();
+        }
+
+        void filter()
+        {
             string k = keyword.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (String.IsNullOrEmpty(k))
+            if (String.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
             {
                 cv.Filter = null;
                 return;
@@ -367,7 +385,10 @@ namespace Cliver.Foreclosures
                 Db.Foreclosure d = (Db.Foreclosure)o;
                 foreach (PropertyInfo pi in pis)
                 {
-                    string s = pi.GetValue(d) as string;
+                    object v = pi.GetValue(d);
+                    if (v == null)
+                        continue;
+                    string s = v.ToString();
                     if (!string.IsNullOrEmpty(s) && Regex.IsMatch(s, Regex.Escape(k), RegexOptions.IgnoreCase))
                         return true;
                 }

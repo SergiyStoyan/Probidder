@@ -63,15 +63,21 @@ namespace Cliver.Foreclosures
                         {
                             var b = table.Insert(document);
                             document.Id = b.AsInt32;
-                            Saved?.Invoke(document, true);
+                            get_table_info().InvokeSaved(document, true);
                             return;
                         }
                         table.Update(document);
-                        Saved?.Invoke(document, false);
+                        get_table_info().InvokeSaved(document, false);
                     }
                 }
-                public delegate void OnSaved(D document, bool inserted);
-                public event OnSaved Saved = null;
+                public void SetOnSaved(TableInfo.OnSaved on_saved)
+                {
+                    get_table_info().Saved += on_saved;
+                }
+                public void UnsetOnSaved(TableInfo.OnSaved on_saved)
+                {
+                    get_table_info().Saved -= on_saved;
+                }
 
                 public List<D> GetAll()
                 {
@@ -110,11 +116,17 @@ namespace Cliver.Foreclosures
                     lock (db)
                     {
                         bool success = table.Delete(document_id);
-                        Deleted?.Invoke(document_id, success);
+                        get_table_info().InvokeDeleted(document_id, success);
                     }
                 }
-                public delegate void OnDeleted(int document_id, bool sucess);
-                public event OnDeleted Deleted = null;
+                public void SetOnDeleted(TableInfo.OnDeleted on_deleted)
+                {
+                    get_table_info().Deleted += on_deleted;
+                }
+                public void UnsetOnDeleted(TableInfo.OnDeleted on_deleted)
+                {
+                    get_table_info().Deleted -= on_deleted;
+                }
 
                 public int Count()
                 {

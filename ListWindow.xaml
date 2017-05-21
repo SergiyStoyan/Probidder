@@ -79,7 +79,7 @@
                         </Grid.ColumnDefinitions>
                     <Label Content="Find:" Grid.Column="0"/>
                         <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
-                        <Button Name="close_search" Content="X" Grid.Column="2" Click="close_search_Click"/>
+                        <ComboBox Name="SearchField" Grid.Column="2" >                       </ComboBox>
                     </Grid>
                     <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click">
                 <ListView.View>
