@@ -178,6 +178,7 @@
     <Compile Include="AuctionWindow.xaml.cs">
       <DependentUpon>AuctionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WpfRoutines.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

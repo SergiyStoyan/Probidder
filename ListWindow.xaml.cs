@@ -82,6 +82,11 @@ namespace Cliver.Foreclosures
 
             foreclosures.SetOnSaved(Foreclosures_Saved);
             foreclosures.SetOnDeleted(Foreclosures_Deleted);
+
+            list.ItemContainerGenerator.StatusChanged += delegate
+              {//needed for highlighting search keyword
+                  highlight(list);
+              };
         }
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
@@ -89,15 +94,6 @@ namespace Cliver.Foreclosures
             if (lw == null || !lw.IsLoaded)
                 return;
 
-            //for (int i = lw.list.Items.Count - 1; i >= 0; i--)
-            //{
-            //    Db.Foreclosure d = (Db.Foreclosure)lw.list.Items[i];
-            //    if (document_id == d.Id)
-            //    {
-            //        lw.list.Items.Remove(d);
-            //        return;
-            //    }
-            //}
             fill();
         }
 
@@ -106,14 +102,6 @@ namespace Cliver.Foreclosures
             if (lw == null || !lw.IsLoaded)
                 return;
 
-            //int i = lw.list.Items.IndexOf(document);
-            //if (i >= 0)
-            //{
-            //    lw.list.Items.Refresh();
-            //    return;
-            //}
-            //lw.list.Items.Add(document);
-            //lw.list.Items.Refresh();
             fill();
         }
 
@@ -125,31 +113,7 @@ namespace Cliver.Foreclosures
             list.ItemsSource = foreclosures.GetAll();
             filter();
             sort();
-
-            //string k = keyword.Text;
-            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
-            //{
-            //    string field;
-            //    Binding b = c.DisplayMemberBinding as Binding;
-            //    if (b != null)
-            //        field = b.Path.Path;
-            //}
-            //list.ItemsSource = foreclosures.Get2(x=> filter(x, k));
         }
-        //static bool filter(Db.Foreclosure foreclosure, string keyword)
-        //{
-        //    foreach (PropertyInfo pi in pis)
-        //        if (!Regex.IsMatch(pi.GetValue(foreclosure).ToString(), Regex.Escape(keyword), RegexOptions.IgnoreCase))
-        //            return false;
-        //    return true;
-        //}
-        //static PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public);
-
-        //public class Item
-        //{
-        //    public Db.Foreclosure Foreclosure { get; set; }
-        //    public AuctionWindow Aw = null;
-        //}
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
@@ -368,6 +332,7 @@ namespace Cliver.Foreclosures
             ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (String.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
             {
+                filter_regex = null;
                 cv.Filter = null;
                 return;
             }
@@ -379,6 +344,7 @@ namespace Cliver.Foreclosures
             //    if (b != null)
             //        field = b.Path.Path;
             //}
+            filter_regex = new Regex("(" + Regex.Escape(k) + ")", RegexOptions.IgnoreCase);
             PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
             cv.Filter = o =>
             {
@@ -389,11 +355,45 @@ namespace Cliver.Foreclosures
                     if (v == null)
                         continue;
                     string s = v.ToString();
-                    if (!string.IsNullOrEmpty(s) && Regex.IsMatch(s, Regex.Escape(k), RegexOptions.IgnoreCase))
+                    if (!string.IsNullOrEmpty(s) && filter_regex.IsMatch(s))
                         return true;
                 }
                 return false;
             };
+        }
+        Regex filter_regex = null;
+        private void highlight(ListView lv)
+        {
+            if (filter_regex == null)
+                return;
+            foreach (ListViewItem lvi in lv.FindChildrenOfType<ListViewItem>())
+                foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
+                    highlight_TextBlock(tb);
+        }
+        private void highlight_TextBlock(TextBlock tb)
+        {
+            if (tb == null)
+                return;
+            string text = tb.Text;
+            tb.Inlines.Clear();
+            if (filter_regex == null)
+            {
+                tb.Inlines.Add(text);
+                return;
+            }
+            bool match = false;
+            foreach (string item in filter_regex.Split(text))
+            {
+                if (match)
+                {
+                    Run r = new Run(item);
+                    r.Background = Brushes.Orange;
+                    tb.Inlines.Add(r);
+                }
+                else
+                    tb.Inlines.Add(item);
+                match = !match;
+            }
         }
     }
 }
