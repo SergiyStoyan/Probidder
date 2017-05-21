@@ -63,10 +63,15 @@ namespace Cliver.Foreclosures
                         {
                             var b = table.Insert(document);
                             document.Id = b.AsInt32;
+                            Saved?.Invoke(document, true);
+                            return;
                         }
                         table.Update(document);
+                        Saved?.Invoke(document, false);
                     }
                 }
+                public delegate void OnSaved(D document, bool inserted);
+                public event OnSaved Saved = null;
 
                 public List<D> GetAll()
                 {
@@ -100,13 +105,16 @@ namespace Cliver.Foreclosures
                     }
                 }
 
-                public void Delete(int id)
+                public virtual void Delete(int document_id)
                 {
                     lock (db)
                     {
-                        table.Delete(id);
+                        bool success = table.Delete(document_id);
+                        Deleted?.Invoke(document_id, success);
                     }
                 }
+                public delegate void OnDeleted(int document_id, bool sucess);
+                public event OnDeleted Deleted = null;
 
                 public int Count()
                 {

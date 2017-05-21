@@ -19,6 +19,7 @@ using System.Management;
 using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
@@ -32,41 +33,6 @@ namespace Cliver.Foreclosures
                 System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(lw);
             }
             lw.ShowDialog();
-        }
-
-        public static void ItemSaved(Db.Foreclosure f)
-        {
-            if (lw == null || !lw.IsLoaded)
-                return;
-
-            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
-            {
-                Item t = (Item)lw.list.Items[i];
-                if (f.Id == t.Foreclosure.Id)
-                {
-                    t.Foreclosure = f;
-                    lw.list.Items.Refresh();
-                    return;
-                }
-            }
-            lw.list.Items.Add(new Item { Foreclosure = f });
-            lw.list.Items.Refresh();
-        }
-
-        public static void ItemDeleted(int foreclosure_id)
-        {
-            if (lw == null || !lw.IsLoaded)
-                return;
-
-            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
-            {
-                Item t = (Item)lw.list.Items[i];
-                if (foreclosure_id == t.Foreclosure.Id)
-                {
-                    lw.list.Items.Remove(t);
-                    return;
-                }
-            }
         }
 
         static ListWindow lw = null;
@@ -114,25 +80,72 @@ namespace Cliver.Foreclosures
                 });
             };
 
-            //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-            //view.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Descending));
-            //view.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
+            foreclosures.Saved += Foreclosures_Saved;
+            foreclosures.Deleted += Foreclosures_Deleted;
         }
+
+        private void Foreclosures_Deleted(int document_id, bool sucess)
+        {
+            if (lw == null || !lw.IsLoaded)
+                return;
+
+            for (int i = lw.list.Items.Count - 1; i >= 0; i--)
+            {
+                Db.Foreclosure d = (Db.Foreclosure)lw.list.Items[i];
+                if (document_id == d.Id)
+                {
+                    lw.list.Items.Remove(d);
+                    return;
+                }
+            }
+        }
+
+        private void Foreclosures_Saved(Db.Foreclosure document, bool inserted)
+        {
+            if (lw == null || !lw.IsLoaded)
+                return;
+
+            int i = lw.list.Items.IndexOf(document);
+            if (i >= 0)
+            {
+                lw.list.Items.Refresh();
+                return;
+            }
+            lw.list.Items.Add(document);
+            lw.list.Items.Refresh();
+        }
+
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
         void fill()
         {
-            list.ItemsSource = foreclosures.GetAll().Select(x => new Item { Foreclosure = x });
-            //list.Items.Clear();
-            //foreach (Db.Foreclosure f in foreclosures.GetAll())
-            //    list.Items.Add(new Item { Foreclosure = f });
-        }
+            //list.ItemsSource = foreclosures.GetAll().Select(x => new Item { Foreclosure = x });
+            list.ItemsSource = foreclosures.GetAll();
 
-        public class Item
-        {
-            public Db.Foreclosure Foreclosure { get; set; }
-            public AuctionWindow Aw = null;
+            //string k = keyword.Text;
+            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
+            //{
+            //    string field;
+            //    Binding b = c.DisplayMemberBinding as Binding;
+            //    if (b != null)
+            //        field = b.Path.Path;
+            //}
+            //list.ItemsSource = foreclosures.Get2(x=> filter(x, k));
         }
+        //static bool filter(Db.Foreclosure foreclosure, string keyword)
+        //{
+        //    foreach (PropertyInfo pi in pis)
+        //        if (!Regex.IsMatch(pi.GetValue(foreclosure).ToString(), Regex.Escape(keyword), RegexOptions.IgnoreCase))
+        //            return false;
+        //    return true;
+        //}
+        //static PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public);
+
+        //public class Item
+        //{
+        //    public Db.Foreclosure Foreclosure { get; set; }
+        //    public AuctionWindow Aw = null;
+        //}
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
@@ -177,36 +190,46 @@ namespace Cliver.Foreclosures
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (Item i in e.AddedItems)
-            {
-                show_AuctionWindow(i);
-            }
+            foreach (Db.Foreclosure d in e.AddedItems)
+                show_AuctionWindow(d);
         }
 
-        void show_AuctionWindow(Item i)
+        void show_AuctionWindow(Db.Foreclosure d)
         {
-            if (i.Aw == null || !i.Aw.IsLoaded)
+            AuctionWindow aw;
+            if (!foreclosures2AuctionWindow.TryGetValue(d, out aw)
+                || (aw == null || !aw.IsLoaded)
+                )
             {
-                i.Aw = AuctionWindow.OpenNew(i.Foreclosure.Id);
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(i.Aw);
-                i.Aw.Show();
+                aw = AuctionWindow.OpenNew(d.Id);
+                foreclosures2AuctionWindow[d] = aw;
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
+                aw.Closed += delegate
+                  {
+                      Db.Foreclosure f = aw.fields.DataContext as Db.Foreclosure;
+                      if (f == null)
+                          return;
+                      foreclosures2AuctionWindow.Remove(f);
+                  };
+                aw.Show();
             }
             else
             {
-                i.Aw.BringIntoView();
-                i.Aw.Activate();
+                aw.BringIntoView();
+                aw.Activate();
             }
         }
+        Dictionary<Db.Foreclosure, AuctionWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, AuctionWindow>();
 
         private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ListViewItem lvi = sender as ListViewItem;
             if (lvi == null)
                 return;
-            Item i = (Item)lvi.Content;
-            if (i == null)
+            Db.Foreclosure d = (Db.Foreclosure)lvi.Content;
+            if (d == null)
                 return;
-            show_AuctionWindow(i);
+            show_AuctionWindow(d);
             e.Handled = true;
         }
 
@@ -279,7 +302,7 @@ namespace Cliver.Foreclosures
                 sorted_columns2direction[column] = direction;
             }
             else
-            {                
+            {
                 foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)//should be removed if multi-column sort
                 {
                     c.Column.HeaderTemplate = null;
@@ -295,19 +318,61 @@ namespace Cliver.Foreclosures
             else
                 column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
 
-            ICollectionView resultDataView = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            resultDataView.SortDescriptions.Clear();
+            ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            cv.SortDescriptions.Clear();
             foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)
             {
-            string header;
-            Binding b = c.Column.DisplayMemberBinding as Binding;
-            if (b != null)
-                header = b.Path.Path;
-            else
-                header = (string)c.Column.Header;
-                resultDataView.SortDescriptions.Add(new SortDescription(header, (ListSortDirection)sorted_columns2direction[c]));
+                string header;
+                Binding b = c.Column.DisplayMemberBinding as Binding;
+                if (b != null)
+                    header = b.Path.Path;
+                else
+                    header = (string)c.Column.Header;
+                cv.SortDescriptions.Add(new SortDescription(header, (ListSortDirection)sorted_columns2direction[c]));
             }
         }
         System.Collections.Specialized.OrderedDictionary sorted_columns2direction = new System.Collections.Specialized.OrderedDictionary { };
+
+        private void show_search_Click(object sender, RoutedEventArgs e)
+        {
+            show_search.IsChecked = !show_search.IsChecked;
+            search.Visibility = ((MenuItem)e.Source).IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void close_search_Click(object sender, RoutedEventArgs e)
+        {
+            //search0.Visibility = Visibility.Visible;
+        }
+
+        private void keyword_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string k = keyword.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (String.IsNullOrEmpty(k))
+            {
+                cv.Filter = null;
+                return;
+            }
+
+            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
+            //{
+            //    string field;
+            //    Binding b = c.DisplayMemberBinding as Binding;
+            //    if (b != null)
+            //        field = b.Path.Path;
+            //}
+            PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
+            cv.Filter = o =>
+            {
+                Db.Foreclosure d = (Db.Foreclosure)o;
+                foreach (PropertyInfo pi in pis)
+                {
+                    string s = pi.GetValue(d) as string;
+                    if (!string.IsNullOrEmpty(s) && Regex.IsMatch(s, Regex.Escape(k), RegexOptions.IgnoreCase))
+                        return true;
+                }
+                return false;
+            };
+        }
     }
 }

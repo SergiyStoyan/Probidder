@@ -46,7 +46,7 @@
                         <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
                     </Popup>
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="Command">
+                <MenuItem Header="File">
                     <MenuItem Header="Export" Name="export" Click="export_Click"/>
                     <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
                    
@@ -54,6 +54,8 @@
                     <MenuItem Header="Exit" Name="exit" Click="exit_Click"/>
                 </MenuItem>
                 <MenuItem Header="New" Click="new_Click">
+                </MenuItem>
+                <MenuItem Header="Filter" Name="show_search" Click="show_search_Click" IsChecked="False">
                 </MenuItem>
                 <MenuItem Header="Settings">
                     <MenuItem Header="Login" Name="login" Click="login_Click"/>
@@ -67,8 +69,18 @@
                     <MenuItem Header="About" Name="about" Click="about_Click"/>
                 </MenuItem>
             </Menu>
-            <StackPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel>    
+                <Grid Name="search" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    <Label Content="Find:" Grid.Column="0"/>
+                        <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
+                        <Button Name="close_search" Content="X" Grid.Column="2" Click="close_search_Click"/>
+                    </Grid>
                     <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click">
                 <ListView.View>
                     <GridView>
@@ -80,11 +92,11 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                             </-->
-                                    <GridViewColumn Header="Id"  Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.Id}" >
+                                    <GridViewColumn Header="Id"  Width="Auto" DisplayMemberBinding="{Binding Path=Id}" >
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.FILING_DATE, StringFormat=MM-dd-yy}" />
-                                    <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.CITY}" />
-                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=Foreclosure.ADDRESS}" >
+                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=FILING_DATE, StringFormat=MM-dd-yy}" />
+                                    <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=CITY}" />
+                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=ADDRESS}" >
                                     </GridViewColumn>
                                 </GridView.Columns>
                     </GridView>
@@ -95,8 +107,8 @@
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
-                </ScrollViewer>
             </StackPanel>
+                </ScrollViewer>
         </DockPanel>
     </Grid>
 </Window>

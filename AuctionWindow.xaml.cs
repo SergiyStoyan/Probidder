@@ -41,7 +41,7 @@ namespace Cliver.Foreclosures
             //ci.DateTimeFormat.ShortDatePattern = "MMddyy";
             //ci.DateTimeFormat.LongDatePattern = "MMddyy";
             //Thread.CurrentThread.CurrentCulture = ci;
-
+            
             if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
@@ -100,10 +100,7 @@ namespace Cliver.Foreclosures
                 return;
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             if (f.Id != 0)
-            {
                 foreclosures.Delete(f.Id);
-                ListWindow.ItemDeleted(f.Id);
-            }
             Close();
         }
 
@@ -126,6 +123,13 @@ namespace Cliver.Foreclosures
             fields.IsEnabled = true;
         }
 
+        private void Prev_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             //if (string.IsNullOrWhiteSpace(subject.Text))
@@ -134,8 +138,7 @@ namespace Cliver.Foreclosures
             //    throw new Exception("Description is empty 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             foreclosures.Save(f);
-
-            ListWindow.ItemSaved(f);
+            
             fields.DataContext = new Db.Foreclosure();
             Save.IsEnabled = false;
             Delete.IsEnabled = false;
