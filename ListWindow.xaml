@@ -30,18 +30,21 @@
                       Fill="Black"
                       Data="M 5,0 10,5 15,0 5,0" />
             </DockPanel>
-        </DataTemplate>        
-        <UserControl x:Key="case2" Name="rr">
-            <StackPanel Orientation="Horizontal">
-                <Label>Id</Label>
-                <Label>N</Label>
-                <Button>X</Button>
-                <Button>X</Button>
-            </StackPanel>
-        </UserControl>
+        </DataTemplate>
+        <Style x:Key="AlternateItemStyle" TargetType="{x:Type ListViewItem}">
+                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="list_PreviewMouseLeftButtonDown" />
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="#ffffff"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#ddddff"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-    <Grid Background="Beige">
-        <DockPanel Background="Beige">
+    <Grid >
+        <DockPanel>
             <Popup Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
                         <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
                     </Popup>
@@ -61,6 +64,7 @@
                     <MenuItem Header="Login" Name="login" Click="login_Click"/>
                     <MenuItem Header="Location" Name="location" Click="location_Click"/>
                     <MenuItem Header="Database" Name="database" Click="database_Click"/>
+                    <MenuItem Header="View" Name="view" Click="view_Click"/>
                     <Separator></Separator>
                     <MenuItem Header="Reset All" Name="reset" Click="reset_Click"/>
                 </MenuItem>
@@ -81,7 +85,10 @@
                         <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
                         <ComboBox Name="SearchField" Grid.Column="2" >                       </ComboBox>
                     </Grid>
-                    <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click">
+                    <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click"                              
+                  AlternationCount="2"
+                  ItemContainerStyle="{StaticResource AlternateItemStyle}"                              >
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
@@ -101,11 +108,6 @@
                                 </GridView.Columns>
                     </GridView>
                 </ListView.View>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="list_PreviewMouseLeftButtonDown" />
-                    </Style>
-                </ListView.ItemContainerStyle>
             </ListView>
             </StackPanel>
                 </ScrollViewer>

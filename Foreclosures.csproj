@@ -138,6 +138,10 @@
     <Compile Include="ListViewColumnHeaderControl.xaml.cs">
       <DependentUpon>ListViewColumnHeaderControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\View.cs" />
+    <Compile Include="Settings\ViewWindow.xaml.cs">
+      <DependentUpon>ViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Login.cs" />
     <Compile Include="Settings\Location.cs" />
     <Compile Include="Db\Zips.cs" />
@@ -168,7 +172,6 @@
     <Compile Include="Service.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\General.cs" />
     <Compile Include="SysTrayForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\DatabaseWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Settings\ViewWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -87,6 +87,29 @@ namespace Cliver.Foreclosures
               {//needed for highlighting search keyword
                   highlight(list);
               };
+
+            Settings.View.Saved += delegate
+            {
+                set_columns();
+            };
+            set_columns();
+        }
+
+        void set_columns()
+        {
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                GridViewColumnCollection cs = ((GridView)list.View).Columns;
+                cs.Clear();
+                foreach (string f in Settings.View.ShowedColumns)
+                {
+                    GridViewColumn c = new GridViewColumn();
+                    c.Header = f;
+                    c.DisplayMemberBinding = new Binding(f);
+                    cs.Add(c);
+                }
+                fill();
+            }));
         }
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
@@ -256,6 +279,11 @@ namespace Cliver.Foreclosures
                 Config.Reset();
         }
 
+        private void view_Click(object sender, RoutedEventArgs e)
+        {
+            ViewWindow.OpenDialog();
+        }
+
         private void list_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = e.OriginalSource as GridViewColumnHeader;
@@ -337,15 +365,20 @@ namespace Cliver.Foreclosures
                 return;
             }
 
-            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
-            //{
-            //    string field;
-            //    Binding b = c.DisplayMemberBinding as Binding;
-            //    if (b != null)
-            //        field = b.Path.Path;
-            //}
+            PropertyInfo[] pis_ = typeof(Db.Foreclosure).GetProperties();
+            List<PropertyInfo> pis = new List<PropertyInfo>();
+            foreach (GridViewColumn c in ((GridView)list.View).Columns)
+            {
+                Binding b = c.DisplayMemberBinding as Binding;
+                if (b == null)
+                    continue;
+                string  field = b.Path.Path;
+                PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == field);
+                if (pi == null)
+                    continue;
+                pis.Add(pi);
+            }
             filter_regex = new Regex("(" + Regex.Escape(k) + ")", RegexOptions.IgnoreCase);
-            PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
             cv.Filter = o =>
             {
                 Db.Foreclosure d = (Db.Foreclosure)o;
@@ -387,7 +420,7 @@ namespace Cliver.Foreclosures
                 if (match)
                 {
                     Run r = new Run(item);
-                    r.Background = Settings.General.SearchHighlightColor;
+                    r.Background = Settings.View.SearchHighlightColor;
                     tb.Inlines.Add(r);
                 }
                 else

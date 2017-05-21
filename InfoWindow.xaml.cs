@@ -47,12 +47,12 @@ namespace Cliver.Foreclosures
                     w.Show();
                     ThreadRoutines.StartTry(() =>
                     {
-                        Thread.Sleep(Settings.General.InfoToastLifeTimeInSecs * 1000);
+                        Thread.Sleep(Settings.View.InfoToastLifeTimeInSecs * 1000);
                         w.Dispatcher.BeginInvoke((Action)(() => { w.Close(); }));
                     });
-                    if (!string.IsNullOrWhiteSpace(Settings.General.InfoSoundFile))
+                    if (!string.IsNullOrWhiteSpace(Settings.View.InfoSoundFile))
                     {
-                        SoundPlayer sp = new SoundPlayer(Settings.General.InfoSoundFile);
+                        SoundPlayer sp = new SoundPlayer(Settings.View.InfoSoundFile);
                         sp.Play();
                     }
                 };
@@ -140,7 +140,7 @@ namespace Cliver.Foreclosures
                     this.Top = w.Top - this.ActualHeight;
                 }
                 else
-                    this.Top = wa.Bottom - this.ActualHeight - Settings.General.InfoToastBottom;
+                    this.Top = wa.Bottom - this.ActualHeight - Settings.View.InfoToastBottom;
 
                 ws.Add(this);
 
@@ -157,7 +157,7 @@ namespace Cliver.Foreclosures
                 }
             }
             sb = new Storyboard();
-            da = new DoubleAnimation(wa.Right, wa.Right - Width - Settings.General.InfoToastRight, (Duration)TimeSpan.FromMilliseconds(300));
+            da = new DoubleAnimation(wa.Right, wa.Right - Width - Settings.View.InfoToastRight, (Duration)TimeSpan.FromMilliseconds(300));
             Storyboard.SetTargetProperty(da, new PropertyPath("(Left)")); //Do not miss the '(' and ')'
             sb.Children.Add(da);
             BeginStoryboard(sb);

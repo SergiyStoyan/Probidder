@@ -14,15 +14,16 @@ namespace Cliver.Foreclosures
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly GeneralSettings General;
+        public static readonly ViewSettings View;
 
-        public class GeneralSettings : Cliver.Settings
+        public class ViewSettings : Cliver.Settings
         {
             public int InfoToastLifeTimeInSecs = 5;
             public string InfoSoundFile = "inform.wav";
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
-            public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.DarkOrange;
+            public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.Yellow;
+            public HashSet<string> ShowedColumns = new HashSet<string> { "Id", "FILING_DATE", "CITY", "ZIP", "PIN", "ADDRESS" };
 
             public override void Loaded()
             {
