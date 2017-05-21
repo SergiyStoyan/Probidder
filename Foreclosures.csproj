@@ -135,6 +135,9 @@
     <Compile Include="Db\Counties.cs" />
     <Compile Include="Db\Db.Json.cs" />
     <Compile Include="Db\CaseNumbers.cs" />
+    <Compile Include="ListViewColumnHeaderControl.xaml.cs">
+      <DependentUpon>ListViewColumnHeaderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Login.cs" />
     <Compile Include="Settings\Location.cs" />
     <Compile Include="Db\Zips.cs" />
@@ -213,6 +216,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ListViewColumnHeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\DatabaseWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

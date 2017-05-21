@@ -264,44 +264,50 @@ namespace Cliver.Foreclosures
             if (Message.YesNo("This will reset all the settings to their initial values. Proceed?"))
                 Config.Reset();
         }
-        
+
         private void list_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = e.OriginalSource as GridViewColumnHeader;
             if (column == null)
                 return;
 
-            if (_sortColumn == column)
-                _sortDirection = _sortDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
-            else
+            ListSortDirection direction;
+            if (sorted_columns2direction.Contains(column))
             {
-                if (_sortColumn != null)
+                direction = (ListSortDirection)sorted_columns2direction[column];
+                direction = direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+                sorted_columns2direction[column] = direction;
+            }
+            else
+            {                
+                foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)//should be removed if multi-column sort
                 {
-                    _sortColumn.Column.HeaderTemplate = null;
-                    _sortColumn.Column.Width = _sortColumn.ActualWidth - 20;
+                    c.Column.HeaderTemplate = null;
+                    c.Column.Width = c.ActualWidth - 20;
                 }
-                _sortColumn = column;
-                _sortDirection = ListSortDirection.Ascending;
+                direction = ListSortDirection.Ascending;
+                sorted_columns2direction.Add(column, direction);
                 column.Column.Width = column.ActualWidth + 20;
             }
 
-            if (_sortDirection == ListSortDirection.Ascending)
+            if (direction == ListSortDirection.Ascending)
                 column.Column.HeaderTemplate = Resources["ArrowUp"] as DataTemplate;
             else
                 column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
 
+            ICollectionView resultDataView = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            resultDataView.SortDescriptions.Clear();
+            foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)
+            {
             string header;
-            Binding b = _sortColumn.Column.DisplayMemberBinding as Binding;
+            Binding b = c.Column.DisplayMemberBinding as Binding;
             if (b != null)
                 header = b.Path.Path;
             else
-                header = (string)_sortColumn.Column.Header;
-
-            ICollectionView resultDataView = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            resultDataView.SortDescriptions.Clear();
-            resultDataView.SortDescriptions.Add(new SortDescription(header, _sortDirection));
+                header = (string)c.Column.Header;
+                resultDataView.SortDescriptions.Add(new SortDescription(header, (ListSortDirection)sorted_columns2direction[c]));
+            }
         }
-        private ListSortDirection _sortDirection;
-        private GridViewColumnHeader _sortColumn;
+        System.Collections.Specialized.OrderedDictionary sorted_columns2direction = new System.Collections.Specialized.OrderedDictionary { };
     }
 }
