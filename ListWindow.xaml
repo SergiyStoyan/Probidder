@@ -97,19 +97,10 @@
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
-                            <!--GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Name="show" Content="Show" Margin="0" VerticalAlignment="Center" Click="show_Click" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                            </-->
-                                    <GridViewColumn Header="Id"  Width="Auto" DisplayMemberBinding="{Binding Path=Id}" >
-                                    </GridViewColumn>
+                                    <GridViewColumn Header="Id"  Width="Auto" DisplayMemberBinding="{Binding Path=Id}" />
                                     <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=FILING_DATE, StringFormat=MM/dd-yy}" />
                                     <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=CITY}" />
-                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=ADDRESS}" >
-                                    </GridViewColumn>
+                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=ADDRESS}" />
                                 </GridView.Columns>
                     </GridView>
                 </ListView.View>

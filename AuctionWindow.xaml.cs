@@ -278,6 +278,10 @@ namespace Cliver.Foreclosures
             //    e.Handled = true;
             //}
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+        }
     }
 
     public class TextInputToVisibilityConverter : IMultiValueConverter

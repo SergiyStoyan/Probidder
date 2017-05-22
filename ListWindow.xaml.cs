@@ -106,6 +106,7 @@ namespace Cliver.Foreclosures
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
+                PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
                 GridViewColumnCollection cs = ((GridView)list.View).Columns;
                 cs.Clear();                
                 foreach (string f in Settings.View.ShowedColumns)
@@ -114,6 +115,11 @@ namespace Cliver.Foreclosures
                     c.Header = f;
                     c.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
                     c.DisplayMemberBinding = new Binding(f);
+                    PropertyInfo pi = pis.FirstOrDefault(x => x.Name == f);
+                    if (pi == null)
+                        throw new Exception("Some of ShowedColumns does not found in Foreclosure members");
+                    if (pi.PropertyType == typeof(DateTime?))
+                        c.DisplayMemberBinding.StringFormat = "MMddyy";
                     cs.Add(c);
                 }
                 fill();
@@ -405,7 +411,11 @@ namespace Cliver.Foreclosures
                     object v = pi.GetValue(d);
                     if (v == null)
                         continue;
-                    string s = v.ToString();
+                    string s;
+                    if (pi.PropertyType == typeof(DateTime?))
+                        s = ((DateTime)v).ToString("MMddyy");
+                    else
+                        s = v.ToString();                    
                     if (!string.IsNullOrEmpty(s) && filter_regex.IsMatch(s))
                         return true;
                 }

@@ -138,7 +138,12 @@
     <Compile Include="ListViewColumnHeaderControl.xaml.cs">
       <DependentUpon>ListViewColumnHeaderControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AutoComplete.cs" />
+    <Compile Include="Settings\AutoComplete.cs" />
     <Compile Include="Settings\View.cs" />
+    <Compile Include="Settings\AutoComplete.xaml.cs">
+      <DependentUpon>AutoComplete.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>
@@ -225,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\DatabaseWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Settings\AutoComplete.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

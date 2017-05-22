@@ -23,6 +23,7 @@
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <EventSetter Event="TextChanged" Handler="TextBox_TextChanged" />
         </Style>
         <Style TargetType="{x:Type DatePicker}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
