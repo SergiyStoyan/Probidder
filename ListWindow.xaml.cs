@@ -398,46 +398,30 @@ namespace Cliver.Foreclosures
             };
         }
         Regex filter_regex = null;
-        List<int> searched_columns = new List<int>();
         private void highlight(ListView lv)
         {
             if (filter_regex == null)
                 return;
 
-            searched_columns.Clear();
+            List<int> searched_columns = new List<int>();
             for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
                 if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
                     searched_columns.Add(i);
 
             foreach (ListViewItem lvi in lv.FindChildrenOfType<ListViewItem>())
             {
-                put(lvi);
+                int i = 0;
                 foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
+                {
+                    if (!searched_columns.Contains(i++))
+                        continue;
                     highlight_TextBlock(tb);
+                }
             }
         }
-        void put(DependencyObject o)
-        {
-            foreach (DependencyObject f in o.GetChildren())
-            {
-                UIElement e = f as UIElement;
-                if (e != null)
-                    g += "," + Grid.GetColumn(e);
-                put(f);
-            }
-        }
-            string g = "";
         private void highlight_TextBlock(TextBlock tb)
         {
             if (tb == null)
-                return;
-            string g = "";
-            for (FrameworkElement f = tb.Parent as FrameworkElement; f != null; f = f.Parent as FrameworkElement)
-            {
-                g += "," + Grid.GetColumn(f);
-            }
-
-            if (!searched_columns.Contains(Grid.GetColumn(tb)))
                 return;
             string text = tb.Text;
             tb.Inlines.Clear();
