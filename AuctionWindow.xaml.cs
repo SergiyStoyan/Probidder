@@ -298,6 +298,21 @@ namespace Cliver.Foreclosures
                 e.Handled = true;
             }
         }
+
+        void DatePicker_LostFocus(object sender, EventArgs e)
+        {
+        }
+
+        private void DatePicker_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //DatePicker dp = ((DatePicker)e.OldFocus);
+            //if (!dp.IsValid())
+            //{
+            //    Console.Beep(5000, 200);
+            //    e.Handled = true;
+            //    Keyboard.Focus(dp);
+            //}
+        }
     }
 
     public class TextInputToVisibilityConverter : IMultiValueConverter

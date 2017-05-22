@@ -26,6 +26,8 @@
         </Style>
         <Style TargetType="{x:Type DatePicker}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <EventSetter Event="LostFocus" Handler="DatePicker_LostFocus"></EventSetter>
+            <EventSetter Event="LostKeyboardFocus" Handler="DatePicker_LostKeyboardFocus"></EventSetter>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
