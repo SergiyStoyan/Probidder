@@ -23,10 +23,17 @@ namespace Cliver.Foreclosures
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
             public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.Yellow;
-            public HashSet<string> ShowedColumns = new HashSet<string> { "Id", "FILING_DATE", "CITY", "ZIP", "PIN", "ADDRESS" };
+            public List<string> ShowedColumns = null;
+            public List<string> SearchedColumns = null;
 
             public override void Loaded()
             {
+                if (ShowedColumns == null)
+                    ShowedColumns = new List<string> { "FILING_DATE", "CITY", "ADDRESS" };
+                if (SearchedColumns == null)
+                    SearchedColumns = new List<string> { "CITY", "ZIP", "PIN", "ADDRESS" };
+
+                ListWindow.This?.Set();
             }
 
             public override void Saving()

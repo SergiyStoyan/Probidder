@@ -39,5 +39,23 @@ namespace Cliver
                 yield return VisualTreeHelper.GetChild(ob, i);
             }
         }
+
+        public static T GetVisualChild<T>(this Visual parent) where T : Visual
+        {
+            T child = default(T);
+
+            for (int index = 0; index < VisualTreeHelper.GetChildrenCount(parent); index++)
+            {
+                Visual visualChild = (Visual)VisualTreeHelper.GetChild(parent, index);
+                child = visualChild as T;
+
+                if (child == null)
+                    child = GetVisualChild<T>(visualChild);//Find Recursively
+
+                else
+                    return child;
+            }
+            return child;
+        }
     }
 }

@@ -148,15 +148,15 @@ namespace Cliver.Foreclosures
             public int Count = 0;
             public object Core = null;
 
-            public delegate void OnSaved(Document document, bool inserted);
-            public event OnSaved Saved = null;
+            public delegate void SavedHandler(Document document, bool inserted);
+            public event SavedHandler Saved = null;
             public void InvokeSaved(Document document, bool inserted)
             {
                 Saved?.Invoke(document, inserted);
             }
 
-            public delegate void OnDeleted(int document_id, bool sucess);
-            public event OnDeleted Deleted = null;
+            public delegate void DeletedHandler(int document_id, bool sucess);
+            public event DeletedHandler Deleted = null;
             public void InvokeDeleted(int document_id, bool sucess)
             {
                 Deleted?.Invoke(document_id, sucess);

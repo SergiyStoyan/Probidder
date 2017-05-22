@@ -50,9 +50,7 @@ namespace Cliver.Foreclosures
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
-
-            fill();
-
+            
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
             };
@@ -80,22 +78,18 @@ namespace Cliver.Foreclosures
                 });
             };
 
-            foreclosures.SetOnSaved(Foreclosures_Saved);
-            foreclosures.SetOnDeleted(Foreclosures_Deleted);
+            foreclosures.Saved+=Foreclosures_Saved;
+            foreclosures.Deleted+=Foreclosures_Deleted;
 
             list.ItemContainerGenerator.StatusChanged += delegate
               {//needed for highlighting search keyword
                   highlight(list);
               };
 
-            Settings.View.Saved += delegate
-            {
-                set_columns();
-            };
-            set_columns();
+            Set();
         }
 
-        void set_columns()
+        public void Set()
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
@@ -105,6 +99,7 @@ namespace Cliver.Foreclosures
                 {
                     GridViewColumn c = new GridViewColumn();
                     c.Header = f;
+                    c.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
                     c.DisplayMemberBinding = new Binding(f);
                     cs.Add(c);
                 }
@@ -298,7 +293,7 @@ namespace Cliver.Foreclosures
                     if (c == column)
                         continue;
                     sorted_columns2direction.Remove(c);
-                    c.Column.HeaderTemplate = null;
+                    c.Column.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
                     c.Column.Width = c.ActualWidth - 20;
                 }
             }
@@ -336,7 +331,7 @@ namespace Cliver.Foreclosures
                 if (b != null)
                     header = b.Path.Path;
                 else
-                    header = (string)c.Column.Header;
+                    header = c.Column.Header.ToString();
                 cv.SortDescriptions.Add(new SortDescription(header, (ListSortDirection)sorted_columns2direction[c]));
             }
         }
@@ -367,17 +362,25 @@ namespace Cliver.Foreclosures
 
             PropertyInfo[] pis_ = typeof(Db.Foreclosure).GetProperties();
             List<PropertyInfo> pis = new List<PropertyInfo>();
-            foreach (GridViewColumn c in ((GridView)list.View).Columns)
+            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
+            //{
+            //    Binding b = c.DisplayMemberBinding as Binding;
+            //    if (b == null)
+            //        continue;
+            //    string field = b.Path.Path;
+            //    PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == field);
+            //    if (pi == null)
+            //        continue;
+            //    pis.Add(pi);
+            //}
+            foreach (string c in Settings.View.SearchedColumns)
             {
-                Binding b = c.DisplayMemberBinding as Binding;
-                if (b == null)
-                    continue;
-                string  field = b.Path.Path;
-                PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == field);
+                PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == c);
                 if (pi == null)
                     continue;
                 pis.Add(pi);
             }
+
             filter_regex = new Regex("(" + Regex.Escape(k) + ")", RegexOptions.IgnoreCase);
             cv.Filter = o =>
             {
@@ -395,17 +398,46 @@ namespace Cliver.Foreclosures
             };
         }
         Regex filter_regex = null;
+        List<int> searched_columns = new List<int>();
         private void highlight(ListView lv)
         {
             if (filter_regex == null)
                 return;
+
+            searched_columns.Clear();
+            for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
+                if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
+                    searched_columns.Add(i);
+
             foreach (ListViewItem lvi in lv.FindChildrenOfType<ListViewItem>())
+            {
+                put(lvi);
                 foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
                     highlight_TextBlock(tb);
+            }
         }
+        void put(DependencyObject o)
+        {
+            foreach (DependencyObject f in o.GetChildren())
+            {
+                UIElement e = f as UIElement;
+                if (e != null)
+                    g += "," + Grid.GetColumn(e);
+                put(f);
+            }
+        }
+            string g = "";
         private void highlight_TextBlock(TextBlock tb)
         {
             if (tb == null)
+                return;
+            string g = "";
+            for (FrameworkElement f = tb.Parent as FrameworkElement; f != null; f = f.Parent as FrameworkElement)
+            {
+                g += "," + Grid.GetColumn(f);
+            }
+
+            if (!searched_columns.Contains(Grid.GetColumn(tb)))
                 return;
             string text = tb.Text;
             tb.Inlines.Clear();

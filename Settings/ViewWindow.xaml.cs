@@ -44,13 +44,38 @@ namespace Cliver.Foreclosures
             {
             };
 
-            Columns.Items.Clear();
+            int r = 0;
             foreach (PropertyInfo pi in typeof(Db.Foreclosure).GetProperties())
             {
-                CheckBox i = new CheckBox();
-                i.Content = pi.Name;
-                i.IsChecked = Settings.View.ShowedColumns.Contains(pi.Name);
-                Columns.Items.Add(i);
+                Columns.RowDefinitions.Add(new RowDefinition());
+                r++;
+                {
+                    CheckBox c = new CheckBox();
+                    c.SetValue(Grid.RowProperty, r);
+                    c.SetValue(Grid.ColumnProperty, 0);
+                    c.IsChecked = Settings.View.ShowedColumns.Contains(pi.Name);
+                    c.Padding = new Thickness(0);
+                    c.HorizontalAlignment = HorizontalAlignment.Center;
+                    Columns.Children.Add(c);
+                }
+                {
+                    CheckBox c = new CheckBox();
+                    c.SetValue(Grid.RowProperty, r);
+                    c.SetValue(Grid.ColumnProperty, 1);
+                    c.IsChecked = Settings.View.SearchedColumns.Contains(pi.Name);
+                    c.Padding = new Thickness(0);
+                    c.HorizontalAlignment = HorizontalAlignment.Center;
+                    Columns.Children.Add(c);
+                }
+                {
+                    TextBlock l = new TextBlock();
+                    l.SetValue(Grid.RowProperty, r);
+                    l.SetValue(Grid.ColumnProperty, 2);
+                    l.Text = pi.Name;
+                    l.Padding = new Thickness(0);
+                    l.HorizontalAlignment = HorizontalAlignment.Left;
+                    Columns.Children.Add(l);
+                }
             }
         }
 
@@ -64,9 +89,18 @@ namespace Cliver.Foreclosures
             try
             {
                 Settings.View.ShowedColumns.Clear();
-                foreach (CheckBox i in Columns.Items)
-                    if (i.IsChecked == true)
-                        Settings.View.ShowedColumns.Add(i.Content.ToString());
+                Settings.View.SearchedColumns.Clear();
+                List<UIElement> es = Columns.Children.Cast<UIElement>().ToList();
+                for (int i = Columns.RowDefinitions.Count - 1; i > 0; i--)
+                {
+                    CheckBox c1 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 0);
+                    CheckBox c2 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 1);
+                    TextBlock l = (TextBlock)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 2);
+                    if (c1.IsChecked == true)
+                        Settings.View.ShowedColumns.Add(l.Text);
+                    if (c2.IsChecked == true)
+                        Settings.View.SearchedColumns.Add(l.Text);
+                }
 
                 Settings.View.Save();
                 Config.Reload();

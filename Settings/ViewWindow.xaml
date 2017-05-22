@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Grid Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="View Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
@@ -18,7 +18,7 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <GroupBox Grid.Row="0" Header="Grid"  Margin="10,10,10,10" Padding="10">
+            <GroupBox Grid.Row="0" Header="Columns"  Margin="10,10,10,10" Padding="10">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -27,11 +27,21 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="auto"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Label Grid.Column="0" Grid.Row="0" Margin="0,0,0,0" >Show Columns:</Label>
-                    <ListBox Grid.Column="1" Grid.Row="0"  Margin="0,0,0,0" Name="Columns" MinWidth="100">
-                    </ListBox>
-                        </Grid>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Column="1" Grid.Row="0"  Margin="0,0,0,0" Name="Columns" MinWidth="100">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition ></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Background="#e0e0c0">Show</Label>
+                        <Label Grid.Column="1" Grid.Row="0" Background="#e0e0c0">Search</Label>
+                        <Label Grid.Column="2" Grid.Row="0" Background="#e0e0c0">Field</Label>
+                    </Grid>
+                </Grid>
                     </GroupBox>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">
