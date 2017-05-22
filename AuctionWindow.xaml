@@ -23,7 +23,6 @@
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
-            <EventSetter Event="TextChanged" Handler="TextBox_TextChanged" />
         </Style>
         <Style TargetType="{x:Type DatePicker}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
@@ -66,7 +65,7 @@
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Listing Code</Label>
                     <TextBox Grid.Column="1" Grid.Row="0" Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay}"></TextBox>
                     <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">County</Label>
-                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay}"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay}" KeyboardNavigation.TabNavigation="None"></TextBox>
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Case #</Label>
                     <ComboBox Grid.Column="1" Grid.Row="1" Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay}" IsEditable="True"></ComboBox>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
@@ -127,7 +126,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="4"  HorizontalAlignment="Right">
                             <Label HorizontalAlignment="Right">Or Loan $</Label>
-                        <TextBox MinWidth="50" Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat='#,#'}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                        <TextBox MinWidth="50" Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     </StackPanel>
                     <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right">Legal Descr</Label>
                     <TextBox Grid.Column="1" Grid.Row="5" Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" ></TextBox>
@@ -176,10 +175,10 @@
                         </DatePicker.Resources>
                     </DatePicker>
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
-                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}" AcceptsReturn="True" TextWrapping="Wrap">
+                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
                     </TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
-                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='#,#.##'}" AcceptsReturn="True" TextWrapping="Wrap">
+                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
                     </TextBox>
 
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
@@ -207,11 +206,11 @@
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">Property Type</Label>
                     <ComboBox Grid.Column="5" Grid.Row="9" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" IsEditable="True"></ComboBox>
                     <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right">Interest</Label>
-                    <TextBox Grid.Column="7" Grid.Row="8" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="8" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right">Monthly Payments</Label>
-                    <TextBox Grid.Column="7" Grid.Row="9" Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="9" Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right">MTG Term</Label>
-                    <TextBox Grid.Column="7" Grid.Row="10" Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#'}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="10" Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#'}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right">Deff. Served Address</Label>
                     <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="12" HorizontalAlignment="Right">Deff. Phone</Label>

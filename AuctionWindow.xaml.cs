@@ -181,6 +181,8 @@ namespace Cliver.Foreclosures
 
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            //Keyboard.Focus(TYPE_OF_EN);
+                        
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
@@ -279,8 +281,22 @@ namespace Cliver.Foreclosures
             //}
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
+            if (Regex.IsMatch(e.Text, @"[^\d]\,"))
+            {
+                Console.Beep(5000, 200);
+                e.Handled = true;
+            }
+        }
+
+        private void Decimal_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (Regex.IsMatch(e.Text, @"[^\d\.\,]"))
+            {
+                Console.Beep(5000, 200);
+                e.Handled = true;
+            }
         }
     }
 
