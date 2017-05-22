@@ -37,9 +37,9 @@
                         <Grid.RowDefinitions>
                             <RowDefinition ></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Label Grid.Column="0" Grid.Row="0" Background="#e0e0c0">Show</Label>
-                        <Label Grid.Column="1" Grid.Row="0" Background="#e0e0c0">Search</Label>
-                        <Label Grid.Column="2" Grid.Row="0" Background="#e0e0c0">Field</Label>
+                        <Label Grid.Column="0" Grid.Row="0" FontWeight="Bold">Show</Label>
+                        <Label Grid.Column="1" Grid.Row="0"  FontWeight="Bold">Search</Label>
+                        <Label Grid.Column="2" Grid.Row="0"  FontWeight="Bold">Field</Label>
                     </Grid>
                 </Grid>
                     </GroupBox>

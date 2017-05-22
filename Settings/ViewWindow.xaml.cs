@@ -91,7 +91,7 @@ namespace Cliver.Foreclosures
                 Settings.View.ShowedColumns.Clear();
                 Settings.View.SearchedColumns.Clear();
                 List<UIElement> es = Columns.Children.Cast<UIElement>().ToList();
-                for (int i = Columns.RowDefinitions.Count - 1; i > 0; i--)
+                for (int i = 1; i < Columns.RowDefinitions.Count; i++)
                 {
                     CheckBox c1 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 0);
                     CheckBox c2 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 1);

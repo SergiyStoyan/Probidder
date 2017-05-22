@@ -50,7 +50,7 @@ namespace Cliver.Foreclosures
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
-            
+
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
             };
@@ -78,10 +78,23 @@ namespace Cliver.Foreclosures
                 });
             };
 
-            foreclosures.Saved+=Foreclosures_Saved;
-            foreclosures.Deleted+=Foreclosures_Deleted;
+            foreclosures.Saved += Foreclosures_Saved;
+            foreclosures.Deleted += Foreclosures_Deleted;
 
-            list.ItemContainerGenerator.StatusChanged += delegate
+            list.LayoutUpdated += delegate (object sender, EventArgs e)
+              {
+                  if (!just_set)
+                      return;
+                  just_set = false;
+                  foreach (GridViewColumn c in ((GridView)list.View).Columns)
+                      if (c.ActualWidth > 100)
+                      {
+                          c.Width = 100;
+                          //c.Width = double.NaN;
+                      }
+              };
+
+            list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
               {//needed for highlighting search keyword
                   highlight(list);
               };
@@ -94,7 +107,7 @@ namespace Cliver.Foreclosures
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 GridViewColumnCollection cs = ((GridView)list.View).Columns;
-                cs.Clear();
+                cs.Clear();                
                 foreach (string f in Settings.View.ShowedColumns)
                 {
                     GridViewColumn c = new GridViewColumn();
@@ -104,8 +117,10 @@ namespace Cliver.Foreclosures
                     cs.Add(c);
                 }
                 fill();
+                just_set = true;
             }));
         }
+        bool just_set = true;
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
         {
@@ -403,7 +418,7 @@ namespace Cliver.Foreclosures
             if (filter_regex == null)
                 return;
 
-            List<int> searched_columns = new List<int>();
+            HashSet<int> searched_columns = new HashSet<int>();
             for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
                 if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
                     searched_columns.Add(i);
