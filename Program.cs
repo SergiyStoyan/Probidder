@@ -27,16 +27,7 @@ using Microsoft.Win32;
  - validation (control red border) for numbers
  - masks
      
-
-    >Also we need the input mask for all date fields.
-
-    Do you mean dysplay a watermark like 'MMddyy' that will dispapper as the user types or it should be '_____' that shows empty chars to be filled?
-
-    >There should be warnings for entering dates in the future. 
-
-    Now it validates fields just before saving and dispays a notification. All incorrect fields are surrounded with red border. 
-    It can be done so that a notification is displayed right after a wrong value is put for every field (like in ia Access). Let me know what you prefer.
-    
+   
 
      */
 

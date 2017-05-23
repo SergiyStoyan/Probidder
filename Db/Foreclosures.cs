@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 using System.IO;
-//using MongoDB.Bson;
-//using MongoDB.Driver;
 using LiteDB;
+using System.Text.RegularExpressions;
 
 namespace Cliver.Foreclosures
 {
@@ -18,7 +17,7 @@ namespace Cliver.Foreclosures
         {
         }
 
-        public class Foreclosure : Document
+        public class Foreclosure : Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
         {
             public string TYPE_OF_EN { get; set; }
             public string COUNTY { get; set; }
@@ -31,7 +30,7 @@ namespace Cliver.Foreclosures
             public string LENDOR { get; set; }
             public string ORIGINAL_MTG { get; set; }
             public string DOCUMENT_N { get; set; }
-            public string ORIGINAL_I { get; set; }
+            public int? ORIGINAL_I { get; set; }
             public string LEGAL_D { get; set; }
             public string ADDRESS { get; set; }
             public string CITY { get; set; }
@@ -58,6 +57,207 @@ namespace Cliver.Foreclosures
             public int TERM_OF_MTG { get; set; }
             public string DEF_ADDRESS { get; set; }
             public string DEF_PHONE { get; set; }
+
+
+
+
+
+            #region Validation
+
+            //public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+            //protected void OnPropertyChanged(string propertyName)
+            //{
+            //    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            //}
+
+            [BsonIgnore]
+            public string Error
+            {
+                get { return "...."; }
+            }
+
+            [BsonIgnore]
+            public string this[string columnName]
+            {
+                get
+                {
+                    return validate(columnName);
+                }
+            }
+
+            [BsonIgnore]
+            private string validate(string propertyName)
+            {
+                switch (propertyName)
+                {
+                    case "TYPE_OF_EN":
+                        if (TYPE_OF_EN == null)
+                            return null;
+                        if (TYPE_OF_EN.Length < 1)
+                            return "Error";
+                        return null;
+                    case "COUNTY":
+                        if (COUNTY == null)
+                            return null;
+                        if (COUNTY.Length < 1)
+                            return "Error";
+                        return null;
+                    case "CASE_N":
+                        if (CASE_N == null)
+                            return null;
+                        if (CASE_N.Length < 1)
+                            return "Error";
+                        return null;
+                    case "FILING_DATE":
+                        if (FILING_DATE == null)
+                            return "Error";
+                        return null;
+                    case "AUCTION_DATE":
+                        return null;
+                    case "AUCTION_TIME":
+                        return null;
+                    case "ENTRY_DATE":
+                        if (ENTRY_DATE == null)
+                            return "Error";
+                        return null;
+                    case "LENDOR":
+                        if (LENDOR == null)
+                            return null;
+                        if (LENDOR.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ORIGINAL_MTG":
+                        return null;
+                    case "DOCUMENT_N":
+                        return null;
+                    case "ORIGINAL_I":
+                        return null;
+                    case "LEGAL_D":
+                        if (LEGAL_D == null)
+                            return null;
+                        if (LEGAL_D.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ADDRESS":
+                        if (ADDRESS == null)
+                            return null;
+                        if (ADDRESS.Length < 1)
+                            return "Error";
+                        return null;
+                    case "CITY":
+                        if (CITY == null)
+                            return null;
+                        if (CITY.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ZIP":
+                        if (ZIP == null)
+                            return null;
+                        if (Regex.IsMatch(ZIP, @"[^\d]") || ZIP.Length >= 5)
+                            return "Error";
+                        return null;
+                    case "PIN":
+                        if (PIN == null)
+                            return null;
+                        if (Regex.IsMatch(PIN, "_"))
+                            return "Error";
+                        return null;
+                    case "DATE_OF_CA":
+                        return null;
+                    case "LAST_PAY_DATE":
+                        return null;
+                    case "BALANCE_DU":
+                        return null;
+                    case "PER_DIEM_I":
+                        return null;
+                    case "CURRENT_OW":
+                        if (CURRENT_OW == null)
+                            return null;
+                        if (CURRENT_OW.Length < 1)
+                            return "Error";
+                        return null;
+                    case "IS_ORG":
+                        return null;
+                    case "DECEASED":
+                        return null;
+                    case "OWNER_ROLE":
+                        if (OWNER_ROLE == null)
+                            return null;
+                        if (OWNER_ROLE.Length < 1)
+                            return "Error";
+                        return null;
+                    case "OTHER_LIENS":
+                        if (OTHER_LIENS == null)
+                            return null;
+                        if (OTHER_LIENS.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ADDL_DEF":
+                        if (ADDL_DEF == null)
+                            return null;
+                        if (ADDL_DEF.Length < 1)
+                            return "Error";
+                        return null;
+                    case "PUB_COMMENTS":
+                        if (PUB_COMMENTS == null)
+                            return null;
+                        if (PUB_COMMENTS.Length < 1)
+                            return "Error";
+                        return null;
+                    case "INT_COMMENTS":
+                        if (INT_COMMENTS == null)
+                            return null;
+                        if (INT_COMMENTS.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ATTY":
+                        if (ATTY == null)
+                            return null;
+                        if (ATTY.Length < 1)
+                            return "Error";
+                        return null;
+                    case "ATTORNEY_S":
+                        if (ATTORNEY_S == null)
+                            return null;
+                        if (Regex.IsMatch(ATTORNEY_S, "_"))
+                            return "Error";
+                        return null;
+                    case "TYPE_OF_MO":
+                        if (TYPE_OF_MO == null)
+                            return null;
+                        if (TYPE_OF_MO.Length < 1)
+                            return "Error";
+                        return null;
+                    case "PROP_DESC":
+                        if (PROP_DESC == null)
+                            return null;
+                        if (PROP_DESC.Length < 1)
+                            return "Error";
+                        return null;
+                    case "INTEREST_R":
+                        return null;
+                    case "MONTHLY_PAY":
+                        return null;
+                    case "TERM_OF_MTG":
+                        return null;
+                    case "DEF_ADDRESS":
+                        if (DEF_ADDRESS == null)
+                            return null;
+                        if (DEF_ADDRESS.Length < 1)
+                            return "Error";
+                        return null;
+                    case "DEF_PHONE":
+                        if (DEF_PHONE == null)
+                            return null;
+                        if (Regex.IsMatch(DEF_PHONE, "_"))
+                            return "Error";
+                        return null;
+                    default:
+                        throw new Exception("Field " + propertyName + " is absent in validation.");
+                }
+            }
+            #endregion
         }
     }
 }

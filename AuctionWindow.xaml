@@ -20,7 +20,7 @@
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
-        </Style>
+        </Style> 
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
         </Style>
@@ -65,21 +65,21 @@
                         <RowDefinition Height="auto"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Listing Code</Label>
-                    <TextBox Grid.Column="1" Grid.Row="0" Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay}"></TextBox>
+                    <TextBox Grid.Column="1" Grid.Row="0" Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                     <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">County</Label>
-                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay}" KeyboardNavigation.TabNavigation="None"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"></TextBox>
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Case #</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="1" Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay}" IsEditable="True"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, ValidatesOnDataErrors=True}" IsEditable="True"></ComboBox>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
                     <DatePicker  Grid.Column="3" Grid.Row="1" Name="FILING_DATE" 
-                                 SelectedDate="{Binding FILING_DATE, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
+                                 SelectedDate="{Binding FILING_DATE, Mode=TwoWay, ValidatesOnDataErrors=True}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
                                 <Setter Property="Control.Template">
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox TextChanged="FILING_DATE_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
+                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -88,14 +88,14 @@
                         </DatePicker.Resources>
                     </DatePicker>
                     <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Entry Date</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="2" Name="ENTRY_DATE" VerticalAlignment="Top" SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay}">
+                    <DatePicker Grid.Column="1" Grid.Row="2" Name="ENTRY_DATE" VerticalAlignment="Top" SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
                                 <Setter Property="Control.Template">
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox TextChanged="ENTRY_DATE_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
+                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -104,7 +104,7 @@
                         </DatePicker.Resources>
                     </DatePicker>
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">Plaintiff Code</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  Text="{Binding LENDOR, Mode=TwoWay}"
+                    <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  Text="{Binding LENDOR, Mode=TwoWay, ValidatesOnDataErrors=True}"
                               VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
                     <DatePicker Grid.Column="1" Grid.Row="4"  Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
@@ -114,7 +114,7 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox TextChanged="ORIGINAL_MTG_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
+                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -124,34 +124,34 @@
                     </DatePicker>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right">
                         <Label >Doc_#</Label>
-                        <TextBox  MinWidth="50" Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                        <TextBox  MinWidth="50" Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="4"  HorizontalAlignment="Right">
                             <Label HorizontalAlignment="Right">Or Loan $</Label>
-                        <TextBox MinWidth="50" Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                        <TextBox MinWidth="50" Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     </StackPanel>
                     <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right">Legal Descr</Label>
-                    <TextBox Grid.Column="1" Grid.Row="5" Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" ></TextBox>
+                    <TextBox Grid.Column="1" Grid.Row="5" Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap" ></TextBox>
                     <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right">Address</Label>
-                    <TextBox Grid.Column="1" Grid.Row="6" Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="1" Grid.Row="6" Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right">City</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="7" IsEditable="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged" Text="{Binding CITY, Mode=TwoWay}"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="7" IsEditable="True" Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged" Text="{Binding CITY, Mode=TwoWay, ValidatesOnDataErrors=True}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right">ZIP</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" IsEditable="True" Height="24" VerticalAlignment="Top" Text="{Binding ZIP, Mode=TwoWay}" PreviewTextInput="ZIP_TextInput"></ComboBox>
+                    <ComboBox Grid.Column="1" Grid.Row="8" Name="ZIP" IsEditable="True" VerticalAlignment="Top" Text="{Binding ZIP, Mode=TwoWay, ValidatesOnDataErrors=True}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">PIN</Label>
-                    <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" Name="PIN" 
-                                        Text="{Binding PIN, Mode=TwoWay}" 
+                    <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" Name="PIN" VerticalAlignment="Top" 
+                                        Text="{Binding PIN, Mode=TwoWay, ValidatesOnDataErrors=True}" 
                                         Mask="&amp;&amp;-&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;&amp;">
                     </xctk:MaskedTextBox>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"  SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay}">
+                    <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"  SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, ValidatesOnDataErrors=True}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
                                 <Setter Property="Control.Template">
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox TextChanged="DATE_OF_CA_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
+                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -160,7 +160,7 @@
                         </DatePicker.Resources>
                     </DatePicker>
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right">Last Pay Date</Label>
-                    <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE" SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay}"
+                    <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE" SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True}"
                                  >
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
@@ -168,7 +168,7 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox TextChanged="LAST_PAY_DATE_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay,  
+                                                Text="{Binding Path=SelectedDate, StringFormat='MMddyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -177,46 +177,48 @@
                         </DatePicker.Resources>
                     </DatePicker>
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
-                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
+                    <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
                     </TextBox>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right">Inter Per Diem</Label>
-                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
+                    <TextBox Grid.Column="3" Grid.Row="11" Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
                     </TextBox>
 
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
-                    <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, ValidatesOnDataErrors=True}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="0,0,5,0">IS ORG</CheckBox>
-                        <CheckBox Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">Deceased</CheckBox>
+                        <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, ValidatesOnDataErrors=True}" Margin="0,0,5,0">IS ORG</CheckBox>
+                        <CheckBox Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, ValidatesOnDataErrors=True}">Deceased</CheckBox>
                         <Label VerticalAlignment="Center" >Owner Role</Label>
-                        <ComboBox Name="OWNER_ROLE" MinWidth="30" Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" IsEditable="True" Width="90"></ComboBox>
+                        <ComboBox Name="OWNER_ROLE" MinWidth="30" Text="{Binding OWNER_ROLE, Mode=TwoWay, ValidatesOnDataErrors=True}" IsReadOnly="True" IsEditable="True" Width="90"></ComboBox>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>
-                    <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="3" HorizontalAlignment="Right">Addl Deff</Label>
-                    <TextBox Grid.Column="5" Grid.Row="3"  Grid.ColumnSpan="3" Name="ADDL_DEF" Text="{Binding ADDL_DEF, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="3"  Grid.ColumnSpan="3" Name="ADDL_DEF" Text="{Binding ADDL_DEF, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="4" HorizontalAlignment="Right">Client Comment</Label>
-                    <TextBox Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="3"  Name="PUB_COMMENTS" Text="{Binding PUB_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="3"  Name="PUB_COMMENTS" Text="{Binding PUB_COMMENTS, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="5" HorizontalAlignment="Right">ilFLS Comments</Label>
-                    <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  Name="INT_COMMENTS" Text="{Binding INT_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  Name="INT_COMMENTS" Text="{Binding INT_COMMENTS, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right">Attorney Code</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" Name="ATTY" SelectionChanged="ATTY_SelectionChanged" Text="{Binding ATTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" Name="ATTY" SelectionChanged="ATTY_SelectionChanged" Text="{Binding ATTY, Mode=TwoWay, ValidatesOnDataErrors=True}"></ComboBox>
                     <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right">Attorney Phone</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="3" IsEditable="True" Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="1" IsEditable="True" 
+                              PreviewTextInput="ATTORNEY_S_TextInput"
+                              Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat={}{0:(###)###-####}}"/>
                     <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right">MTG Codes</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="8" IsEditable="True" Name="TYPE_OF_MO" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="8" IsEditable="True" Name="TYPE_OF_MO" Text="{Binding TYPE_OF_MO, Mode=TwoWay, ValidatesOnDataErrors=True}"></ComboBox>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right">Property Type</Label>
-                    <ComboBox Grid.Column="5" Grid.Row="9" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" IsEditable="True"></ComboBox>
+                    <ComboBox Grid.Column="5" Grid.Row="9" Name="PROP_DESC" MinWidth="30" Text="{Binding PROP_DESC, Mode=TwoWay, ValidatesOnDataErrors=True}" IsReadOnly="False" IsEditable="True"></ComboBox>
                     <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right">Interest</Label>
-                    <TextBox Grid.Column="7" Grid.Row="8" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="8" Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right">Monthly Payments</Label>
-                    <TextBox Grid.Column="7" Grid.Row="9" Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="9" Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#.##'}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right">MTG Term</Label>
-                    <TextBox Grid.Column="7" Grid.Row="10" Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='#,#'}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="7" Grid.Row="10" Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#'}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right">Deff. Served Address</Label>
-                    <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <Label Grid.Column="4" Grid.Row="12" HorizontalAlignment="Right">Deff. Phone</Label>
-                    <TextBox Grid.Column="5" Grid.Row="12" Name="DEF_PHONE" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                    <xctk:MaskedTextBox Grid.Column="5" Grid.Row="12" Name="DEF_PHONE" VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding DEF_PHONE, Mode=TwoWay, ValidatesOnDataErrors=True}" Mask="(000)-000-0000" TextWrapping="Wrap"></xctk:MaskedTextBox>
                 </Grid>
             </ScrollViewer>
             <UniformGrid HorizontalAlignment="Right" Rows="1" Margin="0,10,10,10">

@@ -170,7 +170,7 @@ namespace Cliver.Foreclosures
             ATTORNEY_S.Items.Clear();
             //foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
             //ATTORNEY_S.Items.Add(c);
-            foreach (Db.AttorneyPhone c in (new Db.AttorneyPhones()).GetBy((string)ATTY.SelectedItem, Settings.Location.County))
+            foreach (Db.AttorneyPhone c in (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem))
                 ATTORNEY_S.Items.Add(c.attorney_phone);
 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
@@ -272,18 +272,9 @@ namespace Cliver.Foreclosures
             set_DatePicker(ORIGINAL_MTG, ((TextBox)sender).Text);
         }
 
-        private void ZIP_TextInput(object sender, TextCompositionEventArgs e)
-        {
-            //if (Regex.IsMatch(e.Text, @"[^\d]") || ((ComboBox)sender).Text?.Length >= 5)
-            //{
-            //    Console.Beep(5000, 200);
-            //    e.Handled = true;
-            //}
-        }
-
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (Regex.IsMatch(e.Text, @"[^\d]\,"))
+            if (Regex.IsMatch(e.Text, @"[^\d\,]"))
             {
                 Console.Beep(5000, 200);
                 e.Handled = true;
@@ -312,6 +303,16 @@ namespace Cliver.Foreclosures
             //    e.Handled = true;
             //    Keyboard.Focus(dp);
             //}
+        }
+
+        private void ATTORNEY_S_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            
+        }
+
+        private void ATTORNEY_S_TextChanged(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 
