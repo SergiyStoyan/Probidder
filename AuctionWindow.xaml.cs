@@ -314,6 +314,21 @@ namespace Cliver.Foreclosures
         {
            
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            TextBox tb = cb.GetVisualChild<TextBox>();
+            tb.Select(0, tb.Text.Length);
+            tb.ScrollToHome();
+            if (e != null)
+                e.Handled = true;
+        }
+
+        private void ComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            ComboBox_SelectionChanged(sender, null);
+        }
     }
 
     public class TextInputToVisibilityConverter : IMultiValueConverter

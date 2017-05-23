@@ -71,7 +71,6 @@ namespace Cliver.Foreclosures
 
                 Service.Running = true;
                 //Db.BeginRefresh();
-
                 ListWindow.OpenDialog();
 
                 //Application.Run(SysTray.This);
