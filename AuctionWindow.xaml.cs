@@ -38,10 +38,10 @@ namespace Cliver.Foreclosures
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             //System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture(System.Globalization.CultureInfo.CurrentCulture.Name);
-            //ci.DateTimeFormat.ShortDatePattern = "MMddyy";
-            //ci.DateTimeFormat.LongDatePattern = "MMddyy";
+            //ci.DateTimeFormat.ShortDatePattern = "MM/dd/yyyy";
+            //ci.DateTimeFormat.LongDatePattern = "MM/dd/yyyy";
             //Thread.CurrentThread.CurrentCulture = ci;
-            
+
             if (foreclosure_id != null)
             {
                 fields.IsEnabled = false;
@@ -142,7 +142,7 @@ namespace Cliver.Foreclosures
                 if (!this.IsValid())
                     throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
 
-                    Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+                Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
                 foreclosures.Save(f);
 
                 fields.DataContext = new Db.Foreclosure();
@@ -150,7 +150,7 @@ namespace Cliver.Foreclosures
                 Delete.IsEnabled = false;
                 //Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Message.Error2(ex);
             }
@@ -182,7 +182,7 @@ namespace Cliver.Foreclosures
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //Keyboard.Focus(TYPE_OF_EN);
-                        
+
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
@@ -220,6 +220,13 @@ namespace Cliver.Foreclosures
 
         private DateTime? calendar_input(string text)
         {
+            try
+            {
+                return DateTime.ParseExact(text, "MMddyy", null);
+            }
+            catch
+            {
+            }
             if (text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
                 return null;
             Match m = Regex.Match(text, @"(\d{2})(\d{2})(\d{2})");
@@ -240,36 +247,20 @@ namespace Cliver.Foreclosures
             }
         }
 
-        void set_DatePicker(DatePicker dp, string date)
+        private void DatePicker_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var h = calendar_input(date);
-            if (h != null)
-                dp.SelectedDate = h;
-        }
-
-        private void ENTRY_DATE_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            set_DatePicker(ENTRY_DATE, ((TextBox)sender).Text);
-        }
-
-        private void DATE_OF_CA_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            set_DatePicker(DATE_OF_CA, ((TextBox)sender).Text);
-        }
-
-        private void FILING_DATE_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            set_DatePicker(FILING_DATE, ((TextBox)sender).Text);
-        }
-
-        private void LAST_PAY_DATE_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            set_DatePicker(LAST_PAY_DATE, ((TextBox)sender).Text);
-        }
-
-        private void ORIGINAL_MTG_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            set_DatePicker(ORIGINAL_MTG, ((TextBox)sender).Text);
+            DateTime? td = calendar_input(((TextBox)sender).Text);
+            if (td == null)
+                return;
+            DatePicker dp = ((DependencyObject)sender).FindParentOfType<DatePicker>();
+            DateTime? vd = dp.SelectedDate;
+            if (vd != null && ((DateTime)td).Date == ((DateTime)vd).Date
+                && ((TextBox)sender).Text.Length < 10
+                && dp.IsValid()
+                    )
+                return;
+            dp.SelectedDate = ((DateTime)td).Date;
+            ((TextBox)sender).Text = Regex.Replace(dp.SelectedDate.ToString(), " .*", "");
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -307,12 +298,12 @@ namespace Cliver.Foreclosures
 
         private void ATTORNEY_S_TextInput(object sender, TextCompositionEventArgs e)
         {
-            
+
         }
 
         private void ATTORNEY_S_TextChanged(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -331,49 +322,41 @@ namespace Cliver.Foreclosures
         }
     }
 
-    public class TextInputToVisibilityConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            // Always test MultiValueConverter inputs for non-null
-            // (to avoid crash bugs for views in the designer)
-            if (values[0] is bool && values[1] is bool)
-            {
-                bool hasText = !(bool)values[0];
-                bool hasFocus = (bool)values[1];
-
-                if (hasFocus || hasText)
-                    return Visibility.Collapsed;
-            }
-
-            return Visibility.Visible;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     //public class MyCustomDateConverter : IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     //    {
-    //        if (value == null)
+    //        if (keep_last_text)
+    //            return last_text;
+    //        last_value = (DateTime)value;
+    //        if (last_value == null)
     //            return null;
-    //        return ((DateTime)value).ToString("MMddyy", culture);
+    //        return Regex.Replace(((DateTime)last_value).ToString(culture), " .*", "");
     //    }
+    //    DateTime? last_value = null;
 
     //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     //    {
-    //        //try
-    //        //{
-    //            return DateTime.ParseExact((string)value, "MMddyy", culture);
-    //        //}
-    //        //catch
-    //        //{
-    //        //    return null;
-    //        //}
+    //        last_text = (string)value;
+    //        keep_last_text = false;
+    //        try
+    //        {
+    //            return DateTime.Parse((string)value, culture);
+    //        }
+    //        catch
+    //        {
+    //            try
+    //            {
+    //                return DateTime.ParseExact((string)value, "MMddyy", culture);
+    //            }
+    //            catch
+    //            {
+    //                keep_last_text = true;
+    //                return last_value;
+    //            }
+    //        }
     //    }
+    //    string last_text = null;
+    //    bool keep_last_text = false;
     //}
 }

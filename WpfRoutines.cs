@@ -61,8 +61,16 @@ namespace Cliver
             return valid;
         }
 
+        public static T FindParentOfType<T>(this DependencyObject ob)
+            where T : DependencyObject
+        {
+            for (DependencyObject po = ob; ; po = VisualTreeHelper.GetParent(po))
+                if (po is T)
+                    return (T)po;
+        }
+
         public static IEnumerable<T> FindChildrenOfType<T>(this DependencyObject ob)
-            where T : class
+            where T : DependencyObject
         {
             foreach (var child in ob.GetChildren())
             {
