@@ -18,6 +18,7 @@ using System.IO;
 using System.Management;
 using System.Threading;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
@@ -43,7 +44,40 @@ namespace Cliver.Foreclosures
             Closed += delegate
             {
             };
+
+            items = new ObservableCollection<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
+            //items = new List<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
+            list.ItemsSource = items;
         }
+
+        private ObservableCollection<Item> items;
+        //private List<Item> items;
+
+        class Item:System.ComponentModel.IEditableObject
+        {
+            public string Key { set; get; }
+            public string Phrase { set; get; }
+            
+
+            public void BeginEdit()
+            {
+                original = this.MemberwiseClone() as Item;
+            }
+            private Item original;
+
+            public void CancelEdit()
+            {
+                if (original == null)
+                    return;
+                this.Key = original.Key;
+                this.Phrase = original.Phrase;
+            }
+
+            public void EndEdit()
+            {
+                original = null;
+            }
+        } 
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
@@ -53,8 +87,10 @@ namespace Cliver.Foreclosures
         private void ok_Click(object sender, RoutedEventArgs e)
         {
             try
-            {             
-                
+            {
+                Settings.AutoComplete.Keys2Phrase = items.ToDictionary(x => x.Key, x => x.Phrase);
+                Settings.AutoComplete.Save();
+
                 Config.Reload();
 
                 Close();
@@ -67,21 +103,39 @@ namespace Cliver.Foreclosures
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-
+            object dc = ((Button)e.Source).DataContext;            
+            Item i = dc as Item;
+            if (i == null)
+                return;
+            items.Remove(i);
         }
 
-        private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-
-        }
-
-        private void list_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+            if (e.EditAction != DataGridEditAction.Commit)
+                return;
+                Item i = e.Row.Item as Item;
+            if (i == null)
+                return;
+            if(string.IsNullOrEmpty(i.Key)||string.IsNullOrEmpty(i.Phrase))
+            {
+                Message.Exclaim("The fields cannot be empty!");
+                i.CancelEdit();
+                //list.CancelEdit();
+                list.ItemsSource = null;
+                list.ItemsSource = items;
+                e.Cancel = true;
+            }
+            if (items.Where(x => x.Key == i.Key).Count() > 1)
+            {
+                Message.Exclaim("This key exists already!");
+                i.CancelEdit();
+                //list.CancelEdit();
+                list.ItemsSource = null;
+                list.ItemsSource = items;
+                e.Cancel = true;
+            }
+            i.EndEdit();
         }
     }
 }

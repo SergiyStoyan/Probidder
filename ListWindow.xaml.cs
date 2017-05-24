@@ -284,6 +284,11 @@ namespace Cliver.Foreclosures
             DatabaseWindow.OpenDialog();
         }
 
+        private void auto_complete_Click(object sender, RoutedEventArgs e)
+        {
+            AutoCompleteWindow.OpenDialog();
+        }
+        
         private void location_Click(object sender, RoutedEventArgs e)
         {
             LocationWindow.OpenDialog();

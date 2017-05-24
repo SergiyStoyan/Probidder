@@ -13,32 +13,7 @@
          AllowDrop="True"
             >
     <Window.Resources>
-        <DataTemplate x:Key="ArrowLess">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-            </DockPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ArrowUp">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-                <Path VerticalAlignment="Center"
-                      Fill="Black"
-                      Data="M 5,5 15,5 10,0 5,5" />
-            </DockPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ArrowDown">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-                <Path VerticalAlignment="Center"
-                      Fill="Black"
-                      Data="M 5,0 10,5 15,0 5,0" />
-            </DockPanel>
-        </DataTemplate>
         <Style x:Key="AlternateItemStyle" TargetType="{x:Type ListViewItem}">
-            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="list_PreviewMouseLeftButtonDown" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                     <Setter Property="Background" Value="#eeeeff"></Setter>
@@ -54,28 +29,29 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
             <GroupBox Grid.Row="0" Header="AutoComplete"  Padding="10">
-                <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" 
-                              VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click"                              
-                  AlternationCount="2"
-                  ItemContainerStyle="{StaticResource AlternateItemStyle}"                              >
-                    <ListView.View>
-                        <GridView>
-                            <GridView.Columns>
-                                <GridViewColumn Header="Key"  Width="Auto" DisplayMemberBinding="{Binding Path=Key}" />
-                                <GridViewColumn Header="Substitution" Width="Auto" DisplayMemberBinding="{Binding Path=Substitution}" />
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Name="delete" Content="X" Margin="0" VerticalAlignment="Center" Click="delete_Click" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <StackPanel>
+                    <DataGrid Name="list" ItemsSource="{Binding}"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
+     CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" 
+                                       IsReadOnly="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="delete_Click">X</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Key" MinWidth="50"
+                                       Binding="{Binding Key,UpdateSourceTrigger=LostFocus}" 
+                                       IsReadOnly="False"/>
+                            <DataGridTextColumn Header="Phrase" MinWidth="50"
+                                       Binding="{Binding Phrase,UpdateSourceTrigger=LostFocus}" 
+                                       IsReadOnly="False"/>
+                    </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
             </GroupBox>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">
