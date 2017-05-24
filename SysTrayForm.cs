@@ -91,7 +91,7 @@ namespace Cliver.Foreclosures
 
         private void newAuctionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AuctionWindow.OpenNew();
+            ForeclosureWindow.OpenNew();
         }
 
         private void refreshDatabaseToolStripMenuItem_Click(object sender, EventArgs e)

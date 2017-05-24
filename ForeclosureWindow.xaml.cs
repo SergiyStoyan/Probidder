@@ -21,17 +21,24 @@ using System.Threading;
 
 namespace Cliver.Foreclosures
 {
-    public partial class AuctionWindow : Window
+    public partial class ForeclosureWindow : Window
     {
-        public static AuctionWindow OpenNew(int? foreclosure_id = null)
+        public static ForeclosureWindow OpenNew(int? foreclosure_id = null)
         {
-            AuctionWindow w = new AuctionWindow(foreclosure_id);
+            ForeclosureWindow w = new ForeclosureWindow(foreclosure_id);
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.Show();
             return w;
         }
 
-        AuctionWindow(int? foreclosure_id = null)
+        public static void OpenDialog(int? foreclosure_id = null)
+        {
+            ForeclosureWindow w = new ForeclosureWindow(foreclosure_id);
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
+            w.ShowDialog();
+        }
+
+        ForeclosureWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
 
@@ -51,10 +58,6 @@ namespace Cliver.Foreclosures
             }
 
             COUNTY.Text = Settings.Location.County;
-
-            CASE_N.Items.Clear();
-            foreach (string c in (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns)
-                CASE_N.Items.Add(c);
 
             CITY.Items.Clear();
             foreach (Db.City c in (new Db.Cities()).GetBy(Settings.Location.County))
@@ -226,12 +229,17 @@ namespace Cliver.Foreclosures
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //Keyboard.Focus(TYPE_OF_EN);
+            
+            CASE_N.Items.Clear();
+            foreach (string c in (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns)
+                CASE_N.Items.Add(c);
 
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
             if (f.Id == 0)
             {
                 f.TYPE_OF_EN = "CHA";
-                //f.CASE_N = 
+                if (CASE_N.Items.Count > 0)
+                    f.CASE_N = (string)CASE_N.Items[0];
                 f.OWNER_ROLE = "OWNER";
                 f.TYPE_OF_MO = "CNV";
                 f.PROP_DESC = "SINGLE FAMILY";
@@ -351,9 +359,11 @@ namespace Cliver.Foreclosures
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        {//make text left alignment
             ComboBox cb = (ComboBox)sender;
             TextBox tb = cb.GetVisualChild<TextBox>();
+            if (tb == null)//can be so due to asynchronous building
+                return;
             tb.Select(0, tb.Text.Length);
             tb.ScrollToHome();
             if (e != null)

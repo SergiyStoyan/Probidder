@@ -183,10 +183,9 @@
     <Compile Include="SysTrayForm.designer.cs">
       <DependentUpon>SysTrayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AuctionWindow.xaml.cs">
-      <DependentUpon>AuctionWindow.xaml</DependentUpon>
+    <Compile Include="ForeclosureWindow.xaml.cs">
+      <DependentUpon>ForeclosureWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WpfRoutines.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -261,7 +260,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="AuctionWindow.xaml">
+    <Page Include="ForeclosureWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

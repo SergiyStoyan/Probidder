@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.IO;
 using LiteDB;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
@@ -15,6 +16,22 @@ namespace Cliver.Foreclosures
     {
         public class Foreclosures : Db.LiteDb.Table<Foreclosure>
         {
+            public override void Save(Foreclosure document)
+            {
+                foreach (PropertyInfo pi in typeof(Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
+                {
+                    if (pi.CustomAttributes.Count() > 0)//engine fields
+                        continue;
+                    if (pi.PropertyType == typeof(string))
+                    {
+                        string v = (string)pi.GetValue(document);
+                        if (string.IsNullOrEmpty(v))
+                            continue;
+                        pi.SetValue(document, v.Trim());
+                    }
+                }
+                base.Save(document);
+            }
         }
 
         public class Foreclosure : Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
@@ -75,6 +92,7 @@ namespace Cliver.Foreclosures
             public string Error
             {
                 get { return "...."; }
+                set { }
             }
 
             [BsonIgnore]
@@ -154,7 +172,7 @@ namespace Cliver.Foreclosures
                     case "ZIP":
                         if (ZIP == null)
                             return null;
-                        if (Regex.IsMatch(ZIP, @"[^\d]") || ZIP.Length >= 5)
+                        if (Regex.IsMatch(ZIP, @"[^\d]") || ZIP.Length > 5 || ZIP.Length < 4)
                             return "Error";
                         return null;
                     case "PIN":

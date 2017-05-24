@@ -21,14 +21,14 @@
             <GroupBox Grid.Row="0" Header="Columns" Padding="10">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
                     <StackPanel>
-                        <DataGrid Name="list" AutoGenerateColumns="False"
+                        <DataGrid Name="list" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="Show" 
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged}" />
+                                            <CheckBox IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -36,7 +36,7 @@
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Search, UpdateSourceTrigger=PropertyChanged}" />
+                                            <CheckBox IsChecked="{Binding Path=Search, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

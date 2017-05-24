@@ -147,7 +147,8 @@ namespace Cliver.Foreclosures
         {
             if (SetTriggerKey.IsChecked == true)
             {
-                TriggerKey.Content = "Press keys...\r\n";
+                TriggerKey.Text = "Press keys...";
+                TriggerModifierKey.Text = "Press keys...";
             }
         }
 
@@ -174,7 +175,8 @@ namespace Cliver.Foreclosures
 
         void show_TriggerKey()
         {
-            TriggerKey.Content = "Trigger key: " + triggerKey + "\r\nTrigger modifier key: " + triggerModifierKey;
+            TriggerKey.Text = triggerKey.ToString();
+            TriggerModifierKey.Text = triggerModifierKey.ToString();
         }
         Key triggerKey = Settings.AutoComplete.TriggerKey;
         ModifierKeys triggerModifierKey = Settings.AutoComplete.TriggerModifierKey;

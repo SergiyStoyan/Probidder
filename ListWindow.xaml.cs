@@ -164,7 +164,7 @@ namespace Cliver.Foreclosures
             string file;
             using (var d = new System.Windows.Forms.FolderBrowserDialog())
             {
-                d.Description = "Choose a folder where to save the exported file.";
+                d.Description = "Choose the folder where to save the exported file.";
                 if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                     return;
                 file = d.SelectedPath + "\\foreclosure_" + DateTime.Now.ToString("yy-MM-dd_HH-mm-ss") + ".csv";
@@ -192,41 +192,45 @@ namespace Cliver.Foreclosures
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            AuctionWindow.OpenNew();
+            ForeclosureWindow.OpenDialog();
         }
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (Db.Foreclosure d in e.AddedItems)
-                show_AuctionWindow(d);
+            //foreach (Db.Foreclosure d in e.AddedItems)
+            //    show_AuctionWindow(d);
+            if (list.SelectedItem == null)
+                return;
+            show_AuctionWindow((Db.Foreclosure)list.SelectedItem);
         }
 
         void show_AuctionWindow(Db.Foreclosure d)
         {
-            AuctionWindow aw;
-            if (!foreclosures2AuctionWindow.TryGetValue(d, out aw)
-                || (aw == null || !aw.IsLoaded)
-                )
-            {
-                aw = AuctionWindow.OpenNew(d.Id);
-                foreclosures2AuctionWindow[d] = aw;
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
-                aw.Closed += delegate
-                  {
-                      Db.Foreclosure f = aw.fields.DataContext as Db.Foreclosure;
-                      if (f == null)
-                          return;
-                      foreclosures2AuctionWindow.Remove(f);
-                  };
-                aw.Show();
-            }
-            else
-            {
-                aw.BringIntoView();
-                aw.Activate();
-            }
+            //ForeclosureWindow aw;
+            //if (!foreclosures2AuctionWindow.TryGetValue(d, out aw)
+            //    || (aw == null || !aw.IsLoaded)
+            //    )
+            //{
+            //    aw = ForeclosureWindow.OpenDialog(d.Id);
+            //    foreclosures2AuctionWindow[d] = aw;
+            //    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
+            //    aw.Closed += delegate
+            //      {
+            //          Db.Foreclosure f = aw.fields.DataContext as Db.Foreclosure;
+            //          if (f == null)
+            //              return;
+            //          foreclosures2AuctionWindow.Remove(f);
+            //      };
+            //    aw.Show();
+            //}
+            //else
+            //{
+            //    aw.BringIntoView();
+            //    aw.Activate();
+            //}
+            ForeclosureWindow.OpenDialog(d.Id);            
         }
-        Dictionary<Db.Foreclosure, AuctionWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, AuctionWindow>();
+        //Dictionary<Db.Foreclosure, ForeclosureWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, ForeclosureWindow>();
 
         private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

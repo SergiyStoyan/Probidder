@@ -32,14 +32,15 @@
         <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <GroupBox Header="Trigger" Padding="10">
-
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton Name="SetTriggerKey" Click="SetTriggerKey_Click">Set Key Now</ToggleButton>
-                        <Label Name="TriggerKey"></Label>
+                        <Label>Key:</Label>
+                        <TextBox  Name="TriggerKey" IsReadOnly="True" MinWidth="100"></TextBox>
+                        <Label>Modifier:</Label>
+                        <TextBox  Name="TriggerModifierKey" IsReadOnly="True" MinWidth="100"></TextBox>
                     </StackPanel>
                 </GroupBox>
-            <GroupBox Header="AutoComplete"  Padding="10">
-                        
+            <GroupBox Header="AutoComplete"  Padding="10">                        
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
                         <DataGrid Name="list" ItemsSource="{Binding}"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
      CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
