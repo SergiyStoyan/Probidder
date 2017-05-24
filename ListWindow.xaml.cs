@@ -100,6 +100,11 @@ namespace Cliver.Foreclosures
               };
 
             Set();
+
+            ContentRendered+= delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
         }
 
         public void Set()

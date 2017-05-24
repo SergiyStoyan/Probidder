@@ -44,6 +44,11 @@ namespace Cliver.Foreclosures
             {
             };
 
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
             list.ItemsSource = typeof(Db.Foreclosure).GetProperties().Select(x => new Item
             {
                 Show = Settings.View.ShowedColumns.Contains(x.Name),

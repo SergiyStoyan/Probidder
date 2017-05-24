@@ -43,6 +43,11 @@ namespace Cliver.Foreclosures
             {
             };
 
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
             if (Settings.Database.RefreshPeriodInSecs > 0)
             {
                 RefreshPeriodInDays.Text = ((float)Settings.Database.RefreshPeriodInSecs / (24 * 60 * 60)).ToString();

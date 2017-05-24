@@ -43,6 +43,11 @@ namespace Cliver.Foreclosures
             {
             };
 
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
             County.Items.Clear();
             foreach (Db.County c in (new Db.Counties()).GetAll())
                 County.Items.Add(c.county);

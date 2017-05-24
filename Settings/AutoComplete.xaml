@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="AutoComplete Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="AutoComplete Settings" Height="auto" Width="auto" SizeToContent="Width"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
@@ -33,16 +33,15 @@
             <StackPanel>
                 <GroupBox Header="Trigger" Padding="10">
                     <StackPanel Orientation="Horizontal">
-                        <ToggleButton Name="SetTriggerKey" Click="SetTriggerKey_Click">Set Key Now</ToggleButton>
+                        <ToggleButton Name="SetTriggerKey" Click="SetTriggerKey_Click">Set Key</ToggleButton>
                         <Label>Key:</Label>
                         <TextBox  Name="TriggerKey" IsReadOnly="True" MinWidth="100"></TextBox>
                         <Label>Modifier:</Label>
                         <TextBox  Name="TriggerModifierKey" IsReadOnly="True" MinWidth="100"></TextBox>
                     </StackPanel>
                 </GroupBox>
-            <GroupBox Header="AutoComplete"  Padding="10">                        
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
-                        <DataGrid Name="list" ItemsSource="{Binding}"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
+                <GroupBox Header="AutoComplete"  Margin="0,10,0,0" >                        
+                        <DataGrid Name="list" ItemsSource="{Binding}"  Margin="10,10,10,10"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
      CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="" 
@@ -61,7 +60,6 @@
                                        IsReadOnly="False"/>
                             </DataGrid.Columns>
                         </DataGrid>                    
-                </ScrollViewer>
             </GroupBox>
             </StackPanel>
         </ScrollViewer>

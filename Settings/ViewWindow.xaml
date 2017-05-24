@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="View Settings" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="View Settings" Height="auto" Width="auto" SizeToContent="Width"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
@@ -19,8 +19,7 @@
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Margin="10,10,10,10">
             <GroupBox Grid.Row="0" Header="Columns" Padding="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
-                    <StackPanel>
+                    <StackPanel Margin="10,10,10,10">
                         <DataGrid Name="list" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
                             <DataGrid.Columns>
@@ -46,7 +45,6 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
-                </ScrollViewer>
                     </GroupBox>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">

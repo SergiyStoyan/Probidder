@@ -43,6 +43,16 @@ namespace Cliver.Foreclosures
             {
             };
 
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
             UserName.Text = Settings.Login.UserName;
             if (!string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
                 Password.Password = Settings.Login.Decrypt(Settings.Login.EncryptedPassword);

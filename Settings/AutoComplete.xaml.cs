@@ -45,6 +45,11 @@ namespace Cliver.Foreclosures
             {
             };
 
+            ContentRendered += delegate
+            {
+                WpfRoutines.TrimWindowSize(this);
+            };
+
             items = new ObservableCollection<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
             //items = new List<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
             list.ItemsSource = items;
@@ -158,7 +163,7 @@ namespace Cliver.Foreclosures
                 return;
             ThreadRoutines.StartTry(() =>
             {
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 SetTriggerKey.Dispatcher.Invoke(() =>
                 {
                     pressed = null;

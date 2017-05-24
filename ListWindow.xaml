@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Foreclosures" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="Foreclosures" Height="auto" Width="auto" SizeToContent="Width"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
