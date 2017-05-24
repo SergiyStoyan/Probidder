@@ -24,6 +24,7 @@
         </Style> 
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"></EventSetter>
         </Style>
         <Style TargetType="{x:Type DatePicker}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>

@@ -91,8 +91,52 @@ namespace Cliver.Foreclosures
             {
                 foreclosures.Dispose();
             };
+
+            //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
+
+        void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            //TextBox tb = sender as TextBox;
+            //if (e.Text != AutoComplete.TriggerKey)
+            //    return;
+            //tb.Text = AutoComplete.GetComplete(tb.Text);
+        }
+
+        //public void GotFocusHandler(DependencyObject element, RoutedEventHandler handler)
+        //{
+        //}
+
+        public void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (!AutoComplete.IsKeyTrigger(e.Key))
+                return;
+            IInputElement ii = Keyboard.FocusedElement;
+            if (ii == null)
+                return;
+            e.Handled = true;
+            TextBox tb = ii as TextBox;
+            if (tb != null)
+            {
+                tb.Text = AutoComplete.GetComplete(tb.Text, tb.CaretIndex);
+                return;
+            }
+            ComboBox cb = ii as ComboBox;
+            if (cb != null)
+            {
+                cb.Text = AutoComplete.GetComplete(cb.Text, cb.FindChildrenOfType<TextBox>().First().CaretIndex);
+                return;
+            }
+        }
+        //IInputElement last_InputElement = null;
+        //[DllImport("user32.dll")]
+        //static extern short VkKeyScan(char ch);
+        //static public Key ResolveKey(char charToResolve)
+        //{
+        //    return KeyInterop.KeyFromVirtualKey(VkKeyScan(charToResolve));
+        //}
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {

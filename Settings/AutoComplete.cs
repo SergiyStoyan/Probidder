@@ -19,6 +19,8 @@ namespace Cliver.Foreclosures
         public class AutoCompleteSettings : Cliver.Settings
         {
             public Dictionary<string, string> Keys2Phrase = null;
+            public System.Windows.Input.Key TriggerKey = System.Windows.Input.Key.D8;
+            public System.Windows.Input.ModifierKeys TriggerModifierKey = System.Windows.Input.ModifierKeys.Shift;
 
             public override void Loaded()
             {
@@ -56,6 +58,7 @@ namespace Cliver.Foreclosures
                     };
 
                 ListWindow.This?.Set();
+                Cliver.Foreclosures.AutoComplete.UpdateRegex(Keys2Phrase);
             }
 
             public override void Saving()
