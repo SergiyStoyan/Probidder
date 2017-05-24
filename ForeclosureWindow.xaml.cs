@@ -49,14 +49,6 @@ namespace Cliver.Foreclosures
             //ci.DateTimeFormat.LongDatePattern = "MM/dd/yyyy";
             //Thread.CurrentThread.CurrentCulture = ci;
 
-            if (foreclosure_id != null)
-            {
-                fields.IsEnabled = false;
-                Save.Visibility = Visibility.Collapsed;
-                Delete.Visibility = Visibility.Collapsed;
-                Edit.Visibility = Visibility.Visible;
-            }
-
             COUNTY.Text = Settings.Location.County;
 
             CITY.Items.Clear();
@@ -82,13 +74,11 @@ namespace Cliver.Foreclosures
             OWNER_ROLE.Items.Clear();
             foreach (Db.OwnerRole c in (new Db.OwnerRoles()).GetAll())
                 OWNER_ROLE.Items.Add(c.role);
-
-            Db.Foreclosure f;
+            
             if (foreclosure_id != null)
-                f = foreclosures.GetById((int)foreclosure_id);
+                fields.DataContext = foreclosures.GetById((int)foreclosure_id);
             else
-                f = new Db.Foreclosure();
-            fields.DataContext = f;
+                fields.DataContext = new Db.Foreclosure();
 
             Closed += delegate
             {
@@ -145,10 +135,21 @@ namespace Cliver.Foreclosures
         {
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
-            Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+
+            Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id != 0)
+            {
+                Db.Foreclosure f2 = foreclosures.GetNext(f);
+                if (f2 == null)
+                    f2 = foreclosures.GetPrevious(f);
+                if (f2 == null)
+                    f2 = new Db.Foreclosure();
+
                 foreclosures.Delete(f.Id);
-            Close();
+                fields.DataContext = f2;
+            }
+            else
+                fields.DataContext = new Db.Foreclosure();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -162,19 +163,41 @@ namespace Cliver.Foreclosures
             //}
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
-        {
-            Edit.Visibility = Visibility.Collapsed;
-            Save.Visibility = Visibility.Visible;
-            Delete.Visibility = Visibility.Visible;
-            fields.IsEnabled = true;
-        }
-
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
+            Db.Foreclosure f = get_current_Foreclosure();
+            if (f.Id == 0)
+                f = foreclosures.GetLast();
+            else
+                f = foreclosures.GetPrevious(f);
+            if (f == null)
+            {
+                Prev.IsEnabled = false;
+                return;
+            }
+            fields.DataContext = f;
         }
+
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            Db.Foreclosure f = get_current_Foreclosure();
+            if (f.Id == 0)
+            {
+                Next.IsEnabled = false;
+                return;
+            }
+            f = foreclosures.GetNext(f);
+            if (f == null)
+            {
+                Next.IsEnabled = false;
+                return;
+            }
+            fields.DataContext = f;
+        }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            fields.DataContext = new Db.Foreclosure();
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -189,13 +212,14 @@ namespace Cliver.Foreclosures
                 if (!this.IsValid())
                     throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
 
-                Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+                Db.Foreclosure f = get_current_Foreclosure();
+                bool new_record = f.Id == 0;
                 foreclosures.Save(f);
 
-                fields.DataContext = new Db.Foreclosure();
-                Save.IsEnabled = false;
-                Delete.IsEnabled = false;
-                //Close();
+                if (new_record)
+                    fields.DataContext = new Db.Foreclosure();
+                else
+                    Edit.IsChecked = false;
             }
             catch (Exception ex)
             {
@@ -228,13 +252,14 @@ namespace Cliver.Foreclosures
 
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            //Keyboard.Focus(TYPE_OF_EN);
-            
             CASE_N.Items.Clear();
             foreach (string c in (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns)
                 CASE_N.Items.Add(c);
 
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
+
+            set_controls(f);
+
             if (f.Id == 0)
             {
                 f.TYPE_OF_EN = "CHA";
@@ -256,13 +281,69 @@ namespace Cliver.Foreclosures
             //LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
         }
 
+        void set_controls(Db.Foreclosure f = null)
+        {
+            //Keyboard.Focus(TYPE_OF_EN);
+
+            if (f == null)
+                f = get_current_Foreclosure();
+
+            if (f.Id == 0)
+            {
+                Prev.IsEnabled = foreclosures.GetLast() != null;
+                Next.IsEnabled = false;
+
+                fields.IsEnabled = true;
+                Save.Content = "Save and Continue";
+                Edit.IsChecked = true;
+                Edit.Visibility = Visibility.Collapsed;
+
+                indicator.Content = "Record: [id=new] - / " + foreclosures.Count();
+
+                return;
+            }
+
+            Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
+            Next.IsEnabled = foreclosures.GetNext(f) != null;
+
+            Edit.IsChecked = false;
+            Save.Content = "Save";
+            fields.IsEnabled = false;
+            New.Visibility = Visibility.Visible;
+            Edit.Visibility = Visibility.Visible;
+            Save.Visibility = Visibility.Collapsed;
+            Delete.Visibility = Visibility.Collapsed;
+
+            indicator.Content = "Record: [id=" + f.Id + "] " + (foreclosures.Get(x => x.Id < f.Id).Count() + 1) + " / " + foreclosures.Count();
+        }
+
+        private void Edit_Checked(object sender, RoutedEventArgs e)
+        {
+            fields.IsEnabled = true;
+            New.Visibility = Visibility.Collapsed;
+            Save.Visibility = Visibility.Visible;
+            if (get_current_Foreclosure().Id == 0)
+                Delete.Visibility = Visibility.Collapsed;
+            else
+                Delete.Visibility = Visibility.Visible;
+            //Edit.Visibility = Visibility.Visible;
+        }
+
+        private void Edit_Unchecked(object sender, RoutedEventArgs e)
+        {
+            fields.IsEnabled = false;
+            New.Visibility = Visibility.Visible;
+            Save.Visibility = Visibility.Collapsed;
+            Delete.Visibility = Visibility.Collapsed;
+        }
+
+        Db.Foreclosure get_current_Foreclosure()
+        {
+            return (Db.Foreclosure)fields.DataContext;
+        }
+
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (fields.IsEnabled)
-            {
-                Save.IsEnabled = true;
-                Delete.IsEnabled = true;
-            }
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

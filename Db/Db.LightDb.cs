@@ -122,7 +122,7 @@ namespace Cliver.Foreclosures
                     }
                 }
 
-                public D Prev(D d)
+                public D GetPrevious(D d)
                 {
                     lock (db)
                     {
@@ -132,7 +132,7 @@ namespace Cliver.Foreclosures
                     }
                 }
 
-                public D Forward(D d)
+                public D GetNext(D d)
                 {
                     lock (db)
                     {
