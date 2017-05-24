@@ -29,29 +29,31 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto">
             <GroupBox Grid.Row="0" Header="AutoComplete"  Padding="10">
-                <StackPanel>
-                    <DataGrid Name="list" ItemsSource="{Binding}"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Height="400">
+                    <StackPanel>
+                        <DataGrid Name="list" ItemsSource="{Binding}"  AutoGenerateColumns="False" RowEditEnding="list_RowEditEnding"  
      CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" 
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="" 
                                        IsReadOnly="False">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Click="delete_Click">X</Button>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Key" MinWidth="50"
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Click="delete_Click">X</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Key" MinWidth="50"
                                        Binding="{Binding Key,UpdateSourceTrigger=LostFocus}" 
                                        IsReadOnly="False"/>
-                            <DataGridTextColumn Header="Phrase" MinWidth="50"
+                                <DataGridTextColumn Header="Phrase" MinWidth="50"
                                        Binding="{Binding Phrase,UpdateSourceTrigger=LostFocus}" 
                                        IsReadOnly="False"/>
-                    </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
             </GroupBox>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,0,10,10">

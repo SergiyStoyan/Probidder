@@ -44,39 +44,19 @@ namespace Cliver.Foreclosures
             {
             };
 
-            int r = 0;
-            foreach (PropertyInfo pi in typeof(Db.Foreclosure).GetProperties())
+            list.ItemsSource = typeof(Db.Foreclosure).GetProperties().Select(x => new Item
             {
-                Columns.RowDefinitions.Add(new RowDefinition());
-                r++;
-                {
-                    CheckBox c = new CheckBox();
-                    c.SetValue(Grid.RowProperty, r);
-                    c.SetValue(Grid.ColumnProperty, 0);
-                    c.IsChecked = Settings.View.ShowedColumns.Contains(pi.Name);
-                    c.Padding = new Thickness(0);
-                    c.HorizontalAlignment = HorizontalAlignment.Center;
-                    Columns.Children.Add(c);
-                }
-                {
-                    CheckBox c = new CheckBox();
-                    c.SetValue(Grid.RowProperty, r);
-                    c.SetValue(Grid.ColumnProperty, 1);
-                    c.IsChecked = Settings.View.SearchedColumns.Contains(pi.Name);
-                    c.Padding = new Thickness(0);
-                    c.HorizontalAlignment = HorizontalAlignment.Center;
-                    Columns.Children.Add(c);
-                }
-                {
-                    TextBlock l = new TextBlock();
-                    l.SetValue(Grid.RowProperty, r);
-                    l.SetValue(Grid.ColumnProperty, 2);
-                    l.Text = pi.Name;
-                    l.Padding = new Thickness(0);
-                    l.HorizontalAlignment = HorizontalAlignment.Left;
-                    Columns.Children.Add(l);
-                }
+                Show = Settings.View.ShowedColumns.Contains(x.Name),
+                Search = Settings.View.SearchedColumns.Contains(x.Name),
+                Column = x.Name
             }
+            ).ToList();
+        }
+        class Item
+        {
+            public bool Show { set; get; }
+            public bool Search { set; get; }
+            public string Column { set; get; }
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -90,16 +70,12 @@ namespace Cliver.Foreclosures
             {
                 Settings.View.ShowedColumns.Clear();
                 Settings.View.SearchedColumns.Clear();
-                List<UIElement> es = Columns.Children.Cast<UIElement>().ToList();
-                for (int i = 1; i < Columns.RowDefinitions.Count; i++)
+                foreach (Item i in list.ItemsSource)
                 {
-                    CheckBox c1 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 0);
-                    CheckBox c2 = (CheckBox)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 1);
-                    TextBlock l = (TextBlock)es.First(x => Grid.GetRow(x) == i && Grid.GetColumn(x) == 2);
-                    if (c1.IsChecked == true)
-                        Settings.View.ShowedColumns.Add(l.Text);
-                    if (c2.IsChecked == true)
-                        Settings.View.SearchedColumns.Add(l.Text);
+                    if (i.Show)
+                        Settings.View.ShowedColumns.Add(i.Column);
+                    if (i.Search)
+                        Settings.View.SearchedColumns.Add(i.Column);
                 }
 
                 Settings.View.Save();
