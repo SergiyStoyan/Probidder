@@ -48,16 +48,19 @@ namespace Cliver.Foreclosures
             items = new ObservableCollection<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
             //items = new List<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
             list.ItemsSource = items;
+
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
+            show_TriggerKey();
         }
 
         private ObservableCollection<Item> items;
         //private List<Item> items;
 
-        class Item:System.ComponentModel.IEditableObject
+        class Item : System.ComponentModel.IEditableObject
         {
             public string Key { set; get; }
             public string Phrase { set; get; }
-            
+
 
             public void BeginEdit()
             {
@@ -77,7 +80,7 @@ namespace Cliver.Foreclosures
             {
                 original = null;
             }
-        } 
+        }
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
@@ -88,6 +91,8 @@ namespace Cliver.Foreclosures
         {
             try
             {
+                Settings.AutoComplete.TriggerKey = triggerKey;
+                Settings.AutoComplete.TriggerModifierKey = triggerModifierKey;
                 Settings.AutoComplete.Keys2Phrase = items.ToDictionary(x => x.Key, x => x.Phrase);
                 Settings.AutoComplete.Save();
 
@@ -103,7 +108,7 @@ namespace Cliver.Foreclosures
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-            object dc = ((Button)e.Source).DataContext;            
+            object dc = ((Button)e.Source).DataContext;
             Item i = dc as Item;
             if (i == null)
                 return;
@@ -114,10 +119,10 @@ namespace Cliver.Foreclosures
         {
             if (e.EditAction != DataGridEditAction.Commit)
                 return;
-                Item i = e.Row.Item as Item;
+            Item i = e.Row.Item as Item;
             if (i == null)
                 return;
-            if(string.IsNullOrEmpty(i.Key)||string.IsNullOrEmpty(i.Phrase))
+            if (string.IsNullOrEmpty(i.Key) || string.IsNullOrEmpty(i.Phrase))
             {
                 Message.Exclaim("The fields cannot be empty!");
                 i.CancelEdit();
@@ -137,5 +142,41 @@ namespace Cliver.Foreclosures
             }
             i.EndEdit();
         }
+
+        private void SetTriggerKey_Click(object sender, RoutedEventArgs e)
+        {
+            if (SetTriggerKey.IsChecked == true)
+            {
+                TriggerKey.Content = "Press keys...\r\n";
+            }
+        }
+
+        public void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (SetTriggerKey.IsChecked != true)
+                return;
+            ThreadRoutines.StartTry(() =>
+            {
+                Thread.Sleep(500);
+                SetTriggerKey.Dispatcher.Invoke(() =>
+                {
+                    pressed = null;
+                    SetTriggerKey.IsChecked = false;
+                    show_TriggerKey();
+                });
+            });
+            if (pressed == null)
+                pressed = DateTime.Now;
+            triggerKey = e.Key;
+            triggerModifierKey = Keyboard.Modifiers;
+        }
+        DateTime? pressed = null;
+
+        void show_TriggerKey()
+        {
+            TriggerKey.Content = "Trigger key: " + triggerKey + "\r\nTrigger modifier key: " + triggerModifierKey;
+        }
+        Key triggerKey = Settings.AutoComplete.TriggerKey;
+        ModifierKeys triggerModifierKey = Settings.AutoComplete.TriggerModifierKey;
     }
 }
