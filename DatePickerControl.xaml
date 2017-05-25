@@ -12,9 +12,9 @@
             <Style TargetType="{x:Type DatePickerTextBox}">
                 <Setter Property="Control.Template">
                     <Setter.Value>
-                        <ControlTemplate>
+                        <ControlTemplate TargetType="DatePickerTextBox">
                         <TextBox x:Name="TextBox" 
-                                    Text="111" 
+                                    Text="__/__/__" 
                         PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"
                                  LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus"
                                  />

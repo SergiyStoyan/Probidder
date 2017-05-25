@@ -29,31 +29,28 @@ namespace Cliver.Foreclosures
             LostKeyboardFocus += DatePickerControl_LostKeyboardFocus;
 
             Loaded += delegate
-            {
+            {//bulding template is anynchronous so we are waiting when it is finished to get TextBox
                 ThreadRoutines.StartTry(() =>
                 {
-                    DateTime end = DateTime.Now.AddMilliseconds(1000);
-                    while (end > DateTime.Now)
+                    TextBox tb1 = (TextBox)SleepRoutines.WaitForObject(() =>
                     {
-                        TextBox tb1 = null;
+                        return Dispatcher.Invoke(() =>
+ {
+     return this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+ });
+                    }, 1000);
+                    if (tb1 != null)
+                    {
+                        tb = tb1;
                         Dispatcher.Invoke(() =>
                         {
-                            tb1 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+                            DatePicker_SelectedDateChanged(null, null);
                         });
-                        if (tb1 != null)
-                        {
-                            tb = tb1;
-                            Dispatcher.Invoke(() =>
-                            {
-                                DatePicker_SelectedDateChanged(null, null);
-                            });
-                            break;
-                        }
-                        System.Threading.Thread.Sleep(20);
                     }
                 });
-
-                tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
+                tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+                if (tb == null)
+                    tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
             };
         }
 
