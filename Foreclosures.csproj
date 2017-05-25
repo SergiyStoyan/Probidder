@@ -130,14 +130,14 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AboutForm.Designer.cs" />
+    <Compile Include="DatePickerControl.xaml.cs">
+      <DependentUpon>DatePickerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Db\PropertyCodes.cs" />
     <Compile Include="Db\OwnerRoles.cs" />
     <Compile Include="Db\Counties.cs" />
     <Compile Include="Db\Db.Json.cs" />
     <Compile Include="Db\CaseNumbers.cs" />
-    <Compile Include="ListViewColumnHeaderControl.xaml.cs">
-      <DependentUpon>ListViewColumnHeaderControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AutoComplete.cs" />
     <Compile Include="Settings\AutoComplete.cs" />
     <Compile Include="Settings\View.cs" />
@@ -224,7 +224,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ListViewColumnHeaderControl.xaml">
+    <Page Include="DatePickerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

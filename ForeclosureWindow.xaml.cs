@@ -213,7 +213,10 @@ namespace Cliver.Foreclosures
                 if (new_record)
                     fields.DataContext = new Db.Foreclosure();
                 else
-                    Edit.IsChecked = false;
+                {
+                    //Edit.IsChecked = false;
+                    fields.IsEnabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -289,6 +292,7 @@ namespace Cliver.Foreclosures
                 fields.IsEnabled = true;
                 Save.Content = "Save and Continue";
                 Edit.IsChecked = true;
+                Edit.Visibility = Visibility.Collapsed;
 
                 indicator.Content = "Record: [id=new] - / " + foreclosures.Count();
 
@@ -298,7 +302,12 @@ namespace Cliver.Foreclosures
             Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
             Next.IsEnabled = foreclosures.GetNext(f) != null;
             Save.Content = "Save";
-            Edit.IsChecked = false;
+            Edit.Visibility = Visibility.Visible;
+
+            if (Edit.IsChecked == true)
+                Edit_Checked(null, null);
+            else
+                Edit_Unchecked(null, null);
 
             indicator.Content = "Record: [id=" + f.Id + "] " + (foreclosures.Get(x => x.Id < f.Id).Count() + 1) + " / " + foreclosures.Count();
         }
@@ -306,20 +315,19 @@ namespace Cliver.Foreclosures
         private void Edit_Checked(object sender, RoutedEventArgs e)
         {
             fields.IsEnabled = true;
-            Edit.Visibility = Visibility.Collapsed;
+            //Edit.Visibility = Visibility.Collapsed;
             New.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Visible;
             if (get_current_Foreclosure().Id == 0)
                 Delete.Visibility = Visibility.Collapsed;
             else
                 Delete.Visibility = Visibility.Visible;
-            //Edit.Visibility = Visibility.Visible;
         }
 
         private void Edit_Unchecked(object sender, RoutedEventArgs e)
         {
             fields.IsEnabled = false;
-            Edit.Visibility = Visibility.Visible;
+            //Edit.Visibility = Visibility.Visible;
             New.Visibility = Visibility.Visible;
             Save.Visibility = Visibility.Collapsed;
             Delete.Visibility = Visibility.Collapsed;
@@ -332,6 +340,10 @@ namespace Cliver.Foreclosures
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (!fields.IsEnabled && Edit.IsEnabled)//after save
+            {
+                fields.IsEnabled = true;
+            }
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -382,6 +394,11 @@ namespace Cliver.Foreclosures
                 return;
             dp.SelectedDate = ((DateTime)td).Date;
             ((TextBox)sender).Text = Regex.Replace(dp.SelectedDate.ToString(), " .*", "");
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
