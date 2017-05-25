@@ -83,15 +83,15 @@ namespace Cliver.Foreclosures
 
             list.LayoutUpdated += delegate (object sender, EventArgs e)
               {
-                  if (!just_set)
-                      return;
-                  just_set = false;
-                  foreach (GridViewColumn c in ((GridView)list.View).Columns)
-                      if (c.ActualWidth > 100)
-                      {
-                          c.Width = 100;
-                          //c.Width = double.NaN;
-                      }
+                  //if (!just_set)
+                  //    return;
+                  //just_set = false;
+                  //foreach (GridViewColumn c in ((GridView)list.View).Columns)
+                  //    if (c.ActualWidth > 100)
+                  //    {
+                  //        c.Width = 100;
+                  //        //c.Width = double.NaN;
+                  //    }
               };
 
             list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
@@ -111,27 +111,27 @@ namespace Cliver.Foreclosures
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
-                GridViewColumnCollection cs = ((GridView)list.View).Columns;
-                cs.Clear();                
-                foreach (string f in Settings.View.ShowedColumns)
-                {
-                    GridViewColumn c = new GridViewColumn();
-                    c.Header = f;
-                    c.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
-                    c.DisplayMemberBinding = new Binding(f);
-                    PropertyInfo pi = pis.FirstOrDefault(x => x.Name == f);
-                    if (pi == null)
-                        throw new Exception("Some of ShowedColumns does not found in Foreclosure members");
-                    if (pi.PropertyType == typeof(DateTime?))
-                        c.DisplayMemberBinding.StringFormat = "MMddyy";
-                    cs.Add(c);
-                }
+                //PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
+                //GridViewColumnCollection cs = ((GridView)list.View).Columns;
+                //cs.Clear();                
+                //foreach (string f in Settings.View.ShowedColumns)
+                //{
+                //    GridViewColumn c = new GridViewColumn();
+                //    c.Header = f;
+                //    c.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
+                //    c.DisplayMemberBinding = new Binding(f);
+                //    PropertyInfo pi = pis.FirstOrDefault(x => x.Name == f);
+                //    if (pi == null)
+                //        throw new Exception("Some of ShowedColumns does not found in Foreclosure members");
+                //    if (pi.PropertyType == typeof(DateTime?))
+                //        c.DisplayMemberBinding.StringFormat = "MMddyy";
+                //    cs.Add(c);
+                //}
                 fill();
-                just_set = true;
+                //just_set = true;
             }));
         }
-        bool just_set = true;
+        //bool just_set = true;
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
         {
@@ -437,7 +437,7 @@ namespace Cliver.Foreclosures
             };
         }
         Regex filter_regex = null;
-        private void highlight(ListView lv)
+        private void highlight(DataGrid lv)
         {
             if (filter_regex == null)
                 return;
@@ -447,7 +447,7 @@ namespace Cliver.Foreclosures
                 if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
                     searched_columns.Add(i);
 
-            foreach (ListViewItem lvi in lv.FindChildrenOfType<ListViewItem>())
+            foreach (DataGridRow lvi in lv.FindChildrenOfType<DataGridRow>())
             {
                 int i = 0;
                 foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
@@ -482,6 +482,12 @@ namespace Cliver.Foreclosures
                     tb.Inlines.Add(item);
                 match = !match;
             }
+        }
+
+        private void list_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
+                e.Cancel = true;
         }
     }
 }

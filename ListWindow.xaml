@@ -13,31 +13,7 @@
          AllowDrop="True"
             >
     <Window.Resources>
-        <DataTemplate x:Key="ArrowLess">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-            </DockPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ArrowUp">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-                <Path VerticalAlignment="Center"
-                      Fill="Black"
-                      Data="M 5,5 15,5 10,0 5,5" />
-            </DockPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ArrowDown">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-                <Path VerticalAlignment="Center"
-                      Fill="Black"
-                      Data="M 5,0 10,5 15,0 5,0" />
-            </DockPanel>
-        </DataTemplate>
-        <Style x:Key="AlternateItemStyle" TargetType="{x:Type ListViewItem}">
+        <Style x:Key="AlternateItemStyle" TargetType="{x:Type DataGridRow}">
                 <EventSetter Event="PreviewMouseLeftButtonDown" Handler="list_PreviewMouseLeftButtonDown" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
@@ -90,22 +66,18 @@
                     <Label Content="Find:" Grid.Column="0"/>
                         <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
                     </Grid>
-                    <ListView Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" 
+                    <DataGrid  Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" GridViewColumnHeader.Click="list_Click"                              
                   AlternationCount="2"
-                  ItemContainerStyle="{StaticResource AlternateItemStyle}"                              >
-                <ListView.View>
-                    <GridView>
-                        <GridView.Columns>
-                                    <GridViewColumn Header="Id"  Width="Auto" DisplayMemberBinding="{Binding Path=Id}" />
-                                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Path=FILING_DATE, StringFormat=MM/dd-yy}" />
-                                    <GridViewColumn Header="City" Width="Auto" DisplayMemberBinding="{Binding Path=CITY}" />
-                                    <GridViewColumn Header="Address" Width="Auto" DisplayMemberBinding="{Binding Path=ADDRESS}" />
-                                </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            </StackPanel>
+                  ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
+                        AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
+                               CanUserAddRows="False" CanUserDeleteRows="False"
+     CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
+                        <DataGrid.Columns>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>
                 </ScrollViewer>
         </DockPanel>
     </Grid>
