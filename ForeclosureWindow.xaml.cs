@@ -51,30 +51,18 @@ namespace Cliver.Foreclosures
 
             COUNTY.Text = Settings.Location.County;
 
-            CITY.Items.Clear();
-            foreach (Db.City c in (new Db.Cities()).GetBy(Settings.Location.County))
-                CITY.Items.Add(c.city);
+            CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
 
-            LENDOR.Items.Clear();
-            foreach (Db.Plaintiff c in (new Db.Plaintiffs()).GetBy(Settings.Location.County))
-                LENDOR.Items.Add(c.plaintiff);
-
-            ATTY.Items.Clear();
-            foreach (Db.Attorney c in (new Db.Attorneys()).GetBy(Settings.Location.County))
-                ATTY.Items.Add(c.attorney);
-
-            TYPE_OF_MO.Items.Clear();
-            foreach (Db.MortgageType c in (new Db.MortgageTypes()).Get())
-                TYPE_OF_MO.Items.Add(c.mortgage_type);
-
-            PROP_DESC.Items.Clear();
-            foreach (Db.PropertyCode c in (new Db.PropertyCodes()).GetAll())
-                PROP_DESC.Items.Add(c.type);
-
-            OWNER_ROLE.Items.Clear();
-            foreach (Db.OwnerRole c in (new Db.OwnerRoles()).GetAll())
-                OWNER_ROLE.Items.Add(c.role);
+            LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
             
+            ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
+            
+            TYPE_OF_MO.ItemsSource = (new Db.MortgageTypes()).Get().OrderBy(x => x.mortgage_type).Select(x => x.mortgage_type);
+            
+            PROP_DESC.ItemsSource = (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
+            
+            OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
+
             if (foreclosure_id != null)
                 fields.DataContext = foreclosures.GetById((int)foreclosure_id);
             else
@@ -89,18 +77,6 @@ namespace Cliver.Foreclosures
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);            
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
-
-        void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            //TextBox tb = sender as TextBox;
-            //if (e.Text != AutoComplete.TriggerKey)
-            //    return;
-            //tb.Text = AutoComplete.GetComplete(tb.Text);
-        }
-
-        //public void GotFocusHandler(DependencyObject element, RoutedEventHandler handler)
-        //{
-        //}
 
         public void KeyDownHandler(object sender, KeyEventArgs e)
         {
@@ -123,13 +99,6 @@ namespace Cliver.Foreclosures
                 return;
             }
         }
-        //IInputElement last_InputElement = null;
-        //[DllImport("user32.dll")]
-        //static extern short VkKeyScan(char ch);
-        //static public Key ResolveKey(char charToResolve)
-        //{
-        //    return KeyInterop.KeyFromVirtualKey(VkKeyScan(charToResolve));
-        //}
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
