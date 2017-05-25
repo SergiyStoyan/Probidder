@@ -351,56 +351,6 @@ namespace Cliver.Foreclosures
             Window_PreviewMouseDown(null, null);
         }
 
-        private DateTime? calendar_input(string text)
-        {
-            try
-            {
-                return DateTime.ParseExact(text, "MMddyy", null);
-            }
-            catch
-            {
-            }
-            if (text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
-                return null;
-            Match m = Regex.Match(text, @"(\d{2})(\d{2})(\d{2})");
-            if (!m.Success)
-                return null;
-            try
-            {
-                int y = int.Parse(m.Groups[3].Value);
-                if (y < 30)
-                    y += 2000;
-                else
-                    y += 1900;
-                return new DateTime(y, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private void DatePicker_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            DateTime? td = calendar_input(((TextBox)sender).Text);
-            if (td == null)
-                return;
-            DatePicker dp = ((DependencyObject)sender).FindParentOfType<DatePicker>();
-            DateTime? vd = dp.SelectedDate;
-            if (vd != null && ((DateTime)td).Date == ((DateTime)vd).Date
-                && ((TextBox)sender).Text.Length < 10
-                && dp.IsValid()
-                    )
-                return;
-            dp.SelectedDate = ((DateTime)td).Date;
-            ((TextBox)sender).Text = Regex.Replace(dp.SelectedDate.ToString(), " .*", "");
-        }
-
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (Regex.IsMatch(e.Text, @"[^\d\,]"))
@@ -417,21 +367,6 @@ namespace Cliver.Foreclosures
                 Console.Beep(5000, 200);
                 e.Handled = true;
             }
-        }
-
-        void DatePicker_LostFocus(object sender, EventArgs e)
-        {
-        }
-
-        private void DatePicker_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            //DatePicker dp = ((DatePicker)e.OldFocus);
-            //if (!dp.IsValid())
-            //{
-            //    Console.Beep(5000, 200);
-            //    e.Handled = true;
-            //    Keyboard.Focus(dp);
-            //}
         }
 
         private void ATTORNEY_S_TextInput(object sender, TextCompositionEventArgs e)
@@ -470,29 +405,6 @@ namespace Cliver.Foreclosures
         {
            // ComboBox_SelectionChanged(sender, null);
         }
-
-        private void DatePicker_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            ((DatePicker)sender).FocusOnText();
-        }
-    }
-
-    static public class WpfControlRoutines
-    {
-        public static void FocusOnText(this DatePicker datePicker)
-        {
-            if (datePicker == last_focused)
-                return;
-            last_focused = datePicker;
-            Keyboard.Focus(datePicker);
-            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
-                                             Keyboard.PrimaryDevice.ActiveSource,
-                                             0,
-                                             Key.Up);
-            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
-            datePicker.RaiseEvent(eventArgs);
-        }
-       static IInputElement last_focused = null;
     }
 
         //public class MyCustomDateConverter : IValueConverter

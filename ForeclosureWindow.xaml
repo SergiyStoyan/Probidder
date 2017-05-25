@@ -31,13 +31,10 @@
             <Setter Property="Padding" Value="0, 0, 0, 0"></Setter>
             <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"></EventSetter>
         </Style>
-        <Style TargetType="{x:Type DatePicker}">
+        <Style TargetType="{x:Type local:DatePickerControl}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
             <Setter Property="Margin" Value="0, -2, 0, 5"></Setter>
             <Setter Property="Padding" Value="0, 0, 0, 0"></Setter>
-            <EventSetter Event="LostFocus" Handler="DatePicker_LostFocus"></EventSetter>
-            <EventSetter Event="LostKeyboardFocus" Handler="DatePicker_LostKeyboardFocus"></EventSetter>
-            <EventSetter Event="GotKeyboardFocus" Handler="DatePicker_GotKeyboardFocus"></EventSetter>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
@@ -88,43 +85,20 @@
                     <ComboBox Grid.Column="1" Grid.Row="1" Name="CASE_N" DropDownClosed="ComboBox_DropDownClosed"  Text="{Binding CASE_N, Mode=TwoWay, ValidatesOnDataErrors=True}" IsEditable="True"></ComboBox>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
                     <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" 
-                                              SelectedDate="{Binding FILING_DATE, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
-                        </local:DatePickerControl>
-                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Entry Date</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="2" Name="ENTRY_DATE" VerticalAlignment="Top" SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True}">
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Control.Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <TextBox TextChanged="DatePicker_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MM/dd/yyyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
-                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
+                                              SelectedDate="{Binding FILING_DATE, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" 
+                                              />
+                    <Label  HorizontalAlignment="Right">Entry Date</Label>
+                    <local:DatePickerControl  Grid.Column="1" Grid.Row="2" x:Name="ENTRY_DATE" 
+                                              SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" 
+                                             />
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">Plaintiff Code</Label>
                     <ComboBox Grid.Column="1" Grid.Row="3" Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"   DropDownClosed="ComboBox_DropDownClosed" Text="{Binding LENDOR, Mode=TwoWay, ValidatesOnDataErrors=True}"
                               VerticalAlignment="Top"  Height="{Binding ActualHeight, ElementName=CITY}"></ComboBox>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Or MTG D</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="4"  Name="ORIGINAL_MTG" Text="{Binding ORIGINAL_MTG, Mode=TwoWay}" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Control.Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <TextBox TextChanged="DatePicker_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MM/dd/yyyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
-                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
+                    <Label  HorizontalAlignment="Right">Entry Date</Label>
+                    <local:DatePickerControl Grid.Column="1" Grid.Row="4" x:Name="ORIGINAL_MTG" 
+                                              SelectedDate="{Binding ORIGINAL_MTG, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" 
+                                             />
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right"  VerticalAlignment="Top">
                         <Label >Doc_#</Label>
                         <TextBox  MinWidth="50" Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
@@ -147,38 +121,13 @@
                                         Mask="&amp;&amp;-&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;&amp;">
                     </xctk:MaskedTextBox>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right">Date of Calcul</Label>
-                    <DatePicker Grid.Column="1" Grid.Row="10" Name="DATE_OF_CA"  SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, ValidatesOnDataErrors=True}">
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Control.Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <TextBox TextChanged="DatePicker_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MM/dd/yyyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
-                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
+                    <local:DatePickerControl Grid.Column="1" Grid.Row="10" x:Name="DATE_OF_CA" 
+                                              SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" 
+                                             />
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right">Last Pay Date</Label>
-                    <DatePicker Grid.Column="3" Grid.Row="10" Name="LAST_PAY_DATE" SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True}"
-                                 >
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Control.Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <TextBox TextChanged="DatePicker_TextChanged"
-                                                Text="{Binding Path=SelectedDate, StringFormat='MM/dd/yyyy', Mode=TwoWay, ValidatesOnDataErrors=True,  
-                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}},FallbackValue=''}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
+                    <local:DatePickerControl Grid.Column="3" Grid.Row="10" x:Name="LAST_PAY_DATE" 
+                                              SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" 
+                                             />
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right">Balance Due</Label>
                     <TextBox Grid.Column="1" Grid.Row="11" Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap">
                     </TextBox>

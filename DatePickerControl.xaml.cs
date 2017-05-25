@@ -47,12 +47,16 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox_LostFocus(null, null);
+            //focused = false;
+            //TextBox_LostFocus(null, null);
         }
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            //focused = true;
+            //((DatePicker)sender).FocusOnText();
         }
+        //bool focused = false;
 
         TextBox tb;
         readonly string mask = "__/__/__";
@@ -62,7 +66,7 @@ namespace Cliver.Foreclosures
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                tb.Text = mask;
+                //tb.Text = mask;
                 return;
             }
             tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
@@ -71,12 +75,23 @@ namespace Cliver.Foreclosures
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
-            if (tb.Text.Length < mask.Length)
+            string t = tb.Text;
+            if (t.Length < mask.Length)
             {
                 int p = tb.SelectionStart;
-                string s = mask.Substring(p, mask.Length - tb.Text.Length);
-                tb.Text = tb.Text.Insert(p, s);
-                tb.SelectionStart = p;
+                string s = mask.Substring(p, mask.Length - t.Length);
+                tb.Text = t.Insert(p, s);
+                tb.SelectionStart = p + s.Length;
+                //for (int i = tb.SelectionStart; i < t.Length; i++)
+                //{
+                //    if (i == 2 || i == 5)
+                //        t = t.Insert(i, "/");
+                //    else if (t[i] == '/')
+                //        t = t.Remove(i, 1);
+                //}
+                //string s = mask.Substring(t.Length, mask.Length - t.Length);
+                //tb.Text = t + s;
+                //tb.SelectionStart = p;
             }
         }
 
@@ -100,7 +115,7 @@ namespace Cliver.Foreclosures
                 p++;
             p++;
             tb.SelectionStart = p;
-            tb.SelectionLength = 1;
+            //tb.SelectionLength = 1;
         }
 
         private DateTime? calendar_input(string text)
@@ -141,8 +156,10 @@ namespace Cliver.Foreclosures
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            SelectedDate = calendar_input(tb.Text);
-            DatePicker_SelectedDateChanged(null, null);
+            DateTime? dt = calendar_input(tb.Text);
+            if (dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
+                DatePicker_SelectedDateChanged(null, null);
+            SelectedDate = dt;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -151,12 +168,30 @@ namespace Cliver.Foreclosures
                 tb = (TextBox)sender;
             if (SelectedDate == null)
             {
-                tb.Text = mask;
+             //   tb.Text = mask;
                 return;
             }
             tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");
             tb.SelectionStart = 0;
-            tb.SelectionLength = 1;
+            //tb.SelectionLength = 1;
         }
+    }
+
+    static public class WpfControlRoutines
+    {
+        public static void FocusOnText(this DatePicker datePicker)
+        {
+            if (datePicker == last_focused)
+                return;
+            last_focused = datePicker;
+            Keyboard.Focus(datePicker);
+            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
+                                             Keyboard.PrimaryDevice.ActiveSource,
+                                             0,
+                                             Key.Up);
+            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
+            datePicker.RaiseEvent(eventArgs);
+        }
+        static IInputElement last_focused = null;
     }
 }
