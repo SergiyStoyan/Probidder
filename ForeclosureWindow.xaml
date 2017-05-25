@@ -28,7 +28,6 @@
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
             <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
             <Setter Property="Padding" Value="0, 0, 0, 0"></Setter>
-            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"></EventSetter>
         </Style>
         <Style TargetType="{x:Type local:DatePickerControl}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
