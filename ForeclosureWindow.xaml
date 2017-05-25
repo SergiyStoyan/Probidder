@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d" 
-        Title="Foreclosures" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
+        Title="Foreclosure" Height="auto" Width="auto" SizeToContent="WidthAndHeight"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
@@ -17,22 +17,36 @@
     <Window.Resources>
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
             <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged"></EventSetter>
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
-        </Style> 
+            <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
+        </Style>
         <Style TargetType="{x:Type TextBox}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=CASE_N}"></Setter>
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
+            <Setter Property="Padding" Value="0, 0, 0, 0"></Setter>
             <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"></EventSetter>
         </Style>
         <Style TargetType="{x:Type DatePicker}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Margin" Value="0, -2, 0, 5"></Setter>
+            <Setter Property="Padding" Value="0, 0, 0, 0"></Setter>
             <EventSetter Event="LostFocus" Handler="DatePicker_LostFocus"></EventSetter>
             <EventSetter Event="LostKeyboardFocus" Handler="DatePicker_LostKeyboardFocus"></EventSetter>
+            <EventSetter Event="GotKeyboardFocus" Handler="DatePicker_GotKeyboardFocus"></EventSetter>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
+        </Style>
+        <Style TargetType="{x:Type xctk:MaskedTextBox}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=CASE_N}"></Setter>
+            <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Margin" Value="0, 0, 0, 5"></Setter>
         </Style>
     </Window.Resources>
     <Grid Background="Beige">
@@ -69,11 +83,11 @@
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Listing Code</Label>
                     <TextBox Grid.Column="1" Grid.Row="0" Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                     <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">County</Label>
-                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"></TextBox>
+                    <TextBox Grid.Column="3" Grid.Row="0" Name="COUNTY" IsTabStop="False" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"></TextBox>
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Case #</Label>
                     <ComboBox Grid.Column="1" Grid.Row="1" Name="CASE_N" DropDownClosed="ComboBox_DropDownClosed"  Text="{Binding CASE_N, Mode=TwoWay, ValidatesOnDataErrors=True}" IsEditable="True"></ComboBox>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">Filling Date</Label>
-                    <DatePicker  Grid.Column="3" Grid.Row="1" Name="FILING_DATE" 
+                    <DatePicker  Grid.Column="3" Grid.Row="1" Name="FILING_DATE"
                                  SelectedDate="{Binding FILING_DATE, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True, NotifyOnValidationError=True }" Width="{Binding ActualWidth, ElementName=DATE_OF_CA}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePickerTextBox}">
@@ -124,11 +138,11 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
-                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right"  VerticalAlignment="Top">
                         <Label >Doc_#</Label>
                         <TextBox  MinWidth="50" Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="4"  HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="4"  HorizontalAlignment="Right" VerticalAlignment="Top">
                         <Label HorizontalAlignment="Right">Or Loan $</Label>
                         <TextBox MinWidth="50" Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, ValidatesOnDataErrors=True, StringFormat='#,#'}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     </StackPanel>
@@ -187,10 +201,10 @@
 
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right">Current Owners</Label>
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, ValidatesOnDataErrors=True}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
-                    <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, ValidatesOnDataErrors=True}" Margin="0,0,5,0">IS ORG</CheckBox>
-                        <CheckBox Name="DECEASED" Margin="20,0,0,0" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, ValidatesOnDataErrors=True}">Deceased</CheckBox>
-                        <Label VerticalAlignment="Center" Margin="20,0,0,0" >Owner Role</Label>
+                    <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <CheckBox Name="IS_ORG" VerticalAlignment="Top" Margin="0,5,0,5" IsChecked="{Binding IS_ORG, Mode=TwoWay, ValidatesOnDataErrors=True}" >IS ORG</CheckBox>
+                        <CheckBox Name="DECEASED" VerticalAlignment="Top" Margin="20,5,0,5" IsChecked="{Binding DECEASED, Mode=TwoWay, ValidatesOnDataErrors=True}">Deceased</CheckBox>
+                        <Label VerticalAlignment="Top" Margin="20,0,0,0" >Owner Role</Label>
                         <ComboBox Name="OWNER_ROLE" MinWidth="30"  DropDownClosed="ComboBox_DropDownClosed" Text="{Binding OWNER_ROLE, Mode=TwoWay, ValidatesOnDataErrors=True}" IsReadOnly="True" IsEditable="True" Width="90"></ComboBox>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>
@@ -230,13 +244,13 @@
                 </Grid.ColumnDefinitions>
                 <Label Name="indicator" Grid.Column="0"></Label>
                 <UniformGrid HorizontalAlignment="Right" Grid.Column="1" Rows="1">
-                <Button Name="Prev" Margin="10,0,0,0" Click="Prev_Click"  >&lt;&lt;</Button>
-                    <Button Name="Next" Margin="10,0,0,0" Click="Next_Click" >&gt;&gt;</Button>
+                <Button Name="Prev" Margin="10,0,0,0" Click="Prev_Click">&lt;&lt;</Button>
+                    <Button Name="Next" Margin="10,0,0,0" Click="Next_Click">&gt;&gt;</Button>
                     <Button Name="New" Margin="10,0,0,0" Click="New_Click" Visibility="Collapsed" Grid.Column="0">New</Button>
                     <ToggleButton Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Collapsed" Grid.Column="0">Edit</ToggleButton>
                     <Button Name="Save" Margin="10,0,0,0" Click="Save_Click">Save</Button>
                 <Button Margin="10,0,0,0" Name="Delete" Click="Delete_Click">Delete</Button>
-                <Button Margin="10,0,0,0" Name="Cancel" Click="Cancel_Click">Cancel</Button>
+                <Button Margin="10,0,0,0" Name="Cancel" Click="Cancel_Click">Close</Button>
                 </UniformGrid>
             </Grid>
         </StackPanel>

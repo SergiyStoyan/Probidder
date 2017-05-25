@@ -86,7 +86,7 @@ namespace Cliver.Foreclosures
             };
 
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
-            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);            
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
@@ -155,12 +155,6 @@ namespace Cliver.Foreclosures
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            //{
-            //    Edit.Visibility = Visibility.Visible;
-            //    Delete.Visibility = Visibility.Collapsed;
-            //    Save.Visibility = Visibility.Collapsed;
-            //    fields.IsEnabled = false;
-            //}
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)
@@ -292,11 +286,9 @@ namespace Cliver.Foreclosures
             {
                 Prev.IsEnabled = foreclosures.GetLast() != null;
                 Next.IsEnabled = false;
-
                 fields.IsEnabled = true;
                 Save.Content = "Save and Continue";
                 Edit.IsChecked = true;
-                Edit.Visibility = Visibility.Collapsed;
 
                 indicator.Content = "Record: [id=new] - / " + foreclosures.Count();
 
@@ -305,14 +297,8 @@ namespace Cliver.Foreclosures
 
             Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
             Next.IsEnabled = foreclosures.GetNext(f) != null;
-
-            Edit.IsChecked = false;
             Save.Content = "Save";
-            fields.IsEnabled = false;
-            New.Visibility = Visibility.Visible;
-            Edit.Visibility = Visibility.Visible;
-            Save.Visibility = Visibility.Collapsed;
-            Delete.Visibility = Visibility.Collapsed;
+            Edit.IsChecked = false;
 
             indicator.Content = "Record: [id=" + f.Id + "] " + (foreclosures.Get(x => x.Id < f.Id).Count() + 1) + " / " + foreclosures.Count();
         }
@@ -320,6 +306,7 @@ namespace Cliver.Foreclosures
         private void Edit_Checked(object sender, RoutedEventArgs e)
         {
             fields.IsEnabled = true;
+            Edit.Visibility = Visibility.Collapsed;
             New.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Visible;
             if (get_current_Foreclosure().Id == 0)
@@ -332,6 +319,7 @@ namespace Cliver.Foreclosures
         private void Edit_Unchecked(object sender, RoutedEventArgs e)
         {
             fields.IsEnabled = false;
+            Edit.Visibility = Visibility.Visible;
             New.Visibility = Visibility.Visible;
             Save.Visibility = Visibility.Collapsed;
             Delete.Visibility = Visibility.Collapsed;
@@ -445,53 +433,86 @@ namespace Cliver.Foreclosures
             TextBox tb = cb.GetVisualChild<TextBox>();
             if (tb == null)//can be so due to asynchronous building
                 return;
-            tb.Select(0, tb.Text.Length);
-            tb.ScrollToHome();
-            if (e != null)
-                e.Handled = true;
+            if (e.AddedItems.Count < 1)
+                return;
+            ThreadRoutines.StartTry(() => {
+                DateTime end = DateTime.Now.AddMilliseconds(200);
+                while(end > DateTime.Now)
+                {
+                    Thread.Sleep(20);
+                    tb.Dispatcher.Invoke(() =>
+                    {
+                        tb.Select(0, tb.Text.Length);
+                        tb.ScrollToHome();
+                    });
+                }
+            });
         }
 
         private void ComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            ComboBox_SelectionChanged(sender, null);
+           // ComboBox_SelectionChanged(sender, null);
+        }
+
+        private void DatePicker_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            ((DatePicker)sender).FocusOnText();
         }
     }
 
-    //public class MyCustomDateConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        if (keep_last_text)
-    //            return last_text;
-    //        last_value = (DateTime)value;
-    //        if (last_value == null)
-    //            return null;
-    //        return Regex.Replace(((DateTime)last_value).ToString(culture), " .*", "");
-    //    }
-    //    DateTime? last_value = null;
+    static public class WpfControlRoutines
+    {
+        public static void FocusOnText(this DatePicker datePicker)
+        {
+            if (datePicker == last_focused)
+                return;
+            last_focused = datePicker;
+            Keyboard.Focus(datePicker);
+            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
+                                             Keyboard.PrimaryDevice.ActiveSource,
+                                             0,
+                                             Key.Up);
+            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
+            datePicker.RaiseEvent(eventArgs);
+        }
+       static IInputElement last_focused = null;
+    }
 
-    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        last_text = (string)value;
-    //        keep_last_text = false;
-    //        try
-    //        {
-    //            return DateTime.Parse((string)value, culture);
-    //        }
-    //        catch
-    //        {
-    //            try
-    //            {
-    //                return DateTime.ParseExact((string)value, "MMddyy", culture);
-    //            }
-    //            catch
-    //            {
-    //                keep_last_text = true;
-    //                return last_value;
-    //            }
-    //        }
-    //    }
-    //    string last_text = null;
-    //    bool keep_last_text = false;
-    //}
-}
+        //public class MyCustomDateConverter : IValueConverter
+        //{
+        //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        if (keep_last_text)
+        //            return last_text;
+        //        last_value = (DateTime)value;
+        //        if (last_value == null)
+        //            return null;
+        //        return Regex.Replace(((DateTime)last_value).ToString(culture), " .*", "");
+        //    }
+        //    DateTime? last_value = null;
+
+        //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        last_text = (string)value;
+        //        keep_last_text = false;
+        //        try
+        //        {
+        //            return DateTime.Parse((string)value, culture);
+        //        }
+        //        catch
+        //        {
+        //            try
+        //            {
+        //                return DateTime.ParseExact((string)value, "MMddyy", culture);
+        //            }
+        //            catch
+        //            {
+        //                keep_last_text = true;
+        //                return last_value;
+        //            }
+        //        }
+        //    }
+        //    string last_text = null;
+        //    bool keep_last_text = false;
+        //}
+    }

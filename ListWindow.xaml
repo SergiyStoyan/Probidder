@@ -14,7 +14,6 @@
             >
     <Window.Resources>
         <Style x:Key="AlternateItemStyle" TargetType="{x:Type DataGridRow}">
-                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="list_PreviewMouseLeftButtonDown" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                     <Setter Property="Background" Value="#eeeeff"></Setter>

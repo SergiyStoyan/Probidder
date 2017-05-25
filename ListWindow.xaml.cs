@@ -27,21 +27,21 @@ namespace Cliver.Foreclosures
     {
         public static void OpenDialog()
         {
-            if (lw == null || !lw.IsLoaded)
+            if (_This == null || !_This.IsLoaded)
             {
-                lw = new ListWindow();
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(lw);
+                _This = new ListWindow();
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(_This);
             }
-            lw.ShowDialog();
+            _This.ShowDialog();
         }
 
-        static ListWindow lw = null;
+        static ListWindow _This = null;
 
         public static ListWindow This
         {
             get
             {
-                return lw;
+                return _This;
             }
         }
 
@@ -57,7 +57,7 @@ namespace Cliver.Foreclosures
 
             Closed += delegate
             {
-                lw = null;
+                _This = null;
                 foreclosures.Dispose();
             };
 
@@ -104,7 +104,7 @@ namespace Cliver.Foreclosures
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
         {
-            if (lw == null || !lw.IsLoaded)
+            if (_This == null || !_This.IsLoaded)
                 return;
 
             fill();
@@ -112,7 +112,7 @@ namespace Cliver.Foreclosures
 
         private void Foreclosures_Saved(Db.Document document, bool inserted)
         {
-            if (lw == null || !lw.IsLoaded)
+            if (_This == null || !_This.IsLoaded)
                 return;
 
             fill();
@@ -204,18 +204,6 @@ namespace Cliver.Foreclosures
             ForeclosureWindow.OpenDialog(d.Id);            
         }
         //Dictionary<Db.Foreclosure, ForeclosureWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, ForeclosureWindow>();
-
-        private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //DataGridRow r = sender as DataGridRow;
-            //if (r == null)
-            //    return;
-            //Db.Foreclosure d = (Db.Foreclosure)r.Item;
-            //if (d == null)
-            //    return;
-            //show_AuctionWindow(d);
-            //e.Handled = true;
-        }
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
         {
