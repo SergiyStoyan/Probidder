@@ -369,16 +369,6 @@ namespace Cliver.Foreclosures
             }
         }
 
-        private void ATTORNEY_S_TextInput(object sender, TextCompositionEventArgs e)
-        {
-
-        }
-
-        private void ATTORNEY_S_TextChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {//make text left alignment
             ComboBox cb = (ComboBox)sender;
@@ -399,11 +389,6 @@ namespace Cliver.Foreclosures
                     });
                 }
             });
-        }
-
-        private void ComboBox_DropDownClosed(object sender, EventArgs e)
-        {
-           // ComboBox_SelectionChanged(sender, null);
         }
     }
 
