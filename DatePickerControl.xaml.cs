@@ -30,18 +30,30 @@ namespace Cliver.Foreclosures
 
             Loaded += delegate
             {
-                tb = this.FindChildrenOfType<TextBox>().First();
-                //tb.DataContext = null;
-                //var g = tb.GetBindingExpression(TextBox.TextProperty);
-                //Binding b = new Binding("SelectedDate");
-                //b.Mode = BindingMode.OneWay;
-                //b.StringFormat = "MM/dd/yyyy";
-                //tb.SetBinding(TextBox.TextProperty, b);
-                //tb.PreviewTextInput += TextBox_PreviewTextInput;
-                //tb.TextChanged += TextBox_TextChanged;
-                //tb.LostFocus += TextBox_LostFocus;
-                //tb.GotFocus += TextBox_GotFocus;
-                //tb.Text = mask;
+                ThreadRoutines.StartTry(() =>
+                {
+                    DateTime end = DateTime.Now.AddMilliseconds(1000);
+                    while (end > DateTime.Now)
+                    {
+                        TextBox tb1 = null;
+                        Dispatcher.Invoke(() =>
+                        {
+                            tb1 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+                        });
+                        if (tb1 != null)
+                        {
+                            tb = tb1;
+                            Dispatcher.Invoke(() =>
+                            {
+                                DatePicker_SelectedDateChanged(null, null);
+                            });
+                            break;
+                        }
+                        System.Threading.Thread.Sleep(20);
+                    }
+                });
+
+                tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
             };
         }
 
@@ -54,7 +66,7 @@ namespace Cliver.Foreclosures
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             //focused = true;
-            //((DatePicker)sender).FocusOnText();
+            ((DatePicker)sender).FocusOnText();
         }
         //bool focused = false;
 
@@ -66,7 +78,8 @@ namespace Cliver.Foreclosures
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                //tb.Text = mask;
+                if (tb.Text.Length < 1)
+                    tb.Text = mask;
                 return;
             }
             tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
@@ -157,7 +170,8 @@ namespace Cliver.Foreclosures
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             DateTime? dt = calendar_input(tb.Text);
-            if (dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
+            if (SelectedDate == null && dt == null
+                || SelectedDate != null && dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
                 DatePicker_SelectedDateChanged(null, null);
             SelectedDate = dt;
         }
@@ -168,7 +182,8 @@ namespace Cliver.Foreclosures
                 tb = (TextBox)sender;
             if (SelectedDate == null)
             {
-             //   tb.Text = mask;
+                if (tb.Text.Length < 1)
+                    tb.Text = mask;
                 return;
             }
             tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");

@@ -13,13 +13,14 @@
                 <Setter Property="Control.Template">
                     <Setter.Value>
                         <ControlTemplate>
-                        <TextBox Name="TextBox"
-                            PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"
-                                 LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus" Text="__/__/__1"
+                        <TextBox x:Name="TextBox" 
+                                    Text="111" 
+                        PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"
+                                 LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus"
                                  />
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
         </DatePicker.Resources>
-    </DatePicker>
+</DatePicker>
