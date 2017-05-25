@@ -81,19 +81,6 @@ namespace Cliver.Foreclosures
             foreclosures.Saved += Foreclosures_Saved;
             foreclosures.Deleted += Foreclosures_Deleted;
 
-            list.LayoutUpdated += delegate (object sender, EventArgs e)
-              {
-                  //if (!just_set)
-                  //    return;
-                  //just_set = false;
-                  //foreach (GridViewColumn c in ((GridView)list.View).Columns)
-                  //    if (c.ActualWidth > 100)
-                  //    {
-                  //        c.Width = 100;
-                  //        //c.Width = double.NaN;
-                  //    }
-              };
-
             list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
               {//needed for highlighting search keyword
                   highlight(list);
@@ -111,27 +98,9 @@ namespace Cliver.Foreclosures
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                //PropertyInfo[] pis = typeof(Db.Foreclosure).GetProperties();
-                //GridViewColumnCollection cs = ((GridView)list.View).Columns;
-                //cs.Clear();                
-                //foreach (string f in Settings.View.ShowedColumns)
-                //{
-                //    GridViewColumn c = new GridViewColumn();
-                //    c.Header = f;
-                //    c.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
-                //    c.DisplayMemberBinding = new Binding(f);
-                //    PropertyInfo pi = pis.FirstOrDefault(x => x.Name == f);
-                //    if (pi == null)
-                //        throw new Exception("Some of ShowedColumns does not found in Foreclosure members");
-                //    if (pi.PropertyType == typeof(DateTime?))
-                //        c.DisplayMemberBinding.StringFormat = "MMddyy";
-                //    cs.Add(c);
-                //}
                 fill();
-                //just_set = true;
             }));
         }
-        //bool just_set = true;
 
         private void Foreclosures_Deleted(int document_id, bool sucess)
         {
@@ -153,7 +122,6 @@ namespace Cliver.Foreclosures
 
         void fill()
         {
-            //list.ItemsSource = foreclosures.GetAll().Select(x => new Item { Foreclosure = x });
             list.ItemsSource = foreclosures.GetAll();
             filter();
             sort();
@@ -239,14 +207,14 @@ namespace Cliver.Foreclosures
 
         private void list_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ListViewItem lvi = sender as ListViewItem;
-            if (lvi == null)
-                return;
-            Db.Foreclosure d = (Db.Foreclosure)lvi.Content;
-            if (d == null)
-                return;
-            show_AuctionWindow(d);
-            e.Handled = true;
+            //DataGridRow r = sender as DataGridRow;
+            //if (r == null)
+            //    return;
+            //Db.Foreclosure d = (Db.Foreclosure)r.Item;
+            //if (d == null)
+            //    return;
+            //show_AuctionWindow(d);
+            //e.Handled = true;
         }
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
@@ -447,16 +415,16 @@ namespace Cliver.Foreclosures
                 if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
                     searched_columns.Add(i);
 
-            foreach (DataGridRow lvi in lv.FindChildrenOfType<DataGridRow>())
-            {
-                int i = 0;
-                foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
-                {
-                    if (!searched_columns.Contains(i++))
-                        continue;
-                    highlight_TextBlock(tb);
-                }
-            }
+            //foreach (DataGridRow lvi in lv.FindChildrenOfType<DataGridRow>())
+            //{
+            //    int i = 0;
+            //    foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
+            //    {
+            //        if (!searched_columns.Contains(i++))
+            //            continue;
+            //        highlight_TextBlock(tb);
+            //    }
+            //}
         }
         private void highlight_TextBlock(TextBlock tb)
         {
@@ -488,6 +456,7 @@ namespace Cliver.Foreclosures
         {
             if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
                 e.Cancel = true;
+            e.Column.IsReadOnly = true;
         }
     }
 }

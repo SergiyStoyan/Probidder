@@ -57,7 +57,8 @@ namespace Cliver.Foreclosures
                     if (ccns == null)
                         return new CountyCaseNumbers { case_ns = new List<string>()};
                     Db.Foreclosures fs = new Foreclosures();
-                    List<string> used_cns = fs.Get(x => GetNormalized(x.COUNTY) == county).Select(x => x.CASE_N).ToList();
+                    //List<string> used_cns = fs.Get(x => GetNormalized(x.COUNTY) == county).ToList(); !!!does not work!!!
+                    HashSet<string> used_cns = new HashSet<string>(fs.GetAll().Where(x => GetNormalized(x.COUNTY) == county).Select(x => x.CASE_N));
                     ccns.case_ns = ccns.case_ns.Where(x => !used_cns.Contains(x)).ToList();
                     return ccns;
                 }

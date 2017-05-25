@@ -189,8 +189,8 @@
                     <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, ValidatesOnDataErrors=True}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
                         <CheckBox Name="IS_ORG" VerticalAlignment="Center" IsChecked="{Binding IS_ORG, Mode=TwoWay, ValidatesOnDataErrors=True}" Margin="0,0,5,0">IS ORG</CheckBox>
-                        <CheckBox Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, ValidatesOnDataErrors=True}">Deceased</CheckBox>
-                        <Label VerticalAlignment="Center" >Owner Role</Label>
+                        <CheckBox Name="DECEASED" Margin="20,0,0,0" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, ValidatesOnDataErrors=True}">Deceased</CheckBox>
+                        <Label VerticalAlignment="Center" Margin="20,0,0,0" >Owner Role</Label>
                         <ComboBox Name="OWNER_ROLE" MinWidth="30"  DropDownClosed="ComboBox_DropDownClosed" Text="{Binding OWNER_ROLE, Mode=TwoWay, ValidatesOnDataErrors=True}" IsReadOnly="True" IsEditable="True" Width="90"></ComboBox>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right">Other Liens</Label>

@@ -72,7 +72,7 @@
                   ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
                         AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
                                CanUserAddRows="False" CanUserDeleteRows="False"
-     CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
+     CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                         <DataGrid.Columns>
                         </DataGrid.Columns>
                     </DataGrid>
