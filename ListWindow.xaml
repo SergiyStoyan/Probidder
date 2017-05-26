@@ -82,7 +82,7 @@
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Click="open_Click" VerticalAlignment="Center" Width="20" Height="20"></Button>
+                                        <Button Click="open_Click" VerticalAlignment="Top" Width="30" Height="20"></Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

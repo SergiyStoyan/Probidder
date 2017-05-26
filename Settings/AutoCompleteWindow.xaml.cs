@@ -56,6 +56,10 @@ namespace Cliver.Foreclosures
 
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
             show_TriggerKey();
+
+            Loaded += delegate
+              {
+              };
         }
 
         private ObservableCollection<Item> items;

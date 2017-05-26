@@ -48,6 +48,11 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
+            Loaded += delegate
+            {
+                //SizeToContent = SizeToContent.Manual;
+            };
+
             if (Settings.Database.RefreshPeriodInSecs > 0)
             {
                 RefreshPeriodInDays.Text = ((float)Settings.Database.RefreshPeriodInSecs / (24 * 60 * 60)).ToString();
