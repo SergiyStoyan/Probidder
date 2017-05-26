@@ -54,18 +54,23 @@ namespace Cliver.Foreclosures
             };
         }
 
+        //public override void OnApplyTemplate()
+        //{
+        //    base.OnApplyTemplate();
+        //    tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+        //    if (tb == null)
+        //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
+        //}
+
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //focused = false;
-            //TextBox_LostFocus(null, null);
         }
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //focused = true;
-            ((DatePicker)sender).FocusOnText();
+            tb.Focus();
+            //((DatePicker)sender).FocusOnText();
         }
-        //bool focused = false;
 
         TextBox tb;
         readonly string mask = "__/__/__";
@@ -94,6 +99,8 @@ namespace Cliver.Foreclosures
                 if (t[i] != '/')
                     t = t.Insert(i, "/");
             tb.Text = t + mask.Substring(t.Length);
+            if (p > 0 && t[p - 1] == '/')
+                p--;
             tb.SelectionStart = p;
         }
 
@@ -119,6 +126,8 @@ namespace Cliver.Foreclosures
                 if (t[i] != '/')
                     t = t.Insert(i, "/");
             tb.Text = t.Substring(0, mask.Length);
+            if (p < mask.Length && t[p] == '/')
+                p++;
             tb.SelectionStart = p;
         }
 
