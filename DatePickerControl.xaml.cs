@@ -109,7 +109,10 @@ namespace Cliver.Foreclosures
         {
             e.Handled = true;
             if (tb.SelectionStart >= mask.Length)
+            {
+                Console.Beep(5000, 200);
                 return;
+            }
             int p = tb.SelectionStart;
             if (p == 2 || p == 5)
             {

@@ -20,6 +20,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
@@ -88,10 +89,10 @@ namespace Cliver.Foreclosures
 
             Set();
 
-            ContentRendered+= delegate
-            {
-                WpfRoutines.TrimWindowSize(this);
-            };
+            ContentRendered += delegate
+             {
+                 WpfRoutines.TrimWindowSize(this);
+             };
         }
 
         public void Set()
@@ -122,7 +123,7 @@ namespace Cliver.Foreclosures
 
         void fill()
         {
-            list.ItemsSource = foreclosures.GetAll();
+            list.ItemsSource = new ObservableCollection<Db.Foreclosure>(foreclosures.GetAll());
             filter();
             sort();
         }
@@ -201,7 +202,7 @@ namespace Cliver.Foreclosures
             //    aw.BringIntoView();
             //    aw.Activate();
             //}
-            ForeclosureWindow.OpenDialog(d.Id);            
+            ForeclosureWindow.OpenDialog(d.Id);
         }
         //Dictionary<Db.Foreclosure, ForeclosureWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, ForeclosureWindow>();
 
@@ -253,7 +254,7 @@ namespace Cliver.Foreclosures
         {
             AutoCompleteWindow.OpenDialog();
         }
-        
+
         private void location_Click(object sender, RoutedEventArgs e)
         {
             LocationWindow.OpenDialog();
@@ -272,43 +273,43 @@ namespace Cliver.Foreclosures
 
         private void list_Click(object sender, RoutedEventArgs e)
         {
-            GridViewColumnHeader column = e.OriginalSource as GridViewColumnHeader;
-            if (column == null)
-                return;
+            //DataGridColumnHeader column = e.OriginalSource as DataGridColumnHeader;
+            //if (column == null)
+            //    return;
 
-            {//should be removed if multi-column sort
-                List<System.Collections.DictionaryEntry> cs = sorted_columns2direction.Cast<System.Collections.DictionaryEntry>().ToList();
-                for (int i = cs.Count - 1; i >= 0; i--)
-                {
-                    GridViewColumnHeader c = (GridViewColumnHeader)cs[i].Key;
-                    if (c == column)
-                        continue;
-                    sorted_columns2direction.Remove(c);
-                    c.Column.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
-                    c.Column.Width = c.ActualWidth - 20;
-                }
-            }
+            //{//should be removed if multi-column sort
+            //    List<System.Collections.DictionaryEntry> cs = sorted_columns2direction.Cast<System.Collections.DictionaryEntry>().ToList();
+            //    for (int i = cs.Count - 1; i >= 0; i--)
+            //    {
+            //        GridViewColumnHeader c = (GridViewColumnHeader)cs[i].Key;
+            //        if (c == column)
+            //            continue;
+            //        sorted_columns2direction.Remove(c);
+            //        c.Column.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
+            //        c.Column.Width = c.ActualWidth - 20;
+            //    }
+            //}
 
-            ListSortDirection direction;
-            if (sorted_columns2direction.Contains(column))
-            {
-                direction = (ListSortDirection)sorted_columns2direction[column];
-                direction = direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
-                sorted_columns2direction[column] = direction;
-            }
-            else
-            {
-                direction = ListSortDirection.Ascending;
-                sorted_columns2direction.Add(column, direction);
-                column.Column.Width = column.ActualWidth + 20;
-            }
+            //ListSortDirection direction;
+            //if (sorted_columns2direction.Contains(column))
+            //{
+            //    direction = (ListSortDirection)sorted_columns2direction[column];
+            //    direction = direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            //    sorted_columns2direction[column] = direction;
+            //}
+            //else
+            //{
+            //    direction = ListSortDirection.Ascending;
+            //    sorted_columns2direction.Add(column, direction);
+            //    column.Column.Width = column.ActualWidth + 20;
+            //}
 
-            if (direction == ListSortDirection.Ascending)
-                column.Column.HeaderTemplate = Resources["ArrowUp"] as DataTemplate;
-            else
-                column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
+            //if (direction == ListSortDirection.Ascending)
+            //    column.Column.HeaderTemplate = Resources["ArrowUp"] as DataTemplate;
+            //else
+            //    column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
 
-            sort();
+            //sort();
         }
 
         void sort()
@@ -383,9 +384,9 @@ namespace Cliver.Foreclosures
                         continue;
                     string s;
                     if (pi.PropertyType == typeof(DateTime?))
-                        s = ((DateTime)v).ToString("MMddyy");
+                        s = ((DateTime)v).ToString("MM/dd/yyyy");
                     else
-                        s = v.ToString();                    
+                        s = v.ToString();
                     if (!string.IsNullOrEmpty(s) && filter_regex.IsMatch(s))
                         return true;
                 }
@@ -403,16 +404,19 @@ namespace Cliver.Foreclosures
                 if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
                     searched_columns.Add(i);
 
-            //foreach (DataGridRow lvi in lv.FindChildrenOfType<DataGridRow>())
-            //{
-            //    int i = 0;
-            //    foreach (TextBlock tb in lvi.FindChildrenOfType<TextBlock>())
-            //    {
-            //        if (!searched_columns.Contains(i++))
-            //            continue;
-            //        highlight_TextBlock(tb);
-            //    }
-            //}
+           //foreach(DataGridColumn c in list.Columns)
+           //     if(c.Header.)
+
+            foreach (DataGridRow r in lv.FindChildrenOfType<DataGridRow>())
+            {
+                int i = 0;
+                foreach (TextBlock tb in r.FindChildrenOfType<TextBlock>())
+                {
+                    if (!searched_columns.Contains(i++))
+                        continue;
+                    highlight_TextBlock(tb);
+                }
+            }
         }
         private void highlight_TextBlock(TextBlock tb)
         {
@@ -420,7 +424,7 @@ namespace Cliver.Foreclosures
                 return;
             string text = tb.Text;
             tb.Inlines.Clear();
-            if (filter_regex == null)
+            //if (filter_regex == null)
             {
                 tb.Inlines.Add(text);
                 return;
@@ -443,8 +447,39 @@ namespace Cliver.Foreclosures
         private void list_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
+            {
                 e.Cancel = true;
+                return;
+            }
             e.Column.IsReadOnly = true;
+            e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
+ //           if (e.PropertyType == typeof(DateTime?))
+ //e.Column.               s = ((DateTime)v).ToString("MM/dd/yyyy");
+ //           else
+ //               s = v.ToString();
+        }
+    }
+
+    public static class DataGridExtensions
+    {
+        public static DataGridCell GetCell(this DataGrid grid, DataGridRow row, int columnIndex = 0)
+        {
+            if (row == null)
+                return null;
+
+            var presenters = row.FindVisualChildrenOfType< System.Windows.Controls.Primitives.DataGridCellsPresenter > ().ToList();
+            if (presenters.Count  <1)
+                return null;
+
+            var cell = (DataGridCell)presenters[0].ItemContainerGenerator.ContainerFromIndex(columnIndex);
+            if (cell != null)
+                return cell;
+
+            // now try to bring into view and retreive the cell
+            grid.ScrollIntoView(row, grid.Columns[columnIndex]);
+            cell = (DataGridCell)presenters[0].ItemContainerGenerator.ContainerFromIndex(columnIndex);
+
+            return cell;
         }
     }
 }

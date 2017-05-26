@@ -54,13 +54,13 @@ namespace Cliver.Foreclosures
             CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
 
             LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
-            
+
             ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
-            
+
             TYPE_OF_MO.ItemsSource = (new Db.MortgageTypes()).Get().OrderBy(x => x.mortgage_type).Select(x => x.mortgage_type);
-            
+
             PROP_DESC.ItemsSource = (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
-            
+
             OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
 
             if (foreclosure_id != null)
@@ -74,7 +74,7 @@ namespace Cliver.Foreclosures
             };
 
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
-            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);            
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
@@ -195,32 +195,22 @@ namespace Cliver.Foreclosures
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ZIP.Items.Clear();
-            //foreach (string c in Db.GetValuesFromCsvTable("illinois_postal_codes", "postalcode", new Dictionary<string, string> { { "county", Settings.General.County }, { "placename", (string)CITY.SelectedItem } }))
-            //ZIP.Items.Add(c);
-            foreach (Db.Zip c in (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem))
-                ZIP.Items.Add(c.zip);
+            ZIP.ItemsSource = (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem).OrderBy(x => x.zip);
         }
 
         private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ATTORNEY_S.Items.Clear();
-            //foreach (string c in Db.GetValuesFromJsonTable("attorney_phones", "attorney_phone", new Dictionary<string, string>() { { "county", Settings.General.County }, { "attorney", (string)ATTY.SelectedItem } }))
-            //ATTORNEY_S.Items.Add(c);
-            foreach (Db.AttorneyPhone c in (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem))
-                ATTORNEY_S.Items.Add(c.attorney_phone);
+            ATTORNEY_S.ItemsSource = (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem).OrderBy(x => x.attorney_phone);
 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             if (f.Id == 0)
-                if (ATTORNEY_S.Items.Count == 1)
+                if (ATTORNEY_S.Items.Count > 0)
                     ATTORNEY_S.SelectedIndex = 0;
         }
 
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            CASE_N.Items.Clear();
-            foreach (string c in (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns)
-                CASE_N.Items.Add(c);
+            CASE_N.ItemsSource = (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns.OrderBy(x => x);
 
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
 
@@ -337,65 +327,5 @@ namespace Cliver.Foreclosures
                 e.Handled = true;
             }
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {//make text left alignment
-            ComboBox cb = (ComboBox)sender;
-            TextBox tb = cb.GetVisualChild<TextBox>();
-            if (tb == null)//can be so due to asynchronous building
-                return;
-            if (e.AddedItems.Count < 1)
-                return;
-            ThreadRoutines.StartTry(() => {
-                DateTime end = DateTime.Now.AddMilliseconds(200);
-                while(end > DateTime.Now)
-                {
-                    Thread.Sleep(20);
-                    tb.Dispatcher.Invoke(() =>
-                    {
-                        tb.Select(0, tb.Text.Length);
-                        tb.ScrollToHome();
-                    });
-                }
-            });
-        }
     }
-
-        //public class MyCustomDateConverter : IValueConverter
-        //{
-        //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        //    {
-        //        if (keep_last_text)
-        //            return last_text;
-        //        last_value = (DateTime)value;
-        //        if (last_value == null)
-        //            return null;
-        //        return Regex.Replace(((DateTime)last_value).ToString(culture), " .*", "");
-        //    }
-        //    DateTime? last_value = null;
-
-        //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        //    {
-        //        last_text = (string)value;
-        //        keep_last_text = false;
-        //        try
-        //        {
-        //            return DateTime.Parse((string)value, culture);
-        //        }
-        //        catch
-        //        {
-        //            try
-        //            {
-        //                return DateTime.ParseExact((string)value, "MMddyy", culture);
-        //            }
-        //            catch
-        //            {
-        //                keep_last_text = true;
-        //                return last_value;
-        //            }
-        //        }
-        //    }
-        //    string last_text = null;
-        //    bool keep_last_text = false;
-        //}
-    }
+}

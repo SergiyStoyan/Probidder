@@ -56,8 +56,7 @@ namespace Cliver.Foreclosures
 {"US","MTG: [US BANK] #R" },
 {"WEL","MTG: [WELLS FARGO] #R" },
                     };
-
-                ListWindow.This?.Set();
+                
                 Cliver.Foreclosures.AutoComplete.UpdateRegex(Keys2Phrase);
             }
 
