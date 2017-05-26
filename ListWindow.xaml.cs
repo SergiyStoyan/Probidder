@@ -1,4 +1,9 @@
-﻿using System;
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        http://www.cliversoft.com
+********************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,7 +128,9 @@ namespace Cliver.Foreclosures
 
         void fill()
         {
-            list.ItemsSource = new ObservableCollection<Db.Foreclosure>(foreclosures.GetAll());
+            var fs = foreclosures.GetAll();
+            list.ItemsSource = new ObservableCollection<Db.Foreclosure>(fs);
+            indicator_total.Content = "Total: " + fs.Count;
             filter();
         }
 
@@ -170,8 +177,14 @@ namespace Cliver.Foreclosures
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //foreach (Db.Foreclosure d in e.AddedItems)
-            //    show_AuctionWindow(d);
+            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
+            if (f == null)
+            {
+                indicator_selected.Content = null;
+                return;
+            }
+            indicator_selected.Content = "Selected ID: " + f.Id;
+            show_AuctionWindow(f);
         }
 
         void show_AuctionWindow(Db.Foreclosure d)
@@ -269,9 +282,10 @@ namespace Cliver.Foreclosures
         
         private void open_Click(object sender, RoutedEventArgs e)
         {
-            if (list.SelectedItem == null || !(list.SelectedItem is Db.Foreclosure))
+            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
+            if (f == null)
                 return;
-            show_AuctionWindow((Db.Foreclosure)list.SelectedItem);
+            show_AuctionWindow(f);
         }
 
         private void show_search_Click(object sender, RoutedEventArgs e)
@@ -294,6 +308,7 @@ namespace Cliver.Foreclosures
             {
                 filter_regex = null;
                 cv.Filter = null;
+                indicator_filtered.Content = null;
                 return;
             }
 
@@ -326,6 +341,12 @@ namespace Cliver.Foreclosures
                 }
                 return false;
             };
+
+            int count = 0;
+            foreach (object o in cv)
+                if(o is Db.Foreclosure)
+                    count++;        
+            indicator_filtered.Content = "Filtered: " + count;
         }
         Regex filter_regex = null;
         private void highlight(DataGrid grid)
@@ -376,7 +397,7 @@ namespace Cliver.Foreclosures
                 e.Cancel = true;
                 return;
             }
-            //e.Column.IsReadOnly = true;
+            e.Column.IsReadOnly = true;
             e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
             e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
             e.Column.CanUserSort = true;

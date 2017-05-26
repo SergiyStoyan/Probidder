@@ -31,11 +31,15 @@
         </Style>
     </Window.Resources>
     <Grid >
-        <DockPanel>
-            <Popup Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+            <Popup Grid.Row="0" Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
                         <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
                     </Popup>
-            <Menu DockPanel.Dock="Top">
+        <Menu Name="menu" Grid.Row="0">
                 <MenuItem Header="File">
                     <MenuItem Header="Export" Name="export" Click="export_Click"/>
                     <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
@@ -60,7 +64,7 @@
                     <MenuItem Header="About" Name="about" Click="about_Click"/>
                 </MenuItem>
             </Menu>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel>    
                 <Grid Name="search" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
@@ -71,26 +75,30 @@
                     <Label Content="Find:" Grid.Column="0"/>
                         <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
                     </Grid>
-                    <DataGrid  Margin="0"  MinHeight="100" Height="auto" Name="list" HorizontalAlignment="Stretch" 
+                    <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged"                            
                   AlternationCount="2" 
                   ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
                         AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
-                               CanUserAddRows="True" CanUserDeleteRows="True"
+                               CanUserAddRows="False" CanUserDeleteRows="False"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn>
+                            <!--DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Click="open_Click" VerticalAlignment="Top" Width="30" Height="20"></Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            </-->
                         </DataGrid.Columns>
                     </DataGrid>
 
                 </StackPanel>
-                </ScrollViewer>
-        </DockPanel>
+            </ScrollViewer>
+        <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Left">
+            <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
+            <Label Name="indicator_filtered" Margin="10,0,0,0"></Label>
+            <Label Name="indicator_selected"  Margin="10,0,0,0"></Label>
+        </StackPanel>
     </Grid>
 </Window>
