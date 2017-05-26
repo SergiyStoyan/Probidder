@@ -49,11 +49,6 @@ namespace Cliver.Foreclosures
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
-            //System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture(System.Globalization.CultureInfo.CurrentCulture.Name);
-            //ci.DateTimeFormat.ShortDatePattern = "MM/dd/yyyy";
-            //ci.DateTimeFormat.LongDatePattern = "MM/dd/yyyy";
-            //Thread.CurrentThread.CurrentCulture = ci;
-
             COUNTY.Text = Settings.Location.County;
 
             CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
@@ -200,12 +195,12 @@ namespace Cliver.Foreclosures
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ZIP.ItemsSource = (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem).OrderBy(x => x.zip);
+            ZIP.ItemsSource = (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem).OrderBy(x => x.zip).Select(x=>x.zip);
         }
 
         private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ATTORNEY_S.ItemsSource = (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem).OrderBy(x => x.attorney_phone);
+            ATTORNEY_S.ItemsSourceNomalized = (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem).OrderBy(x => x.attorney_phone).Select(x=>x.attorney_phone);
 
             Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
             if (f.Id == 0)
@@ -331,6 +326,29 @@ namespace Cliver.Foreclosures
                 Console.Beep(5000, 200);
                 e.Handled = true;
             }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {//make text left alignment
+            ComboBox cb = (ComboBox)sender;
+            TextBox tb = cb.GetVisualChild<TextBox>();
+            if (tb == null)//can be so due to asynchronous building
+                return;
+            if (e.AddedItems.Count < 1)
+                return;
+            ThreadRoutines.StartTry(() =>
+            {
+                DateTime end = DateTime.Now.AddMilliseconds(200);
+                while (end > DateTime.Now)
+                {
+                    System.Threading.Thread.Sleep(20);
+                    tb.Dispatcher.Invoke(() =>
+                    {
+                        tb.Select(0, tb.Text.Length);
+                        tb.ScrollToHome();
+                    });
+                }
+            });
         }
     }
 }

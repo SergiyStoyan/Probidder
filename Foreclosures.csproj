@@ -84,6 +84,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -132,6 +133,9 @@
     <Compile Include="AboutForm.Designer.cs" />
     <Compile Include="ComboBoxControl.xaml.cs">
       <DependentUpon>ComboBoxControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NumberBoxControl.xaml.cs">
+      <DependentUpon>NumberBoxControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatePickerControl.xaml.cs">
       <DependentUpon>DatePickerControl.xaml</DependentUpon>
@@ -230,6 +234,10 @@
     <Page Include="ComboBoxControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NumberBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DatePickerControl.xaml">
       <SubType>Designer</SubType>

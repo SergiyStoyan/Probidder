@@ -247,10 +247,10 @@ namespace Cliver.Foreclosures
                         //    return "Error";
                         return null;
                     case "ATTORNEY_S":
-                        //if (ATTORNEY_S == null)
-                        //    return null;
-                        //if (Regex.IsMatch(ATTORNEY_S, "_"))
-                        //    return "Error";
+                        if (ATTORNEY_S == null)
+                            return null;
+                        if (Regex.IsMatch(ATTORNEY_S, @"_") && Regex.IsMatch(ATTORNEY_S, @"\d"))
+                            return "Error";
                         return null;
                     case "TYPE_OF_MO":
                         //if (TYPE_OF_MO == null)
@@ -277,10 +277,10 @@ namespace Cliver.Foreclosures
                         //    return "Error";
                         return null;
                     case "DEF_PHONE":
-                        //if (DEF_PHONE == null)
-                        //    return null;
-                        //if (Regex.IsMatch(DEF_PHONE, "_"))
-                        //    return "Error";
+                        if (DEF_PHONE == null)
+                            return null;
+                        if (Regex.IsMatch(DEF_PHONE, @"_") && Regex.IsMatch(DEF_PHONE, @"\d"))
+                            return "Error";
                         return null;
                     default:
                         throw new Exception("Field " + propertyName + " is absent in validation.");
