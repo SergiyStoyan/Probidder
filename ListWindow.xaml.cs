@@ -432,12 +432,17 @@ namespace Cliver.Foreclosures
                 return;
             }
             //e.Column.IsReadOnly = true;
+            e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
             e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
+            e.Column.CanUserSort = true;
+            e.Column.CanUserResize = true;
+            e.Column.CanUserReorder = true;
             if (e.PropertyType == typeof(DateTime?))
             {
                 DataGridTextColumn tc = e.Column as DataGridTextColumn;
                 if (tc != null)
                     tc.Binding.StringFormat = DATE_FORMAT;
+                //e.Column.SortMemberPath = e.Column.Header.ToString();
             }
         }
         readonly string DATE_FORMAT = "MM/dd/yyyy";

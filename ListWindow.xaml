@@ -39,7 +39,7 @@
                 <MenuItem Header="File">
                     <MenuItem Header="Export" Name="export" Click="export_Click"/>
                     <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
-                    <MenuItem Header="Logs" Name="work_dir" Click="work_dir_Click"/>
+                    <MenuItem Header="Open Logs" Name="work_dir" Click="work_dir_Click"/>
                     <Separator />
                     <MenuItem Header="Exit" Name="exit" Click="exit_Click"/>
                 </MenuItem>
