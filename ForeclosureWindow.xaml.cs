@@ -304,7 +304,7 @@ namespace Cliver.Foreclosures
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!fields.IsEnabled && Edit.IsEnabled)//after save
+            if (!fields.IsEnabled && Edit.IsChecked == true)//after save
             {
                 fields.IsEnabled = true;
             }

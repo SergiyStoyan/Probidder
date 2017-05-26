@@ -174,12 +174,14 @@
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Name="indicator" Grid.Column="0"></Label>
-                <UniformGrid HorizontalAlignment="Right" Grid.Column="1" Rows="1">
-                <Button Name="Prev" Margin="10,0,0,0" Click="Prev_Click">&lt;&lt;</Button>
+                <Label Name="indicator" Grid.Column="0" VerticalAlignment="Bottom"></Label>
+                <UniformGrid HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Rows="1">
+                    <ToggleButton VerticalAlignment="Center"  Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Visible" Grid.Column="0">
+                        Edit
+                    </ToggleButton>                    
+                    <Button Name="Prev" Margin="10,0,0,0" Click="Prev_Click">&lt;&lt;</Button>
                     <Button Name="Next" Margin="10,0,0,0" Click="Next_Click">&gt;&gt;</Button>
                     <Button Name="New" Margin="10,0,0,0" Click="New_Click" Visibility="Collapsed" Grid.Column="0">New</Button>
-                    <ToggleButton Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Collapsed" Grid.Column="0">Edit</ToggleButton>
                     <Button Name="Save" Margin="10,0,0,0" Click="Save_Click">Save</Button>
                 <Button Margin="10,0,0,0" Name="Delete" Click="Delete_Click">Delete</Button>
                 <Button Margin="10,0,0,0" Name="Cancel" Click="Cancel_Click">Close</Button>
