@@ -86,49 +86,40 @@ namespace Cliver.Foreclosures
         {
             e.Handled = true;
             string t = tb.Text;
-            if (t.Length < mask.Length)
-            {
-                int p = tb.SelectionStart;
-                string s = mask.Substring(p, mask.Length - t.Length);
-                tb.Text = t.Insert(p, s);
-                tb.SelectionStart = p + s.Length;
-                //for (int i = tb.SelectionStart; i < t.Length; i++)
-                //{
-                //    if (i == 2 || i == 5)
-                //        t = t.Insert(i, "/");
-                //    else if (t[i] == '/')
-                //        t = t.Remove(i, 1);
-                //}
-                //string s = mask.Substring(t.Length, mask.Length - t.Length);
-                //tb.Text = t + s;
-                //tb.SelectionStart = p;
-            }
+            if (t.Length >= mask.Length)
+                return;
+            int p = tb.SelectionStart;
+            t = t.Substring(0, p) + Regex.Replace(t.Substring(p), @"/", "");
+            for (int i = 2; i < mask.Length; i += 3)
+                if (t[i] != '/')
+                    t = t.Insert(i, "/");
+            tb.Text = t + mask.Substring(t.Length);
+            tb.SelectionStart = p;
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = true;
-            if (tb.SelectionStart >= mask.Length)
+            string t = tb.Text;
+            int p = tb.SelectionStart;
+            if (!Regex.IsMatch(t, "_") || p >= mask.Length)
             {
                 Console.Beep(5000, 200);
                 return;
             }
-            int p = tb.SelectionStart;
             if (p == 2 || p == 5)
             {
                 if (e.Text == "/")
                     return;
                 p++;
             }
-            if (Regex.IsMatch(e.Text, @"[^\d]"))
-                return;
-            string t = tb.Text.Remove(p, 1);
-            tb.Text = t.Insert(p, e.Text);
-            if (p == 1 || p == 4)
-                p++;
+            t = t.Substring(0, p) + e.Text + Regex.Replace(t.Substring(p), @"/", "");
             p++;
+            for (int i = 2; i < mask.Length; i += 3)
+                if (t[i] != '/')
+                    t = t.Insert(i, "/");
+            tb.Text = t.Substring(0, mask.Length);
             tb.SelectionStart = p;
-            //tb.SelectionLength = 1;
         }
 
         private DateTime? calendar_input(string text)
