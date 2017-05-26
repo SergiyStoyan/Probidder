@@ -345,7 +345,7 @@ namespace Cliver.Foreclosures
         {
             string k = keyword.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (String.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
+            if (string.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
             {
                 filter_regex = null;
                 cv.Filter = null;
@@ -354,17 +354,6 @@ namespace Cliver.Foreclosures
 
             PropertyInfo[] pis_ = typeof(Db.Foreclosure).GetProperties();
             List<PropertyInfo> pis = new List<PropertyInfo>();
-            //foreach (GridViewColumn c in ((GridView)list.View).Columns)
-            //{
-            //    Binding b = c.DisplayMemberBinding as Binding;
-            //    if (b == null)
-            //        continue;
-            //    string field = b.Path.Path;
-            //    PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == field);
-            //    if (pi == null)
-            //        continue;
-            //    pis.Add(pi);
-            //}
             foreach (string c in Settings.View.SearchedColumns)
             {
                 PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == c);
@@ -384,7 +373,7 @@ namespace Cliver.Foreclosures
                         continue;
                     string s;
                     if (pi.PropertyType == typeof(DateTime?))
-                        s = ((DateTime)v).ToString("MM/dd/yyyy");
+                        s = ((DateTime)v).ToString(DATE_FORMAT);
                     else
                         s = v.ToString();
                     if (!string.IsNullOrEmpty(s) && filter_regex.IsMatch(s))
@@ -400,12 +389,9 @@ namespace Cliver.Foreclosures
                 return;
 
             HashSet<int> searched_columns = new HashSet<int>();
-            for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
-                if (Settings.View.SearchedColumns.Contains(Settings.View.ShowedColumns[i]))
+            for (int i = 0; i < list.Columns.Count; i++)
+                if (Settings.View.SearchedColumns.Contains(list.Columns[i].Header))
                     searched_columns.Add(i);
-
-           //foreach(DataGridColumn c in list.Columns)
-           //     if(c.Header.)
 
             foreach (DataGridRow r in lv.FindChildrenOfType<DataGridRow>())
             {
@@ -420,26 +406,20 @@ namespace Cliver.Foreclosures
         }
         private void highlight_TextBlock(TextBlock tb)
         {
-            if (tb == null)
+            if (tb == null || filter_regex == null)
                 return;
             string text = tb.Text;
-            tb.Inlines.Clear();
-            //if (filter_regex == null)
-            {
-                tb.Inlines.Add(text);
+            string[] ts = filter_regex.Split(text);
+            if (ts.Length < 2)
                 return;
-            }
+            tb.Inlines.Clear();
             bool match = false;
-            foreach (string item in filter_regex.Split(text))
+            foreach (string t in ts)
             {
                 if (match)
-                {
-                    Run r = new Run(item);
-                    r.Background = Settings.View.SearchHighlightColor;
-                    tb.Inlines.Add(r);
-                }
+                    tb.Inlines.Add(new Run() { Text = t, Background = Settings.View.SearchHighlightColor });
                 else
-                    tb.Inlines.Add(item);
+                    tb.Inlines.Add(new Run() { Text = t });
                 match = !match;
             }
         }
@@ -451,13 +431,16 @@ namespace Cliver.Foreclosures
                 e.Cancel = true;
                 return;
             }
-            e.Column.IsReadOnly = true;
+            //e.Column.IsReadOnly = true;
             e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
- //           if (e.PropertyType == typeof(DateTime?))
- //e.Column.               s = ((DateTime)v).ToString("MM/dd/yyyy");
- //           else
- //               s = v.ToString();
+            if (e.PropertyType == typeof(DateTime?))
+            {
+                DataGridTextColumn tc = e.Column as DataGridTextColumn;
+                if (tc != null)
+                    tc.Binding.StringFormat = DATE_FORMAT;
+            }
         }
+        readonly string DATE_FORMAT = "MM/dd/yyyy";
     }
 
     public static class DataGridExtensions
