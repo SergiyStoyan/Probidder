@@ -125,7 +125,6 @@ namespace Cliver.Foreclosures
         {
             list.ItemsSource = new ObservableCollection<Db.Foreclosure>(foreclosures.GetAll());
             filter();
-            sort();
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -173,9 +172,6 @@ namespace Cliver.Foreclosures
         {
             //foreach (Db.Foreclosure d in e.AddedItems)
             //    show_AuctionWindow(d);
-            if (list.SelectedItem == null)
-                return;
-            show_AuctionWindow((Db.Foreclosure)list.SelectedItem);
         }
 
         void show_AuctionWindow(Db.Foreclosure d)
@@ -270,64 +266,13 @@ namespace Cliver.Foreclosures
         {
             ViewWindow.OpenDialog();
         }
-
-        private void list_Click(object sender, RoutedEventArgs e)
+        
+        private void open_Click(object sender, RoutedEventArgs e)
         {
-            //DataGridColumnHeader column = e.OriginalSource as DataGridColumnHeader;
-            //if (column == null)
-            //    return;
-
-            //{//should be removed if multi-column sort
-            //    List<System.Collections.DictionaryEntry> cs = sorted_columns2direction.Cast<System.Collections.DictionaryEntry>().ToList();
-            //    for (int i = cs.Count - 1; i >= 0; i--)
-            //    {
-            //        GridViewColumnHeader c = (GridViewColumnHeader)cs[i].Key;
-            //        if (c == column)
-            //            continue;
-            //        sorted_columns2direction.Remove(c);
-            //        c.Column.HeaderTemplate = Resources["ArrowLess"] as DataTemplate;
-            //        c.Column.Width = c.ActualWidth - 20;
-            //    }
-            //}
-
-            //ListSortDirection direction;
-            //if (sorted_columns2direction.Contains(column))
-            //{
-            //    direction = (ListSortDirection)sorted_columns2direction[column];
-            //    direction = direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
-            //    sorted_columns2direction[column] = direction;
-            //}
-            //else
-            //{
-            //    direction = ListSortDirection.Ascending;
-            //    sorted_columns2direction.Add(column, direction);
-            //    column.Column.Width = column.ActualWidth + 20;
-            //}
-
-            //if (direction == ListSortDirection.Ascending)
-            //    column.Column.HeaderTemplate = Resources["ArrowUp"] as DataTemplate;
-            //else
-            //    column.Column.HeaderTemplate = Resources["ArrowDown"] as DataTemplate;
-
-            //sort();
+            if (list.SelectedItem == null || !(list.SelectedItem is Db.Foreclosure))
+                return;
+            show_AuctionWindow((Db.Foreclosure)list.SelectedItem);
         }
-
-        void sort()
-        {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            cv.SortDescriptions.Clear();
-            foreach (GridViewColumnHeader c in sorted_columns2direction.Keys)
-            {
-                string header;
-                Binding b = c.Column.DisplayMemberBinding as Binding;
-                if (b != null)
-                    header = b.Path.Path;
-                else
-                    header = c.Column.Header.ToString();
-                cv.SortDescriptions.Add(new SortDescription(header, (ListSortDirection)sorted_columns2direction[c]));
-            }
-        }
-        System.Collections.Specialized.OrderedDictionary sorted_columns2direction = new System.Collections.Specialized.OrderedDictionary { };
 
         private void show_search_Click(object sender, RoutedEventArgs e)
         {
@@ -383,7 +328,7 @@ namespace Cliver.Foreclosures
             };
         }
         Regex filter_regex = null;
-        private void highlight(DataGrid lv)
+        private void highlight(DataGrid grid)
         {
             if (filter_regex == null)
                 return;
@@ -393,14 +338,14 @@ namespace Cliver.Foreclosures
                 if (Settings.View.SearchedColumns.Contains(list.Columns[i].Header))
                     searched_columns.Add(i);
 
-            foreach (DataGridRow r in lv.FindChildrenOfType<DataGridRow>())
+            foreach (DataGridRow r in grid.FindChildrenOfType<DataGridRow>())
             {
-                int i = 0;
-                foreach (TextBlock tb in r.FindChildrenOfType<TextBlock>())
+                for (int j = 0; j < grid.Columns.Count; j++)
                 {
-                    if (!searched_columns.Contains(i++))
+                    if (!searched_columns.Contains(j))
                         continue;
-                    highlight_TextBlock(tb);
+                    foreach (TextBlock tb in grid.GetCell(r, j).FindChildrenOfType<TextBlock>())
+                        highlight_TextBlock(tb);
                 }
             }
         }
