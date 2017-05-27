@@ -22,7 +22,7 @@
         <Style x:Key="AlternateItemStyle" TargetType="{x:Type DataGridRow}">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" Value="#eeeeff"></Setter>
+                    <Setter Property="Background" Value="#f5f5ff"></Setter>
                 </Trigger>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                     <Setter Property="Background" Value="#ffffff"></Setter>
@@ -76,7 +76,8 @@
                         <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
                     </Grid>
                     <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
-                              VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged"                            
+                              VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
+          VerticalGridLinesBrush="#eed"                           
                   AlternationCount="2" 
                   ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
                         AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
@@ -94,11 +95,13 @@
                     </DataGrid>
 
                 </StackPanel>
-            </ScrollViewer>
-        <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Left">
-            <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
-            <Label Name="indicator_filtered" Margin="10,0,0,0"></Label>
-            <Label Name="indicator_selected"  Margin="10,0,0,0"></Label>
-        </StackPanel>
+        </ScrollViewer>
+        <Border Grid.Row="2"  BorderBrush="#aaa" BorderThickness="0 1 0 0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#eee">
+                <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
+                <Label Name="indicator_filtered" Margin="10,0,0,0"></Label>
+                <Label Name="indicator_selected"  Margin="10,0,0,0"></Label>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
