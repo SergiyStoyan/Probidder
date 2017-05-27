@@ -24,8 +24,6 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 
 /*
- - validation (control red border) for numbers
- - masks
      
    
 
@@ -52,11 +50,12 @@ namespace Cliver.Foreclosures
             Log.Initialize(Log.Mode.ONLY_LOG);
             //Cliver.Config.Initialize(new string[] { "General" });
             Cliver.Config.Reload();
-        }        
+        }  
 
         [STAThread]
         public static void Main(string[] args)
         {
+
             try
             {
                 ProcessRoutines.RunSingleProcessOnly();

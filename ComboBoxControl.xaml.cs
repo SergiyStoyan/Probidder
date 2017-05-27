@@ -174,48 +174,66 @@ namespace Cliver.Foreclosures
                 return;
             }
             int p = tb.SelectionStart;
+            string t = tb.Text.Substring(0, p);
             tb.Text = apply_mask(s);
             tb.SelectionStart = p;
+            if (tb.Text.StartsWith(t))
+                tb.SelectionLength = tb.Text.Length - p;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //if (ignore_text_change)
+            //    return;
+
             e.Handled = true;
             string t = tb.Text;
-            if (t.Length >= mask.Length)
+            if (t.Length > mask.Length)
                 return;
+
+            //ignore_text_change = true;
+
             string v = strip_mask(t);
-            bool found = false;
-            foreach (string i in Items)
-                if (strip_mask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if ((string)SelectedItem != i)
+            if (v.Length > 0)
+            {
+                foreach (string i in Items)
+                    if (strip_mask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if ((string)SelectedItem == i)
+                            ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
-                    found = true;
-                    break;
-                }
-            if(!found)
-                SelectedItem = null;
+                        return;
+                    }
+            }
+            SelectedItem = null;
             int p = tb.SelectionStart;            
             tb.Text = apply_mask(t);
             //tb.ScrollToHome();
             tb.SelectionStart = p;
+
+            //ignore_text_change = false;
         }
+        bool ignore_text_change = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = true;
             string t = tb.Text;
             int p = tb.SelectionStart;
-            if (!Regex.IsMatch(t, "_") || p >= mask.Length || Regex.IsMatch(e.Text, @"[^\d]"))
+            t = t.Remove(p, tb.SelectionLength);
+            t = apply_mask(t);
+            if (!Regex.IsMatch(t, "_") 
+                || p >= mask.Length 
+                || Regex.IsMatch(e.Text, @"[^\d]")
+                )
             {
                 Console.Beep(5000, 200);
                 return;
             }
             while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
                 p++;
-            t = t.Substring(0, p) + e.Text + t.Substring(p);
-            t = apply_mask(t);
+            t = t.Remove(p, 1);
+            t = t.Insert(p, e.Text);
             p++;
             tb.Text = t;
             tb.SelectionStart = p;
