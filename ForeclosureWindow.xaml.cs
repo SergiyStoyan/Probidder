@@ -130,7 +130,10 @@ namespace Cliver.Foreclosures
         {
             Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id == 0)
+            {
+                Edit.IsChecked = false;
                 f = foreclosures.GetLast();
+            }
             else
                 f = foreclosures.GetPrevious(f);
             if (f == null)

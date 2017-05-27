@@ -7,6 +7,13 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
              mc:Ignorable="d"
           SelectionChanged="ComboBox_SelectionChanged">
+    <!--ComboBox.Text>
+        <Binding Path="Name" Mode="OneWayToSource" UpdateSourceTrigger="LostFocus">
+            <Binding.ValidationRules>
+                <local:BogusValidationRule></local:BogusValidationRule>
+            </Binding.ValidationRules>
+        </Binding>
+    </-->
     <ComboBox.Resources>
         <Style TargetType="{x:Type local:ComboBoxControl}">
             <Setter Property="Control.Template">
