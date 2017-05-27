@@ -132,20 +132,20 @@ namespace Cliver.Foreclosures
         {
             if (!IsInitialized)
                 return;
-            lDbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            RefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            DoRefreshRetry.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            lDbRefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            RefreshPeriodInDays.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            DoRefreshRetry.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
             DoRefreshRetry_Checked(null, null);
-            lNextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            NextRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            lNextDbRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            NextRefreshTime.Visibility = DoRefresh.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void DoRefreshRetry_Checked(object sender, RoutedEventArgs e)
         {
             if (!IsInitialized)
                 return;
-            lDbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            RefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            lDbRefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            RefreshRetryPeriodInSecs.Visibility = DoRefresh.IsChecked == true && DoRefreshRetry.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void DoRefresh_Unchecked(object sender, RoutedEventArgs e)
