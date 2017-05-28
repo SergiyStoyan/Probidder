@@ -38,8 +38,78 @@ namespace Cliver.Foreclosures
                 base.Save(document);
             }
         }
+        //public class Foreclosures
+        //{
+        //    ListDb.Table<Foreclosure> t = ListDb.GetTable<Foreclosure>();
+
+        //    public void Save(Foreclosure document)
+        //    {
+        //        if (document.Id == 0)
+        //            document.Id = DateTime.Now.Ticks;
+
+        //        foreach (PropertyInfo pi in typeof(Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
+        //        {
+        //            if (pi.CustomAttributes.Count() > 0)//engine fields
+        //                continue;
+        //            if (pi.PropertyType == typeof(string))
+        //            {
+        //                string v = (string)pi.GetValue(document);
+        //                if (string.IsNullOrEmpty(v))
+        //                    continue;
+        //                pi.SetValue(document, v.Trim());
+        //            }
+        //        }
+        //    }
+
+        //    public void Delete(long foreclosure_id)
+        //    {
+        //      bool r =  t.Remove(t.Where(x => x.Id == foreclosure_id).First());
+        //    }
+
+        //    public List<Foreclosure> GetAll()
+        //    {
+        //        return t;
+        //    }
+
+        //    public Foreclosure GetById(int foreclosure_id)
+        //    {
+        //        return t.Where(x => x.Id == foreclosure_id).FirstOrDefault();
+        //    }
+
+        //    public void Dispose()
+        //    {
+        //        t.Dispose();
+        //    }
+
+        //    public Foreclosure GetNext(Foreclosure document)
+        //    {
+        //        return t.GetNext(document);
+        //    }
+
+        //    public Foreclosure GetPrevious(Foreclosure document)
+        //    {
+        //        return t.GetPrevious(document);
+        //    }
+
+        //    public int Count()
+        //    {
+        //        return t.Count();
+        //    }
+
+        //    public IEnumerable<Foreclosure> Get(System.Linq.Expressions.Expression<Func<Foreclosure, bool>> query)
+        //    {
+        //        return t.AsQueryable().Where(query);
+        //    }
+
+        //    public delegate void SavedHandler(Document document, bool inserted);
+        //    public event SavedHandler Saved = null;
+
+        //    public delegate void DeletedHandler(int document_id, bool sucess);
+        //    public event DeletedHandler Deleted = null;
+        //}
 
         public class Foreclosure : Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
+        //public class Foreclosure : ListDb.Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
         {
             public string TYPE_OF_EN { get; set; }
             public string COUNTY { get; set; }
