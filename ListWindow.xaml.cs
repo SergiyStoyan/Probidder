@@ -306,7 +306,10 @@ namespace Cliver.Foreclosures
         {
             Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
             if (f == null)
+            {
+                ForeclosureWindow.OpenDialog();
                 return;
+            }
             show_AuctionWindow(f);
         }
 
