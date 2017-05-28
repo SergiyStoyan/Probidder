@@ -29,6 +29,12 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#F6F6F6" Offset="0.25"/>
+            <GradientStop Color="#EAE8E8" Offset="0.25"/>
+            <GradientStop Color="#DCD9D9" Offset="0.8"/>
+            <GradientStop Color="White" Offset="1"/>
+        </LinearGradientBrush>
     </Window.Resources>
     <Grid >
         <Grid.RowDefinitions>
@@ -36,46 +42,46 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-            <Popup Grid.Row="0" Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
-                        <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
-                    </Popup>
+        <Popup Grid.Row="0" Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
+            <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
+        </Popup>
         <Menu Name="menu" Grid.Row="0">
-                <MenuItem Header="File">
-                    <MenuItem Header="Export" Name="export" Click="export_Click"/>
-                    <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
-                    <MenuItem Header="Open Logs" Name="work_dir" Click="work_dir_Click"/>
-                    <Separator />
-                    <MenuItem Header="Exit" Name="exit" Click="exit_Click"/>
-                </MenuItem>
-                <MenuItem Header="New" Click="new_Click">
-                </MenuItem>
-                <MenuItem Header="Filter" Name="show_search" Click="show_search_Click" IsChecked="False">
-                </MenuItem>
-                <MenuItem Header="Settings">
-                    <MenuItem Header="Login" Name="login" Click="login_Click"/>
-                    <MenuItem Header="Location" Name="location" Click="location_Click"/>
-                    <MenuItem Header="Database" Name="database" Click="database_Click"/>
-                    <MenuItem Header="View" Name="view" Click="view_Click"/>
-                    <MenuItem Header="Auto Complete" Name="auto_complete" Click="auto_complete_Click"/>
-                    <Separator></Separator>
-                    <MenuItem Header="Reset All" Name="reset" Click="reset_Click"/>
-                </MenuItem>
-                <MenuItem Header="Help">
-                    <MenuItem Header="About" Name="about" Click="about_Click"/>
-                </MenuItem>
-            </Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Export" Name="export" Click="export_Click"/>
+                <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
+                <MenuItem Header="Open Logs" Name="work_dir" Click="work_dir_Click"/>
+                <Separator />
+                <MenuItem Header="Exit" Name="exit" Click="exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="New" Click="new_Click">
+            </MenuItem>
+            <MenuItem Header="Filter" Name="show_search" Click="show_search_Click" IsChecked="False">
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem Header="Login" Name="login" Click="login_Click"/>
+                <MenuItem Header="Location" Name="location" Click="location_Click"/>
+                <MenuItem Header="Database" Name="database" Click="database_Click"/>
+                <MenuItem Header="View" Name="view" Click="view_Click"/>
+                <MenuItem Header="Auto Complete" Name="auto_complete" Click="auto_complete_Click"/>
+                <Separator></Separator>
+                <MenuItem Header="Reset All" Name="reset" Click="reset_Click"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Name="about" Click="about_Click"/>
+            </MenuItem>
+        </Menu>
         <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <StackPanel>    
+            <StackPanel>
                 <Grid Name="search" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <Label Content="Find:" Grid.Column="0"/>
-                        <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
-                    </Grid>
-                    <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
+                    <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
+                </Grid>
+                <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"                           
                   AlternationCount="2" TargetUpdated="list_TargetUpdated" CellEditEnding="list_CellEditEnding"
@@ -83,23 +89,31 @@
                         AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
                                CanUserAddRows="True" CanUserDeleteRows="True"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
-                        <DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Click="open_Click" VerticalAlignment="Top" Padding="5,0,5,0">
-                                        Open                                       
+                                        Open
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                </DataGrid>
+            </StackPanel>
         </ScrollViewer>
-        <Border Grid.Row="2"  BorderBrush="#aaa" BorderThickness="0 1 0 0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#eee">
-                <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
+        <Border Grid.Row="2" BorderBrush="#aaa" BorderThickness="0 1 0 0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{StaticResource MenuBackground}" Height="{Binding ActualHeight, ElementName=CASE_N}">
+                    <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
                 <Label Name="indicator_filtered" Margin="10,0,0,0"></Label>
                 <Label Name="indicator_selected"  Margin="10,0,0,0"></Label>
             </StackPanel>
