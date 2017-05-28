@@ -52,7 +52,7 @@ namespace Cliver.Foreclosures
             public string LENDOR { get; set; }
             public DateTime? ORIGINAL_MTG { get; set; }
             public string DOCUMENT_N { get; set; }
-            public int? ORIGINAL_I { get; set; }
+            public uint? ORIGINAL_I { get; set; }
             public string LEGAL_D { get; set; }
             public string ADDRESS { get; set; }
             public string CITY { get; set; }
@@ -60,8 +60,8 @@ namespace Cliver.Foreclosures
             public string PIN { get; set; }
             public DateTime? DATE_OF_CA { get; set; }
             public DateTime? LAST_PAY_DATE { get; set; }
-            public int BALANCE_DU { get; set; }
-            public decimal PER_DIEM_I { get; set; }
+            public uint? BALANCE_DU { get; set; }
+            public decimal? PER_DIEM_I { get; set; }
             public string CURRENT_OW { get; set; }
             public bool IS_ORG { get; set; }
             public bool DECEASED { get; set; }
@@ -74,9 +74,9 @@ namespace Cliver.Foreclosures
             public string ATTORNEY_S { get; set; }
             public string TYPE_OF_MO { get; set; }
             public string PROP_DESC { get; set; }
-            public string INTEREST_R { get; set; }
-            public string MONTHLY_PAY { get; set; }
-            public int TERM_OF_MTG { get; set; }
+            public decimal? INTEREST_R { get; set; }
+            public decimal? MONTHLY_PAY { get; set; }
+            public uint? TERM_OF_MTG { get; set; }
             public string DEF_ADDRESS { get; set; }
             public string DEF_PHONE { get; set; }
 
