@@ -23,7 +23,7 @@
                         <DataGrid Name="list" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="CellOrRowHeader">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Show" 
+                            <DataGridTemplateColumn Header="Show" CanUserSort="True" 
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -31,7 +31,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Search" 
+                            <DataGridTemplateColumn Header="Search" CanUserSort="True" 
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>

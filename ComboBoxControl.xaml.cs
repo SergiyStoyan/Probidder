@@ -26,10 +26,27 @@ namespace Cliver.Foreclosures
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxControl), new FrameworkPropertyMetadata(typeof(ComboBoxControl)));
         }
 
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            //hidden_tb = this.FindVisualChildrenOfType<TextBox>().Where(x=>x.Name== "PART_EditableTextBox").First();
+            //hidden_tb.Visibility = Visibility.Collapsed;
+
+            //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
+            tb = this.FindVisualChildrenOfType<TextBox>().First();
+            tb.Text = mask;
+            tb.PreviewTextInput += TextBox_PreviewTextInput;
+            tb.TextChanged += TextBox_TextChanged;
+            tb.KeyDown += TextBox_PreviewKeyDown;
+            tb.LostFocus += TextBox_LostFocus;
+            tb.GotFocus += TextBox_GotFocus;
+        }
+
         public ComboBoxControl()
         {
             InitializeComponent();
-            
+
             Loaded += delegate
               {
               };
@@ -46,15 +63,14 @@ namespace Cliver.Foreclosures
 
         private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
-            //var b = GetBindingExpression(TextProperty);
-            //string t = apply_mask(tb.Text);
-            //if (Regex.IsMatch(t, @"_") && Regex.IsMatch(t, @"\d"))
-            //{
-            //    ValidationError ve = new ValidationError(new BogusValidationRule(), b);
-            //    ve.ErrorContent = "Error";
-            //    Validation.MarkInvalid(b, ve);
-            //}
-            //Validation.ClearInvalid(b);
+            var b = GetBindingExpression(SelectedIndexProperty);
+            string t = apply_mask(tb.Text);
+            if (Regex.IsMatch(t, @"_") && Regex.IsMatch(t, @"\d"))
+            {
+                this.MarkInvalid("error");
+                return;
+            }
+            this.MarkValid();
         }
 
         public IEnumerable<string> ItemsSourceNomalized
@@ -103,24 +119,11 @@ namespace Cliver.Foreclosures
 
         private void ComboBoxControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (tb != null)
-                tb.Focus();
-        }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            //hidden_tb = this.FindVisualChildrenOfType<TextBox>().Where(x=>x.Name== "PART_EditableTextBox").First();
-            //hidden_tb.Visibility = Visibility.Collapsed;
-
-            //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
-            tb = this.FindVisualChildrenOfType<TextBox>().First();
-            tb.Text = mask;
-            tb.PreviewTextInput += TextBox_PreviewTextInput;
-            tb.TextChanged += TextBox_TextChanged;
-            tb.KeyDown += TextBox_PreviewKeyDown;
-            tb.LostFocus += TextBox_LostFocus;
+            if (tb == null)
+                return;
+            tb.Focus();
+            tb.SelectionStart = 0;
+            tb.SelectionLength = tb.Text.Length;
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -206,7 +209,7 @@ namespace Cliver.Foreclosures
                     }
             }
             SelectedItem = null;
-            int p = tb.SelectionStart;            
+            int p = tb.SelectionStart;
             tb.Text = apply_mask(t);
             //tb.ScrollToHome();
             tb.SelectionStart = p;
@@ -222,8 +225,8 @@ namespace Cliver.Foreclosures
             int p = tb.SelectionStart;
             t = t.Remove(p, tb.SelectionLength);
             t = apply_mask(t);
-            if (!Regex.IsMatch(t, "_") 
-                || p >= mask.Length 
+            if (!Regex.IsMatch(t, "_")
+                || p >= mask.Length
                 || Regex.IsMatch(e.Text, @"[^\d]")
                 )
             {
@@ -245,24 +248,6 @@ namespace Cliver.Foreclosures
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            //if (tb.Name != "TextBox")
-            //    tb = (TextBox)sender;
-            //if (SelectedDate == null)
-            //{
-            //    if (tb.Text.Length < 1)
-            //        tb.Text = mask;
-            //    return;
-            //}
-            //tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");
-            //tb.SelectionStart = 0;
-            //tb.SelectionLength = 1;
         }
     }
-    //public class BogusValidationRule : ValidationRule
-    //{
-    //    public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
-    //    {
-    //        return new ValidationResult(false, "value cannot be empty.");
-    //    }
-    //}
 }

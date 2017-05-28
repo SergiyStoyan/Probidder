@@ -176,7 +176,18 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="indicator" Grid.Column="0" VerticalAlignment="Bottom"/>
                 <UniformGrid HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Rows="1">
-                    <ToggleButton VerticalAlignment="Center"  x:Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Visible" Grid.Column="0" Content="Edit"/>
+                    <ToggleButton VerticalAlignment="Center"  x:Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Visible" Grid.Column="0" Content="Edit">
+
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter Property="Background" Value="#ab6" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
                     <Button x:Name="Prev" Margin="10,0,0,0" Click="Prev_Click" Content="&lt;&lt;"/>
                     <Button x:Name="Next" Margin="10,0,0,0" Click="Next_Click" Content="&gt;&gt;"/>
                     <Button x:Name="New" Margin="10,0,0,0" Click="New_Click" Visibility="Collapsed" Grid.Column="0" Content="New"/>
