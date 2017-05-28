@@ -185,7 +185,7 @@ namespace Cliver.Foreclosures
                     case "PIN":
                         if (PIN == null)
                             return null;
-                        if (Regex.IsMatch(PIN, "_"))
+                        if (Regex.IsMatch(PIN, "_") && Regex.IsMatch(PIN, @"[^_\-]"))
                             return "Error";
                         return null;
                     case "DATE_OF_CA":

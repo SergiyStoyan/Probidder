@@ -69,6 +69,12 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            if (Regex.IsMatch(tb.Text, @"\d") && SelectedDate == null)
+            {
+                this.MarkInvalid("");
+                return;
+            }
+            this.MarkValid();
         }
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

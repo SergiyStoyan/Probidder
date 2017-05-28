@@ -53,7 +53,7 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
-            LostFocus += ComboBoxControl_LostFocus;
+            LostKeyboardFocus += KeyboardFocusControl_LostFocus;
 
             List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
             mask_r = new Regex("[" + string.Join("", ss) + "]");
@@ -61,11 +61,11 @@ namespace Cliver.Foreclosures
             mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
 
-        private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
+        private void KeyboardFocusControl_LostFocus(object sender, RoutedEventArgs e)
         {
             var b = GetBindingExpression(SelectedIndexProperty);
             string t = apply_mask(tb.Text);
-            if (Regex.IsMatch(t, @"_") && Regex.IsMatch(t, @"\d"))
+            if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
             {
                 this.MarkInvalid("error");
                 return;
@@ -93,6 +93,7 @@ namespace Cliver.Foreclosures
 
         private void ComboBoxControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            delete_clicked = false;
             if (e.Key == Key.Up)
             {
                 e.Handled = true;
@@ -111,7 +112,16 @@ namespace Cliver.Foreclosures
                     SelectedIndex = SelectedIndex + 1;
                 return;
             }
+            if (e.Key == Key.Back || e.Key== Key.Delete)
+            {
+                //e.Handled = true;
+                //if (SelectedIndex > 0)
+                //    SelectedIndex = SelectedIndex - 1;
+                delete_clicked = true;
+                return;
+            }
         }
+        bool delete_clicked = false;
 
         readonly string mask = "(___) ___-____";
         readonly Regex mask_separators_r = null;
@@ -174,6 +184,12 @@ namespace Cliver.Foreclosures
             {
                 if (tb.Text.Length < 1)
                     tb.Text = mask;
+                if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
+                {
+                    this.MarkInvalid("error");
+                    return;
+                }
+                this.MarkValid();
                 return;
             }
             int p = tb.SelectionStart;
@@ -182,22 +198,17 @@ namespace Cliver.Foreclosures
             tb.SelectionStart = p;
             if (tb.Text.StartsWith(t))
                 tb.SelectionLength = tb.Text.Length - p;
+            this.MarkValid();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //if (ignore_text_change)
-            //    return;
-
             e.Handled = true;
             string t = tb.Text;
             if (t.Length > mask.Length)
                 return;
-
-            //ignore_text_change = true;
-
             string v = strip_mask(t);
-            if (v.Length > 0)
+            if (v.Length > 0 && !delete_clicked)
             {
                 foreach (string i in Items)
                     if (strip_mask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
@@ -213,10 +224,7 @@ namespace Cliver.Foreclosures
             tb.Text = apply_mask(t);
             //tb.ScrollToHome();
             tb.SelectionStart = p;
-
-            //ignore_text_change = false;
         }
-        bool ignore_text_change = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
