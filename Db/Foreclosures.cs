@@ -123,12 +123,12 @@ namespace Cliver.Foreclosures
                     case "COUNTY":
                         //if (COUNTY == null)
                         //    return null;
-                        if (COUNTY.Length < 1)
+                        if (COUNTY == null || COUNTY.Length < 1)
                             return "Error";
                         return null;
                     case "CASE_N":
-                        //if (CASE_N == null)
-                        //    return null;
+                        if (CASE_N == null)
+                            return null;
                         if (CASE_N.Length < 1)
                             return "Error";
                         return null;

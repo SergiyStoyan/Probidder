@@ -46,7 +46,7 @@ namespace Cliver.Foreclosures
         ForeclosureWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
-
+            
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             COUNTY.Text = Settings.Location.County;
