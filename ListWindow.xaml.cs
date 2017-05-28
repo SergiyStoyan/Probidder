@@ -453,6 +453,16 @@ namespace Cliver.Foreclosures
             edited_item = list.SelectedItem as Db.Foreclosure;
         }
         Db.Foreclosure edited_item = null;
+
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
+            if (f == null)
+                return;
+            if (!Message.YesNo("You are abount deleting record [Id=" + f.Id + "]. Proceed?"))
+                return;
+            foreclosures.Delete(f.Id);
+        }
     }
 
     public static class DataGridExtensions
