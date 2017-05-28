@@ -112,11 +112,22 @@ namespace Cliver.Foreclosures
                     SelectedIndex = SelectedIndex + 1;
                 return;
             }
-            if (e.Key == Key.Back || e.Key== Key.Delete)
+            if (e.Key == Key.Delete)
             {
                 //e.Handled = true;
                 //if (SelectedIndex > 0)
                 //    SelectedIndex = SelectedIndex - 1;
+                delete_clicked = true;
+                return;
+            }
+            if (e.Key == Key.Back)
+            {
+                //e.Handled = true;
+                //if (tb.SelectionStart > 0)
+                //{
+                //    tb.SelectionStart = tb.SelectionStart - 1;
+                //    tb.SelectionLength += 1;
+                //}
                 delete_clicked = true;
                 return;
             }
@@ -179,31 +190,37 @@ namespace Cliver.Foreclosures
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            selection_setting = true;
+            int p = tb.SelectionStart;
             string s = (string)SelectedItem;
             if (s == null)
             {
-                if (tb.Text.Length < 1)
-                    tb.Text = mask;
-                if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
-                {
-                    this.MarkInvalid("error");
-                    return;
-                }
-                this.MarkValid();
-                return;
+                tb.Text = apply_mask(tb.Text);
+                //tb.ScrollToHome();
+                tb.SelectionStart = p;
+                //if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
+                //    this.MarkInvalid("error");
+                //else
+                    this.MarkValid();
             }
-            int p = tb.SelectionStart;
-            string t = tb.Text.Substring(0, p);
-            tb.Text = apply_mask(s);
-            tb.SelectionStart = p;
-            if (tb.Text.StartsWith(t))
-                tb.SelectionLength = tb.Text.Length - p;
-            this.MarkValid();
+            else
+            {
+                string t = tb.Text.Substring(0, p);
+                tb.Text = apply_mask(s);
+                tb.SelectionStart = p;
+                if (tb.Text.StartsWith(t))
+                    tb.SelectionLength = tb.Text.Length - p;
+                this.MarkValid();
+            }
+            selection_setting = false;
         }
+        bool selection_setting = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
+            if (selection_setting)
+                return;
             string t = tb.Text;
             if (t.Length > mask.Length)
                 return;
@@ -220,10 +237,11 @@ namespace Cliver.Foreclosures
                     }
             }
             SelectedItem = null;
-            int p = tb.SelectionStart;
-            tb.Text = apply_mask(t);
-            //tb.ScrollToHome();
-            tb.SelectionStart = p;
+            ComboBox_SelectionChanged(null, null);
+            //int p = tb.SelectionStart;
+            //tb.Text = apply_mask(t);
+            ////tb.ScrollToHome();
+            //tb.SelectionStart = p;
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
