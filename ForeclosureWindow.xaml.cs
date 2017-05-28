@@ -188,6 +188,11 @@ namespace Cliver.Foreclosures
                 {
                     //Edit.IsChecked = false;
                     fields.IsEnabled = false;
+                    ThreadRoutines.StartTry(() =>
+                    {
+                        Thread.Sleep(200);
+                        fields.Dispatcher.Invoke(() => { if (Edit.IsChecked == true) fields.IsEnabled = true; });
+                    });
                 }
             }
             catch (Exception ex)

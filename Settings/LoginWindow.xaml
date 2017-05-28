@@ -12,7 +12,7 @@
         FontFamily="Microsoft Sans Serif"
          AllowDrop="True"
             >
-    <Grid Background="Beige">
+    <Grid Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="195*"/>
             <ColumnDefinition Width="31*"/>

@@ -24,7 +24,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Background="Beige">
+    <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>

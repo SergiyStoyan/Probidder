@@ -70,7 +70,7 @@
                 <MenuItem Header="About" Name="about" Click="about_Click"/>
             </MenuItem>
         </Menu>
-        <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="WhiteSmoke">
             <StackPanel>
                 <Grid Name="search" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>
