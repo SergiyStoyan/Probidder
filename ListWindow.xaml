@@ -78,22 +78,21 @@
                     <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"                           
-                  AlternationCount="2" 
+                  AlternationCount="2" TargetUpdated="list_TargetUpdated" CellEditEnding="list_CellEditEnding"
                   ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
                         AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
-                               CanUserAddRows="False" CanUserDeleteRows="False"
+                               CanUserAddRows="True" CanUserDeleteRows="True"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                         <DataGrid.Columns>
-                            <!--DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Click="open_Click" VerticalAlignment="Top" Width="30" Height="20"></Button>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </-->
-                        </DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="open_Click" VerticalAlignment="Top" Width="30" Height="20"></Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                     </DataGrid>
-
                 </StackPanel>
         </ScrollViewer>
         <Border Grid.Row="2"  BorderBrush="#aaa" BorderThickness="0 1 0 0">

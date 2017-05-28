@@ -128,8 +128,23 @@ namespace Cliver.Foreclosures
 
         void fill()
         {
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (cv != null)
+            {
+                if (cv.IsEditingItem)
+                    cv.CommitEdit();
+                if (cv.IsAddingNew)
+                    cv.CommitNew();
+
+                //if (edited_item != null)
+                //{
+                //    edited_item = null;
+                //    foreclosures.Save(edited_item);
+                //}
+            }
             var fs = foreclosures.GetAll();
             list.ItemsSource = new ObservableCollection<Db.Foreclosure>(fs);
+
             indicator_total.Content = "Total: " + fs.Count;
             filter();
         }
@@ -178,13 +193,20 @@ namespace Cliver.Foreclosures
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
+
+            if (edited_item != null && edited_item != f)
+            {
+                foreclosures.Save(edited_item);
+                edited_item = null;
+            }
+
             if (f == null)
             {
                 indicator_selected.Content = null;
                 return;
             }
             indicator_selected.Content = "Selected ID: " + f.Id;
-            show_AuctionWindow(f);
+            //show_AuctionWindow(f);
         }
 
         void show_AuctionWindow(Db.Foreclosure d)
@@ -303,7 +325,12 @@ namespace Cliver.Foreclosures
         void filter()
         {
             string k = keyword.Text;
-            ICollectionView cv = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (cv.IsEditingItem)
+                cv.CommitEdit();
+            if (cv.IsAddingNew)
+                cv.CommitNew();
+
             if (string.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
             {
                 filter_regex = null;
@@ -397,7 +424,7 @@ namespace Cliver.Foreclosures
                 e.Cancel = true;
                 return;
             }
-            e.Column.IsReadOnly = true;
+            e.Column.IsReadOnly = false;
             e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
             e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
             e.Column.CanUserSort = true;
@@ -412,6 +439,17 @@ namespace Cliver.Foreclosures
             }
         }
         readonly string DATE_FORMAT = "MM/dd/yyyy";
+
+        private void list_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
+        }
+
+        private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            edited_item = list.SelectedItem as Db.Foreclosure;
+        }
+        Db.Foreclosure edited_item = null;
     }
 
     public static class DataGridExtensions
