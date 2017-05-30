@@ -150,10 +150,6 @@ namespace Cliver.Foreclosures
             public string DEF_ADDRESS { get; set; }
             public string DEF_PHONE { get; set; }
 
-
-
-
-
             #region Validation
 
             //public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -185,22 +181,21 @@ namespace Cliver.Foreclosures
                 switch (propertyName)
                 {
                     case "TYPE_OF_EN":
-                        //if (TYPE_OF_EN == null)
-                        //    return null;
-                        //if (TYPE_OF_EN.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty( TYPE_OF_EN))
+                            return "Error";
                         return null;
                     case "COUNTY":
-                        //if (COUNTY == null)
-                        //    return null;
-                        if (COUNTY == null || COUNTY.Length < 1)
+                        if (string.IsNullOrEmpty(COUNTY))
                             return "Error";
                         return null;
                     case "CASE_N":
-                        if (CASE_N == null)
-                            return null;
-                        if (CASE_N.Length < 1)
-                            return "Error";
+                        if (CASE_N != null)
+                        {
+                            if (Regex.IsMatch(CASE_N, @"[^\w\-_]"))
+                                return "Error";
+                            if (CASE_N.Length > 16)
+                                return "Error";
+                        }
                         return null;
                     case "FILING_DATE":
                         if (FILING_DATE == null)
@@ -211,18 +206,16 @@ namespace Cliver.Foreclosures
                     case "AUCTION_TIME":
                         return null;
                     case "ENTRY_DATE":
-                        if (ENTRY_DATE == null)
-                            return "Error";
+                        //if (ENTRY_DATE == null)
+                        //    return "Error";
                         return null;
                     case "LENDOR":
-                        //if (LENDOR == null)
-                        //    return null;
-                        //if (LENDOR.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty(LENDOR))
+                            return "Error";
                         return null;
                     case "ORIGINAL_MTG":
-                        //if (ORIGINAL_MTG == null)
-                        //    return "Error";
+                        if (ORIGINAL_MTG == null)
+                            return "Error";
                         return null;
                     case "DOCUMENT_N":
                         return null;
@@ -235,86 +228,58 @@ namespace Cliver.Foreclosures
                         //    return "Error";
                         return null;
                     case "ADDRESS":
-                        //if (ADDRESS == null)
-                        //    return null;
-                        //if (ADDRESS.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty(ADDRESS))
+                            return "Error";
                         return null;
                     case "CITY":
-                        if (CITY == null)
-                            return null;
-                        if (CITY.Length < 1)
+                        if (string.IsNullOrEmpty(CITY))
                             return "Error";
                         return null;
                     case "ZIP":
-                        if (ZIP == null)
+                        if (string.IsNullOrEmpty(ZIP))
                             return null;
                         if (Regex.IsMatch(ZIP, @"[^\d]") || ZIP.Length > 5 || ZIP.Length < 4)
                             return "Error";
                         return null;
                     case "PIN":
-                        if (PIN == null)
+                        if (string.IsNullOrEmpty(PIN))
                             return null;
-                        if (Regex.IsMatch(PIN, "_") && Regex.IsMatch(PIN, @"[^_\-]"))
+                        if (!Regex.IsMatch(PIN, "[^_]{2}-[^_]{2}-[^_]{3}-[^_]{3}-[^_]{4}") && !Regex.IsMatch(PIN, "[^_]{2}-[^_]{2}-[^_]{3}-[^_]{3}-[_]{4}"))
                             return "Error";
                         return null;
                     case "DATE_OF_CA":
-                        //if (DATE_OF_CA == null)
-                        //    return "Error";
+                        if (DATE_OF_CA == null)
+                            return "Error";
                         return null;
                     case "LAST_PAY_DATE":
-                        //if (LAST_PAY_DATE == null)
-                        //    return "Error";
+                        if (LAST_PAY_DATE == null)
+                            return "Error";
                         return null;
                     case "BALANCE_DU":
                         return null;
                     case "PER_DIEM_I":
                         return null;
                     case "CURRENT_OW":
-                        //if (CURRENT_OW == null)
-                        //    return null;
-                        //if (CURRENT_OW.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty(CURRENT_OW))
+                            return "Error";
                         return null;
                     case "IS_ORG":
                         return null;
                     case "DECEASED":
                         return null;
                     case "OWNER_ROLE":
-                        //if (OWNER_ROLE == null)
-                        //    return null;
-                        //if (OWNER_ROLE.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty(OWNER_ROLE))
+                            return "Error";
                         return null;
                     case "OTHER_LIENS":
-                        //if (OTHER_LIENS == null)
-                        //    return null;
-                        //if (OTHER_LIENS.Length < 1)
-                        //    return "Error";
                         return null;
                     case "ADDL_DEF":
-                        //if (ADDL_DEF == null)
-                        //    return null;
-                        //if (ADDL_DEF.Length < 1)
-                        //    return "Error";
                         return null;
                     case "PUB_COMMENTS":
-                        //if (PUB_COMMENTS == null)
-                        //    return null;
-                        //if (PUB_COMMENTS.Length < 1)
-                        //    return "Error";
                         return null;
                     case "INT_COMMENTS":
-                        //if (INT_COMMENTS == null)
-                        //    return null;
-                        //if (INT_COMMENTS.Length < 1)
-                        //    return "Error";
                         return null;
                     case "ATTY":
-                        //if (ATTY == null)
-                        //    return null;
-                        //if (ATTY.Length < 1)
-                        //    return "Error";
                         return null;
                     case "ATTORNEY_S":
                         if (ATTORNEY_S == null)
@@ -323,16 +288,10 @@ namespace Cliver.Foreclosures
                             return "Error";
                         return null;
                     case "TYPE_OF_MO":
-                        //if (TYPE_OF_MO == null)
-                        //    return null;
-                        //if (TYPE_OF_MO.Length < 1)
-                        //    return "Error";
                         return null;
                     case "PROP_DESC":
-                        //if (PROP_DESC == null)
-                        //    return null;
-                        //if (PROP_DESC.Length < 1)
-                        //    return "Error";
+                        if (string.IsNullOrEmpty(PROP_DESC))
+                            return "Error";
                         return null;
                     case "INTEREST_R":
                         return null;
@@ -341,10 +300,6 @@ namespace Cliver.Foreclosures
                     case "TERM_OF_MTG":
                         return null;
                     case "DEF_ADDRESS":
-                        //if (DEF_ADDRESS == null)
-                        //    return null;
-                        //if (DEF_ADDRESS.Length < 1)
-                        //    return "Error";
                         return null;
                     case "DEF_PHONE":
                         if (DEF_PHONE == null)

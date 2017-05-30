@@ -170,11 +170,6 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                //if (string.IsNullOrWhiteSpace(subject.Text))
-                //    throw new Exception("Subject is empty.");
-                //if (string.IsNullOrWhiteSpace(this.description.Text))
-                //    throw new Exception("Description is empty 
-
                 if (!this.IsValid())
                     throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
 
@@ -234,7 +229,6 @@ namespace Cliver.Foreclosures
                 f.PROP_DESC = "SINGLE FAMILY";
                 f.TERM_OF_MTG = 30;
                 f.COUNTY = Settings.Location.County;
-                f.FILING_DATE = DateTime.Now;
                 f.ENTRY_DATE = DateTime.Now;
                 f.IS_ORG = false;
                 f.DECEASED = false;
@@ -334,29 +328,6 @@ namespace Cliver.Foreclosures
                 Console.Beep(5000, 200);
                 e.Handled = true;
             }
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {//make text left alignment
-            ComboBox cb = (ComboBox)sender;
-            TextBox tb = cb.GetVisualChild<TextBox>();
-            if (tb == null)//can be so due to asynchronous building
-                return;
-            if (e.AddedItems.Count < 1)
-                return;
-            ThreadRoutines.StartTry(() =>
-            {
-                DateTime end = DateTime.Now.AddMilliseconds(200);
-                while (end > DateTime.Now)
-                {
-                    System.Threading.Thread.Sleep(20);
-                    tb.Dispatcher.Invoke(() =>
-                    {
-                        tb.Select(0, tb.Text.Length);
-                        tb.ScrollToHome();
-                    });
-                }
-            });
         }
     }
 }

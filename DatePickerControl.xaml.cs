@@ -57,6 +57,11 @@ namespace Cliver.Foreclosures
                 if (tb == null)
                     tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
             };
+
+            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
+            mask_r = new Regex("[" + string.Join("", ss) + "]");
+            ss.Remove(Regex.Escape("_"));
+            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
 
         //public override void OnApplyTemplate()
@@ -69,50 +74,105 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (Regex.IsMatch(tb.Text, @"\d") && SelectedDate == null)
+            DateTime? dt = calendar_input(tb.Text);
+            if (dt == null && Regex.IsMatch(tb.Text, @"\d"))
             {
-                this.MarkInvalid("");
+                this.MarkInvalid("Error");
                 return;
             }
+            if (SelectedDate != dt)
+                SelectedDate = dt;
+            else
+                DatePicker_SelectedDateChanged(null, null);
             this.MarkValid();
         }
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             tb.Focus();
-            //((DatePicker)sender).FocusOnText();
+            select(0, tb.Text.Length);
         }
 
         TextBox tb;
         readonly string mask = "__/__/__";
+        readonly Regex mask_separators_r = null;
+        readonly Regex mask_r = null;
+
+        string apply_mask(string t)
+        {
+            if (t == null)
+                return null;
+            string s = strip_separators(t);
+            t = mask;
+            int j = 0;
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (j >= s.Length)
+                    break;
+                if (t[i] == '_')
+                {
+                    t = t.Remove(i, 1);
+                    t = t.Insert(i, s[j++].ToString());
+                }
+            }
+            return t;
+        }
+
+        string strip_separators(string t)
+        {
+            if (t == null)
+                return null;
+            return mask_separators_r.Replace(t, "");
+        }
+
+        string strip_mask(string t)
+        {
+            if (t == null)
+                return null;
+            return mask_r.Replace(t, "");
+        }
+
+        void select(int index, int length)
+        {
+            tb.BeginChange();
+            tb.SelectionStart = index;
+            tb.SelectionLength = length;
+            tb.ScrollToHome();
+            tb.EndChange();
+        }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            selection_setting = true;
+            int p = tb.SelectionStart;
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                if (tb.Text.Length < 1)
-                    tb.Text = mask;
-                return;
+                tb.Text = apply_mask(tb.Text);
+                select(p, 0);
             }
-            tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
+            else
+            {
+                tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
+                select(p, tb.Text.Length);
+            }
+            selection_setting = false;
         }
+        bool selection_setting = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
+            if (selection_setting)
+                return;
             string t = tb.Text;
             if (t.Length >= mask.Length)
                 return;
-            int p = tb.SelectionStart;
-            t = t.Substring(0, p) + Regex.Replace(t.Substring(p), @"/", "");
-            for (int i = 2; i < mask.Length; i += 3)
-                if (t[i] != '/')
-                    t = t.Insert(i, "/");
-            tb.Text = t + mask.Substring(t.Length);
-            if (p > 0 && t[p - 1] == '/')
-                p--;
-            tb.SelectionStart = p;
+            DateTime? dt = calendar_input(t);
+            if (SelectedDate != dt)
+                SelectedDate = dt;
+            else
+                DatePicker_SelectedDateChanged(null, null);
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -120,25 +180,22 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             string t = tb.Text;
             int p = tb.SelectionStart;
-            if (!Regex.IsMatch(t, "_") || p >= mask.Length)
+            t = t.Remove(p, tb.SelectionLength);
+            t = apply_mask(t);
+            if (!Regex.IsMatch(t, "_")
+                || p >= mask.Length
+                || Regex.IsMatch(e.Text, @"[^\d]")
+                )
             {
                 Console.Beep(5000, 200);
                 return;
             }
-            if (p == 2 || p == 5)
-            {
-                if (e.Text == "/")
-                    return;
+            while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
                 p++;
-            }
-            t = t.Substring(0, p) + e.Text + Regex.Replace(t.Substring(p), @"/", "");
+            t = t.Remove(p, 1);
+            t = t.Insert(p, e.Text);
             p++;
-            for (int i = 2; i < mask.Length; i += 3)
-                if (t[i] != '/')
-                    t = t.Insert(i, "/");
-            tb.Text = t.Substring(0, mask.Length);
-            if (p < mask.Length && t[p] == '/')
-                p++;
+            tb.Text = t;
             tb.SelectionStart = p;
         }
 
@@ -180,11 +237,11 @@ namespace Cliver.Foreclosures
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            DateTime? dt = calendar_input(tb.Text);
-            if (SelectedDate == null && dt == null
-                || SelectedDate != null && dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
-                DatePicker_SelectedDateChanged(null, null);
-            SelectedDate = dt;
+            //DateTime? dt = calendar_input(tb.Text);
+            //if (SelectedDate == null && dt == null
+            //    || SelectedDate != null && dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
+            //    DatePicker_SelectedDateChanged(null, null);
+            //SelectedDate = dt;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -192,32 +249,28 @@ namespace Cliver.Foreclosures
             if (tb.Name != "TextBox")
                 tb = (TextBox)sender;
             if (SelectedDate == null)
-            {
-                if (tb.Text.Length < 1)
-                    tb.Text = mask;
-                return;
-            }
-            tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");
-            tb.SelectionStart = 0;
-            //tb.SelectionLength = 1;
+                tb.Text = apply_mask(tb.Text);
+            else
+                tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");
+            select(0, tb.Text.Length);
         }
     }
 
-    static public class WpfControlRoutines
-    {
-        public static void FocusOnText(this DatePicker datePicker)
-        {
-            if (datePicker == last_focused)
-                return;
-            last_focused = datePicker;
-            Keyboard.Focus(datePicker);
-            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
-                                             Keyboard.PrimaryDevice.ActiveSource,
-                                             0,
-                                             Key.Up);
-            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
-            datePicker.RaiseEvent(eventArgs);
-        }
-        static IInputElement last_focused = null;
-    }
+    //static public class WpfControlRoutines
+    //{
+    //    public static void FocusOnText(this DatePicker datePicker)
+    //    {
+    //        if (datePicker == last_focused)
+    //            return;
+    //        last_focused = datePicker;
+    //        Keyboard.Focus(datePicker);
+    //        var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
+    //                                         Keyboard.PrimaryDevice.ActiveSource,
+    //                                         0,
+    //                                         Key.Up);
+    //        eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
+    //        datePicker.RaiseEvent(eventArgs);
+    //    }
+    //    static IInputElement last_focused = null;
+    //}
 }

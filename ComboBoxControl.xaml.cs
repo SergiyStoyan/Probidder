@@ -29,7 +29,9 @@ namespace Cliver.Foreclosures
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            
+
+            SelectionChanged += ComboBox_SelectionChanged;
+
             //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
             tb = this.FindVisualChildrenOfType<TextBox>().First();
             tb.PreviewTextInput += TextBox_PreviewTextInput;
@@ -93,12 +95,6 @@ namespace Cliver.Foreclosures
             }
             if (e.Key == Key.Back)
             {
-                //e.Handled = true;
-                //if (tb.SelectionStart > 0)
-                //{
-                //    tb.SelectionStart = tb.SelectionStart - 1;
-                //    tb.SelectionLength += 1;
-                //}
                 delete_clicked = true;
                 return;
             }
@@ -131,7 +127,6 @@ namespace Cliver.Foreclosures
             if (s == null)
             {
                 select(p, 0);
-                //this.MarkValid();
             }
             else
             {
@@ -141,7 +136,6 @@ namespace Cliver.Foreclosures
                     select(p, tb.Text.Length - p);
                 else
                     select(p, 0);
-                //this.MarkValid();
             }
             selection_setting = false;
         }

@@ -30,17 +30,16 @@ namespace Cliver.Foreclosures
         {
             base.OnApplyTemplate();
 
-            //hidden_tb = this.FindVisualChildrenOfType<TextBox>().Where(x=>x.Name== "PART_EditableTextBox").First();
-            //hidden_tb.Visibility = Visibility.Collapsed;
+            SelectionChanged += ComboBox_SelectionChanged;
 
             //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
             tb = this.FindVisualChildrenOfType<TextBox>().First();
             tb.Text = mask;
             tb.PreviewTextInput += TextBox_PreviewTextInput;
             tb.TextChanged += TextBox_TextChanged;
-            tb.KeyDown += TextBox_PreviewKeyDown;
-            tb.LostFocus += TextBox_LostFocus;
-            tb.GotFocus += TextBox_GotFocus;
+            //tb.KeyDown += TextBox_PreviewKeyDown;
+            //tb.LostFocus += TextBox_LostFocus;
+            //tb.GotFocus += TextBox_GotFocus;
         }
 
         public ComboBoxPhoneControl()
@@ -53,7 +52,7 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
-            LostKeyboardFocus += KeyboardFocusControl_LostFocus;
+            LostKeyboardFocus += ComboBoxControl_LostFocus;
 
             List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
             mask_r = new Regex("[" + string.Join("", ss) + "]");
@@ -61,9 +60,9 @@ namespace Cliver.Foreclosures
             mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
 
-        private void KeyboardFocusControl_LostFocus(object sender, RoutedEventArgs e)
+        private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
+            if (Regex.IsMatch(tb.Text, @"\d") && Regex.IsMatch(tb.Text, @"_"))
             {
                 this.MarkInvalid("error");
                 return;
@@ -99,6 +98,7 @@ namespace Cliver.Foreclosures
                     SelectedIndex = Items.Count - 1;
                 else
                     SelectedIndex = SelectedIndex - 1;
+                select(0, tb.Text.Length);
                 return;
             }
             if (e.Key == Key.Down)
@@ -108,24 +108,16 @@ namespace Cliver.Foreclosures
                     SelectedIndex = 0;
                 else
                     SelectedIndex = SelectedIndex + 1;
+                select(0, tb.Text.Length);
                 return;
             }
             if (e.Key == Key.Delete)
             {
-                //e.Handled = true;
-                //if (SelectedIndex > 0)
-                //    SelectedIndex = SelectedIndex - 1;
                 delete_clicked = true;
                 return;
             }
             if (e.Key == Key.Back)
             {
-                //e.Handled = true;
-                //if (tb.SelectionStart > 0)
-                //{
-                //    tb.SelectionStart = tb.SelectionStart - 1;
-                //    tb.SelectionLength += 1;
-                //}
                 delete_clicked = true;
                 return;
             }
@@ -141,16 +133,19 @@ namespace Cliver.Foreclosures
             if (tb == null)
                 return;
             tb.Focus();
-            tb.SelectionStart = 0;
-            tb.SelectionLength = tb.Text.Length;
+            select(0, tb.Text.Length);
         }
-
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-        }
-
-        //TextBox hidden_tb = null;
+        
         TextBox tb = null;
+
+        void select(int index, int length)
+        {
+            tb.BeginChange();
+            tb.SelectionStart = index;
+            tb.SelectionLength = length;
+            tb.ScrollToHome();
+            tb.EndChange();
+        }
 
         string apply_mask(string t)
         {
@@ -194,22 +189,18 @@ namespace Cliver.Foreclosures
             if (s == null)
             {
                 tb.Text = apply_mask(tb.Text);
-                //tb.ScrollToHome();
-                tb.SelectionStart = p;
-                //if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
-                //    this.MarkInvalid("error");
-                //else
-                    this.MarkValid();
+                select(p, 0);
             }
             else
             {
                 string t = tb.Text.Substring(0, p);
-                tb.Text = apply_mask(s);
-                tb.SelectionStart = p;
-                if (tb.Text.StartsWith(t))
-                    tb.SelectionLength = tb.Text.Length - p;
-                this.MarkValid();
+                tb.Text = s;
+                if (tb.Text.StartsWith(t, StringComparison.InvariantCultureIgnoreCase))
+                    select(p, tb.Text.Length - p);
+                else
+                    select(p, 0);
             }
+            //this.MarkValid();
             selection_setting = false;
         }
         bool selection_setting = false;
@@ -240,10 +231,6 @@ namespace Cliver.Foreclosures
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            //int p = tb.SelectionStart;
-            //tb.Text = apply_mask(t);
-            ////tb.ScrollToHome();
-            //tb.SelectionStart = p;
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -268,14 +255,6 @@ namespace Cliver.Foreclosures
             p++;
             tb.Text = t;
             tb.SelectionStart = p;
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
         }
     }
 }

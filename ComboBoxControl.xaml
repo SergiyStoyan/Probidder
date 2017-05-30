@@ -5,15 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
-             mc:Ignorable="d"
-          SelectionChanged="ComboBox_SelectionChanged">
-    <!--ComboBox.SelectedIndex>
-        <Binding Path="Name" Mode="OneWayToSource" UpdateSourceTrigger="LostFocus"  NotifyOnValidationError="True" >
-            <Binding.ValidationRules >
-                <local:BogusValidationRule></local:BogusValidationRule>
-            </Binding.ValidationRules>
-        </Binding>
-    </-->
+             mc:Ignorable="d">
     <ComboBox.Resources>
         <Style TargetType="{x:Type local:ComboBoxControl}">
             <Setter Property="Control.Template">
