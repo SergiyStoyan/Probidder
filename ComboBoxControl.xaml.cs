@@ -29,18 +29,14 @@ namespace Cliver.Foreclosures
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-
-            //hidden_tb = this.FindVisualChildrenOfType<TextBox>().Where(x=>x.Name== "PART_EditableTextBox").First();
-            //hidden_tb.Visibility = Visibility.Collapsed;
-
+            
             //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
             tb = this.FindVisualChildrenOfType<TextBox>().First();
-            tb.Text = mask;
             tb.PreviewTextInput += TextBox_PreviewTextInput;
             tb.TextChanged += TextBox_TextChanged;
-            tb.KeyDown += TextBox_PreviewKeyDown;
-            tb.LostFocus += TextBox_LostFocus;
-            tb.GotFocus += TextBox_GotFocus;
+            //tb.KeyDown += TextBox_PreviewKeyDown;
+            //tb.LostFocus += TextBox_LostFocus;
+            //tb.GotKeyboardFocus += TextBox_GotKeyboardFocus;
         }
 
         public ComboBoxControl()
@@ -53,42 +49,18 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
-            LostKeyboardFocus += KeyboardFocusControl_LostFocus;
-
-            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
-            mask_r = new Regex("[" + string.Join("", ss) + "]");
-            ss.Remove(Regex.Escape("_"));
-            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
+            LostKeyboardFocus += ComboBoxControl_LostFocus;
         }
 
-        private void KeyboardFocusControl_LostFocus(object sender, RoutedEventArgs e)
+        private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
-            var b = GetBindingExpression(SelectedIndexProperty);
-            string t = apply_mask(tb.Text);
-            if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
-            {
-                this.MarkInvalid("error");
-                return;
-            }
-            this.MarkValid();
-        }
-
-        public IEnumerable<string> ItemsSourceNomalized
-        {
-            set
-            {
-                List<string> vs = new List<string>();
-                foreach (string s in value)
-                {
-                    if (string.IsNullOrWhiteSpace(s))
-                        continue;
-                    string v = apply_mask(s);
-                    if (!vs.Contains(v))
-                        vs.Add(v);
-                }
-                ItemsSource = vs;
-                tb.Text = mask;
-            }
+            tb.ScrollToHome();
+            //if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
+            //{
+            //    this.MarkInvalid("error");
+            //    return;
+            //}
+            //this.MarkValid();
         }
 
         private void ComboBoxControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -101,6 +73,7 @@ namespace Cliver.Foreclosures
                     SelectedIndex = Items.Count - 1;
                 else
                     SelectedIndex = SelectedIndex - 1;
+                select(0, tb.Text.Length);
                 return;
             }
             if (e.Key == Key.Down)
@@ -110,13 +83,11 @@ namespace Cliver.Foreclosures
                     SelectedIndex = 0;
                 else
                     SelectedIndex = SelectedIndex + 1;
+                select(0, tb.Text.Length);
                 return;
             }
             if (e.Key == Key.Delete)
             {
-                //e.Handled = true;
-                //if (SelectedIndex > 0)
-                //    SelectedIndex = SelectedIndex - 1;
                 delete_clicked = true;
                 return;
             }
@@ -134,58 +105,22 @@ namespace Cliver.Foreclosures
         }
         bool delete_clicked = false;
 
-        readonly string mask = "(___) ___-____";
-        readonly Regex mask_separators_r = null;
-        readonly Regex mask_r = null;
-
         private void ComboBoxControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (tb == null)
                 return;
             tb.Focus();
-            tb.SelectionStart = 0;
-            tb.SelectionLength = tb.Text.Length;
-        }
-
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-        }
-
-        //TextBox hidden_tb = null;
+            select(0, tb.Text.Length);
+        }        
         TextBox tb = null;
 
-        string apply_mask(string t)
+        void select(int index, int length)
         {
-            if (t == null)
-                return null;
-            string s = strip_separators(t);
-            t = mask;
-            int j = 0;
-            for (int i = 0; i < t.Length; i++)
-            {
-                if (j >= s.Length)
-                    break;
-                if (t[i] == '_')
-                {
-                    t = t.Remove(i, 1);
-                    t = t.Insert(i, s[j++].ToString());
-                }
-            }
-            return t;
-        }
-
-        string strip_separators(string t)
-        {
-            if (t == null)
-                return null;
-            return mask_separators_r.Replace(t, "");
-        }
-
-        string strip_mask(string t)
-        {
-            if (t == null)
-                return null;
-            return mask_r.Replace(t, "");
+            tb.BeginChange();
+            tb.SelectionStart = index;
+            tb.SelectionLength = length;
+            tb.ScrollToHome();
+            tb.EndChange();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -195,22 +130,18 @@ namespace Cliver.Foreclosures
             string s = (string)SelectedItem;
             if (s == null)
             {
-                tb.Text = apply_mask(tb.Text);
-                //tb.ScrollToHome();
-                tb.SelectionStart = p;
-                //if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
-                //    this.MarkInvalid("error");
-                //else
-                    this.MarkValid();
+                select(p, 0);
+                //this.MarkValid();
             }
             else
             {
                 string t = tb.Text.Substring(0, p);
-                tb.Text = apply_mask(s);
-                tb.SelectionStart = p;
-                if (tb.Text.StartsWith(t))
-                    tb.SelectionLength = tb.Text.Length - p;
-                this.MarkValid();
+                tb.Text = s;
+                if (tb.Text.StartsWith(t, StringComparison.InvariantCultureIgnoreCase))
+                    select(p, tb.Text.Length - p);
+                else
+                    select(p, 0);
+                //this.MarkValid();
             }
             selection_setting = false;
         }
@@ -222,58 +153,30 @@ namespace Cliver.Foreclosures
             if (selection_setting)
                 return;
             string t = tb.Text;
-            if (t.Length > mask.Length)
-                return;
-            string v = strip_mask(t);
-            if (v.Length > 0 && !delete_clicked)
+            //Items.Filter = new Predicate<object>((object o) => {
+            //    return ((string)o).StartsWith(t, StringComparison.InvariantCultureIgnoreCase);
+            //});
+            if (t.Length > 0 && !delete_clicked)
             {
                 foreach (string i in Items)
-                    if (strip_mask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (string.IsNullOrEmpty(i))
+                        continue;                    
+                    if (i.StartsWith(t, StringComparison.InvariantCultureIgnoreCase))
                     {
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
                         return;
                     }
+                }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            //int p = tb.SelectionStart;
-            //tb.Text = apply_mask(t);
-            ////tb.ScrollToHome();
-            //tb.SelectionStart = p;
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = true;
-            string t = tb.Text;
-            int p = tb.SelectionStart;
-            t = t.Remove(p, tb.SelectionLength);
-            t = apply_mask(t);
-            if (!Regex.IsMatch(t, "_")
-                || p >= mask.Length
-                || Regex.IsMatch(e.Text, @"[^\d]")
-                )
-            {
-                Console.Beep(5000, 200);
-                return;
-            }
-            while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
-                p++;
-            t = t.Remove(p, 1);
-            t = t.Insert(p, e.Text);
-            p++;
-            tb.Text = t;
-            tb.SelectionStart = p;
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-        }
+        }        
     }
 }
