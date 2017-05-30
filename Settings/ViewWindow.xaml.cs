@@ -54,7 +54,7 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            list.ItemsSource = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.CustomAttributes.Count() < 1).Select(x => new Item
+            list.ItemsSource = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
             {
                 Show = Settings.View.ShowedColumns.Contains(x.Name),
                 Search = Settings.View.SearchedColumns.Contains(x.Name),

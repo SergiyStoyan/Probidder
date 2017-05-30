@@ -25,7 +25,7 @@ namespace Cliver.Foreclosures
             {
                 foreach (PropertyInfo pi in typeof(Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
                 {
-                    if (pi.CustomAttributes.Count() > 0)//engine fields
+                    if (pi.GetCustomAttribute<FieldPreparation.IgnoredField>() != null)
                         continue;
                     if (pi.PropertyType == typeof(string))
                     {
@@ -159,6 +159,7 @@ namespace Cliver.Foreclosures
             //    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             //}
 
+            [FieldPreparation.IgnoredField]
             [BsonIgnore]
             public string Error
             {
@@ -166,6 +167,7 @@ namespace Cliver.Foreclosures
                 set { }
             }
 
+            [FieldPreparation.IgnoredField]
             [BsonIgnore]
             public string this[string columnName]
             {
@@ -175,6 +177,7 @@ namespace Cliver.Foreclosures
                 }
             }
 
+            [FieldPreparation.IgnoredField]
             [BsonIgnore]
             private string validate(string propertyName)
             {
