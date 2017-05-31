@@ -60,7 +60,7 @@ namespace Cliver.Foreclosures
 
             UserName.Text = Settings.Login.UserName;
             if (!string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
-                Password.Password = Settings.Login.Decrypt(Settings.Login.EncryptedPassword);
+                Password.Password = Settings.Login.Password();
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

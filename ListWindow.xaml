@@ -48,6 +48,7 @@
         <Menu Name="menu" Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Export" Name="export" Click="export_Click"/>
+                <MenuItem Header="Upload" Name="upload" Click="upload_Click"/>
                 <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
                 <MenuItem Header="Open Logs" Name="work_dir" Click="work_dir_Click"/>
                 <Separator />

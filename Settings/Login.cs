@@ -23,8 +23,22 @@ namespace Cliver.Foreclosures
 
         public class LoginSettings : Cliver.Settings
         {
-            public string UserName = "";
-            public string EncryptedPassword = "";
+            public string UserName = "protest";
+            public string EncryptedPassword = "";//"qpwoei";
+            public string ExportUrl = "http://cliversoft.com";
+
+            public string Password()
+            {
+                try
+                {
+                    return c.Decrypt(EncryptedPassword);
+                }
+                catch (Exception e)
+                {
+                    Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
+                }
+                return null;
+            }
 
             public string Decrypt(string s)
             {
@@ -32,7 +46,7 @@ namespace Cliver.Foreclosures
                 {
                     return c.Decrypt(s);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
                 }

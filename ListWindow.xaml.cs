@@ -156,33 +156,12 @@ namespace Cliver.Foreclosures
 
         private void export_Click(object sender, RoutedEventArgs e)
         {
-            string file;
-            using (var d = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                d.Description = "Choose the folder where to save the exported file.";
-                if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                    return;
-                file = d.SelectedPath + "\\foreclosure_" + DateTime.Now.ToString("yy-MM-dd_HH-mm-ss") + ".csv";
-            }
+            Export.ToDisk();
+        }
 
-            try
-            {
-                TextWriter tw = new StreamWriter(file);
-                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
-                foreach (Db.Foreclosure f in foreclosures.GetAll())
-                    tw.WriteLine(FieldPreparation.GetCsvLine(f, FieldPreparation.FieldSeparator.COMMA));
-                tw.Close();
-
-                if (Message.YesNo("Data has been exported succesfully to " + file + "\r\n\r\nClean up the database?"))
-                {
-                    foreclosures.Drop();
-                    fill();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogMessage.Error(ex);
-            }
+        private void upload_Click(object sender, RoutedEventArgs e)
+        {
+            Export.ToServer();
         }
 
         private void new_Click(object sender, RoutedEventArgs e)

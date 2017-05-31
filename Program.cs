@@ -69,6 +69,8 @@ namespace Cliver.Foreclosures
 
                 Db.Mode = Db.Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE;
 
+                LocationWindow.OpenDialog();
+
                 Service.Running = true;
                 //Db.BeginRefresh();
                 ListWindow.OpenDialog();
