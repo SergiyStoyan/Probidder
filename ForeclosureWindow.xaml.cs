@@ -73,6 +73,11 @@ namespace Cliver.Foreclosures
                 foreclosures.Dispose();
             };
 
+            Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
+               {
+                   e.Cancel = !Save();
+               };
+
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
         }
@@ -128,12 +133,11 @@ namespace Cliver.Foreclosures
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
+            if (!Save())
+                return;
             Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id == 0)
-            {
-                Edit.IsChecked = false;
                 f = foreclosures.GetLast();
-            }
             else
                 f = foreclosures.GetPrevious(f);
             if (f == null)
@@ -146,6 +150,8 @@ namespace Cliver.Foreclosures
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            if (!Save())
+                return;
             Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id == 0)
             {
@@ -163,10 +169,12 @@ namespace Cliver.Foreclosures
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
+            if (!Save())
+                return;
             fields.DataContext = new Db.Foreclosure();
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private bool Save()
         {
             try
             {
@@ -174,26 +182,22 @@ namespace Cliver.Foreclosures
                     throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
 
                 Db.Foreclosure f = get_current_Foreclosure();
-                bool new_record = f.Id == 0;
                 foreclosures.Save(f);
-
-                if (new_record)
-                    fields.DataContext = new Db.Foreclosure();
-                else
+                
+                fields.IsEnabled = false;
+                ThreadRoutines.StartTry(() =>
                 {
-                    //Edit.IsChecked = false;
-                    fields.IsEnabled = false;
-                    ThreadRoutines.StartTry(() =>
-                    {
-                        Thread.Sleep(200);
-                        fields.Dispatcher.Invoke(() => { if (Edit.IsChecked == true) fields.IsEnabled = true; });
-                    });
-                }
+                    Thread.Sleep(200);
+                    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
+                });
+
+                return true;
             }
             catch (Exception ex)
             {
                 Message.Error2(ex);
             }
+            return false;
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -250,10 +254,6 @@ namespace Cliver.Foreclosures
             {
                 Prev.IsEnabled = foreclosures.GetLast() != null;
                 Next.IsEnabled = false;
-                fields.IsEnabled = true;
-                Save.Content = "Save and Continue";
-                Edit.IsChecked = true;
-                Edit.Visibility = Visibility.Collapsed;
 
                 indicator.Content = "Record: [id=new] - / " + foreclosures.Count();
 
@@ -262,54 +262,13 @@ namespace Cliver.Foreclosures
 
             Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
             Next.IsEnabled = foreclosures.GetNext(f) != null;
-            Save.Content = "Save";
-            Edit.Visibility = Visibility.Visible;
-
-            if (Edit.IsChecked == true)
-                Edit_Checked(null, null);
-            else
-                Edit_Unchecked(null, null);
 
             indicator.Content = "Record: [id=" + f.Id + "] " + (foreclosures.Get(x => x.Id < f.Id).Count() + 1) + " / " + foreclosures.Count();
-        }
-
-        private void Edit_Checked(object sender, RoutedEventArgs e)
-        {
-            fields.IsEnabled = true;
-            //Edit.Visibility = Visibility.Collapsed;
-            New.Visibility = Visibility.Collapsed;
-            Save.Visibility = Visibility.Visible;
-            if (get_current_Foreclosure().Id == 0)
-                Delete.Visibility = Visibility.Collapsed;
-            else
-                Delete.Visibility = Visibility.Visible;
-        }
-
-        private void Edit_Unchecked(object sender, RoutedEventArgs e)
-        {
-            fields.IsEnabled = false;
-            //Edit.Visibility = Visibility.Visible;
-            New.Visibility = Visibility.Visible;
-            Save.Visibility = Visibility.Collapsed;
-            Delete.Visibility = Visibility.Collapsed;
         }
 
         Db.Foreclosure get_current_Foreclosure()
         {
             return (Db.Foreclosure)fields.DataContext;
-        }
-
-        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!fields.IsEnabled && Edit.IsChecked == true)//after save
-            {
-                fields.IsEnabled = true;
-            }
-        }
-
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            Window_PreviewMouseDown(null, null);
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)

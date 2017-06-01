@@ -12,8 +12,7 @@
         ResizeMode="CanResize" 
         Background="#ffffff" Topmost="False" ShowInTaskbar="True"
         FontFamily="Microsoft Sans Serif"
-         AllowDrop="True"
-        PreviewMouseDown="Window_PreviewMouseDown" PreviewKeyDown="Window_PreviewKeyDown"
+         AllowDrop="True"       
             >
 
     <Window.Resources>
@@ -84,73 +83,73 @@
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Content="Listing Code"/>
                     <TextBox Grid.Column="1" Grid.Row="0" x:Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                     <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Content="County"/>
-                    <TextBox Grid.Column="3" Grid.Row="0" x:Name="COUNTY" IsTabStop="False" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" KeyboardNavigation.TabNavigation="None"/>
+                    <TextBox Grid.Column="3" Grid.Row="0" x:Name="COUNTY" IsTabStop="False" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Content="Case #"/>
-                    <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" x:Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEditable="True"/>
+                    <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" x:Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" IsEditable="True"/>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Content="Filling Date"/>
                     <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" 
-                                              SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" 
+                                              SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                               />
                     <Label  Grid.Column="0" Grid.Row="2"  HorizontalAlignment="Right" Content="Entry Date"/>
                     <local:DatePickerControl  Grid.Column="1" Grid.Row="2" x:Name="ENTRY_DATE" 
-                                              SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" 
+                                              SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Content="Plaintiff Code"/>
                     <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="1" Grid.Row="3" x:Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3"  Text="{Binding LENDOR, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                                 Height="{Binding ActualHeight, ElementName=CITY}"/>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Content="Or MTG D"/>
                     <local:DatePickerControl Grid.Column="1" Grid.Row="4" x:Name="ORIGINAL_MTG" 
-                                              SelectedDate="{Binding ORIGINAL_MTG, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" 
+                                              SelectedDate="{Binding ORIGINAL_MTG, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right"  VerticalAlignment="Top">
                         <Label Content="Doc_#" />
-                        <TextBox  MinWidth="50" x:Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                        <TextBox  MinWidth="50" x:Name="DOCUMENT_N" Text="{Binding DOCUMENT_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="4"  HorizontalAlignment="Right" VerticalAlignment="Top">
                         <Label HorizontalAlignment="Right" Content="Or Loan $"/>
-                        <TextBox MinWidth="50" x:Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                        <TextBox MinWidth="50" x:Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     </StackPanel>
                     <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" Content="Legal Descr"/>
-                    <TextBox Grid.Column="1" Grid.Row="5" x:Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap" />
+                    <TextBox Grid.Column="1" Grid.Row="5" x:Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap" />
                     <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Content="Address"/>
-                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" Content="City"/>
                     <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="1" Grid.Row="7" IsEditable="True" x:Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged" Text="{Binding CITY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" Content="ZIP"/>
                     <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="1" Grid.Row="8" x:Name="ZIP" IsEditable="True"  Text="{Binding ZIP, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right" Content="PIN"/>
                     <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" x:Name="PIN" VerticalAlignment="Top" 
-                                        Text="{Binding PIN, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" 
+                                        Text="{Binding PIN, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" 
                                         Mask="&amp;&amp;-&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;&amp;"/>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right" Content="Date of Calcul"/>
                     <local:DatePickerControl Grid.Column="1" Grid.Row="10" x:Name="DATE_OF_CA" 
-                                              SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" 
+                                              SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right" Content="Last Pay Date"/>
                     <local:DatePickerControl Grid.Column="3" Grid.Row="10" x:Name="LAST_PAY_DATE" 
-                                              SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" 
+                                              SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right" Content="Balance Due"/>
-                    <TextBox Grid.Column="1" Grid.Row="11" x:Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="1" Grid.Row="11" x:Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="2" Grid.Row="11" HorizontalAlignment="Right" Content="Inter Per Diem"/>
-                    <TextBox Grid.Column="3" Grid.Row="11" x:Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="3" Grid.Row="11" x:Name="PER_DIEM_I" Text="{Binding PER_DIEM_I, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
 
                     <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right" Content="Current Owners"/>
-                    <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" x:Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" x:Name="CURRENT_OW" Text="{Binding CURRENT_OW, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  AcceptsReturn="True" TextWrapping="Wrap"/>
                     <StackPanel Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <CheckBox x:Name="IS_ORG" VerticalAlignment="Top" Margin="0,5,0,5" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Content="IS ORG" />
-                        <CheckBox x:Name="DECEASED" VerticalAlignment="Top" Margin="20,5,0,5" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Content="Deceased"/>
+                        <CheckBox x:Name="IS_ORG" VerticalAlignment="Top" Margin="0,5,0,5" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Content="IS ORG" />
+                        <CheckBox x:Name="DECEASED" VerticalAlignment="Top" Margin="20,5,0,5" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Content="Deceased"/>
                         <Label VerticalAlignment="Top" Margin="20,0,0,0" Content="Owner Role" />
-                        <local:ComboBoxControl VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEditable="True" Width="90"/>
+                        <local:ComboBoxControl VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" IsEditable="True" Width="90"/>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right" Content="Other Liens"/>
-                    <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" x:Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" x:Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="3" HorizontalAlignment="Right" Content="Addl Deff"/>
-                    <TextBox Grid.Column="5" Grid.Row="3"  Grid.ColumnSpan="3" x:Name="ADDL_DEF" Text="{Binding ADDL_DEF, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="3"  Grid.ColumnSpan="3" x:Name="ADDL_DEF" Text="{Binding ADDL_DEF, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="4" HorizontalAlignment="Right" Content="Client Comment"/>
-                    <TextBox Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="3"  x:Name="PUB_COMMENTS" Text="{Binding PUB_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="3"  x:Name="PUB_COMMENTS" Text="{Binding PUB_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="5" HorizontalAlignment="Right" Content="ilFLS Comments"/>
-                    <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  x:Name="INT_COMMENTS" Text="{Binding INT_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  x:Name="INT_COMMENTS" Text="{Binding INT_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right" Content="Attorney Code"/>
                     <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" x:Name="ATTY" SelectionChanged="ATTY_SelectionChanged"  Text="{Binding ATTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                     <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right" Content="Attorney Phone"/>
@@ -159,17 +158,17 @@
                     <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right" Content="MTG Codes"/>
                     <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="5" Grid.Row="8" IsEditable="True" x:Name="TYPE_OF_MO" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right" Content="Property Type"/>
-                    <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="5" Grid.Row="9" x:Name="PROP_DESC" MinWidth="30"  Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" IsEditable="True"/>
+                    <local:ComboBoxControl VerticalAlignment="Top"  Grid.Column="5" Grid.Row="9" x:Name="PROP_DESC" MinWidth="30"  Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" IsReadOnly="False" IsEditable="True"/>
                     <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right" Content="Interest"/>
-                    <TextBox Grid.Column="7" Grid.Row="8" x:Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="7" Grid.Row="8" x:Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right" Content="Monthly Payments"/>
-                    <TextBox Grid.Column="7" Grid.Row="9" x:Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="7" Grid.Row="9" x:Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right" Content="MTG Term"/>
-                    <TextBox Grid.Column="7" Grid.Row="10" x:Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="7" Grid.Row="10" x:Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right" Content="Deff. Served Address"/>
-                    <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" x:Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" x:Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="12" HorizontalAlignment="Right" Content="Deff. Phone"/>
-                    <xctk:MaskedTextBox Grid.Column="5" Grid.Row="12" x:Name="DEF_PHONE" VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
+                    <xctk:MaskedTextBox Grid.Column="5" Grid.Row="12" x:Name="DEF_PHONE" VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
                 </Grid>
             </ScrollViewer>
             <Grid Grid.Row="1" Margin="10,10,10,10">
@@ -179,12 +178,9 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="indicator" Grid.Column="0" VerticalAlignment="Bottom"/>
                 <UniformGrid HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Rows="1">
-                    <ToggleButton VerticalAlignment="Center" x:Name="Edit" Margin="10,0,0,0" Checked="Edit_Checked" Unchecked="Edit_Unchecked" Visibility="Visible" Grid.Column="0" Content="Edit">
-                    </ToggleButton>
                     <Button x:Name="Prev" Margin="10,0,0,0" Click="Prev_Click" Content="&lt;&lt;"/>
                     <Button x:Name="Next" Margin="10,0,0,0" Click="Next_Click" Content="&gt;&gt;"/>
-                    <Button x:Name="New" Margin="10,0,0,0" Click="New_Click" Visibility="Collapsed" Grid.Column="0" Content="New"/>
-                    <Button x:Name="Save" Margin="10,0,0,0" Click="Save_Click" Content="Save"/>
+                    <Button x:Name="New" Margin="10,0,0,0" Click="New_Click" Grid.Column="0" Content="New"/>
                     <Button Margin="10,0,0,0" x:Name="Delete" Click="Delete_Click" Content="Delete"/>
                     <Button Margin="10,0,0,0" x:Name="Cancel" Click="Cancel_Click" Content="Close"/>
                 </UniformGrid>
