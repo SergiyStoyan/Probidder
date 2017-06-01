@@ -28,11 +28,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using Jose;
+using JWT;
 
 namespace Cliver.Foreclosures
 {
     public class Export
-    {
+    {        
         public static bool ToServer()
         {
             Log.Main.Inform("Exporting to: " + Settings.Login.ExportUrl);
@@ -40,7 +41,7 @@ namespace Cliver.Foreclosures
             try
             {
                 HttpClient http_client = new HttpClient();
-                if (!loginByUsername(ref http_client, Settings.Login.UserName, Settings.Login.Password()))
+                if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Login.UserName, Settings.Login.Password()))
                     return false;
 
                 Db.Foreclosures fs = new Db.Foreclosures();
@@ -65,20 +66,19 @@ namespace Cliver.Foreclosures
             return false;
 
         }
-        
-      static  public string getOAuthTAccessToken(ref HttpClient http_client)
+
+        static public string getOAuthTAccessToken(ref HttpClient http_client)
         {
-            Dictionary<string, string> payload = new Dictionary<string, string>
-            {
-                { "iss", "win_recording_app" },
-                { "sub", "WinRecordingApp" },
-                { "aud","https://dev-auth.probidder.com" },
-                { "exp" ,(DateTime.Now.GetSecondsSinceUnixEpoch() + 1000 ).ToString()},
-                { "iat" , DateTime.Now.GetSecondsSinceUnixEpoch().ToString() }
-            };
             byte[] privateKey = File.ReadAllBytes(Log.AppDir + "\\win_recording_app.key");
-            //string jwt = JsonWebToken.Encode(post_object, privateKey, JwtHashAlgorithm.RS256);
-            string jwt = JWT.Encode(payload, privateKey, JwsAlgorithm.RS512);
+            var payload = new
+            {
+                iss = "win_recording_app",
+                sub = "WinRecordingApp",
+                aud = "https://dev-auth.probidder.com",
+                exp = DateTime.Now.GetSecondsSinceUnixEpoch() + 1000,
+                iat = DateTime.Now.GetSecondsSinceUnixEpoch(),
+            };
+            string jwt = JsonWebToken.Encode(payload, privateKey, JwtHashAlgorithm.HS512);
 
             FormUrlEncodedContent fuec = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -88,28 +88,29 @@ namespace Cliver.Foreclosures
             if (http_client == null)
                 http_client = new HttpClient();
             HttpResponseMessage rm = http_client.PostAsync("https://dev-auth.probidder.com/api/oauth/token", fuec).Result;
-            string c = rm.Content.ReadAsStringAsync().Result;
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not get AuthTAccessToken: " + rm.ReasonPhrase);
-            JObject jo = new JObject(rm.Content);
-            return (string)jo["access_token"];
+            dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
+            return (string)d["access_token"];
         }
 
-        static public bool loginByUsername(ref HttpClient http_client, string username, string password)
+        static public bool loginByUsername(ref HttpClient http_client, string access_token, string username, string password)
         {
             FormUrlEncodedContent fuec = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 { "username", username },
                 { "password",  password }
             });
+
+            HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, "https://dev-auth.probidder.com/api/authenticate/recorders/win/app?" + fuec.ReadAsStringAsync().Result);
+            hrm.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", access_token);
             if (http_client == null)
                 http_client = new HttpClient();
-            http_client.DefaultRequestHeaders.Add("Bearer", getOAuthTAccessToken(ref http_client));
-            HttpResponseMessage rm = http_client.PostAsync("https://dev-auth.probidder.com/api/authenticate/recorders/win/app?", fuec).Result;
+            HttpResponseMessage rm = http_client.SendAsync(hrm).Result;
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not get login: " + rm.ReasonPhrase);
-            JObject jo = new JObject(rm.Content);
-            return true; 
+            dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
+            return d["status"]; 
         }
 
         public static bool ToDisk()
@@ -143,6 +144,145 @@ namespace Cliver.Foreclosures
                 LogMessage.Error(ex);
             }
             return false;
+        }
+    }
+    public enum JwtHashAlgorithm
+    {
+        RS256,
+        RS512,
+        HS384,
+        HS512
+    }
+
+    public class JsonWebToken
+    {
+        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
+
+        static JsonWebToken()
+        {
+            HashAlgorithms = new Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>>
+            {
+                { JwtHashAlgorithm.RS256, (key, value) => { using (var sha = new HMACSHA256(key)) { return sha.ComputeHash(value); } } },
+                { JwtHashAlgorithm.RS512, (key, value) => {
+                    string key_file = Path.GetTempPath() + "\\key.bin";
+                    string value_file = Path.GetTempPath() + "\\payload.bin";
+                    string signed_file = Path.GetTempPath() + "\\payload.bin.signed";
+                    File.WriteAllBytes(key_file, key);
+                    File.WriteAllBytes(value_file, value);
+                    ProcessStartInfo psi = new ProcessStartInfo("openssl\\openssl.exe", "dgst -sha512 -sign \"" + key_file + "\" -out \"" + signed_file + "\" \"" + value_file + "\"");
+                    psi.RedirectStandardOutput = true;
+                    psi.RedirectStandardError = true;
+                    psi.UseShellExecute = false;
+                    psi.CreateNoWindow = true;
+                    Process p = new Process();
+                    p.StartInfo = psi;
+                    p.Start();
+                    p.WaitForExit();
+                    return File.ReadAllBytes(signed_file);
+                } },
+                { JwtHashAlgorithm.HS384, (key, value) => { using (var sha = new HMACSHA384(key)) { return sha.ComputeHash(value); } } },
+                { JwtHashAlgorithm.HS512, (key, value) => { using (var sha = new HMACSHA512(key)) { return sha.ComputeHash(value); } } },
+            };
+        }
+
+        public static string Encode(object payload, string key, JwtHashAlgorithm algorithm)
+        {            
+            return Encode(payload, Encoding.UTF8.GetBytes(key), algorithm);
+        }
+
+        public static string Encode(object payload, byte[] keyBytes, JwtHashAlgorithm algorithm)
+        {
+            var segments = new List<string>();
+            var header = new { alg = algorithm.ToString(), typ = "JWT" };
+
+            byte[] headerBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(header, Formatting.None));
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload, Formatting.None));
+           
+            segments.Add(Base64UrlEncode(headerBytes));
+            segments.Add(Base64UrlEncode(payloadBytes));
+
+            var stringToSign = string.Join(".", segments);
+            var bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
+
+            byte[] signature = HashAlgorithms[algorithm](keyBytes, bytesToSign);
+            segments.Add(Base64UrlEncode(signature));
+
+            return string.Join(".", segments);
+        }
+
+        public static string Decode(string token, string key)
+        {
+            return Decode(token, key, true);
+        }
+
+        public static string Decode(string token, string key, bool verify)
+        {
+            var parts = token.Split('.');
+            var header = parts[0];
+            var payload = parts[1];
+            byte[] crypto = Base64UrlDecode(parts[2]);
+
+            var headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
+            var headerData = JObject.Parse(headerJson);
+            var payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(payload));
+            var payloadData = JObject.Parse(payloadJson);
+
+            if (verify)
+            {
+                var bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", payload));
+                var keyBytes = Encoding.UTF8.GetBytes(key);
+                var algorithm = (string)headerData["alg"];
+
+                var signature = HashAlgorithms[GetHashAlgorithm(algorithm)](keyBytes, bytesToSign);
+                var decodedCrypto = Convert.ToBase64String(crypto);
+                var decodedSignature = Convert.ToBase64String(signature);
+
+                if (decodedCrypto != decodedSignature)
+                {
+                    throw new ApplicationException(string.Format("Invalid signature. Expected {0} got {1}", decodedCrypto, decodedSignature));
+                }
+            }
+
+            return payloadData.ToString();
+        }
+
+        private static JwtHashAlgorithm GetHashAlgorithm(string algorithm)
+        {
+            switch (algorithm)
+            {
+                case "RS256": return JwtHashAlgorithm.RS256;
+                case "RS512": return JwtHashAlgorithm.RS256;
+                case "HS384": return JwtHashAlgorithm.HS384;
+                case "HS512": return JwtHashAlgorithm.HS512;
+                default: throw new InvalidOperationException("Algorithm not supported.");
+            }
+        }
+
+        // from JWT spec
+        private static string Base64UrlEncode(byte[] input)
+        {
+            var output = Convert.ToBase64String(input);
+            output = output.Split('=')[0]; // Remove any trailing '='s
+            output = output.Replace('+', '-'); // 62nd char of encoding
+            output = output.Replace('/', '_'); // 63rd char of encoding
+            return output;
+        }
+
+        // from JWT spec
+        private static byte[] Base64UrlDecode(string input)
+        {
+            var output = input;
+            output = output.Replace('-', '+'); // 62nd char of encoding
+            output = output.Replace('_', '/'); // 63rd char of encoding
+            switch (output.Length % 4) // Pad with trailing '='s
+            {
+                case 0: break; // No pad chars in this case
+                case 2: output += "=="; break; // Two pad chars
+                case 3: output += "="; break; // One pad char
+                default: throw new System.Exception("Illegal base64url string!");
+            }
+            var converted = Convert.FromBase64String(output); // Standard base64 decoder
+            return converted;
         }
     }
 }
