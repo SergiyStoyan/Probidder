@@ -27,14 +27,78 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
-using Jose;
-using JWT;
+using System.Threading.Tasks;
 
 namespace Cliver.Foreclosures
 {
     public class Export
-    {        
-        public static bool ToServer()
+    {
+        public static bool ToServerRuns
+        {
+            get
+            {
+                return (to_server_t != null && to_server_t.IsAlive);
+            }
+        }
+
+        public delegate void OnToServerStateChanged();
+        public static event OnToServerStateChanged ToServerStateChanged = null;
+
+        public static Thread BeginToServer(bool show_start_notification)
+        {
+            if (to_server_t != null && to_server_t.IsAlive)
+                return to_server_t;
+
+            MessageForm mf = null;
+            to_server_t = ThreadRoutines.StartTry(() =>
+            {
+                ToServerStateChanged?.BeginInvoke(null, null);
+                Log.Main.Inform("Uploading database.");
+
+                if (show_start_notification)
+                {
+                    ThreadRoutines.StartTry(() =>
+                    {
+                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. Please wait...", new string[1] { "OK" }, 0, null);
+                        mf.ShowDialog();
+                    });
+                    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
+                        Log.Main.Exit("SleepRoutines.WaitForObject got null");
+                }
+
+                HttpClientHandler handler = new HttpClientHandler();
+                HttpClient http_client = new HttpClient(handler);
+
+                bool r = _ToServer();
+                mf?.Close();
+                InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
+                if (r)
+                    if (Message.YesNo("Data has been uploaded succesfully to " + Settings.Login.ExportUrl + "\r\n\r\nClean up the database?"))
+                    {
+                        Log.Inform("Dropping the database.");
+                        Db.Foreclosures fs = new Db.Foreclosures();
+                        fs.Drop();
+                    }
+            },
+            (Exception e) =>
+            {
+                Log.Main.Error(e);
+                Log.Main.Error("Could not upload data.");
+
+                mf?.Close();
+                InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not be uploaded!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+            },
+            () =>
+            {
+                Settings.Database.Save();
+                ToServerStateChanged?.BeginInvoke(null, null);
+            }
+            );
+            return to_server_t;
+        }
+        static Thread to_server_t = null;
+
+        public static bool _ToServer()
         {
             Log.Main.Inform("Exporting to: " + Settings.Login.ExportUrl);
 
@@ -42,7 +106,10 @@ namespace Cliver.Foreclosures
             {
                 HttpClient http_client = new HttpClient();
                 if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Login.UserName, Settings.Login.Password()))
+                {
+                    Message.Error("Could not login with Username: " + Settings.Login.UserName);
                     return false;
+                }
 
                 Db.Foreclosures fs = new Db.Foreclosures();
                 string s = SerializationRoutines.Json.Serialize(fs.GetAll());
@@ -51,12 +118,7 @@ namespace Cliver.Foreclosures
                 HttpResponseMessage rm = http_client.PostAsync(Settings.Login.ExportUrl, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception(rm.ReasonPhrase);
-
-                if (Message.YesNo("Data has been uploaded succesfully to " + Settings.Login.ExportUrl + "\r\n\r\nClean up the database?"))
-                {
-                    fs.Drop();
-                    return true;
-                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -78,7 +140,7 @@ namespace Cliver.Foreclosures
                 exp = DateTime.Now.GetSecondsSinceUnixEpoch() + 1000,
                 iat = DateTime.Now.GetSecondsSinceUnixEpoch(),
             };
-            string jwt = JsonWebToken.Encode(payload, privateKey, JwtHashAlgorithm.HS512);
+            string jwt = JsonWebToken.Encode(payload, privateKey, JwtHashAlgorithm.RS512);
 
             FormUrlEncodedContent fuec = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -156,7 +218,7 @@ namespace Cliver.Foreclosures
 
     public class JsonWebToken
     {
-        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
+        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;        
 
         static JsonWebToken()
         {
@@ -164,6 +226,13 @@ namespace Cliver.Foreclosures
             {
                 { JwtHashAlgorithm.RS256, (key, value) => { using (var sha = new HMACSHA256(key)) { return sha.ComputeHash(value); } } },
                 { JwtHashAlgorithm.RS512, (key, value) => {
+                    //string k = Regex.Replace(Encoding.UTF8.GetString(  key), @"^\s*-----BEGIN PRIVATE KEY-----", "");
+                    // k = Regex.Replace( k, @"-----END PRIVATE KEY-----\s*$", "").Trim();
+                    //using (RSA rsa = RSA.Create())
+                    //{
+                    //    return rsa.SignHash(value, HashAlgorithmName.SHA512, RSASignaturePadding.Pkcs1);
+                    //}
+
                     string key_file = Path.GetTempPath() + "\\key.bin";
                     string value_file = Path.GetTempPath() + "\\payload.bin";
                     string signed_file = Path.GetTempPath() + "\\payload.bin.signed";

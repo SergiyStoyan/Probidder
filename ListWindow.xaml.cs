@@ -84,6 +84,23 @@ namespace Cliver.Foreclosures
                 });
             };
 
+            Export.ToServerStateChanged += delegate
+            {
+                refresh_db.Dispatcher.Invoke(() =>
+                {
+                    if (Export.ToServerRuns)
+                    {
+                        upload.Header = "Uploading...";
+                        upload.IsEnabled = false;
+                    }
+                    else
+                    {
+                        upload.Header = "Upload";
+                        upload.IsEnabled = true;
+                    }
+                });
+            };
+
             foreclosures.Saved += Foreclosures_Saved;
             foreclosures.Deleted += Foreclosures_Deleted;
 
@@ -160,8 +177,8 @@ namespace Cliver.Foreclosures
         }
 
         private void upload_Click(object sender, RoutedEventArgs e)
-        {
-            Export.ToServer();
+        {            
+            Export.BeginToServer(true);
         }
 
         private void new_Click(object sender, RoutedEventArgs e)
@@ -406,7 +423,7 @@ namespace Cliver.Foreclosures
                 e.Cancel = true;
                 return;
             }
-            e.Column.IsReadOnly = false;
+            e.Column.IsReadOnly = true;
             e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
             e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
             e.Column.CanUserSort = true;

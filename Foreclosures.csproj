@@ -77,14 +77,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="jose-jwt, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\jose-jwt.2.3.0\lib\net40\jose-jwt.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JWT, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\JWT.2.4.2\lib\net35\JWT.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="LiteDB, Version=3.1.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
       <HintPath>packages\LiteDB.3.1.0\lib\net35\LiteDB.dll</HintPath>
       <Private>True</Private>
@@ -307,6 +299,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(ProjectDir)config_files" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(ProjectDir)config_files" "$(TargetDir)"
+xcopy /Y "$(ProjectDir)config_files\openssl" "$(TargetDir)openssl\"
+
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

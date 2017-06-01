@@ -89,6 +89,7 @@ namespace Cliver.Foreclosures
                 {
                     Type t = new System.Diagnostics.StackFrame(1).GetMethod().DeclaringType;
                     Log.Main.Inform("Refreshing table: " + t.Name);
+                    HttpClient http_client = new HttpClient();
                     HttpResponseMessage rm = http_client.GetAsync(url).Result;
                     if (!rm.IsSuccessStatusCode)
                         throw new Exception("Could not refresh table: " + rm.ReasonPhrase);

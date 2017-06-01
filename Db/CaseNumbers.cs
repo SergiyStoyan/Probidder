@@ -40,6 +40,7 @@ namespace Cliver.Foreclosures
             static CountyCaseNumbers get_CountyCaseNumbers(string county)
             {
                 county = GetNormalized(county);
+                HttpClient http_client = new HttpClient();
                 HttpResponseMessage rm = http_client.GetAsync("https://i.probidder.com/api/record-gaps/index.php?foreclosures&county=" + county).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception("Could not refresh table: " + rm.ReasonPhrase);

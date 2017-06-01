@@ -25,7 +25,7 @@ namespace Cliver.Foreclosures
         {
             public string UserName = "protest";
             public string EncryptedPassword = "";//"qpwoei";
-            public string ExportUrl = "http://cliversoft.com";
+            public string ExportUrl = "https://cliversoft.com";
 
             public string Password()
             {

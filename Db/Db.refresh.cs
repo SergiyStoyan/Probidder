@@ -39,7 +39,7 @@ namespace Cliver.Foreclosures
             refresh_t = ThreadRoutines.StartTry(() =>
             {
                 RefreshStateChanged?.BeginInvoke(null, null);
-                Log.Main.Inform("Refreshing db.");
+                Log.Main.Inform("Refreshing database.");
 
                 if (show_start_notification)
                 {
@@ -54,7 +54,7 @@ namespace Cliver.Foreclosures
                 }
 
                 HttpClientHandler handler = new HttpClientHandler();
-                http_client = new HttpClient(handler);
+                HttpClient http_client = new HttpClient(handler);
 
                 List<Task> tasks = new List<Task>();
                 var t = new Task(() =>
@@ -118,7 +118,7 @@ namespace Cliver.Foreclosures
             (Exception e) =>
             {
                 Log.Main.Error(e);
-                Log.Main.Error("Could not refresh db.");
+                Log.Main.Error("Could not refresh database.");
                 if (Settings.Database.RefreshRetryPeriodInSecs > 0)
                     Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshRetryPeriodInSecs);
 
@@ -133,7 +133,6 @@ namespace Cliver.Foreclosures
             );
             return refresh_t;
         }
-        static Thread refresh_t = null;
-        static HttpClient http_client;        
+        static Thread refresh_t = null;   
     }
 }

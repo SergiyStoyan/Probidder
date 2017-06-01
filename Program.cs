@@ -60,9 +60,7 @@ namespace Cliver.Foreclosures
             try
             {
                 ProcessRoutines.RunSingleProcessOnly();
-
-                Export.ToServer();
-
+                
                 if (string.IsNullOrWhiteSpace(Settings.Login.UserName) || string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
                     LoginWindow.OpenDialog();
 
