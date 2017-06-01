@@ -61,16 +61,14 @@ namespace Cliver.Foreclosures
             {
                 ProcessRoutines.RunSingleProcessOnly();
                 
-                if (string.IsNullOrWhiteSpace(Settings.Login.UserName) || string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
-                    LoginWindow.OpenDialog();
+                if (string.IsNullOrWhiteSpace(Settings.Network.UserName) || string.IsNullOrWhiteSpace(Settings.Network.EncryptedPassword))
+                    NetworkWindow.OpenDialog();
 
-                if (string.IsNullOrWhiteSpace(Settings.Location.County))
+                //if (string.IsNullOrWhiteSpace(Settings.Location.County))
                     LocationWindow.OpenDialog();
 
                 Db.Mode = Db.Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE;
-
-                LocationWindow.OpenDialog();
-
+                
                 Service.Running = true;
                 //Db.BeginRefresh();
                 ListWindow.OpenDialog();

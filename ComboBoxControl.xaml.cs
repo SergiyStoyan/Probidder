@@ -126,7 +126,10 @@ namespace Cliver.Foreclosures
             string s = (string)SelectedItem;
             if (s == null)
             {
-                select(p, 0);
+                if (text_setting)
+                    select(p, 0);
+                else
+                    tb.Text = null;
             }
             else
             {
@@ -146,6 +149,7 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             if (selection_setting)
                 return;
+            text_setting = true;
             string t = tb.Text;
             //Items.Filter = new Predicate<object>((object o) => {
             //    return ((string)o).StartsWith(t, StringComparison.InvariantCultureIgnoreCase);
@@ -161,13 +165,16 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
+                        text_setting = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
+            text_setting = false;
         }
+        bool text_setting = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

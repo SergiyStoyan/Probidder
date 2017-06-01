@@ -19,9 +19,9 @@ namespace Cliver.Foreclosures
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly LoginSettings Login;
+        public static readonly NetworkSettings Network;
 
-        public class LoginSettings : Cliver.Settings
+        public class NetworkSettings : Cliver.Settings
         {
             public string UserName = "protest";
             public string EncryptedPassword = "";//"qpwoei";

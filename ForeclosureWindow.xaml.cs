@@ -63,10 +63,32 @@ namespace Cliver.Foreclosures
 
             OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
 
-            if (foreclosure_id != null)
-                fields.DataContext = foreclosures.GetById((int)foreclosure_id);
-            else
-                fields.DataContext = new Db.Foreclosure();
+            Loaded += delegate
+            {
+                Db.Foreclosure f;
+                if (foreclosure_id != null)
+                    f = foreclosures.GetById((int)foreclosure_id);
+                else
+                {
+                    f = new Db.Foreclosure();
+                    f.InitialControlSetting = true;
+                }
+                fields.DataContext = f;
+            };
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() => {
+                Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+                if (f != null)
+                    f.InitialControlSetting = false;
+            }));
+
+            PreviewKeyDown += delegate
+              {
+              };
+
+            PreviewMouseDown += delegate
+            {
+            };
 
             Closed += delegate
             {
@@ -75,13 +97,21 @@ namespace Cliver.Foreclosures
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
                {
-                   e.Cancel = !Save();
+                   if (!save_current_Foreclosure() && !Message.YesNo("Close without saving the current entry?"))
+                       e.Cancel = true;
                };
 
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
+
+        void set_context(Db.Foreclosure f)
+        {
+            f.InitialControlSetting = true;
+            fields.DataContext = f;
+            f.InitialControlSetting = false;
+        }
 
         public void KeyDownHandler(object sender, KeyEventArgs e)
         {
@@ -120,10 +150,10 @@ namespace Cliver.Foreclosures
                     f2 = new Db.Foreclosure();
 
                 foreclosures.Delete(f.Id);
-                fields.DataContext = f2;
+                set_context(f2);
             }
             else
-                fields.DataContext = new Db.Foreclosure();
+                set_context(new Db.Foreclosure());
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -133,7 +163,7 @@ namespace Cliver.Foreclosures
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
-            if (!Save())
+            if (!save_current_Foreclosure())
                 return;
             Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id == 0)
@@ -145,12 +175,12 @@ namespace Cliver.Foreclosures
                 Prev.IsEnabled = false;
                 return;
             }
-            fields.DataContext = f;
+            set_context(f);
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (!Save())
+            if (!save_current_Foreclosure())
                 return;
             Db.Foreclosure f = get_current_Foreclosure();
             if (f.Id == 0)
@@ -164,32 +194,38 @@ namespace Cliver.Foreclosures
                 Next.IsEnabled = false;
                 return;
             }
-            fields.DataContext = f;
+            set_context(f);
         }
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            if (!Save())
+            if (!save_current_Foreclosure())
                 return;
-            fields.DataContext = new Db.Foreclosure();
+            set_context(new Db.Foreclosure());
         }
 
-        private bool Save()
+        private bool save_current_Foreclosure()
         {
             try
             {
+                Db.Foreclosure f = get_current_Foreclosure();
+                
+                if (!f.Edited)
+                    return true;
+
+                f.OnPropertyChanged(null);
+
                 if (!this.IsValid())
                     throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
 
-                Db.Foreclosure f = get_current_Foreclosure();
                 foreclosures.Save(f);
                 
-                fields.IsEnabled = false;
-                ThreadRoutines.StartTry(() =>
-                {
-                    Thread.Sleep(200);
-                    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
-                });
+                //fields.IsEnabled = false;
+                //ThreadRoutines.StartTry(() =>
+                //{
+                //    Thread.Sleep(200);
+                //    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
+                //});
 
                 return true;
             }

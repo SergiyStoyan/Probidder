@@ -71,9 +71,9 @@ namespace Cliver.Foreclosures
 
                 bool r = _ToServer();
                 mf?.Close();
-                InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
+                //InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
                 if (r)
-                    if (Message.YesNo("Data has been uploaded succesfully to " + Settings.Login.ExportUrl + "\r\n\r\nClean up the database?"))
+                    if (Message.YesNo("Data has been uploaded succesfully to " + Settings.Network.ExportUrl + "\r\n\r\nClean up the database?"))
                     {
                         Log.Inform("Dropping the database.");
                         Db.Foreclosures fs = new Db.Foreclosures();
@@ -100,14 +100,14 @@ namespace Cliver.Foreclosures
 
         public static bool _ToServer()
         {
-            Log.Main.Inform("Exporting to: " + Settings.Login.ExportUrl);
+            Log.Main.Inform("Exporting to: " + Settings.Network.ExportUrl);
 
             try
             {
                 HttpClient http_client = new HttpClient();
-                if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Login.UserName, Settings.Login.Password()))
+                if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Network.UserName, Settings.Network.Password()))
                 {
-                    Message.Error("Could not login with Username: " + Settings.Login.UserName);
+                    Message.Error("Could not login with Username: " + Settings.Network.UserName);
                     return false;
                 }
 
@@ -115,7 +115,7 @@ namespace Cliver.Foreclosures
                 string s = SerializationRoutines.Json.Serialize(fs.GetAll());
                 StringContent post_data = new StringContent(s);
                 post_data.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                HttpResponseMessage rm = http_client.PostAsync(Settings.Login.ExportUrl, post_data).Result;
+                HttpResponseMessage rm = http_client.PostAsync(Settings.Network.ExportUrl, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception(rm.ReasonPhrase);
                 return true;

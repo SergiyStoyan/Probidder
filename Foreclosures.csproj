@@ -163,7 +163,7 @@
     <Compile Include="Settings\ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Login.cs" />
+    <Compile Include="Settings\Network.cs" />
     <Compile Include="Settings\Location.cs" />
     <Compile Include="Db\Zips.cs" />
     <Compile Include="Db\Cities.cs" />
@@ -181,8 +181,8 @@
     <Compile Include="Settings\LocationWindow.xaml.cs">
       <DependentUpon>LocationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="Settings\NetworkWindow.xaml.cs">
+      <DependentUpon>NetworkWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ListWindow.xaml.cs">
       <DependentUpon>ListWindow.xaml</DependentUpon>
@@ -272,7 +272,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Settings\LoginWindow.xaml">
+    <Page Include="Settings\NetworkWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

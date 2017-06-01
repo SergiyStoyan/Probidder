@@ -269,7 +269,7 @@ namespace Cliver.Foreclosures
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow.OpenDialog();
+            NetworkWindow.OpenDialog();
         }
 
         private void database_Click(object sender, RoutedEventArgs e)

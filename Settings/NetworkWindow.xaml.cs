@@ -25,16 +25,16 @@ using System.Threading;
 
 namespace Cliver.Foreclosures
 {
-    public partial class LoginWindow : Window
+    public partial class NetworkWindow : Window
     {
         public static void OpenDialog()
         {
-            var w = new LoginWindow();
+            var w = new NetworkWindow();
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.ShowDialog();
         }
 
-        LoginWindow()
+        NetworkWindow()
         {
             InitializeComponent();
 
@@ -58,9 +58,10 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            UserName.Text = Settings.Login.UserName;
-            if (!string.IsNullOrWhiteSpace(Settings.Login.EncryptedPassword))
-                Password.Password = Settings.Login.Password();
+            UserName.Text = Settings.Network.UserName;
+            if (!string.IsNullOrWhiteSpace(Settings.Network.EncryptedPassword))
+                Password.Password = Settings.Network.Password();
+            ExportUrl.Text = Settings.Network.ExportUrl;
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -74,12 +75,15 @@ namespace Cliver.Foreclosures
             {
                 if (string.IsNullOrWhiteSpace(UserName.Text))
                     throw new Exception("User Name is not set.");
-                Settings.Login.UserName = UserName.Text;
+                Settings.Network.UserName = UserName.Text;
                 if (string.IsNullOrWhiteSpace(Password.Password))
                     throw new Exception("Password is not set.");
-                Settings.Login.EncryptedPassword = Settings.Login.Encrypt(Password.Password);
+                Settings.Network.EncryptedPassword = Settings.Network.Encrypt(Password.Password);
+                if (string.IsNullOrWhiteSpace(ExportUrl.Text))
+                    throw new Exception("Export Url is not set.");
+                Settings.Network.ExportUrl = ExportUrl.Text;
 
-                Settings.Login.Save();
+                Settings.Network.Save();
                 Config.Reload();
 
                 Close();

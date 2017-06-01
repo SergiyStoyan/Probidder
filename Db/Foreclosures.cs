@@ -14,6 +14,8 @@ using System.IO;
 using LiteDB;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Collections;
+using System.ComponentModel;
 
 namespace Cliver.Foreclosures
 {
@@ -108,7 +110,7 @@ namespace Cliver.Foreclosures
         //    public event DeletedHandler Deleted = null;
         //}
 
-        public class Foreclosure : Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
+        public class Foreclosure : Document, System.ComponentModel.INotifyPropertyChanged, System.ComponentModel.IDataErrorInfo
         //public class Foreclosure : ListDb.Document, /*System.ComponentModel.INotifyPropertyChanged,*/ System.ComponentModel.IDataErrorInfo
         {
             public string TYPE_OF_EN { get; set; }
@@ -152,12 +154,11 @@ namespace Cliver.Foreclosures
 
             #region Validation
 
-            //public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-            //protected void OnPropertyChanged(string propertyName)
-            //{
-            //    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            //}
+            public void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
@@ -179,8 +180,21 @@ namespace Cliver.Foreclosures
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
+            public bool InitialControlSetting = true;
+
+            [FieldPreparation.IgnoredField]
+            [BsonIgnore]
+            public bool Edited = false;
+
+            [FieldPreparation.IgnoredField]
+            [BsonIgnore]
             private string validate(string propertyName)
             {
+                if (InitialControlSetting)
+                    return null;
+
+                Edited = true;
+
                 switch (propertyName)
                 {
                     case "TYPE_OF_EN":

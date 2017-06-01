@@ -81,7 +81,7 @@ namespace Cliver.Foreclosures
                 return;
             }
             if (SelectedDate != dt)
-                SelectedDate = dt;
+                base.SelectedDate = dt;
             else
                 DatePicker_SelectedDateChanged(null, null);
             this.MarkValid();
@@ -148,7 +148,10 @@ namespace Cliver.Foreclosures
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                tb.Text = apply_mask(tb.Text);
+                if(text_setting)
+                    tb.Text = apply_mask(tb.Text);
+                else
+                    tb.Text = mask;
                 select(p, 0);
             }
             else
@@ -165,15 +168,16 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             if (selection_setting)
                 return;
+            text_setting = true;
             string t = tb.Text;
-            if (t.Length >= mask.Length)
-                return;
             DateTime? dt = calendar_input(t);
             if (SelectedDate != dt)
                 SelectedDate = dt;
             else
                 DatePicker_SelectedDateChanged(null, null);
+            text_setting = false;
         }
+        bool text_setting = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
