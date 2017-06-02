@@ -32,6 +32,7 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += DatePickerControl_GotKeyboardFocus;
             LostKeyboardFocus += DatePickerControl_LostKeyboardFocus;
+            SelectedDateChanged += DatePicker_SelectedDateChanged;
 
             Loaded += delegate
             {//bulding template is anynchronous so we are waiting when it is finished to get TextBox
@@ -56,6 +57,10 @@ namespace Cliver.Foreclosures
                 tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
                 if (tb == null)
                     tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
+
+                tb.PreviewTextInput += TextBox_PreviewTextInput;
+                tb.TextChanged += TextBox_TextChanged;
+                tb.GotFocus += TextBox_GotFocus;
             };
 
             List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
@@ -72,15 +77,31 @@ namespace Cliver.Foreclosures
         //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
         //}
 
+        public string Text
+        {
+            get
+            {
+                return base.Text;
+            }
+            set
+            {
+                if (tb != null)
+                    tb.Text = value;
+            }
+        }
+
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            DateTime? dt = calendar_input(tb.Text);
+            DateTime? dt = calendar_input(tb.Text); 
+            if (dt != SelectedDate)
+                SelectedDate = dt;
+            else
+                DatePicker_SelectedDateChanged(null, null);
             if (dt == null && Regex.IsMatch(tb.Text, @"\d"))
             {
                 this.MarkInvalid("Error");
                 return;
             }
-            DatePicker_SelectedDateChanged(null, null);
             this.MarkValid();
         }
 
@@ -94,6 +115,14 @@ namespace Cliver.Foreclosures
         readonly string mask = "__/__/__";
         readonly Regex mask_separators_r = null;
         readonly Regex mask_r = null;
+
+        public string Mask
+        {
+            get
+            {
+                return mask;
+            }
+        }
 
         string apply_mask(string t)
         {
@@ -140,44 +169,45 @@ namespace Cliver.Foreclosures
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            selection_setting = true;
+            ignore_text_change = true;
             int p = tb.SelectionStart;
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                if(text_setting)
+                //if(tb.IsKeyboardFocused)
                     tb.Text = apply_mask(tb.Text);
-                else
-                    tb.Text = mask;
+                //else
+                //    tb.Text = mask;
                 select(p, 0);
             }
             else
             {
-                if(tb.IsKeyboardFocused)
+                if (tb.IsKeyboardFocused)
                     tb.Text = ((DateTime)dt).ToString("MM/dd/yy");
                 else
                     tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
                 select(p, tb.Text.Length);
+                //this.MarkValid();
             }
-            selection_setting = false;
+            ignore_text_change = false;
         }
-        bool selection_setting = false;
+        //bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
-            if (selection_setting)
+            if (ignore_text_change)
                 return;
-            text_setting = true;
+            //ignore_selection_change = true;
             string t = tb.Text;
             DateTime? dt = calendar_input(t);
             if (SelectedDate != dt)
                 SelectedDate = dt;
             else
                 DatePicker_SelectedDateChanged(null, null);
-            text_setting = false;
+            //ignore_selection_change = false;
         }
-        bool text_setting = false;
+        bool ignore_text_change = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -196,10 +226,11 @@ namespace Cliver.Foreclosures
             }
             while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
                 p++;
-            t = t.Remove(p, 1);
+            if (t[p] == '_')
+                t = t.Remove(p, 1);
             t = t.Insert(p, e.Text);
             p++;
-            tb.Text = t;
+            tb.Text = apply_mask(t);
             tb.SelectionStart = p;
         }
 
@@ -207,21 +238,13 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                return DateTime.ParseExact(text, "MM/dd/yy", null);
-            }
-            catch
-            {
-            }
-            try
-            {
                 return DateTime.ParseExact(text, "MM/dd/yyyy", null);
             }
             catch
             {
             }
-            if (text.Length > 6 || Regex.IsMatch(text, @"[^\d]"))
-                return null;
-            Match m = Regex.Match(text, @"(\d{2})/(\d{2})/(\d{2})");
+            text = strip_mask(text);
+            Match m = Regex.Match(text, @"^(\d{2})(\d{2})(\d{2})$");
             if (!m.Success)
                 return null;
             try
@@ -237,15 +260,6 @@ namespace Cliver.Foreclosures
             {
                 return null;
             }
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //DateTime? dt = calendar_input(tb.Text);
-            //if (SelectedDate == null && dt == null
-            //    || SelectedDate != null && dt != null && ((DateTime)SelectedDate).Date == ((DateTime)dt).Date && tb.Text.Length != 10)
-            //    DatePicker_SelectedDateChanged(null, null);
-            //SelectedDate = dt;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

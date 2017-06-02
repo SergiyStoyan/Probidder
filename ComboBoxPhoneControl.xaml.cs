@@ -29,9 +29,7 @@ namespace Cliver.Foreclosures
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-
-            SelectionChanged += ComboBox_SelectionChanged;
-
+            
             tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_EditableTextBox").First();
             tb0.TextChanged += tb0_TextChanged;
 
@@ -52,6 +50,7 @@ namespace Cliver.Foreclosures
               {
               };
 
+            SelectionChanged += ComboBox_SelectionChanged;
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
             LostKeyboardFocus += ComboBoxControl_LostFocus;
@@ -64,7 +63,7 @@ namespace Cliver.Foreclosures
 
         private void tb0_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ignore_selection_change)
+            if (ignore_text_change)
                 return;
             ignore_text_change = true;
             tb.Text = apply_mask(tb0.Text);
@@ -77,6 +76,8 @@ namespace Cliver.Foreclosures
 
         private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
+            Text = tb.Text;
+            tb.ScrollToHome();
             if (Regex.IsMatch(tb.Text, @"\d") && Regex.IsMatch(tb.Text, @"_"))
             {
                 this.MarkInvalid("error");
@@ -150,6 +151,14 @@ namespace Cliver.Foreclosures
         readonly Regex mask_separators_r = null;
         readonly Regex mask_r = null;
 
+        public string Mask
+        {
+            get
+            {
+                return mask;
+            }
+        }
+
         private void ComboBoxControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (tb == null)
@@ -210,7 +219,7 @@ namespace Cliver.Foreclosures
             string s = (string)SelectedItem;
             if (s == null)
             {
-                if (ignore_selection_change)
+                if (IsEditable)
                 {
                     tb.Text = apply_mask(tb.Text);
                     select(p, 0);
@@ -230,18 +239,13 @@ namespace Cliver.Foreclosures
             //this.MarkValid();
             ignore_text_change = false;
         }
-        bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
             if (ignore_text_change)
                 return;
-            ignore_selection_change = true;
-            string t = tb.Text;
-            //if (t.Length > mask.Length)
-            //    return;
-            string v = strip_mask(t);
+            string v = strip_mask(tb.Text);
             if (v.Length > 0 && !delete_clicked)
             {
                 foreach (string i in Items)
@@ -253,14 +257,12 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
-                        ignore_selection_change = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            ignore_selection_change = false;
         }
         bool ignore_text_change = false;
 
@@ -281,10 +283,11 @@ namespace Cliver.Foreclosures
             }
             while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
                 p++;
-            t = t.Remove(p, 1);
+            if(t[p] == '_')
+                t = t.Remove(p, 1);
             t = t.Insert(p, e.Text);
             p++;
-            tb.Text = t;
+            tb.Text = apply_mask(t);
             tb.SelectionStart = p;
         }
     }

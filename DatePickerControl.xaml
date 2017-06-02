@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
              mc:Ignorable="d"
-            SelectedDateChanged="DatePicker_SelectedDateChanged"
             >
 
         <DatePicker.Resources>
@@ -15,8 +14,6 @@
                         <ControlTemplate TargetType="DatePickerTextBox">
                         <TextBox x:Name="TextBox" 
                                     Text="__/__/__" 
-                        PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"
-                                 LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus"
                                  />
                         </ControlTemplate>
                     </Setter.Value>

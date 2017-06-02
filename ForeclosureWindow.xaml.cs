@@ -96,6 +96,20 @@ namespace Cliver.Foreclosures
         {
             this.MarkValid();
 
+            FILING_DATE.Text = FILING_DATE.Mask;
+            ENTRY_DATE.Text = ENTRY_DATE.Mask;
+            ORIGINAL_MTG.Text = ORIGINAL_MTG.Mask;
+            DATE_OF_CA.Text = DATE_OF_CA.Mask;
+            LAST_PAY_DATE.Text = LAST_PAY_DATE.Mask;
+            LENDOR.Text = "";
+            CITY.Text = "";
+            ZIP.Text = "";
+            PROP_DESC.Text = "";
+            TYPE_OF_MO.Text = "";
+            ATTORNEY_S.Text = ATTORNEY_S.Mask;
+            ATTY.Text = "";
+            OWNER_ROLE.Text = "";
+
             CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
             LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
             ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
@@ -261,16 +275,16 @@ namespace Cliver.Foreclosures
         {
             ATTORNEY_S.ItemsSourceNomalized = (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem).OrderBy(x => x.attorney_phone).Select(x=>x.attorney_phone);
 
-            Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
-            if (f.Id == 0)
-                if (ATTORNEY_S.Items.Count > 0)
-                    ATTORNEY_S.SelectedIndex = 0;
+            //Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
+            //if (f.Id == 0)
+            //    if (ATTORNEY_S.Items.Count > 0)
+            //        ATTORNEY_S.SelectedIndex = 0;
         }
 
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             CASE_N.ItemsSource = (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns.OrderBy(x => x);
-
+            
             Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
 
             set_controls(f);

@@ -46,8 +46,6 @@ namespace Cliver.Foreclosures
         {
             base.OnApplyTemplate();
 
-            SelectionChanged += ComboBox_SelectionChanged;
-
             tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_EditableTextBox").First();
             tb0.TextChanged += tb0_TextChanged;
 
@@ -58,36 +56,11 @@ namespace Cliver.Foreclosures
             //tb.KeyDown += TextBox_PreviewKeyDown;
             //tb.LostFocus += TextBox_LostFocus;
             //tb.GotKeyboardFocus += TextBox_GotKeyboardFocus;
-            tb.PreviewLostKeyboardFocus += tb_PreviewLostKeyboardFocus;
-        }
-
-        private void tb_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            Text = tb.Text;
-            tb.ScrollToHome();
-
-            if (!IsEditable && 
-                ((string)SelectedItem != tb.Text
-                || string.IsNullOrEmpty((string)SelectedItem) != string.IsNullOrEmpty(tb.Text))
-                )
-            {
-                this.MarkInvalid("Error");
-            }
-            this.MarkValid();
-
-            //var dpd = DependencyPropertyDescriptor.FromProperty(TextProperty, GetType());
-            //var dpd = DependencyPropertyDescriptor.FromName("Text", GetType(), GetType());
-            //dpd.AddValueChanged(this)
-            //DependencyProperty dp = dpd.DependencyProperty;
-            //dp.ValidateValueCallback?.Invoke(tb.Text);
-            //dp.AddValueChanged(this.tb, GridIsAvailableChanged);            
-
-            //OnPropertyChanged(new DependencyPropertyChangedEventArgs(TextProperty, old_value, tb.Text));
         }
 
         private void tb0_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ignore_selection_change)
+            if (ignore_text_change)
                 return;
             ignore_text_change = true;
             tb.Text = tb0.Text;
@@ -130,27 +103,32 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
-            LostKeyboardFocus += ComboBoxControl_LostFocus;            
-
-            //dp = DependencyProperty.Register("Text", typeof(string), GetType());
+            SelectionChanged += ComboBox_SelectionChanged;
+            LostKeyboardFocus += ComboBoxControl_LostKeyboardFocus;
         }
 
-        private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
+        private void ComboBoxControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //tb0.Text = tb.Text;
-            //tb.ScrollToHome();
-            //this.MarkValid();
-            //NotifyPropertyChanged("Text2");
-            ////NotifyPropertyChanged("SelectedItem");
+            Text = tb.Text;
+            tb.ScrollToHome();
+
+            if (!IsEditable &&
+                ((string)SelectedItem != tb.Text
+                || string.IsNullOrEmpty((string)SelectedItem) != string.IsNullOrEmpty(tb.Text))
+                )
+            {
+                this.MarkInvalid("Error");
+            }
+            this.MarkValid();
 
             //var dpd = DependencyPropertyDescriptor.FromProperty(TextProperty, GetType());
             //var dpd = DependencyPropertyDescriptor.FromName("Text", GetType(), GetType());
             //dpd.AddValueChanged(this)
             //DependencyProperty dp = dpd.DependencyProperty;
-            //dp.AddValueChanged(this.tb, GridIsAvailableChanged);
-            //OnPropertyChanged(new DependencyPropertyChangedEventArgs(TextProperty, old_value, tb.Text));
+            //dp.ValidateValueCallback?.Invoke(tb.Text);
+            //dp.AddValueChanged(this.tb, GridIsAvailableChanged);            
 
-            //InvalidateProperty(dp);
+            //OnPropertyChanged(new DependencyPropertyChangedEventArgs(TextProperty, old_value, tb.Text));
         }
 
         private void ComboBoxControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -214,10 +192,10 @@ namespace Cliver.Foreclosures
             string s = (string)SelectedItem;
             if (s == null)
             {
-                if (ignore_selection_change)
+                if (IsEditable)
                     select(p, 0);
                 else
-                    tb.Text = null;
+                    tb.Text = "";
             }
             else
             {
@@ -230,14 +208,12 @@ namespace Cliver.Foreclosures
             }
             ignore_text_change = false;
         }
-        bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
             if (ignore_text_change)
                 return;
-            ignore_selection_change = true;
             string t = tb.Text;
             //Items.Filter = new Predicate<object>((object o) => {
             //    return ((string)o).StartsWith(t, StringComparison.InvariantCultureIgnoreCase);
@@ -253,14 +229,12 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
-                        ignore_selection_change = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            ignore_selection_change = false;
         }
         bool ignore_text_change = false;
 
