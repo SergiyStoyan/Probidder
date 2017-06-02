@@ -122,18 +122,18 @@ namespace Cliver.Foreclosures
 
             f.PropertyChanged2 += delegate
               {
-                  //if (!fields.IsValid())
-                  //{
-                  //    Next.IsEnabled = false;
-                  //    Prev.IsEnabled = false;
-                  //    New.IsEnabled = false;
-                  //}
-                  //else
-                  //{
-                  //    Next.IsEnabled = true;
-                  //    Prev.IsEnabled = true;
-                  //    New.IsEnabled = true;
-                  //}
+                  if (!fields.IsValid())
+                  {
+                      Next.IsEnabled = false;
+                      Prev.IsEnabled = false;
+                      New.IsEnabled = false;
+                  }
+                  else
+                  {
+                      Next.IsEnabled = true;
+                      Prev.IsEnabled = true;
+                      New.IsEnabled = true;
+                  }
               };
             f.InitialControlSetting = true;
             fields.DataContext = f;
@@ -236,9 +236,9 @@ namespace Cliver.Foreclosures
             try
             {
                 Db.Foreclosure f = get_current_Foreclosure();
-                
-                //if (!f.Edited)
-                //    return true;
+
+                if (!f.Edited)
+                    return true;
 
                 f.OnPropertyChanged(null);
 
