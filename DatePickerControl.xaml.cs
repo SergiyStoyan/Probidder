@@ -80,10 +80,7 @@ namespace Cliver.Foreclosures
                 this.MarkInvalid("Error");
                 return;
             }
-            if (SelectedDate != dt)
-                base.SelectedDate = dt;
-            else
-                DatePicker_SelectedDateChanged(null, null);
+            DatePicker_SelectedDateChanged(null, null);
             this.MarkValid();
         }
 
@@ -156,7 +153,10 @@ namespace Cliver.Foreclosures
             }
             else
             {
-                tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
+                if(tb.IsKeyboardFocused)
+                    tb.Text = ((DateTime)dt).ToString("MM/dd/yy");
+                else
+                    tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
                 select(p, tb.Text.Length);
             }
             selection_setting = false;

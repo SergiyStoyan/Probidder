@@ -32,8 +32,10 @@ namespace Cliver.Foreclosures
 
             SelectionChanged += ComboBox_SelectionChanged;
 
-            //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
-            tb = this.FindVisualChildrenOfType<TextBox>().First();
+            tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_EditableTextBox").First();
+            tb0.TextChanged += tb0_TextChanged;
+
+            tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
             tb.Text = mask;
             tb.PreviewTextInput += TextBox_PreviewTextInput;
             tb.TextChanged += TextBox_TextChanged;
@@ -60,12 +62,32 @@ namespace Cliver.Foreclosures
             mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
 
+        private void tb0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ignore_selection_change)
+                return;
+            ignore_text_change = true;
+            tb.Text = apply_mask(tb0.Text);
+            ignore_text_change = false;
+            old_value = tb.Text;
+        }
+
+        TextBox tb0;
+        string old_value;
+
         private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
             if (Regex.IsMatch(tb.Text, @"\d") && Regex.IsMatch(tb.Text, @"_"))
             {
                 this.MarkInvalid("error");
                 return;
+            }
+            if (!IsEditable && (
+                strip_mask((string)SelectedItem) != strip_mask(tb.Text)
+                || string.IsNullOrEmpty((string)SelectedItem)) != string.IsNullOrEmpty(strip_mask(tb.Text)
+                ))
+            {
+                this.MarkInvalid("Error");
             }
             this.MarkValid();
         }
@@ -183,12 +205,12 @@ namespace Cliver.Foreclosures
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selection_setting = true;
+            ignore_text_change = true;
             int p = tb.SelectionStart;
             string s = (string)SelectedItem;
             if (s == null)
             {
-                if (text_setting)
+                if (ignore_selection_change)
                 {
                     tb.Text = apply_mask(tb.Text);
                     select(p, 0);
@@ -206,16 +228,16 @@ namespace Cliver.Foreclosures
                     select(p, 0);
             }
             //this.MarkValid();
-            selection_setting = false;
+            ignore_text_change = false;
         }
-        bool selection_setting = false;
+        bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
-            if (selection_setting)
+            if (ignore_text_change)
                 return;
-            text_setting = true;
+            ignore_selection_change = true;
             string t = tb.Text;
             //if (t.Length > mask.Length)
             //    return;
@@ -231,16 +253,16 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
-                        text_setting = false;
+                        ignore_selection_change = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            text_setting = false;
+            ignore_selection_change = false;
         }
-        bool text_setting = false;
+        bool ignore_text_change = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

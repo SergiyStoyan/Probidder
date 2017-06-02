@@ -140,7 +140,7 @@
                         <CheckBox x:Name="IS_ORG" VerticalAlignment="Top" Margin="0,5,0,5" IsChecked="{Binding IS_ORG, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Content="IS ORG" />
                         <CheckBox x:Name="DECEASED" VerticalAlignment="Top" Margin="20,5,0,5" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Content="Deceased"/>
                         <Label VerticalAlignment="Top" Margin="20,0,0,0" Content="Owner Role" />
-                        <local:ComboBoxControl VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  Text="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" IsEditable="True" Width="90"/>
+                        <local:ComboBoxControl VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  SelectedItem="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" IsEditable="True" Width="90"/>
                     </StackPanel>
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right" Content="Other Liens"/>
                     <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" x:Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>

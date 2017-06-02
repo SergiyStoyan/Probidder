@@ -51,29 +51,15 @@ namespace Cliver.Foreclosures
 
             COUNTY.Text = Settings.Location.County;
 
-            CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
-
-            LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
-
-            ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
-
-            TYPE_OF_MO.ItemsSource = (new Db.MortgageTypes()).Get().OrderBy(x => x.mortgage_type).Select(x => x.mortgage_type);
-
-            PROP_DESC.ItemsSource = (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
-
-            OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
-
             Loaded += delegate
             {
                 Db.Foreclosure f;
                 if (foreclosure_id != null)
                     f = foreclosures.GetById((int)foreclosure_id);
                 else
-                {
                     f = new Db.Foreclosure();
-                    f.InitialControlSetting = true;
-                }
-                fields.DataContext = f;
+                set_context(f);
+                f.InitialControlSetting = true;
             };
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() => {
@@ -108,6 +94,33 @@ namespace Cliver.Foreclosures
 
         void set_context(Db.Foreclosure f)
         {
+            this.MarkValid();
+
+            CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
+            LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
+            ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
+            TYPE_OF_MO.ItemsSource = (new Db.MortgageTypes()).Get().OrderBy(x => x.mortgage_type).Select(x => x.mortgage_type);
+            PROP_DESC.ItemsSource = (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
+            OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
+            ZIP.ItemsSource = null;
+            ATTORNEY_S.ItemsSource = null;
+            CASE_N.ItemsSource = null;
+
+            f.PropertyChanged2 += delegate
+              {
+                  //if (!fields.IsValid())
+                  //{
+                  //    Next.IsEnabled = false;
+                  //    Prev.IsEnabled = false;
+                  //    New.IsEnabled = false;
+                  //}
+                  //else
+                  //{
+                  //    Next.IsEnabled = true;
+                  //    Prev.IsEnabled = true;
+                  //    New.IsEnabled = true;
+                  //}
+              };
             f.InitialControlSetting = true;
             fields.DataContext = f;
             f.InitialControlSetting = false;
@@ -210,23 +223,26 @@ namespace Cliver.Foreclosures
             {
                 Db.Foreclosure f = get_current_Foreclosure();
                 
-                if (!f.Edited)
-                    return true;
+                //if (!f.Edited)
+                //    return true;
 
                 f.OnPropertyChanged(null);
 
-                if (!this.IsValid())
-                    throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
+                if (!fields.IsValid())
+                {
+                    //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
+                    return false;
+                }
 
                 foreclosures.Save(f);
-                
+
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{
                 //    Thread.Sleep(200);
                 //    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
                 //});
-
+                
                 return true;
             }
             catch (Exception ex)

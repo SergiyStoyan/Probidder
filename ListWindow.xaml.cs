@@ -267,7 +267,7 @@ namespace Cliver.Foreclosures
             refresh_db_last_time0.IsOpen = false;
         }
 
-        private void login_Click(object sender, RoutedEventArgs e)
+        private void network_Click(object sender, RoutedEventArgs e)
         {
             NetworkWindow.OpenDialog();
         }

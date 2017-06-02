@@ -154,6 +154,8 @@ namespace Cliver.Foreclosures
 
             #region Validation
 
+            [FieldPreparation.IgnoredField]
+            [BsonIgnore]
             public void OnPropertyChanged(string propertyName)
             {
                 PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
@@ -170,13 +172,33 @@ namespace Cliver.Foreclosures
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
+            Dictionary<string, string> columnNames2error = new Dictionary<string, string>();
+
+            [FieldPreparation.IgnoredField]
+            [BsonIgnore]
             public string this[string columnName]
             {
                 get
                 {
-                    return validate(columnName);
+                    if (InitialControlSetting)
+                        return null;
+                    string e = validate(columnName);
+                    columnNames2error[columnName] = e;
+                    PropertyChanged2?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
+                    return e;
                 }
             }
+            public event PropertyChangedEventHandler PropertyChanged2;
+
+            //[FieldPreparation.IgnoredField]
+            //[BsonIgnore]
+            //public bool HasError
+            //{
+            //    get
+            //    {
+            //        return columnNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
+            //    }
+            //}
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
@@ -184,17 +206,18 @@ namespace Cliver.Foreclosures
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
-            public bool Edited = false;
+            public bool Edited
+            {
+                get
+                {
+                    return columnNames2error.Select(x => x.Key).FirstOrDefault() != null;
+                }
+            }
 
             [FieldPreparation.IgnoredField]
             [BsonIgnore]
             private string validate(string propertyName)
             {
-                if (InitialControlSetting)
-                    return null;
-
-                Edited = true;
-
                 switch (propertyName)
                 {
                     case "TYPE_OF_EN":

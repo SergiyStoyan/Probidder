@@ -59,7 +59,7 @@
             <MenuItem Header="Filter" Name="show_search" Click="show_search_Click" IsChecked="False">
             </MenuItem>
             <MenuItem Header="Settings">
-                <MenuItem Header="Login" Name="login" Click="login_Click"/>
+                <MenuItem Header="Network" Name="network" Click="network_Click"/>
                 <MenuItem Header="Location" Name="location" Click="location_Click"/>
                 <MenuItem Header="Database" Name="database" Click="database_Click"/>
                 <MenuItem Header="View" Name="view" Click="view_Click"/>

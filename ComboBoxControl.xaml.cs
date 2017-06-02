@@ -13,14 +13,30 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
     /// <summary>
     /// Interaction logic for ComboBoxControl.xaml
     /// </summary>
-    public partial class ComboBoxControl : ComboBox
+    public partial class ComboBoxControl : ComboBox/*, INotifyPropertyChanged*/
     {
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //protected void NotifyPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
+
+        //protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    base.OnPropertyChanged(e);
+        //}
+
         static ComboBoxControl()
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxControl), new FrameworkPropertyMetadata(typeof(ComboBoxControl)));
@@ -32,14 +48,77 @@ namespace Cliver.Foreclosures
 
             SelectionChanged += ComboBox_SelectionChanged;
 
-            //tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
-            tb = this.FindVisualChildrenOfType<TextBox>().First();
+            tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_EditableTextBox").First();
+            tb0.TextChanged += tb0_TextChanged;
+
+            tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").First();
+            //tb = this.FindVisualChildrenOfType<TextBox>().First();
             tb.PreviewTextInput += TextBox_PreviewTextInput;
             tb.TextChanged += TextBox_TextChanged;
             //tb.KeyDown += TextBox_PreviewKeyDown;
             //tb.LostFocus += TextBox_LostFocus;
             //tb.GotKeyboardFocus += TextBox_GotKeyboardFocus;
+            tb.PreviewLostKeyboardFocus += tb_PreviewLostKeyboardFocus;
         }
+
+        private void tb_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            Text = tb.Text;
+            tb.ScrollToHome();
+
+            if (!IsEditable && 
+                ((string)SelectedItem != tb.Text
+                || string.IsNullOrEmpty((string)SelectedItem) != string.IsNullOrEmpty(tb.Text))
+                )
+            {
+                this.MarkInvalid("Error");
+            }
+            this.MarkValid();
+
+            //var dpd = DependencyPropertyDescriptor.FromProperty(TextProperty, GetType());
+            //var dpd = DependencyPropertyDescriptor.FromName("Text", GetType(), GetType());
+            //dpd.AddValueChanged(this)
+            //DependencyProperty dp = dpd.DependencyProperty;
+            //dp.ValidateValueCallback?.Invoke(tb.Text);
+            //dp.AddValueChanged(this.tb, GridIsAvailableChanged);            
+
+            //OnPropertyChanged(new DependencyPropertyChangedEventArgs(TextProperty, old_value, tb.Text));
+        }
+
+        private void tb0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ignore_selection_change)
+                return;
+            ignore_text_change = true;
+            tb.Text = tb0.Text;
+            ignore_text_change = false;
+            old_value = tb.Text;
+        }
+
+        TextBox tb0;
+        string old_value;
+
+        //public event PropertyChangedEventHandler TextChanged;
+        //public string Text
+        //{
+        //    get { return (string)GetValue(TextProperty); }
+        //    set { SetValue(TextProperty, value);
+        //        old_value = value;
+        //    }
+        //}
+        //string old_value;
+        //public static DependencyProperty TextProperty = DependencyProperty.Register("Text2", typeof(string), typeof(ComboBoxControl),
+        //    new FrameworkPropertyMetadata(
+        //        string.Empty,
+        //        FrameworkPropertyMetadataOptions.AffectsRender,
+        //        OnTextChanged
+        //        )
+        //    );
+        //private static void OnTextChanged(DependencyObject control, DependencyPropertyChangedEventArgs eventArgs)
+        //{
+        //    var c = (ComboBoxControl)control;
+        //    c.Text = (string)eventArgs.NewValue;
+        //}
 
         public ComboBoxControl()
         {
@@ -51,18 +130,27 @@ namespace Cliver.Foreclosures
 
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
-            LostKeyboardFocus += ComboBoxControl_LostFocus;
+            LostKeyboardFocus += ComboBoxControl_LostFocus;            
+
+            //dp = DependencyProperty.Register("Text", typeof(string), GetType());
         }
 
         private void ComboBoxControl_LostFocus(object sender, RoutedEventArgs e)
         {
-            tb.ScrollToHome();
-            //if (Regex.IsMatch(tb.Text, @"\d") && SelectedItem == null)
-            //{
-            //    this.MarkInvalid("error");
-            //    return;
-            //}
+            //tb0.Text = tb.Text;
+            //tb.ScrollToHome();
             //this.MarkValid();
+            //NotifyPropertyChanged("Text2");
+            ////NotifyPropertyChanged("SelectedItem");
+
+            //var dpd = DependencyPropertyDescriptor.FromProperty(TextProperty, GetType());
+            //var dpd = DependencyPropertyDescriptor.FromName("Text", GetType(), GetType());
+            //dpd.AddValueChanged(this)
+            //DependencyProperty dp = dpd.DependencyProperty;
+            //dp.AddValueChanged(this.tb, GridIsAvailableChanged);
+            //OnPropertyChanged(new DependencyPropertyChangedEventArgs(TextProperty, old_value, tb.Text));
+
+            //InvalidateProperty(dp);
         }
 
         private void ComboBoxControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -121,12 +209,12 @@ namespace Cliver.Foreclosures
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selection_setting = true;
+            ignore_text_change = true;
             int p = tb.SelectionStart;
             string s = (string)SelectedItem;
             if (s == null)
             {
-                if (text_setting)
+                if (ignore_selection_change)
                     select(p, 0);
                 else
                     tb.Text = null;
@@ -140,16 +228,16 @@ namespace Cliver.Foreclosures
                 else
                     select(p, 0);
             }
-            selection_setting = false;
+            ignore_text_change = false;
         }
-        bool selection_setting = false;
+        bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.Handled = true;
-            if (selection_setting)
+            if (ignore_text_change)
                 return;
-            text_setting = true;
+            ignore_selection_change = true;
             string t = tb.Text;
             //Items.Filter = new Predicate<object>((object o) => {
             //    return ((string)o).StartsWith(t, StringComparison.InvariantCultureIgnoreCase);
@@ -165,16 +253,16 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
-                        text_setting = false;
+                        ignore_selection_change = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
-            text_setting = false;
+            ignore_selection_change = false;
         }
-        bool text_setting = false;
+        bool ignore_text_change = false;
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
