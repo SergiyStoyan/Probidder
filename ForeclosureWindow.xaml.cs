@@ -101,7 +101,7 @@ namespace Cliver.Foreclosures
                };
 
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
-            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
@@ -164,28 +164,6 @@ namespace Cliver.Foreclosures
                     Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
                     Next.IsEnabled = foreclosures.GetNext(f) != null;
                 }
-            }
-        }
-
-        public void KeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (!AutoComplete.IsKeyTrigger(e.Key))
-                return;
-            IInputElement ii = Keyboard.FocusedElement;
-            if (ii == null)
-                return;
-            e.Handled = true;
-            TextBox tb = ii as TextBox;
-            if (tb != null)
-            {
-                tb.Text = AutoComplete.GetComplete(tb.Text, tb.CaretIndex);
-                return;
-            }
-            ComboBox cb = ii as ComboBox;
-            if (cb != null)
-            {
-                cb.Text = AutoComplete.GetComplete(cb.Text, cb.FindChildrenOfType<TextBox>().First().CaretIndex);
-                return;
             }
         }
 

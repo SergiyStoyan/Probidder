@@ -44,63 +44,76 @@ namespace Cliver.Foreclosures
         public delegate void OnToServerStateChanged();
         public static event OnToServerStateChanged ToServerStateChanged = null;
 
-        public static Thread BeginToServer(bool show_start_notification)
+        public static Thread BeginToServer<D>(Db.LiteDb.Table<D> table) where D : Db.Document, new()
         {
             if (to_server_t != null && to_server_t.IsAlive)
                 return to_server_t;
 
-            MessageForm mf = null;
+            //MessageForm mf = null;
             to_server_t = ThreadRoutines.StartTry(() =>
             {
                 ToServerStateChanged?.BeginInvoke(null, null);
                 Log.Main.Inform("Uploading database.");
 
-                if (show_start_notification)
-                {
-                    ThreadRoutines.StartTry(() =>
-                    {
-                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. Please wait...", new string[1] { "OK" }, 0, null);
-                        mf.ShowDialog();
-                    });
-                    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
-                        Log.Main.Exit("SleepRoutines.WaitForObject got null");
-                }
+                //if (show_start_notification)
+                //{
+                //    ThreadRoutines.StartTry(() =>
+                //    {
+                //        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. Please wait...", new string[1] { "OK" }, 0, null);
+                //        mf.ShowDialog();
+                //    });
+                //    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
+                //        Log.Main.Exit("SleepRoutines.WaitForObject got null");
+                //}
 
                 HttpClientHandler handler = new HttpClientHandler();
                 HttpClient http_client = new HttpClient(handler);
 
-                bool r = _ToServer();
-                mf?.Close();
-                //InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
-                if (r)
-                    if (Message.YesNo("Data has been uploaded succesfully to " + Settings.Network.ExportUrl + "\r\n\r\nClean up the database?"))
-                    {
-                        Log.Inform("Dropping the database.");
-                        Db.Foreclosures fs = new Db.Foreclosures();
-                        fs.Drop();
-                    }
+                _ToServer(table);                  
             },
             (Exception e) =>
             {
-                Log.Main.Error(e);
-                Log.Main.Error("Could not upload data.");
-
-                mf?.Close();
-                InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not be uploaded!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                Log.Main.Error("Could not upload data.", e);
+                //try
+                //{
+                //    mf?.Close();
+                //}
+                //catch { }
+                InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
             },
             () =>
             {
                 Settings.Database.Save();
                 ToServerStateChanged?.BeginInvoke(null, null);
+                //try
+                //{
+                //    mf?.Close();
+                //}
+                //catch { }
             }
             );
             return to_server_t;
         }
         static Thread to_server_t = null;
-
-        public static bool _ToServer()
+        
+        public enum Table
         {
-            Log.Main.Inform("Exporting to: " + Settings.Network.ExportUrl);
+            Foreclosures,
+        }
+
+        static bool _ToServer<D>(Db.LiteDb.Table<D> table) where D:Db.Document, new()
+        {
+            List<object> rs;
+            string url;
+            if (table is Db.Foreclosures)
+            {
+                rs = table.GetAll().ToList<object>();
+                url = Settings.Network.ExportUrl + "?mode=estate";
+            }
+            else
+                throw new Exception("Unknown option: " + table.GetType());
+
+            Log.Main.Inform("Exporting to: " + url);
 
             try
             {
@@ -111,13 +124,32 @@ namespace Cliver.Foreclosures
                     return false;
                 }
 
-                Db.Foreclosures fs = new Db.Foreclosures();
-                string s = SerializationRoutines.Json.Serialize(fs.GetAll());
+                string s = SerializationRoutines.Json.Serialize(rs);
                 StringContent post_data = new StringContent(s);
                 post_data.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                HttpResponseMessage rm = http_client.PostAsync(Settings.Network.ExportUrl, post_data).Result;
+                HttpResponseMessage rm = http_client.PostAsync(url, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception(rm.ReasonPhrase);
+                dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
+                Log.Main.Inform("Inserted records: " + d["records_inserted"]);
+                List<object> failed_records = (List<object>)d["failed_records"];
+                if (failed_records.Count > 0)
+                {
+                    Log.Main.Error2("Failed insert records: \r\n" + failed_records);
+                    //InfoWindow.Create(ProgramRoutines.GetAppName() + ": some records could not be uploaded!", "See log for more details.", null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                    Message.Error("Some records could not be uploaded!\r\nSee log for more details.");
+                    return false;
+                }
+                else
+                {
+                    //InfoWindow.Create(ProgramRoutines.GetAppName(), "The table has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
+                    if (Message.YesNo("Table " + table.GetType() + " has been uploaded succesfully to the server.\r\n\r\nClean up the table?"))
+                    {
+                        Log.Inform("Dropping table " + table.GetType());
+                        Db.Foreclosures fs = new Db.Foreclosures();
+                        fs.Drop();
+                    }
+                }
                 return true;
             }
             catch (Exception ex)

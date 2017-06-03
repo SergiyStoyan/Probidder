@@ -3,14 +3,6 @@
         sergey.stoyan@gmail.com
         http://www.cliversoft.com
 ********************************************************************************************/
-//********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
-//        http://cliversoft.com
-//        stoyan@cliversoft.com
-//        sergey.stoyan@gmail.com
-//        27 February 2007
-//Copyright: (C) 2007, Sergey Stoyan
-//********************************************************************************************
 
 using System;
 using System.Linq;
@@ -25,36 +17,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Cliver;
 using System.Configuration;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Windows.Input;
 //using GlobalHotKey;
 
 namespace Cliver.Foreclosures
 {
-    public class AutoComplete
+    public partial class AutoComplete
     {
-        //static AutoComplete This
-        //{
-        //    get
-        //    {
-        //        if (_This == null)
-        //            _This = new AutoComplete();
-        //        return _This;
-        //    }
-        //}
-        //static AutoComplete _This = null;
-
         static AutoComplete()
         {
         }
-        
+
         public static bool IsKeyTrigger(Key key)
         {
             return key == Settings.AutoComplete.TriggerKey && (Keyboard.Modifiers & Settings.AutoComplete.TriggerModifierKey) == Settings.AutoComplete.TriggerModifierKey;
         }
 
-        public static string GetComplete(string text, int end_position = -1)
+        public static string GetComplete(string text, ref int end_position)
         {
             if (key_filter == null || string.IsNullOrEmpty(text))
                 return text;
@@ -75,9 +56,10 @@ namespace Cliver.Foreclosures
                 found = true;
                 return Settings.AutoComplete.Keys2Phrase[m.Value];
             }, 1, end_position) + t2;
-            if(found)
+            end_position = t.Length - t2.Length;
+            if (found)
             {
-                Console.Beep(4000, 100);
+                Console.Beep(4000, 80);
                 Console.Beep(5000, 80);
                 Console.Beep(6000, 50);
             }

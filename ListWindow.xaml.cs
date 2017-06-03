@@ -178,7 +178,7 @@ namespace Cliver.Foreclosures
 
         private void upload_Click(object sender, RoutedEventArgs e)
         {            
-            Export.BeginToServer(true);
+            Export.BeginToServer(new Db.Foreclosures());
         }
 
         private void new_Click(object sender, RoutedEventArgs e)

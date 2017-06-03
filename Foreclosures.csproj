@@ -136,6 +136,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AboutForm.Designer.cs" />
+    <Compile Include="AutoComplete.Wpf.cs" />
     <Compile Include="ComboBoxControl2.cs" />
     <Compile Include="ComboBoxControl1.cs" />
     <Compile Include="ComboBoxPhoneControl.xaml.cs">

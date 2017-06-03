@@ -53,15 +53,6 @@ namespace Cliver.Foreclosures
             public string SALE_LOC { get; set; }
             public DateTime? ENTRY_DATE { get; set; }
             public string LENDOR { get; set; }
-            //    {
-            //        return _l;
-            //    } set {
-            //        _l = value;
-            //        OnPropertyChanged("LENDOR");
-            //    }
-            //}
-            //string _l;
-
             public DateTime? ORIGINAL_MTG { get; set; }
             public string DOCUMENT_N { get; set; }
             public uint? ORIGINAL_I { get; set; }
