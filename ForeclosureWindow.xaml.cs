@@ -68,6 +68,17 @@ namespace Cliver.Foreclosures
                     f.InitialControlSetting = false;
             }));
 
+          Thread check_validity_t = ThreadRoutines.StartTry(() =>
+            {
+                while(true)
+                {
+                    Thread.Sleep(300);
+                    Dispatcher.Invoke(() => {
+                        check_validity();
+                    });
+                }
+            });
+
             PreviewKeyDown += delegate
               {
               };
@@ -78,6 +89,8 @@ namespace Cliver.Foreclosures
 
             Closed += delegate
             {
+                if (check_validity_t != null && check_validity_t.IsAlive)
+                    check_validity_t.Abort();
                 foreclosures.Dispose();
             };
 
@@ -122,22 +135,36 @@ namespace Cliver.Foreclosures
 
             f.PropertyChanged2 += delegate
               {
-                  if (!fields.IsValid())
-                  {
-                      Next.IsEnabled = false;
-                      Prev.IsEnabled = false;
-                      New.IsEnabled = false;
-                  }
-                  else
-                  {
-                      Next.IsEnabled = true;
-                      Prev.IsEnabled = true;
-                      New.IsEnabled = true;
-                  }
+                  check_validity();
               };
             f.InitialControlSetting = true;
             fields.DataContext = f;
             f.InitialControlSetting = false;
+        }
+
+        void check_validity()
+        {
+            if (!fields.IsValid())
+            {
+                Next.IsEnabled = false;
+                Prev.IsEnabled = false;
+                New.IsEnabled = false;
+            }
+            else
+            {
+                New.IsEnabled = true;
+                Db.Foreclosure f = get_current_Foreclosure();
+                if (f.Id == 0)
+                {
+                    Prev.IsEnabled = foreclosures.GetLast() != null;
+                    Next.IsEnabled = false;
+                }
+                else
+                {
+                    Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
+                    Next.IsEnabled = foreclosures.GetNext(f) != null;
+                }
+            }
         }
 
         public void KeyDownHandler(object sender, KeyEventArgs e)

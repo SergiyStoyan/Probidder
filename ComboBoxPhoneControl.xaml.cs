@@ -63,13 +63,15 @@ namespace Cliver.Foreclosures
 
         private void tb0_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ignore_text_change)
+            //tb0.TextChanged -= tb0_TextChanged;
+            if (do_not_change_tb_text)
                 return;
             ignore_text_change = true;
             tb.Text = apply_mask(tb0.Text);
             ignore_text_change = false;
             old_value = tb.Text;
         }
+        bool do_not_change_tb_text = false;
 
         TextBox tb0;
         string old_value;
@@ -245,6 +247,7 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             if (ignore_text_change)
                 return;
+            do_not_change_tb_text = true;
             string v = strip_mask(tb.Text);
             if (v.Length > 0 && !delete_clicked)
             {
@@ -257,12 +260,14 @@ namespace Cliver.Foreclosures
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
                         SelectedItem = i;
+                        do_not_change_tb_text = false;
                         return;
                     }
                 }
             }
             SelectedItem = null;
             ComboBox_SelectionChanged(null, null);
+            do_not_change_tb_text = false;
         }
         bool ignore_text_change = false;
 

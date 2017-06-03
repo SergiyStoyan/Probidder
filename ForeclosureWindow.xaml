@@ -48,6 +48,13 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
+        <Style x:Key="FocusedStyle" TargetType="{x:Type Control}">
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="true">
+                    <Setter Property="Background" Value="LightGreen" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid Background="WhiteSmoke">
         <StackPanel Orientation="Vertical">
@@ -161,7 +168,7 @@
                     <local:ComboBoxControl1  IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top"  Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" x:Name="ATTY" SelectionChanged="ATTY_SelectionChanged"  Text="{Binding ATTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
                     <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right" Content="Attorney Phone"/>
                     <local:ComboBoxPhoneControl VerticalAlignment="Top" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="1" IsEditable="True" 
-                              x:Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus}"/>
+                              x:Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
                     <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right" Content="MTG Codes"/>
                     <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"   Grid.Column="5" Grid.Row="8"  x:Name="TYPE_OF_MO" IsEditable="True" Grid.ColumnSpan="1" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right" Content="Property Type"/>

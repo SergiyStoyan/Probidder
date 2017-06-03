@@ -26,6 +26,8 @@ namespace Cliver.Foreclosures
         public NumberBoxControl()
         {
             InitializeComponent();
+
+            PreviewTextInput += TextBox_PreviewTextInput;
         }
 
         public uint MaxFractionChars
@@ -37,8 +39,7 @@ namespace Cliver.Foreclosures
         public static readonly DependencyProperty MaxFractionCharsProperty = DependencyProperty.Register(
                   "MaxFractionChars",
                   typeof(uint),
-                  typeof(NumberBoxControl),
-                  new PropertyMetadata(0)
+                  typeof(NumberBoxControl)
               );
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

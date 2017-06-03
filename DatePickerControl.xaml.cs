@@ -169,6 +169,8 @@ namespace Cliver.Foreclosures
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (tb == null)
+                return;
             ignore_text_change = true;
             int p = tb.SelectionStart;
             DateTime? dt = SelectedDate;
