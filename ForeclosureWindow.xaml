@@ -48,13 +48,6 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
-        <Style x:Key="FocusedStyle" TargetType="{x:Type Control}">
-            <Style.Triggers>
-                <Trigger Property="IsKeyboardFocused" Value="true">
-                    <Setter Property="Background" Value="LightGreen" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
     <Grid Background="WhiteSmoke">
         <StackPanel Orientation="Vertical">
