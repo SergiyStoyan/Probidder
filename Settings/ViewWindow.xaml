@@ -27,7 +27,7 @@
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" Unchecked="ShowCheckBox_Unchecked" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -35,7 +35,7 @@
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Search, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" />
+                                        <CheckBox IsChecked="{Binding Path=Search, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" Checked="SearchCheckBox_Checked" HorizontalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

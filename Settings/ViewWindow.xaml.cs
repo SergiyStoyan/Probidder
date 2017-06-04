@@ -23,6 +23,7 @@ using System.IO;
 using System.Management;
 using System.Threading;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace Cliver.Foreclosures
 {
@@ -62,11 +63,18 @@ namespace Cliver.Foreclosures
             }
             ).ToList();
         }
-        class Item
+
+        class Item: INotifyPropertyChanged
         {
             public bool Show { set; get; }
             public bool Search { set; get; }
             public string Column { set; get; }
+
+            public void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
@@ -96,6 +104,36 @@ namespace Cliver.Foreclosures
             catch (Exception ex)
             {
                 Message.Exclaim(ex.Message);
+            }
+        }
+
+        private void ShowCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var c in list.SelectedCells)
+            {
+                Item i = c.Item as Item;
+                if (i == null)
+                    continue;
+                if (!i.Show)
+                {
+                    i.Search = false;
+                    i.OnPropertyChanged(null);
+                }
+            }
+        }
+
+        private void SearchCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (var c in list.SelectedCells)
+            {
+                Item i = c.Item as Item;
+                if (i == null)
+                    continue;
+                if (i.Search)
+                {
+                    i.Show = true;
+                    i.OnPropertyChanged(null);
+                }
             }
         }
     }

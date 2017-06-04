@@ -20,7 +20,7 @@ using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
-    public class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo//, INotifyDataErrorInfo
+    public class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo, INotifyDataErrorInfo
     {
         public ForeclosureView(Db.Foreclosure f = null)
         {
@@ -121,7 +121,7 @@ namespace Cliver.Foreclosures
             }
         }
 
-        public string TYPE_OF_EN { get { return Model.TYPE_OF_EN; } set { Model.TYPE_OF_EN = value; } }
+        public string TYPE_OF_EN { get { return Model.TYPE_OF_EN; } set { InitialControlSetting = false; Model.TYPE_OF_EN = value; } }
         public string COUNTY {
             get
             {
@@ -129,6 +129,7 @@ namespace Cliver.Foreclosures
             }
             set
             {
+                InitialControlSetting = false;
                 if (Model.COUNTY == value)
                     return;
                 Model.COUNTY = value;
@@ -140,7 +141,7 @@ namespace Cliver.Foreclosures
                 OnPropertyChanged("ATTORNEY_Ss"); 
             }
         }        
-        public string CASE_N { get { return Model.CASE_N; } set { Model.CASE_N = value; } }
+        public string CASE_N { get { return Model.CASE_N; } set { InitialControlSetting = false; Model.CASE_N = value; } }
         //public string FILING_DATE
         //{
         //    get
@@ -161,55 +162,57 @@ namespace Cliver.Foreclosures
         //}
         //string _FILING_DATE = null;
         public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { InitialControlSetting = false; Model.FILING_DATE = value; } }
-        public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { Model.AUCTION_DATE = value; } }  
-        public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { Model.AUCTION_TIME = value; } }  
-        public string SALE_LOC { get { return Model.SALE_LOC; } set { Model.SALE_LOC = value; } }  
-        public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { Model.ENTRY_DATE = value; } }
-        public string LENDOR { get { return Model.LENDOR; } set { Model.LENDOR = value; } }  
-        public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { Model.ORIGINAL_MTG = value; } }  
-        public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { Model.DOCUMENT_N = value; } }  
-        public uint? ORIGINAL_I { get { return Model.ORIGINAL_I; } set { Model.ORIGINAL_I = value; } }  
-        public string LEGAL_D { get { return Model.LEGAL_D; } set { Model.LEGAL_D = value; } }  
-        public string ADDRESS { get { return Model.ADDRESS; } set { Model.ADDRESS = value; } }  
+        public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { InitialControlSetting = false; Model.AUCTION_DATE = value; } }  
+        public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { InitialControlSetting = false; Model.AUCTION_TIME = value; } }  
+        public string SALE_LOC { get { return Model.SALE_LOC; } set { InitialControlSetting = false; Model.SALE_LOC = value; } }  
+        public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { InitialControlSetting = false; Model.ENTRY_DATE = value; } }
+        public string LENDOR { get { return Model.LENDOR; } set { InitialControlSetting = false; Model.LENDOR = value; } }  
+        public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { InitialControlSetting = false; Model.ORIGINAL_MTG = value; } }  
+        public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { InitialControlSetting = false; Model.DOCUMENT_N = value; } }  
+        public uint? ORIGINAL_I { get { return Model.ORIGINAL_I; } set { InitialControlSetting = false; Model.ORIGINAL_I = value; } }  
+        public string LEGAL_D { get { return Model.LEGAL_D; } set { InitialControlSetting = false; Model.LEGAL_D = value; } }  
+        public string ADDRESS { get { return Model.ADDRESS; } set { InitialControlSetting = false; Model.ADDRESS = value; } }  
         public string CITY { get { return Model.CITY; }
             set
             {
+                InitialControlSetting = false;
                 if (Model.CITY == value)
                     return;
                 Model.CITY = value;
                 OnPropertyChanged("ZIPs");
             }
         }  
-        public string ZIP { get { return Model.ZIP; } set { Model.ZIP = value; } }  
-        public string PIN { get { return Model.PIN; } set { Model.PIN = value; } }  
-        public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { Model.DATE_OF_CA = value; } }  
-        public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { Model.LAST_PAY_DATE = value; } }  
-        public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { Model.BALANCE_DU = value; } }  
-        public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { Model.PER_DIEM_I = value; } }  
+        public string ZIP { get { return Model.ZIP; } set { InitialControlSetting = false; Model.ZIP = value; } }  
+        public string PIN { get { return Model.PIN; } set { InitialControlSetting = false; Model.PIN = value; } }  
+        public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { InitialControlSetting = false; Model.DATE_OF_CA = value; } }  
+        public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { InitialControlSetting = false; Model.LAST_PAY_DATE = value; } }  
+        public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { InitialControlSetting = false; Model.BALANCE_DU = value; } }  
+        public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { InitialControlSetting = false; Model.PER_DIEM_I = value; } }  
         public string CURRENT_OW { get { return Model.CURRENT_OW; } set { Model.CURRENT_OW = value; } }  
-        public bool IS_ORG { get { return Model.IS_ORG; } set { Model.IS_ORG = value; } }
-        public bool DECEASED { get { return Model.DECEASED; } set { Model.DECEASED = value; } }
-        public string OWNER_ROLE { get { return Model.OWNER_ROLE; } set { Model.OWNER_ROLE = value; } }
-        public string OTHER_LIENS { get { return Model.OTHER_LIENS; } set { Model.OTHER_LIENS = value; } }  
-        public string ADDL_DEF { get { return Model.ADDL_DEF; } set { Model.ADDL_DEF = value; } }  
-        public string PUB_COMMENTS { get { return Model.PUB_COMMENTS; } set { Model.PUB_COMMENTS = value; } }  
-        public string INT_COMMENTS { get { return Model.INT_COMMENTS; } set { Model.INT_COMMENTS = value; } }  
+        public bool IS_ORG { get { return Model.IS_ORG; } set { InitialControlSetting = false; Model.IS_ORG = value; } }
+        public bool DECEASED { get { return Model.DECEASED; } set { InitialControlSetting = false; Model.DECEASED = value; } }
+        public string OWNER_ROLE { get { return Model.OWNER_ROLE; } set { InitialControlSetting = false; Model.OWNER_ROLE = value; } }
+        public string OTHER_LIENS { get { return Model.OTHER_LIENS; } set { InitialControlSetting = false; Model.OTHER_LIENS = value; } }  
+        public string ADDL_DEF { get { return Model.ADDL_DEF; } set { InitialControlSetting = false; Model.ADDL_DEF = value; } }  
+        public string PUB_COMMENTS { get { return Model.PUB_COMMENTS; } set { InitialControlSetting = false; Model.PUB_COMMENTS = value; } }  
+        public string INT_COMMENTS { get { return Model.INT_COMMENTS; } set { InitialControlSetting = false; Model.INT_COMMENTS = value; } }  
         public string ATTY { get { return Model.ATTY; }
             set
             {
+                InitialControlSetting = false;
                 if (Model.ATTY == value)
                     return;
                 Model.ATTY = value;
                 OnPropertyChanged("ATTORNEY_Ss");
             } }  
-        public string ATTORNEY_S { get { return Model.ATTORNEY_S; } set { Model.ATTORNEY_S = value; } }  
-        public string TYPE_OF_MO { get { return Model.TYPE_OF_MO; } set { Model.TYPE_OF_MO = value; } }
-        public string PROP_DESC { get { return Model.PROP_DESC; } set { Model.PROP_DESC = value; } }
-        public decimal? INTEREST_R { get { return Model.INTEREST_R; } set { Model.INTEREST_R = value; } }  
-        public decimal? MONTHLY_PAY { get { return Model.MONTHLY_PAY; } set { Model.MONTHLY_PAY = value; } }
-        public uint? TERM_OF_MTG { get { return Model.TERM_OF_MTG; } set { Model.TERM_OF_MTG = value; } }  
-        public string DEF_ADDRESS { get { return Model.DEF_ADDRESS; } set { Model.DEF_ADDRESS = value; } }  
-        public string DEF_PHONE { get { return Model.DEF_PHONE; } set { Model.DEF_PHONE = value; } }
+        public string ATTORNEY_S { get { return Model.ATTORNEY_S; } set { InitialControlSetting = false; Model.ATTORNEY_S = value; } }  
+        public string TYPE_OF_MO { get { return Model.TYPE_OF_MO; } set { InitialControlSetting = false; Model.TYPE_OF_MO = value; } }
+        public string PROP_DESC { get { return Model.PROP_DESC; } set { InitialControlSetting = false; Model.PROP_DESC = value; } }
+        public decimal? INTEREST_R { get { return Model.INTEREST_R; } set { InitialControlSetting = false; Model.INTEREST_R = value; } }  
+        public decimal? MONTHLY_PAY { get { return Model.MONTHLY_PAY; } set { InitialControlSetting = false; Model.MONTHLY_PAY = value; } }
+        public uint? TERM_OF_MTG { get { return Model.TERM_OF_MTG; } set { InitialControlSetting = false; Model.TERM_OF_MTG = value; } }  
+        public string DEF_ADDRESS { get { return Model.DEF_ADDRESS; } set { InitialControlSetting = false; Model.DEF_ADDRESS = value; } }  
+        public string DEF_PHONE { get { return Model.DEF_PHONE; } set { InitialControlSetting = false; Model.DEF_PHONE = value; } }
         
         public void OnPropertyChanged(string propertyName)
         {
