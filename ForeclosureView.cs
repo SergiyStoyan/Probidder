@@ -53,6 +53,28 @@ namespace Cliver.Foreclosures
             Model.MONTHLY_PAY = 30;
         }
         public readonly Db.Foreclosure Model;
+        
+        //public bool Save()
+        //{
+        //    try
+        //    {
+        //        if (Model.Id != 0 && !Edited)
+        //            return true;
+        //        OnPropertyChanged(null);
+        //        if (!fields.IsValid() || HasErrors)
+        //        {
+        //            //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
+        //            return false;
+        //        }
+        //        foreclosures.Save(Model);
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Message.Error2(ex);
+        //    }
+        //    return false;
+        //}
 
         public IEnumerable<string> CASE_Ns
         {

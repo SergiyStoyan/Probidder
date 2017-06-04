@@ -520,7 +520,10 @@ namespace Cliver.Foreclosures
             var fw = e.Row.DataContext as ForeclosureView;
             if (fw == null)
                 return;
-            if (!e.Row.IsValid())
+            if (fw.Model.Id != 0 && !fw.Edited)
+                return;
+            fw.OnPropertyChanged(null);
+            if (!e.Row.IsValid() || fw.HasErrors)
             {
                 e.Cancel = true;
                 //keep_selected_fw = fw;

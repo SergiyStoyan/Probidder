@@ -233,27 +233,21 @@ namespace Cliver.Foreclosures
                 ForeclosureView fw = (ForeclosureView)fields.DataContext;
                 if (fw == null)
                     return false;
-
                 if (fw.Model.Id != 0 && !fw.Edited)
                     return true;
-
                 fw.OnPropertyChanged(null);
-
-                if (!fields.IsValid())
+                if (!fields.IsValid() || fw.HasErrors)
                 {
                     //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
                     return false;
                 }
-
                 foreclosures.Save(fw.Model);
-
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{
                 //    Thread.Sleep(200);
                 //    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
                 //});
-
                 return true;
             }
             catch (Exception ex)
