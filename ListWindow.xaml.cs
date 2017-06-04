@@ -59,6 +59,15 @@ namespace Cliver.Foreclosures
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
+                Settings.View.ShowedColumns = new List<string>();
+                foreach (DataGridColumn dgc in list.Columns.OrderBy(x=>x.DisplayIndex))
+                {
+                    string cn = get_column_name(dgc);
+                    if (cn == null)//buttons
+                        continue;
+                    Settings.View.ShowedColumns.Add(cn);
+                }
+                Settings.View.Save();
             };
 
             Closed += delegate
@@ -158,21 +167,30 @@ namespace Cliver.Foreclosures
 
         void fill()
         {
-            foreach (DataGridColumn dgc in list.Columns)
+            List<DataGridColumn> dgcs = new List<DataGridColumn>();
+            for (int i = list.Columns.Count - 1; i >= 0; i--)
             {
+                DataGridColumn dgc = list.Columns[i];
                 string h = get_column_name(dgc);
-                if (h == null)
-                {//buttons
-                    dgc.Visibility = Visibility.Visible;
-                    continue;
-                }
-                if (Settings.View.ShowedColumns.Contains(h))
+                if (h != null && !Settings.View.ShowedColumns.Contains(h))
                 {
-                    dgc.Visibility = Visibility.Visible;
-                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+                    list.Columns.RemoveAt(i);
                     continue;
                 }
-                dgc.Visibility = Visibility.Collapsed;
+                dgc.CanUserSort = true;
+                dgc.CanUserResize = true;
+                dgc.CanUserReorder = true;
+                if (h != null)//data
+                {
+                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+                    list.Columns.RemoveAt(i);
+                    dgcs.Add(dgc);
+                }
+            }
+            foreach (string cn in Settings.View.ShowedColumns)
+            {
+                DataGridColumn dgc = dgcs.Where(x => get_column_name(x) == cn).First();
+                list.Columns.Add(dgc);
             }
 
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
