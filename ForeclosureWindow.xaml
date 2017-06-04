@@ -117,9 +117,9 @@
                         <TextBox MinWidth="50" x:Name="ORIGINAL_I" Text="{Binding ORIGINAL_I, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     </StackPanel>
                     <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" Content="Legal Descr"/>
-                    <TextBox Grid.Column="1" Grid.Row="5" x:Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap" />
+                    <TextBox Grid.Column="1" Grid.Row="5" x:Name="LEGAL_D" Grid.ColumnSpan="3" Text="{Binding LEGAL_D, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" AcceptsReturn="True" TextWrapping="Wrap" />
                     <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Content="Address"/>
-                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" Content="City"/>
                     <local:ComboBoxControl1 IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top"  Grid.Column="1" Grid.Row="7" IsEditable="True" x:Name="CITY" Grid.ColumnSpan="3" Text="{Binding CITY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" Content="ZIP"/>

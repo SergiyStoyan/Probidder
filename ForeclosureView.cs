@@ -237,9 +237,9 @@ namespace Cliver.Foreclosures
                 string e = validate(columnName);
                 string e0 = null;
                 columnNames2error.TryGetValue(columnName, out e0);
+                columnNames2error[columnName] = e;
                 if (e0 != e)
                     ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
-                columnNames2error[columnName] = e;
                 PropertyChanged2?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
                 return e;
             }
