@@ -139,8 +139,8 @@ namespace Cliver.Foreclosures
             DateTime? dt = ParseText(tb.Text);
             if (dt != SelectedDate)
                 SelectedDate = dt;
-            //else
-            //    DatePicker_SelectedDateChanged(null, null);
+            else
+                DatePicker_SelectedDateChanged(null, null);
             if (dt == null && Regex.IsMatch(tb.Text, @"\d"))
             {
                 this.MarkInvalid("Error");
@@ -230,7 +230,6 @@ namespace Cliver.Foreclosures
             }
             ignore_text_change = false;
         }
-        //bool ignore_selection_change = false;
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -238,7 +237,11 @@ namespace Cliver.Foreclosures
             if (ignore_text_change)
                 return;
             string t = apply_mask(tb.Text);
-            SelectedDate = ParseText(t);
+            DateTime? td = ParseText(t);
+            if (SelectedDate != td)
+                SelectedDate = td;
+            else
+                DatePicker_SelectedDateChanged(null, null);
         }
         bool ignore_text_change = false;
 

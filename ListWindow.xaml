@@ -98,14 +98,6 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                        <Style TargetType="{x:Type local:DatePickerControl}">
-                            <Style.Triggers>
-                                <Trigger Property="Validation.HasError" Value="True">
-                                    <Setter Property="Background" Value="BlueViolet"/>
-                                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>

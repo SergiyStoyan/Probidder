@@ -117,7 +117,8 @@ namespace Cliver.Foreclosures
               {//needed for highlighting search keyword
                   highlight(list);
               };
-
+            
+            order_columns();
             Set();
 
             ContentRendered += delegate
@@ -165,7 +166,7 @@ namespace Cliver.Foreclosures
             return tb.Text;
         }
 
-        void fill()
+        void order_columns()
         {
             List<DataGridColumn> dgcs = new List<DataGridColumn>();
             for (int i = list.Columns.Count - 1; i >= 0; i--)
@@ -192,7 +193,10 @@ namespace Cliver.Foreclosures
                 DataGridColumn dgc = dgcs.Where(x => get_column_name(x) == cn).First();
                 list.Columns.Add(dgc);
             }
+        }
 
+            void fill()
+        {
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (cv != null)
             {
@@ -200,13 +204,14 @@ namespace Cliver.Foreclosures
                     cv.CommitEdit();
                 if (cv.IsAddingNew)
                     cv.CommitNew();
-                
+
                 //if (edited_item != null)
                 //{
                 //    edited_item = null;
                 //    foreclosures.Save(edited_item);
                 //}
             }
+
             var fs = foreclosures.GetAll();
             list.ItemsSource = new ObservableCollection<ForeclosureView>(foreclosures.GetAll().Select(x => new ForeclosureView(x)).ToList());
 
@@ -522,12 +527,13 @@ namespace Cliver.Foreclosures
                 //var presenters = e.Row.FindVisualChildrenOfType<System.Windows.Controls.Primitives.DataGridCellsPresenter>().ToList();
                 //foreach (var p in presenters)
                 //    if (!p.IsValid())
-                        return;
+                return;
                 //e.Row.MarkValid();
             }
             e.Cancel = false;
             keep_selected_fw = null;
-            foreclosures.Save(fw.Model);
+            if (fw.Edited)
+                foreclosures.Save(fw.Model);
         }
         ForeclosureView keep_selected_fw = null;
 

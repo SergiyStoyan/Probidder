@@ -22,24 +22,35 @@ namespace Cliver.Foreclosures
 {
     public class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo, INotifyDataErrorInfo
     {
-        public ForeclosureView(Db.Foreclosure f = null)
+        public ForeclosureView()
         {
-            if (f == null)
-            {
-                f = new Db.Foreclosure();
+            Model = new Db.Foreclosure();
+            set_new_model();
+        }
 
-                f.COUNTY = Settings.Location.County;
-                f.TYPE_OF_EN = "CHA";
-                f.CASE_N = CASE_Ns.FirstOrDefault();
-                f.ENTRY_DATE = DateTime.Now;
-                f.IS_ORG = false;
-                f.DECEASED = false;
-                f.OWNER_ROLE = "OWNER";
-                f.TYPE_OF_MO = "CNV";
-                f.PROP_DESC = "SINGLE FAMILY";
-                f.MONTHLY_PAY = 30;
+        public ForeclosureView(Db.Foreclosure f)
+        {
+            if (f != null)
+                Model = f;
+            else
+            {
+                Model = new Db.Foreclosure();
+                set_new_model();
             }
-            Model = f;
+        }
+
+        void set_new_model()
+        {
+            Model.COUNTY = Settings.Location.County;
+            Model.TYPE_OF_EN = "CHA";
+            Model.CASE_N = CASE_Ns.FirstOrDefault();
+            Model.ENTRY_DATE = DateTime.Now;
+            Model.IS_ORG = false;
+            Model.DECEASED = false;
+            Model.OWNER_ROLE = "OWNER";
+            Model.TYPE_OF_MO = "CNV";
+            Model.PROP_DESC = "SINGLE FAMILY";
+            Model.MONTHLY_PAY = 30;
         }
         public readonly Db.Foreclosure Model;
 
