@@ -143,8 +143,38 @@ namespace Cliver.Foreclosures
 
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
+        public static string GetName(DependencyObject obj)
+        {
+            return (string)obj.GetValue(NameProperty);
+        }
+
+        string get_column_name(DataGridColumn dgc)
+        {
+            TextBlock tb = dgc.Header as TextBlock;
+            if (tb == null)
+                return null;
+            return tb.Text;
+        }
+
         void fill()
         {
+            foreach (DataGridColumn dgc in list.Columns)
+            {
+                string h = get_column_name(dgc);
+                if (h == null)
+                {//buttons
+                    dgc.Visibility = Visibility.Visible;
+                    continue;
+                }
+                if (Settings.View.ShowedColumns.Contains(h))
+                {
+                    dgc.Visibility = Visibility.Visible;
+                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+                    continue;
+                }
+                dgc.Visibility = Visibility.Collapsed;
+            }
+
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (cv != null)
             {
@@ -152,7 +182,7 @@ namespace Cliver.Foreclosures
                     cv.CommitEdit();
                 if (cv.IsAddingNew)
                     cv.CommitNew();
-
+                
                 //if (edited_item != null)
                 //{
                 //    edited_item = null;
@@ -160,12 +190,15 @@ namespace Cliver.Foreclosures
                 //}
             }
             var fs = foreclosures.GetAll();
-            list.ItemsSource = new ObservableCollection<Db.Foreclosure>(fs);
+            list.ItemsSource = new ObservableCollection<ForeclosureView>(foreclosures.GetAll().Select(x => new ForeclosureView(x)).ToList());
 
             indicator_total.Content = "Total: " + fs.Count;
             filter();
         }
 
+        //ListCollectionView Items { get { return items; } set { items = value; } }
+        //ListCollectionView items = new ListCollectionView((new Db.Foreclosures()).GetAll().Select(x => new ForeclosureView(x)).ToList());
+        
         private void close_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -188,50 +221,28 @@ namespace Cliver.Foreclosures
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
-
-            if (edited_item != null && edited_item != f)
+            if (keep_selected_fw != null)
             {
-                foreclosures.Save(edited_item);
-                edited_item = null;
+                list.SelectedItem = keep_selected_fw;
+                keep_selected_fw = null;
+                return;
             }
 
-            if (f == null)
+            ForeclosureView fw = list.SelectedItem as ForeclosureView;
+
+            if (fw == null||fw.Model==null)
             {
                 indicator_selected.Content = null;
                 return;
             }
-            indicator_selected.Content = "Selected ID: " + f.Id;
+            indicator_selected.Content = "Selected ID: " + fw.Model.Id;
             //show_AuctionWindow(f);
         }
 
-        void show_AuctionWindow(Db.Foreclosure d)
+        void show_ForeclosureWindow(ForeclosureView fw)
         {
-            //ForeclosureWindow aw;
-            //if (!foreclosures2AuctionWindow.TryGetValue(d, out aw)
-            //    || (aw == null || !aw.IsLoaded)
-            //    )
-            //{
-            //    aw = ForeclosureWindow.OpenDialog(d.Id);
-            //    foreclosures2AuctionWindow[d] = aw;
-            //    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(aw);
-            //    aw.Closed += delegate
-            //      {
-            //          Db.Foreclosure f = aw.fields.DataContext as Db.Foreclosure;
-            //          if (f == null)
-            //              return;
-            //          foreclosures2AuctionWindow.Remove(f);
-            //      };
-            //    aw.Show();
-            //}
-            //else
-            //{
-            //    aw.BringIntoView();
-            //    aw.Activate();
-            //}
-            ForeclosureWindow.OpenDialog(d.Id);
+            ForeclosureWindow.OpenDialog(fw.Model.Id);
         }
-        //Dictionary<Db.Foreclosure, ForeclosureWindow> foreclosures2AuctionWindow = new Dictionary<Db.Foreclosure, ForeclosureWindow>();
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
         {
@@ -300,13 +311,13 @@ namespace Cliver.Foreclosures
         
         private void open_Click(object sender, RoutedEventArgs e)
         {
-            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
-            if (f == null)
+            ForeclosureView fw = list.SelectedItem as ForeclosureView;
+            if (fw == null)
             {
                 ForeclosureWindow.OpenDialog();
                 return;
             }
-            show_AuctionWindow(f);
+            show_ForeclosureWindow(fw);
         }
 
         private void show_search_Click(object sender, RoutedEventArgs e)
@@ -338,7 +349,7 @@ namespace Cliver.Foreclosures
                 return;
             }
 
-            PropertyInfo[] pis_ = typeof(Db.Foreclosure).GetProperties();
+            PropertyInfo[] pis_ = typeof(ForeclosureView).GetProperties();
             List<PropertyInfo> pis = new List<PropertyInfo>();
             foreach (string c in Settings.View.SearchedColumns)
             {
@@ -351,10 +362,10 @@ namespace Cliver.Foreclosures
             filter_regex = new Regex("(" + Regex.Escape(k) + ")", RegexOptions.IgnoreCase);
             cv.Filter = o =>
             {
-                Db.Foreclosure d = (Db.Foreclosure)o;
+                ForeclosureView fw = (ForeclosureView)o;
                 foreach (PropertyInfo pi in pis)
                 {
-                    object v = pi.GetValue(d);
+                    object v = pi.GetValue(fw);
                     if (v == null)
                         continue;
                     string s;
@@ -370,7 +381,7 @@ namespace Cliver.Foreclosures
 
             int count = 0;
             foreach (object o in cv)
-                if(o is Db.Foreclosure)
+                if(o is ForeclosureView)
                     count++;        
             indicator_filtered.Content = "Filtered: " + count;
         }
@@ -382,7 +393,7 @@ namespace Cliver.Foreclosures
 
             HashSet<int> searched_columns = new HashSet<int>();
             for (int i = 0; i < list.Columns.Count; i++)
-                if (Settings.View.SearchedColumns.Contains(list.Columns[i].Header))
+                if (Settings.View.SearchedColumns.Contains(get_column_name(list.Columns[i])))
                     searched_columns.Add(i);
 
             foreach (DataGridRow r in grid.FindChildrenOfType<DataGridRow>())
@@ -423,64 +434,100 @@ namespace Cliver.Foreclosures
                 e.Cancel = true;
                 return;
             }
-            e.Column.IsReadOnly = true;
-            e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
-            e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
-            e.Column.CanUserSort = true;
-            e.Column.CanUserResize = true;
-            e.Column.CanUserReorder = true;
-            if (e.PropertyType == typeof(DateTime?))
-            {
-                DataGridTextColumn tc = e.Column as DataGridTextColumn;
-                if (tc != null)
-                    tc.Binding.StringFormat = DATE_FORMAT;
-                //e.Column.SortMemberPath = e.Column.Header.ToString();
-            }
+
+            //e.Column.IsReadOnly = false;
+            //e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+            //e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
+            //e.Column.CanUserSort = true;
+            //e.Column.CanUserResize = true;
+            //e.Column.CanUserReorder = true;
+
+            //var tc = new DataGridTemplateColumn();
+            //var dt = new DataTemplate();
+            //var dtc = new FrameworkElementFactory(typeof(TextBlock));
+            //Binding b = new Binding(e.PropertyName);
+            //dtc.SetBinding(TextBlock.TextProperty, b);
+            //dt.VisualTree = dtc;
+            //tc.CellTemplate = dt;
+
+            //{
+            //    tc = new DataGridTemplateColumn();
+            //    dt = new DataTemplate();
+            //    dtc = new FrameworkElementFactory(typeof(TextBlock));
+            //    b = new Binding(e.PropertyName);
+            //    b.Mode = BindingMode.OneWay;
+            //    b.NotifyOnSourceUpdated = true;
+            //    b.NotifyOnTargetUpdated = true;
+            //    b.NotifyOnValidationError = true;
+
+            //    if (e.PropertyType == typeof(DateTime?))
+            //    {
+            //        b.StringFormat = DATE_FORMAT;
+            //        dtc.SetBinding(DatePickerControl.TextProperty, b);
+            //        dt.VisualTree = dtc;
+            //        tc.CellEditingTemplate = dt;
+            //    }
+            //    else if (e.PropertyType == typeof(DateTime?))
+            //    {
+            //        b.StringFormat = DATE_FORMAT;
+            //        dtc.SetBinding(DatePickerControl.TextProperty, b);
+            //        dt.VisualTree = dtc;
+            //        tc.CellEditingTemplate = dt;
+            //    }
+            //}
+
+            //e.Column = tc;
         }
         readonly string DATE_FORMAT = "MM/dd/yyyy";
 
-        private void list_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
-        }
-
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            edited_item = list.SelectedItem as Db.Foreclosure;
+        {            
         }
-        Db.Foreclosure edited_item = null;
+
+        private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var fw = e.Row.DataContext as ForeclosureView;
+            if (fw == null)
+                return;
+            fw.InitialControlSetting = true;
+        }
+
+        private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            var fw = e.Row.DataContext as ForeclosureView;
+            if (fw == null)
+                return;
+            if (!e.Row.IsValid())
+            {
+                e.Cancel = true;
+                //keep_selected_fw = fw;
+                //var presenters = e.Row.FindVisualChildrenOfType<System.Windows.Controls.Primitives.DataGridCellsPresenter>().ToList();
+                //foreach (var p in presenters)
+                //    if (!p.IsValid())
+                        return;
+                //e.Row.MarkValid();
+            }
+            e.Cancel = false;
+            keep_selected_fw = null;
+            foreclosures.Save(fw.Model);
+        }
+        ForeclosureView keep_selected_fw = null;
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-            Db.Foreclosure f = list.SelectedItem as Db.Foreclosure;
-            if (f == null)
+            ForeclosureView fw = list.SelectedItem as ForeclosureView;
+            if (fw == null||fw.Model==null)
                 return;
-            if (!Message.YesNo("You are abount deleting record [Id=" + f.Id + "]. Proceed?"))
+            if (!Message.YesNo("You are abount deleting record [Id=" + fw.Model.Id + "]. Proceed?"))
                 return;
-            foreclosures.Delete(f.Id);
+            foreclosures.Delete(fw.Model.Id);
         }
     }
 
-    public static class DataGridExtensions
-    {
-        public static DataGridCell GetCell(this DataGrid grid, DataGridRow row, int columnIndex = 0)
-        {
-            if (row == null)
-                return null;
+    //public class ForeclosuresView
+    //{
+    //  static  ObservableCollection<ForeclosureView> list = new ObservableCollection<ForeclosureView>((new Db.Foreclosures()).GetAll().Select(x => new ForeclosureView(x)));
 
-            var presenters = row.FindVisualChildrenOfType< System.Windows.Controls.Primitives.DataGridCellsPresenter > ().ToList();
-            if (presenters.Count  <1)
-                return null;
-
-            var cell = (DataGridCell)presenters[0].ItemContainerGenerator.ContainerFromIndex(columnIndex);
-            if (cell != null)
-                return cell;
-
-            // now try to bring into view and retreive the cell
-            grid.ScrollIntoView(row, grid.Columns[columnIndex]);
-            cell = (DataGridCell)presenters[0].ItemContainerGenerator.ContainerFromIndex(columnIndex);
-
-            return cell;
-        }
-    }
+    //   static public ObservableCollection<ForeclosureView> List { get { return list; } set { list = value; } }
+    //}
 }

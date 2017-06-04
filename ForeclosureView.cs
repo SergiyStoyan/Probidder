@@ -20,7 +20,7 @@ using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
-    public class ForeclosureView : System.ComponentModel.INotifyPropertyChanged, System.ComponentModel.IDataErrorInfo
+    public class ForeclosureView : System.ComponentModel.INotifyPropertyChanged, System.ComponentModel.INotifyDataErrorInfo, IDataErrorInfo
     {
         public ForeclosureView(Db.Foreclosure f = null)
         {
@@ -142,8 +142,28 @@ namespace Cliver.Foreclosures
                     return CASE_Ns.FirstOrDefault();
                 return Model.CASE_N;
             }
-            set { Model.CASE_N = value; } }  
-        public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { Model.FILING_DATE = value; } }  
+            set { Model.CASE_N = value; }
+        }
+        //public string FILING_DATE
+        //{
+        //    get
+        //    {
+        //        if (_FILING_DATE != null)
+        //            return _FILING_DATE;
+        //        return DatePickerControl.GetMaskedString(Model.FILING_DATE);
+        //    }
+        //    set
+        //    {
+        //        InitialControlSetting = false;
+        //        if (_FILING_DATE == value)
+        //            return;
+        //        _FILING_DATE = value;
+        //        DateTime? dt = DatePickerControl.ParseText(value);
+        //        Model.FILING_DATE = dt;
+        //    }
+        //}
+        //string _FILING_DATE = null;
+        public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { InitialControlSetting = false; Model.FILING_DATE = value; } }
         public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { Model.AUCTION_DATE = value; } }  
         public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { Model.AUCTION_TIME = value; } }  
         public string SALE_LOC { get { return Model.SALE_LOC; } set { Model.SALE_LOC = value; } }  
@@ -164,12 +184,14 @@ namespace Cliver.Foreclosures
         public string LEGAL_D { get { return Model.LEGAL_D; } set { Model.LEGAL_D = value; } }  
         public string ADDRESS { get { return Model.ADDRESS; } set { Model.ADDRESS = value; } }  
         public string CITY { get { return Model.CITY; }
-            set {
+            set
+            {
                 if (Model.CITY == value)
                     return;
                 Model.CITY = value;
                 OnPropertyChanged("ZIPs");
-            } }  
+            }
+        }  
         public string ZIP { get { return Model.ZIP; } set { Model.ZIP = value; } }  
         public string PIN { get { return Model.PIN; } set { Model.PIN = value; } }  
         public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { Model.DATE_OF_CA = value; } }  
@@ -272,20 +294,24 @@ namespace Cliver.Foreclosures
                 if (InitialControlSetting)
                     return null;
                 string e = validate(columnName);
-                columnNames2error[columnName] = e;
+                string e0 = null;
+                columnNames2error.TryGetValue(columnName, out e0);
+                if (e0 != e)
+                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
                 PropertyChanged2?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
                 return e;
             }
         }
         public event PropertyChangedEventHandler PropertyChanged2;
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        //public bool HasError
-        //{
-        //    get
-        //    {
-        //        return columnNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
-        //    }
-        //}
+        public bool HasErrors
+        {
+            get
+            {
+                return columnNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
+            }
+        }
 
         public bool InitialControlSetting = true;
 
@@ -319,6 +345,8 @@ namespace Cliver.Foreclosures
                     }
                     return null;
                 case "FILING_DATE":
+                    //if (FILING_DATE == null || Regex.IsMatch(FILING_DATE, @"\d") && Regex.IsMatch(FILING_DATE, @"_"))
+                    //    return "Error";              
                     if (FILING_DATE == null)
                         return "Error";
                     return null;
@@ -327,8 +355,8 @@ namespace Cliver.Foreclosures
                 case "AUCTION_TIME":
                     return null;
                 case "ENTRY_DATE":
-                    //if (ENTRY_DATE == null)
-                    //    return "Error";
+                    if (ENTRY_DATE == null)
+                        return "Error";
                     return null;
                 case "LENDOR":
                     if (string.IsNullOrEmpty(LENDOR))
@@ -431,6 +459,11 @@ namespace Cliver.Foreclosures
                 default:
                     throw new Exception("Field " + propertyName + " is absent in validation.");
             }
+        }
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return columnNames2error.Where(x => x.Value != null).Select(x => x.Key);
         }
     }
 }

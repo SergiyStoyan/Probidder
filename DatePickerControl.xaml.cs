@@ -18,14 +18,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace Cliver.Foreclosures
 {
-    /// <summary>
-    /// Interaction logic for DatePickerControl.xaml
-    /// </summary>
     public partial class DatePickerControl : DatePicker
     {
+        static DatePickerControl()
+        {
+            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
+            mask_r = new Regex("[" + string.Join("", ss) + "]");
+            ss.Remove(Regex.Escape("_"));
+            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
+        }
+
         public DatePickerControl()
         {
             InitializeComponent();
@@ -33,41 +39,44 @@ namespace Cliver.Foreclosures
             GotKeyboardFocus += DatePickerControl_GotKeyboardFocus;
             LostKeyboardFocus += DatePickerControl_LostKeyboardFocus;
             SelectedDateChanged += DatePicker_SelectedDateChanged;
-
-            Loaded += delegate
-            {//bulding template is anynchronous so we are waiting when it is finished to get TextBox
-                ThreadRoutines.StartTry(() =>
-                {
-                    TextBox tb1 = (TextBox)SleepRoutines.WaitForObject(() =>
-                    {
-                        return Dispatcher.Invoke(() =>
- {
-     return this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
- });
-                    }, 1000);
-                    if (tb1 != null)
-                    {
-                        tb = tb1;
-                        Dispatcher.Invoke(() =>
-                        {
-                            DatePicker_SelectedDateChanged(null, null);
-                        });
-                    }
-                });
-                tb = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
-                if (tb == null)
-                    tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
-
-                tb.PreviewTextInput += TextBox_PreviewTextInput;
-                tb.TextChanged += TextBox_TextChanged;
-                tb.GotFocus += TextBox_GotFocus;
+            PreviewGotKeyboardFocus += delegate
+            {
             };
 
-            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
-            mask_r = new Regex("[" + string.Join("", ss) + "]");
-            ss.Remove(Regex.Escape("_"));
-            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
+            Loaded += delegate
+            {
+                tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_TextBox").FirstOrDefault();
+                
+                tb.PreviewTextInput += TextBox_PreviewTextInput;
+                tb.TextChanged += TextBox_TextChanged;
+                tb.GotFocus += TextBox_GotFocus; 
+                tb.Focus();               
+            };
         }
+
+        TextBox tb0;
+        TextBox tb
+        {
+            get
+            {
+                if (_tb == null)
+                {//bulding template is anynchronous so we are waiting when it is finished to get TextBox                    
+                    _tb = (TextBox)SleepRoutines.WaitForObject(() =>
+                    {
+                        return this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "TextBox").FirstOrDefault();
+                    }, 1000);
+                    if (_tb != null)
+                    {
+                        //Dispatcher.Invoke(() =>
+                        //{
+                        //    DatePicker_SelectedDateChanged(null, null);
+                        //});
+                    }
+                }
+                return _tb;
+            }
+        }
+        TextBox _tb;
 
         //public override void OnApplyTemplate()
         //{
@@ -76,27 +85,62 @@ namespace Cliver.Foreclosures
         //    if (tb == null)
         //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
         //}
+        
+        //public string Text2
+        //{
+        //    get
+        //    {
+        //        return (string)GetValue(Text2Property);
+        //    }
+        //    set
+        //    {
+        //        SetValue(Text2Property, value);
+        //    }
+        //}
+        //public static DependencyProperty Text2Property = DependencyProperty.Register("Text2", typeof(string), typeof(DatePickerControl),
+        //    new FrameworkPropertyMetadata(
+        //        mask,
+        //        FrameworkPropertyMetadataOptions.AffectsRender,
+        //        OnText2Changed
+        //        )
+        //    );
+        //private static void OnText2Changed(DependencyObject control, DependencyPropertyChangedEventArgs eventArgs)
+        //{
+        //    var c = (DatePickerControl)control;
+        //    c.tb.Text = (string)eventArgs.NewValue;
+        //    //TextChanged?.Invoke(control, new PropertyChangedEventArgs("Text"));
+        //}
+        //private static object OnText2Coersed(DependencyObject control, object baseValue)
+        //{
+        //    var c = (DatePickerControl)control;
+        //    if (c.tb == null)
+        //        return baseValue;
+        //    return c.tb.Text;
+        //    TextChanged?.Invoke(control, new PropertyChangedEventArgs("Text"));
+        //}
 
-        public string Text
-        {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                if (tb != null)
-                    tb.Text = value;
-            }
-        }
+        //public static readonly DependencyProperty Text2Property =
+        //    DependencyProperty.RegisterAttached("Text2", typeof(string), typeof(DatePickerControl), new PropertyMetadata(mask));
+
+        //public static void SetText2(UIElement element, double value)
+        //{
+        //    element.SetValue(Text2Property, value);
+        //}
+
+        //public static string GetText2(UIElement element)
+        //{
+        //    return (string)element.GetValue(Text2Property);
+        //}
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            DateTime? dt = calendar_input(tb.Text); 
+            //if (SelectedDate != null)
+            //    tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yyyy");
+            DateTime? dt = ParseText(tb.Text);
             if (dt != SelectedDate)
                 SelectedDate = dt;
-            else
-                DatePicker_SelectedDateChanged(null, null);
+            //else
+            //    DatePicker_SelectedDateChanged(null, null);
             if (dt == null && Regex.IsMatch(tb.Text, @"\d"))
             {
                 this.MarkInvalid("Error");
@@ -107,24 +151,22 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            tb.Focus();
-            select(0, tb.Text.Length);
+            //tb.Focus();
+            //select(0, tb.Text.Length);
         }
 
-        TextBox tb;
-        readonly string mask = "__/__/__";
-        readonly Regex mask_separators_r = null;
-        readonly Regex mask_r = null;
+        static readonly string mask = "__/__/__";
+        static readonly Regex mask_separators_r = null;
+        static readonly Regex mask_r = null;
 
-        public string Mask
+        public static string GetMaskedString(DateTime? dt = null)
         {
-            get
-            {
+            if (dt == null)
                 return mask;
-            }
+            return ((DateTime)dt).ToString("MM/dd/yyyy");
         }
 
-        string apply_mask(string t)
+        static string apply_mask(string t)
         {
             if (t == null)
                 return null;
@@ -144,14 +186,14 @@ namespace Cliver.Foreclosures
             return t;
         }
 
-        string strip_separators(string t)
+        static string strip_separators(string t)
         {
             if (t == null)
                 return null;
             return mask_separators_r.Replace(t, "");
         }
 
-        string strip_mask(string t)
+       static string strip_mask(string t)
         {
             if (t == null)
                 return null;
@@ -169,17 +211,12 @@ namespace Cliver.Foreclosures
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (tb == null)
-                return;
             ignore_text_change = true;
             int p = tb.SelectionStart;
             DateTime? dt = SelectedDate;
             if (dt == null)
             {
-                //if(tb.IsKeyboardFocused)
-                    tb.Text = apply_mask(tb.Text);
-                //else
-                //    tb.Text = mask;
+                tb.Text = apply_mask(tb.Text);
                 select(p, 0);
             }
             else
@@ -188,8 +225,8 @@ namespace Cliver.Foreclosures
                     tb.Text = ((DateTime)dt).ToString("MM/dd/yy");
                 else
                     tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
-                select(p, tb.Text.Length);
-                //this.MarkValid();
+                //select(p, tb.Text.Length);
+                this.MarkValid();
             }
             ignore_text_change = false;
         }
@@ -200,14 +237,8 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             if (ignore_text_change)
                 return;
-            //ignore_selection_change = true;
-            string t = tb.Text;
-            DateTime? dt = calendar_input(t);
-            if (SelectedDate != dt)
-                SelectedDate = dt;
-            else
-                DatePicker_SelectedDateChanged(null, null);
-            //ignore_selection_change = false;
+            string t = apply_mask(tb.Text);
+            SelectedDate = ParseText(t);
         }
         bool ignore_text_change = false;
 
@@ -236,8 +267,15 @@ namespace Cliver.Foreclosures
             tb.SelectionStart = p;
         }
 
-        private DateTime? calendar_input(string text)
+        public static DateTime? ParseText(string text)
         {
+            //try
+            //{
+            //    return DateTime.Parse(text);
+            //}
+            //catch
+            //{
+            //}
             try
             {
                 return DateTime.ParseExact(text, "MM/dd/yyyy", null);
@@ -266,8 +304,6 @@ namespace Cliver.Foreclosures
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (tb.Name != "TextBox")
-                tb = (TextBox)sender;
             if (SelectedDate == null)
                 tb.Text = apply_mask(tb.Text);
             else
@@ -276,21 +312,21 @@ namespace Cliver.Foreclosures
         }
     }
 
-    //static public class WpfControlRoutines
-    //{
-    //    public static void FocusOnText(this DatePicker datePicker)
-    //    {
-    //        if (datePicker == last_focused)
-    //            return;
-    //        last_focused = datePicker;
-    //        Keyboard.Focus(datePicker);
-    //        var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
-    //                                         Keyboard.PrimaryDevice.ActiveSource,
-    //                                         0,
-    //                                         Key.Up);
-    //        eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
-    //        datePicker.RaiseEvent(eventArgs);
-    //    }
-    //    static IInputElement last_focused = null;
-    //}
+    static public class WpfControlRoutines
+    {
+        public static void FocusOnText(this DatePicker datePicker)
+        {
+            if (datePicker == last_focused)
+                return;
+            last_focused = datePicker;
+            Keyboard.Focus(datePicker);
+            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
+                                             Keyboard.PrimaryDevice.ActiveSource,
+                                             0,
+                                             Key.Up);
+            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
+            datePicker.RaiseEvent(eventArgs);
+        }
+        static IInputElement last_focused = null;
+    }
 }

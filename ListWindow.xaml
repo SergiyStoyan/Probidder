@@ -84,10 +84,10 @@
                 </Grid>
                 <DataGrid  Margin="0"  Height="auto" Name="list" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
-          VerticalGridLinesBrush="#eed"                           
-                  AlternationCount="2" TargetUpdated="list_TargetUpdated" CellEditEnding="list_CellEditEnding"
-                  ItemContainerStyle="{StaticResource AlternateItemStyle}"                              
-                        AutoGenerateColumns="True" AutoGeneratingColumn="list_AutoGeneratingColumn"
+          VerticalGridLinesBrush="#eed"    BeginningEdit="list_BeginningEdit" RowEditEnding="list_RowEditEnding"                      
+                  AlternationCount="2" CellEditEnding="list_CellEditEnding"
+                  ItemContainerStyle="{StaticResource AlternateItemStyle}"   SelectionMode="Single"                           
+                        AutoGenerateColumns="False" AutoGeneratingColumn="list_AutoGeneratingColumn"
                                CanUserAddRows="True" CanUserDeleteRows="True"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                     <DataGrid.Resources>
@@ -95,6 +95,14 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
                                 </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="{x:Type local:DatePickerControl}">
+                            <Style.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Setter Property="Background" Value="BlueViolet"/>
+                                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>
@@ -131,21 +139,80 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="test" IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" x:Name="FILING_DATE">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>FILING_DATE</TextBlock>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FILING_DATE}"></TextBlock>
+                                    <TextBlock Text="{Binding FILING_DATE, StringFormat=MM/dd/yyyy}"></TextBlock>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" 
-                                              SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
-                                              />                                    
+                                    <local:DatePickerControl SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
-
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn IsReadOnly="False" x:Name="ENTRY_DATE">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>ENTRY_DATE</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ENTRY_DATE, StringFormat=MM/dd/yyyy}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <local:DatePickerControl SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn IsReadOnly="False" x:Name="ORIGINAL_MTG">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>ORIGINAL_MTG</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ORIGINAL_MTG, StringFormat=MM/dd/yyyy}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <local:DatePickerControl SelectedDate="{Binding ORIGINAL_MTG, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn IsReadOnly="False" x:Name="DATE_OF_CA">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>DATE_OF_CA</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DATE_OF_CA, StringFormat=MM/dd/yyyy}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <local:DatePickerControl SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn IsReadOnly="False" x:Name="LAST_PAY_DATE">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>LAST_PAY_DATE</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding LAST_PAY_DATE, StringFormat=MM/dd/yyyy}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <local:DatePickerControl SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>

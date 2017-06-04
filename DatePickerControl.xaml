@@ -4,18 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Foreclosures"
-             mc:Ignorable="d"
+             mc:Ignorable="d"            
             >
 
         <DatePicker.Resources>
             <Style TargetType="{x:Type DatePickerTextBox}">
                 <Setter Property="Control.Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="DatePickerTextBox">
-                        <TextBox x:Name="TextBox" 
-                                    Text="__/__/__" 
-                                 />
-                        </ControlTemplate>
+                    <ControlTemplate TargetType="DatePickerTextBox">
+                        <Grid>
+                            <TextBox x:Name="PART_TextBox" Visibility="Hidden"
+                                    Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                            <TextBox x:Name="TextBox" Visibility="Visible" Text="__/__/__"/>
+                        </Grid>
+                    </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>

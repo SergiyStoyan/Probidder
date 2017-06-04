@@ -234,7 +234,7 @@ namespace Cliver.Foreclosures
                 if (fw == null)
                     return false;
 
-                if (!fw.Edited)
+                if (fw.Model.Id != 0 && !fw.Edited)
                     return true;
 
                 fw.OnPropertyChanged(null);
