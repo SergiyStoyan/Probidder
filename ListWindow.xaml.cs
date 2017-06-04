@@ -518,7 +518,7 @@ namespace Cliver.Foreclosures
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
             if (fw == null||fw.Model==null)
                 return;
-            if (!Message.YesNo("You are abount deleting record [Id=" + fw.Model.Id + "]. Proceed?"))
+            if (!Message.YesNo("You are about deleting record [Id=" + fw.Model.Id + "]. Proceed?"))
                 return;
             foreclosures.Delete(fw.Model.Id);
         }

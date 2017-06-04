@@ -20,12 +20,25 @@ using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
-    public class ForeclosureView : System.ComponentModel.INotifyPropertyChanged, System.ComponentModel.INotifyDataErrorInfo, IDataErrorInfo
+    public class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo//, INotifyDataErrorInfo
     {
         public ForeclosureView(Db.Foreclosure f = null)
         {
             if (f == null)
+            {
                 f = new Db.Foreclosure();
+
+                f.COUNTY = Settings.Location.County;
+                f.TYPE_OF_EN = "CHA";
+                f.CASE_N = CASE_Ns.FirstOrDefault();
+                f.ENTRY_DATE = DateTime.Now;
+                f.IS_ORG = false;
+                f.DECEASED = false;
+                f.OWNER_ROLE = "OWNER";
+                f.TYPE_OF_MO = "CNV";
+                f.PROP_DESC = "SINGLE FAMILY";
+                f.MONTHLY_PAY = 30;
+            }
             Model = f;
         }
         public readonly Db.Foreclosure Model;
@@ -108,19 +121,10 @@ namespace Cliver.Foreclosures
             }
         }
 
-        public string TYPE_OF_EN {
-            get {
-                if (Model.Id == 0)
-                    return "CHA";
-                return Model.TYPE_OF_EN;
-            }
-            set { Model.TYPE_OF_EN = value; }
-        }
+        public string TYPE_OF_EN { get { return Model.TYPE_OF_EN; } set { Model.TYPE_OF_EN = value; } }
         public string COUNTY {
             get
             {
-                if (Model.Id == 0)
-                    return Settings.Location.County;
                 return Model.COUNTY;
             }
             set
@@ -136,14 +140,7 @@ namespace Cliver.Foreclosures
                 OnPropertyChanged("ATTORNEY_Ss"); 
             }
         }        
-        public string CASE_N { get
-            {
-                if (Model.Id == 0)
-                    return CASE_Ns.FirstOrDefault();
-                return Model.CASE_N;
-            }
-            set { Model.CASE_N = value; }
-        }
+        public string CASE_N { get { return Model.CASE_N; } set { Model.CASE_N = value; } }
         //public string FILING_DATE
         //{
         //    get
@@ -167,16 +164,7 @@ namespace Cliver.Foreclosures
         public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { Model.AUCTION_DATE = value; } }  
         public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { Model.AUCTION_TIME = value; } }  
         public string SALE_LOC { get { return Model.SALE_LOC; } set { Model.SALE_LOC = value; } }  
-        public DateTime? ENTRY_DATE
-        {
-            get
-            {
-                if (Model.Id == 0)
-                    return DateTime.Now;
-                return Model.ENTRY_DATE;
-            }
-            set { Model.ENTRY_DATE = value; }
-        }  
+        public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { Model.ENTRY_DATE = value; } }
         public string LENDOR { get { return Model.LENDOR; } set { Model.LENDOR = value; } }  
         public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { Model.ORIGINAL_MTG = value; } }  
         public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { Model.DOCUMENT_N = value; } }  
@@ -199,35 +187,9 @@ namespace Cliver.Foreclosures
         public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { Model.BALANCE_DU = value; } }  
         public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { Model.PER_DIEM_I = value; } }  
         public string CURRENT_OW { get { return Model.CURRENT_OW; } set { Model.CURRENT_OW = value; } }  
-        public bool IS_ORG
-        {
-            get
-            {
-                if (Model.Id == 0)
-                    return false;
-                return Model.IS_ORG;
-            }
-            set { Model.IS_ORG = value; }
-        }  
-        public bool DECEASED
-        {
-            get
-            {
-                if (Model.Id == 0)
-                    return false;
-                return Model.DECEASED;
-            }
-            set { Model.DECEASED = value; }
-        }  
-        public string OWNER_ROLE {
-            get
-            {
-                if (Model.Id == 0)
-                    return "OWNER";
-                return Model.OWNER_ROLE;
-            }
-            set { Model.OWNER_ROLE = value; }
-        }  
+        public bool IS_ORG { get { return Model.IS_ORG; } set { Model.IS_ORG = value; } }
+        public bool DECEASED { get { return Model.DECEASED; } set { Model.DECEASED = value; } }
+        public string OWNER_ROLE { get { return Model.OWNER_ROLE; } set { Model.OWNER_ROLE = value; } }
         public string OTHER_LIENS { get { return Model.OTHER_LIENS; } set { Model.OTHER_LIENS = value; } }  
         public string ADDL_DEF { get { return Model.ADDL_DEF; } set { Model.ADDL_DEF = value; } }  
         public string PUB_COMMENTS { get { return Model.PUB_COMMENTS; } set { Model.PUB_COMMENTS = value; } }  
@@ -241,34 +203,10 @@ namespace Cliver.Foreclosures
                 OnPropertyChanged("ATTORNEY_Ss");
             } }  
         public string ATTORNEY_S { get { return Model.ATTORNEY_S; } set { Model.ATTORNEY_S = value; } }  
-        public string TYPE_OF_MO {
-            get
-            {
-                if (Model.Id == 0)
-                    return "CNV";
-                return Model.TYPE_OF_MO;
-            }
-            set { Model.TYPE_OF_MO = value; }
-        }  
-        public string PROP_DESC {
-            get
-            {
-                if (Model.Id == 0)
-                    return "SINGLE FAMILY";
-                return Model.PROP_DESC;
-            }
-            set { Model.PROP_DESC = value; }
-        }  
+        public string TYPE_OF_MO { get { return Model.TYPE_OF_MO; } set { Model.TYPE_OF_MO = value; } }
+        public string PROP_DESC { get { return Model.PROP_DESC; } set { Model.PROP_DESC = value; } }
         public decimal? INTEREST_R { get { return Model.INTEREST_R; } set { Model.INTEREST_R = value; } }  
-        public decimal? MONTHLY_PAY {
-            get
-            {
-                if (Model.Id == 0)
-                    return 30;
-                return Model.MONTHLY_PAY;
-            }
-            set { Model.MONTHLY_PAY = value; }
-        }  
+        public decimal? MONTHLY_PAY { get { return Model.MONTHLY_PAY; } set { Model.MONTHLY_PAY = value; } }
         public uint? TERM_OF_MTG { get { return Model.TERM_OF_MTG; } set { Model.TERM_OF_MTG = value; } }  
         public string DEF_ADDRESS { get { return Model.DEF_ADDRESS; } set { Model.DEF_ADDRESS = value; } }  
         public string DEF_PHONE { get { return Model.DEF_PHONE; } set { Model.DEF_PHONE = value; } }
@@ -298,6 +236,7 @@ namespace Cliver.Foreclosures
                 columnNames2error.TryGetValue(columnName, out e0);
                 if (e0 != e)
                     ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
+                columnNames2error[columnName] = e;
                 PropertyChanged2?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
                 return e;
             }
@@ -463,7 +402,7 @@ namespace Cliver.Foreclosures
 
         public IEnumerable GetErrors(string propertyName)
         {
-            return columnNames2error.Where(x => x.Value != null).Select(x => x.Key);
+            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
         }
     }
 }
