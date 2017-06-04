@@ -107,14 +107,7 @@ namespace Cliver.Foreclosures
 
         ForeclosureView set_context(Db.Foreclosure f)
         {
-            this.MarkValid();
-
-            FILING_DATE.Text = FILING_DATE.Mask;
-            ENTRY_DATE.Text = ENTRY_DATE.Mask;
-            ORIGINAL_MTG.Text = ORIGINAL_MTG.Mask;
-            DATE_OF_CA.Text = DATE_OF_CA.Mask;
-            LAST_PAY_DATE.Text = LAST_PAY_DATE.Mask;
-            ATTORNEY_S.Text = ATTORNEY_S.Mask;            
+            this.MarkValid();  
 
             ForeclosureView fw = new ForeclosureView(f);
             fw.PropertyChanged2 += delegate

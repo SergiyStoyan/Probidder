@@ -172,7 +172,7 @@ namespace Cliver.Foreclosures
         static readonly Regex mask_separators_r = null;
         static readonly Regex mask_r = null;
 
-        public string Mask
+        static public string Mask
         {
             get
             {
