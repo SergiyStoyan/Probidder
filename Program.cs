@@ -23,12 +23,6 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-/*
-     
-   
-
-     */
-
 namespace Cliver.Foreclosures
 {
     public class Program
@@ -46,7 +40,6 @@ namespace Cliver.Foreclosures
             };
 
             Message.TopMost = true;
-
             Log.Initialize(Log.Mode.ONLY_LOG);
             //Cliver.Config.Initialize(new string[] { "General" });
             Cliver.Config.Reload();

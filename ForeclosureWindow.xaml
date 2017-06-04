@@ -88,11 +88,11 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Content="Listing Code"/>
-                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="TYPE_OF_EN" Text="{Binding TYPE_OF_EN, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
                     <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Content="County"/>
                     <TextBox Grid.Column="3" Grid.Row="0" x:Name="COUNTY" IsTabStop="False" IsReadOnly="True" Text="{Binding COUNTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Content="Case #"/>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Grid.Column="1" Grid.Row="1" x:Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True"/>
+                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Grid.Column="1" Grid.Row="1" x:Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding CASE_Ns, Mode=OneTime}"/>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Content="Filling Date"/>
                     <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" 
                                               SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
@@ -102,8 +102,8 @@
                                               SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Content="Plaintiff Code"/>
-                    
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" Grid.Column="1" Grid.Row="3" x:Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3" Text="{Binding LENDOR, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" Height="{Binding ActualHeight, ElementName=CITY}"/>
+
+                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" Grid.Column="1" Grid.Row="3" x:Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3" Text="{Binding LENDOR, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" Height="{Binding ActualHeight, ElementName=CITY}"  ItemsSource="{Binding LENDORs, Mode=OneTime}"/>
                     
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Content="Or MTG D"/>
                     <local:DatePickerControl Grid.Column="1" Grid.Row="4" x:Name="ORIGINAL_MTG" 
@@ -122,9 +122,9 @@
                     <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Content="Address"/>
                     <TextBox Grid.Column="1" Grid.Row="6" x:Name="ADDRESS" Grid.ColumnSpan="3" Text="{Binding ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" Content="City"/>
-                    <local:ComboBoxControl1 IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top"  Grid.Column="1" Grid.Row="7" IsEditable="True" x:Name="CITY" Grid.ColumnSpan="3" SelectionChanged="City_SelectionChanged" Text="{Binding CITY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+                    <local:ComboBoxControl1 IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top"  Grid.Column="1" Grid.Row="7" IsEditable="True" x:Name="CITY" Grid.ColumnSpan="3" Text="{Binding CITY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" Content="ZIP"/>
-                    <local:ComboBoxControl1 IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top"  Grid.Column="1" Grid.Row="8" x:Name="ZIP" IsEditable="True"  Text="{Binding ZIP, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+                    <local:ComboBoxControl1 IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top"  Grid.Column="1" Grid.Row="8" x:Name="ZIP" IsEditable="True"  Text="{Binding ZIP, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding ZIPs}"/>
                     <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right" Content="PIN"/>
                     <xctk:MaskedTextBox Grid.Column="1" Grid.Row="9" x:Name="PIN" VerticalAlignment="Top" 
                                         Text="{Binding PIN, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" 
@@ -155,7 +155,7 @@
                         <CheckBox  Grid.Column="2" x:Name="DECEASED" VerticalAlignment="Center" IsChecked="{Binding DECEASED, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Content="Deceased"/>
                         <Label  Grid.Column="3" VerticalAlignment="Top" Content="Owner Role" />
                     </Grid>
-                    <local:ComboBoxControl1 Grid.Column="7" Grid.Row="1" Grid.ColumnSpan="1" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  SelectedItem="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True"/>
+                    <local:ComboBoxControl1 Grid.Column="7" Grid.Row="1" Grid.ColumnSpan="1" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" VerticalAlignment="Top"  x:Name="OWNER_ROLE" MinWidth="30"  SelectedItem="{Binding OWNER_ROLE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding OWNER_ROLEs}" />
                     <Label Grid.Column="4" Grid.Row="2" HorizontalAlignment="Right" Content="Other Liens"/>
                     <TextBox Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="3" x:Name="OTHER_LIENS" Text="{Binding OTHER_LIENS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="3" HorizontalAlignment="Right" Content="Addl Deff"/>
@@ -165,14 +165,13 @@
                     <Label Grid.Column="4" Grid.Row="5" HorizontalAlignment="Right" Content="ilFLS Comments"/>
                     <TextBox Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="3"  x:Name="INT_COMMENTS" Text="{Binding INT_COMMENTS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right" Content="Attorney Code"/>
-                    <local:ComboBoxControl1  IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top"  Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" x:Name="ATTY" SelectionChanged="ATTY_SelectionChanged"  Text="{Binding ATTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+                    <local:ComboBoxControl1  IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top"  Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="3" IsEditable="True" x:Name="ATTY"  Text="{Binding ATTY, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding ATTYs}"/>
                     <Label Grid.Column="4" Grid.Row="7" HorizontalAlignment="Right" Content="Attorney Phone"/>
-                    <local:ComboBoxPhoneControl VerticalAlignment="Top" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="1" IsEditable="True" 
-                              x:Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+                    <local:ComboBoxPhoneControl VerticalAlignment="Top" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="1" IsEditable="True" x:Name="ATTORNEY_S" Text="{Binding ATTORNEY_S, Mode=TwoWay, StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding ATTORNEY_Ss}"/>
                     <Label Grid.Column="4" Grid.Row="8" HorizontalAlignment="Right" Content="MTG Codes"/>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"   Grid.Column="5" Grid.Row="8"  x:Name="TYPE_OF_MO" IsEditable="True" Grid.ColumnSpan="1" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"   Grid.Column="5" Grid.Row="8"  x:Name="TYPE_OF_MO" IsEditable="True" Grid.ColumnSpan="1" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding TYPE_OF_MOs}"/>
                     <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right" Content="Property Type"/>
-                    <local:ComboBoxControl1 IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" VerticalAlignment="Top"  Grid.Column="5" Grid.Row="9" x:Name="PROP_DESC" MinWidth="30"  Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsReadOnly="False" IsEditable="True"/>
+                    <local:ComboBoxControl1 IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" VerticalAlignment="Top"  Grid.Column="5" Grid.Row="9" x:Name="PROP_DESC" MinWidth="30"  Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsReadOnly="False" IsEditable="True" ItemsSource="{Binding PROP_DESCs}"/>
                     <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right" Content="Interest"/>
                     <TextBox Grid.Column="7" Grid.Row="8" x:Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right" Content="Monthly Payments"/>

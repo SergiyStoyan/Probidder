@@ -46,11 +46,9 @@ namespace Cliver.Foreclosures
         ForeclosureWindow(int? foreclosure_id = null)
         {
             InitializeComponent();
-            
+
             Icon = AssemblyRoutines.GetAppIconImageSource();
-
-            COUNTY.Text = Settings.Location.County;
-
+            
             Loaded += delegate
             {
                 Db.Foreclosure f;
@@ -58,26 +56,28 @@ namespace Cliver.Foreclosures
                     f = foreclosures.GetById((int)foreclosure_id);
                 else
                     f = new Db.Foreclosure();
-                set_context(f);
-                f.InitialControlSetting = true;
+                ForeclosureView fw = set_context(f);
+                fw.InitialControlSetting = true;
             };
 
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() => {
-                Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
-                if (f != null)
-                    f.InitialControlSetting = false;
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+            {
+                ForeclosureView fw = (ForeclosureView)fields.DataContext;
+                if (fw != null)
+                    fw.InitialControlSetting = false;
             }));
 
-          Thread check_validity_t = ThreadRoutines.StartTry(() =>
-            {
-                while(true)
-                {
-                    Thread.Sleep(300);
-                    Dispatcher.Invoke(() => {
-                        check_validity();
-                    });
-                }
-            });
+            Thread check_validity_t = ThreadRoutines.StartTry(() =>
+              {
+                  while (true)
+                  {
+                      Thread.Sleep(300);
+                      Dispatcher.Invoke(() =>
+                      {
+                          check_validity();
+                      });
+                  }
+              });
 
             PreviewKeyDown += delegate
               {
@@ -105,7 +105,7 @@ namespace Cliver.Foreclosures
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
-        void set_context(Db.Foreclosure f)
+        ForeclosureView set_context(Db.Foreclosure f)
         {
             this.MarkValid();
 
@@ -114,32 +114,17 @@ namespace Cliver.Foreclosures
             ORIGINAL_MTG.Text = ORIGINAL_MTG.Mask;
             DATE_OF_CA.Text = DATE_OF_CA.Mask;
             LAST_PAY_DATE.Text = LAST_PAY_DATE.Mask;
-            LENDOR.Text = "";
-            CITY.Text = "";
-            ZIP.Text = "";
-            PROP_DESC.Text = "";
-            TYPE_OF_MO.Text = "";
-            ATTORNEY_S.Text = ATTORNEY_S.Mask;
-            ATTY.Text = "";
-            OWNER_ROLE.Text = "";
+            ATTORNEY_S.Text = ATTORNEY_S.Mask;            
 
-            CITY.ItemsSource = (new Db.Cities()).GetBy(Settings.Location.County).OrderBy(x => x.city).Select(x => x.city);
-            LENDOR.ItemsSource = (new Db.Plaintiffs()).GetBy(Settings.Location.County).OrderBy(x => x.plaintiff).Select(x => x.plaintiff);
-            ATTY.ItemsSource = (new Db.Attorneys()).GetBy(Settings.Location.County).OrderBy(x => x.attorney).Select(x => x.attorney);
-            TYPE_OF_MO.ItemsSource = (new Db.MortgageTypes()).Get().OrderBy(x => x.mortgage_type).Select(x => x.mortgage_type);
-            PROP_DESC.ItemsSource = (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
-            OWNER_ROLE.ItemsSource = (new Db.OwnerRoles()).GetAll().OrderBy(x => x.role).Select(x => x.role);
-            ZIP.ItemsSource = null;
-            ATTORNEY_S.ItemsSource = null;
-            CASE_N.ItemsSource = null;
-
-            f.PropertyChanged2 += delegate
+            ForeclosureView fw = new ForeclosureView(f);
+            fw.PropertyChanged2 += delegate
               {
                   check_validity();
               };
-            f.InitialControlSetting = true;
-            fields.DataContext = f;
-            f.InitialControlSetting = false;
+            fw.InitialControlSetting = true;
+            fields.DataContext = fw;
+            fw.InitialControlSetting = false;
+            return fw;
         }
 
         void check_validity()
@@ -153,7 +138,10 @@ namespace Cliver.Foreclosures
             else
             {
                 New.IsEnabled = true;
-                Db.Foreclosure f = get_current_Foreclosure();
+                ForeclosureView fw = (ForeclosureView)fields.DataContext;
+                if (fw == null)
+                    return;
+                Db.Foreclosure f = fw.Model;
                 if (f.Id == 0)
                 {
                     Prev.IsEnabled = foreclosures.GetLast() != null;
@@ -172,7 +160,10 @@ namespace Cliver.Foreclosures
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
 
-            Db.Foreclosure f = get_current_Foreclosure();
+            ForeclosureView fw = (ForeclosureView)fields.DataContext;
+            if (fw == null)
+                return;
+            Db.Foreclosure f = fw.Model;
             if (f.Id != 0)
             {
                 Db.Foreclosure f2 = foreclosures.GetNext(f);
@@ -197,7 +188,10 @@ namespace Cliver.Foreclosures
         {
             if (!save_current_Foreclosure())
                 return;
-            Db.Foreclosure f = get_current_Foreclosure();
+            ForeclosureView fw = (ForeclosureView)fields.DataContext;
+            if (fw == null)
+                return;
+            Db.Foreclosure f = fw.Model;
             if (f.Id == 0)
                 f = foreclosures.GetLast();
             else
@@ -214,7 +208,10 @@ namespace Cliver.Foreclosures
         {
             if (!save_current_Foreclosure())
                 return;
-            Db.Foreclosure f = get_current_Foreclosure();
+            ForeclosureView fw = (ForeclosureView)fields.DataContext;
+            if (fw == null)
+                return;
+            Db.Foreclosure f = fw.Model;
             if (f.Id == 0)
             {
                 Next.IsEnabled = false;
@@ -240,12 +237,14 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                Db.Foreclosure f = get_current_Foreclosure();
+                ForeclosureView fw = (ForeclosureView)fields.DataContext;
+                if (fw == null)
+                    return false;
 
-                if (!f.Edited)
+                if (!fw.Edited)
                     return true;
 
-                f.OnPropertyChanged(null);
+                fw.OnPropertyChanged(null);
 
                 if (!fields.IsValid())
                 {
@@ -253,7 +252,7 @@ namespace Cliver.Foreclosures
                     return false;
                 }
 
-                foreclosures.Save(f);
+                foreclosures.Save(fw.Model);
 
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
@@ -261,7 +260,7 @@ namespace Cliver.Foreclosures
                 //    Thread.Sleep(200);
                 //    fields.Dispatcher.Invoke(() => { fields.IsEnabled = true; });
                 //});
-                
+
                 return true;
             }
             catch (Exception ex)
@@ -271,57 +270,18 @@ namespace Cliver.Foreclosures
             return false;
         }
 
-        private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ZIP.ItemsSource = (new Db.Zips()).GetBy(Settings.Location.County, (string)CITY.SelectedItem).OrderBy(x => x.zip).Select(x=>x.zip);
-        }
-
-        private void ATTY_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ATTORNEY_S.ItemsSourceNomalized = (new Db.AttorneyPhones()).GetBy(Settings.Location.County, (string)ATTY.SelectedItem).OrderBy(x => x.attorney_phone).Select(x=>x.attorney_phone);
-
-            //Db.Foreclosure f = (Db.Foreclosure)fields.DataContext;
-            //if (f.Id == 0)
-            //    if (ATTORNEY_S.Items.Count > 0)
-            //        ATTORNEY_S.SelectedIndex = 0;
-        }
-
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            CASE_N.ItemsSource = (new Db.CaseNumbers()).GetBy(Settings.Location.County).case_ns.OrderBy(x => x);
+            ForeclosureView fw = (ForeclosureView)e.NewValue;
             
-            Db.Foreclosure f = (Db.Foreclosure)e.NewValue;
-
-            set_controls(f);
-
-            if (f.Id == 0)
-            {
-                f.TYPE_OF_EN = "CHA";
-                if (CASE_N.Items.Count > 0)
-                    f.CASE_N = (string)CASE_N.Items[0];
-                f.OWNER_ROLE = "OWNER";
-                f.TYPE_OF_MO = "CNV";
-                f.PROP_DESC = "SINGLE FAMILY";
-                f.TERM_OF_MTG = 30;
-                f.COUNTY = Settings.Location.County;
-                f.ENTRY_DATE = DateTime.Now;
-                f.IS_ORG = false;
-                f.DECEASED = false;
-
-                return;
-            }
-            //DATE_OF_CA.SelectedDate = f.DATE_OF_CA;
-            //LAST_PAY_DATE.SelectedDate = f.LAST_PAY_DATE;
-        }
-
-        void set_controls(Db.Foreclosure f = null)
-        {
             //Keyboard.Focus(TYPE_OF_EN);
 
-            if (f == null)
-                f = get_current_Foreclosure();
+            if (fw == null)
+                fw = (ForeclosureView)fields.DataContext;
+            if (fw == null)
+                return;
 
-            if (f.Id == 0)
+            if (fw.Model.Id == 0)
             {
                 Prev.IsEnabled = foreclosures.GetLast() != null;
                 Next.IsEnabled = false;
@@ -331,15 +291,10 @@ namespace Cliver.Foreclosures
                 return;
             }
 
-            Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
-            Next.IsEnabled = foreclosures.GetNext(f) != null;
+            Prev.IsEnabled = foreclosures.GetPrevious(fw.Model) != null;
+            Next.IsEnabled = foreclosures.GetNext(fw.Model) != null;
 
-            indicator.Content = "Record: [id=" + f.Id + "] " + (foreclosures.Get(x => x.Id < f.Id).Count() + 1) + " / " + foreclosures.Count();
-        }
-
-        Db.Foreclosure get_current_Foreclosure()
-        {
-            return (Db.Foreclosure)fields.DataContext;
+            indicator.Content = "Record: [id=" + fw.Model.Id + "] " + (foreclosures.Get(x => x.Id < fw.Model.Id).Count() + 1) + " / " + foreclosures.Count();
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)

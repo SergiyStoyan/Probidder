@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace Cliver.Foreclosures
 {
@@ -23,7 +24,10 @@ namespace Cliver.Foreclosures
     {
         static ComboBoxPhoneControl()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxControl), new FrameworkPropertyMetadata(typeof(ComboBoxControl)));
+            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
+            mask_r = new Regex("[" + string.Join("", ss) + "]");
+            ss.Remove(Regex.Escape("_"));
+            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
 
         public override void OnApplyTemplate()
@@ -54,13 +58,8 @@ namespace Cliver.Foreclosures
             GotKeyboardFocus += ComboBoxControl_GotKeyboardFocus;
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
             LostKeyboardFocus += ComboBoxControl_LostFocus;
-
-            List<string> ss = mask.ToCharArray().Distinct().Select(x => Regex.Escape(x.ToString())).ToList();
-            mask_r = new Regex("[" + string.Join("", ss) + "]");
-            ss.Remove(Regex.Escape("_"));
-            mask_separators_r = new Regex("[" + string.Join("", ss) + "]");
         }
-
+        
         private void tb0_TextChanged(object sender, TextChangedEventArgs e)
         {
             //tb0.TextChanged -= tb0_TextChanged;
@@ -80,37 +79,57 @@ namespace Cliver.Foreclosures
         {
             Text = tb.Text;
             tb.ScrollToHome();
-            if (Regex.IsMatch(tb.Text, @"\d") && Regex.IsMatch(tb.Text, @"_"))
-            {
-                this.MarkInvalid("error");
-                return;
-            }
-            if (!IsEditable && (
-                strip_mask((string)SelectedItem) != strip_mask(tb.Text)
-                || string.IsNullOrEmpty((string)SelectedItem)) != string.IsNullOrEmpty(strip_mask(tb.Text)
-                ))
-            {
-                this.MarkInvalid("Error");
-            }
-            this.MarkValid();
+            //if (Regex.IsMatch(tb.Text, @"\d") && Regex.IsMatch(tb.Text, @"_"))
+            //{
+            //    this.MarkInvalid("error");
+            //    return;
+            //}
+            //if (!IsEditable && (
+            //    strip_mask((string)SelectedItem) != strip_mask(tb.Text)
+            //    || string.IsNullOrEmpty((string)SelectedItem)) != string.IsNullOrEmpty(strip_mask(tb.Text)
+            //    ))
+            //{
+            //    this.MarkInvalid("Error");
+            //}
+            //this.MarkValid();
         }
 
-        public IEnumerable<string> ItemsSourceNomalized
+        //protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        //{
+            //if (!ignore_OnItemsSourceChanged)
+            //{
+                //List<string> newValue2 = new List<string>();            
+                //foreach (string s in newValue)
+                //{
+                //    if (string.IsNullOrWhiteSpace(s))
+                //        continue;
+                //    string v = apply_mask(s);
+                //    if (!newValue2.Contains(v))
+                //        newValue2.Add(v);
+                //}
+
+            //    //base.OnItemsSourceChanged(oldValue, newValue);
+            //    ignore_OnItemsSourceChanged = true;
+            //    ItemsSource = null;
+            //    ItemsSource = newValue2;
+            //    ignore_OnItemsSourceChanged = false;
+            //    base.OnItemsSourceChanged(oldValue, newValue2);
+            //}
+        //}
+        //bool ignore_OnItemsSourceChanged = false;
+
+        public static IEnumerable<string> GetItemsNormalized(IEnumerable items)
         {
-            set
+            List<string> is2 = new List<string>();
+            foreach (string s in items)
             {
-                List<string> vs = new List<string>();
-                foreach (string s in value)
-                {
-                    if (string.IsNullOrWhiteSpace(s))
-                        continue;
-                    string v = apply_mask(s);
-                    if (!vs.Contains(v))
-                        vs.Add(v);
-                }
-                ItemsSource = vs;
-                tb.Text = mask;
+                if (string.IsNullOrWhiteSpace(s))
+                    continue;
+                string v = apply_mask(s);
+                if (!is2.Contains(v))
+                    is2.Add(v);
             }
+            return is2;
         }
 
         private void ComboBoxControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -149,9 +168,9 @@ namespace Cliver.Foreclosures
         }
         bool delete_clicked = false;
 
-        readonly string mask = "(___) ___-____";
-        readonly Regex mask_separators_r = null;
-        readonly Regex mask_r = null;
+        static readonly string mask = "(___) ___-____";
+        static readonly Regex mask_separators_r = null;
+        static readonly Regex mask_r = null;
 
         public string Mask
         {
@@ -180,7 +199,7 @@ namespace Cliver.Foreclosures
             tb.EndChange();
         }
 
-        string apply_mask(string t)
+      static  string apply_mask(string t)
         {
             if (t == null)
                 return null;
@@ -200,7 +219,7 @@ namespace Cliver.Foreclosures
             return t;
         }
 
-        string strip_separators(string t)
+        static string strip_separators(string t)
         {
             if (t == null)
                 return null;

@@ -145,6 +145,7 @@
     <Compile Include="ComboBoxControl.xaml.cs">
       <DependentUpon>ComboBoxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\ForeclosuresView.cs" />
     <Compile Include="NumberBoxControl.xaml.cs">
       <DependentUpon>NumberBoxControl.xaml</DependentUpon>
     </Compile>
