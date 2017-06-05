@@ -129,12 +129,12 @@ namespace Cliver.Foreclosures
                 HttpResponseMessage rm = http_client.PostAsync(url, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception(rm.ReasonPhrase);
-                dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
-                Log.Main.Inform("Inserted records: " + d["records_inserted"]);
-                List<object> failed_records = (List<object>)d["failed_records"];
-                if (failed_records.Count > 0)
+                string r = rm.Content.ReadAsStringAsync().Result;
+                JObject jo = SerializationRoutines.Json.Deserialize<JObject>(r);
+                Log.Main.Inform("Inserted records: " + jo["records_inserted"].ToString());
+                if (jo["failed_records"].Count() > 0)
                 {
-                    Log.Main.Error2("Failed insert records: \r\n" + failed_records);
+                    Log.Main.Error2("Failed insert records: \r\n" + jo["failed_records"].ToString());
                     //InfoWindow.Create(ProgramRoutines.GetAppName() + ": some records could not be uploaded!", "See log for more details.", null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
                     Message.Error("Some records could not be uploaded!\r\nSee log for more details.");
                     return false;
