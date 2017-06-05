@@ -349,11 +349,10 @@ namespace Cliver.Foreclosures
                 columnNames2error[columnName] = e;
                 if (e0 != e)
                     ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
-                PropertyChanged2?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
+                //PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
                 return e;
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged2;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public bool HasErrors

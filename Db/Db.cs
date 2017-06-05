@@ -139,9 +139,8 @@ namespace Cliver.Foreclosures
                         case Modes.KEEP_ALL_OPEN_TABLES_FOREVER:
                             break;
                         case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
-                            foreach (TableInfo t in table_types2table_info.Values)
-                                if (t.Count > 0)
-                                    return;
+                            if (table_types2table_info.Values.Where(x => x.Count > 0).FirstOrDefault() != null)
+                                return;
                             table_types2table_info.Clear();
                             break;
                         default:
@@ -149,7 +148,7 @@ namespace Cliver.Foreclosures
                     }
                 }
             }
-            bool disposed = false;
+            protected bool disposed = false;
         }
         public class TableInfo
         {

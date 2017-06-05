@@ -112,8 +112,8 @@ namespace Cliver.Foreclosures
                 });
             };
 
-            foreclosures.Saved += Foreclosures_Saved;
-            foreclosures.Deleted += Foreclosures_Deleted;
+            //foreclosures.Saved += Foreclosures_Saved;
+            //foreclosures.Deleted += Foreclosures_Deleted;
 
             list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
               {//needed for highlighting search keyword
@@ -137,21 +137,21 @@ namespace Cliver.Foreclosures
             }));
         }
 
-        private void Foreclosures_Deleted(int document_id, bool sucess)
-        {
-            if (_This == null || !_This.IsLoaded)
-                return;
+        //private void Foreclosures_Deleted(int document_id, bool sucess)
+        //{
+        //    if (_This == null || !_This.IsLoaded)
+        //        return;
 
-            fill();
-        }
+        //    fill();
+        //}
 
-        private void Foreclosures_Saved(Db.Document document, bool inserted)
-        {
-            if (_This == null || !_This.IsLoaded)
-                return;
+        //private void Foreclosures_Saved(Db.Document document, bool inserted)
+        //{
+        //    if (_This == null || !_This.IsLoaded)
+        //        return;
 
-            fill();
-        }
+        //    fill();
+        //}
 
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 

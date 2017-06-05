@@ -69,14 +69,14 @@ namespace Cliver.Foreclosures
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
               {
-                  while (true)
-                  {
-                      Thread.Sleep(300);
-                      Dispatcher.Invoke(() =>
-                      {
-                          check_validity();
-                      });
-                  }
+                  //while (true)
+                  //{
+                  //    Thread.Sleep(300);
+                  //    Dispatcher.Invoke(() =>
+                  //    {
+                  //        check_validity();
+                  //    });
+                  //}
               });
 
             PreviewKeyDown += delegate
@@ -116,7 +116,7 @@ namespace Cliver.Foreclosures
             LAST_PAY_DATE.Reset();
 
             ForeclosureView fw = new ForeclosureView(f);
-            fw.PropertyChanged2 += delegate
+            fw.ErrorsChanged += delegate
               {
                   check_validity();
               };
@@ -246,6 +246,7 @@ namespace Cliver.Foreclosures
                     return false;
                 }
                 foreclosures.Save(fw.Model);
+                fw.OnPropertyChanged(null);
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{
