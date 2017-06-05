@@ -493,7 +493,7 @@ namespace Cliver.Foreclosures
             if (fw.Id != 0 && !fw.Edited)
                 return;
             fw.OnPropertyChanged(null);
-            if (!e.Row.IsValid() || fw.HasErrors)
+            if (/*!e.Row.IsValid() ||*/ fw.HasErrors)
             {
                 e.Cancel = true;
                 return;

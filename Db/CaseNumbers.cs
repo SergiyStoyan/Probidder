@@ -23,16 +23,16 @@ namespace Cliver.Foreclosures
             {
                 Type t = MethodBase.GetCurrentMethod().DeclaringType;
                 Log.Main.Inform("Refreshing table: " + t.Name);
-                //string[] ls = File.ReadAllLines(Log.AppDir + "\\counties.csv");
+                string[] ls = File.ReadAllLines(Log.AppDir + "\\counties.csv");
                 List<CountyCaseNumbers> ccns = new List<CountyCaseNumbers>();
-                //for (int i = 1; i < ls.Length; i++)
-                //    ccns.Add(get_CountyCaseNumbers(ls[i]));
-                if(string.IsNullOrEmpty(Settings.Location.County))
-                {
-                    Message.Exclaim("Your location is not specified so Case Numbers cannot be refreshed now.");
-                    return;
-                }
-                ccns.Add(get_CountyCaseNumbers(Settings.Location.County));
+                for (int i = 1; i < ls.Length; i++)
+                    ccns.Add(get_CountyCaseNumbers(ls[i]));
+                //if(string.IsNullOrEmpty(Settings.Location.County))
+                //{
+                //    Message.Exclaim("Your location is not specified so Case Numbers cannot be refreshed now.");
+                //    return;
+                //}
+                //ccns.Add(get_CountyCaseNumbers(Settings.Location.County));
                 string s = SerializationRoutines.Json.Serialize(ccns);
                 System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
             }

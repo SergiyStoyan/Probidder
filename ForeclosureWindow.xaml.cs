@@ -221,7 +221,7 @@ namespace Cliver.Foreclosures
                 if (!fw.Edited)
                     return true;
                 fw.OnPropertyChanged(null);
-                if (!fields.IsValid() || fw.HasErrors)
+                if (/*!fields.IsValid() ||*/ fw.HasErrors)
                 {
                     //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
                     return false;
