@@ -22,7 +22,7 @@ using System.ComponentModel;
 
 namespace Cliver.Foreclosures
 {
-    public partial class DatePickerControl : DatePicker
+    public partial class DatePickerControl : DatePicker//, INotifyPropertyChanged
     {
         static DatePickerControl()
         {
@@ -86,18 +86,8 @@ namespace Cliver.Foreclosures
         //    if (tb == null)
         //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
         //}
-        
-        //public string Text2
-        //{
-        //    get
-        //    {
-        //        return (string)GetValue(Text2Property);
-        //    }
-        //    set
-        //    {
-        //        SetValue(Text2Property, value);
-        //    }
-        //}
+
+        //public string Text2 { get { return (string)GetValue(Text2Property); } set { SetValue(Text2Property, value); } }
         //public static DependencyProperty Text2Property = DependencyProperty.Register("Text2", typeof(string), typeof(DatePickerControl),
         //    new FrameworkPropertyMetadata(
         //        mask,
@@ -109,29 +99,17 @@ namespace Cliver.Foreclosures
         //{
         //    var c = (DatePickerControl)control;
         //    c.tb.Text = (string)eventArgs.NewValue;
-        //    //TextChanged?.Invoke(control, new PropertyChangedEventArgs("Text"));
         //}
-        //private static object OnText2Coersed(DependencyObject control, object baseValue)
+        //public void OnText2PropertyChanged()
         //{
-        //    var c = (DatePickerControl)control;
-        //    if (c.tb == null)
-        //        return baseValue;
-        //    return c.tb.Text;
-        //    TextChanged?.Invoke(control, new PropertyChangedEventArgs("Text"));
+        //    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs("Text2"));
         //}
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        //public static readonly DependencyProperty Text2Property =
-        //    DependencyProperty.RegisterAttached("Text2", typeof(string), typeof(DatePickerControl), new PropertyMetadata(mask));
-
-        //public static void SetText2(UIElement element, double value)
-        //{
-        //    element.SetValue(Text2Property, value);
-        //}
-
-        //public static string GetText2(UIElement element)
-        //{
-        //    return (string)element.GetValue(Text2Property);
-        //}
+        public void Reset()
+        {
+            tb.Text = mask;
+        }
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -243,9 +221,10 @@ namespace Cliver.Foreclosures
                 SelectedDate = td;
             else
                 DatePicker_SelectedDateChanged(null, null);
+            //OnText2PropertyChanged();
         }
         bool ignore_text_change = false;
-
+        
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = true;
