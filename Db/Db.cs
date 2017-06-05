@@ -128,7 +128,9 @@ namespace Cliver.Foreclosures
                         return;
                     disposed = true;
 
-                    TableInfo ti = table_types2table_info[GetType()];
+                    TableInfo ti;
+                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
+                        return;
                     ti.Count--;
                     switch (mode)
                     {

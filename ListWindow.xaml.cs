@@ -539,7 +539,10 @@ namespace Cliver.Foreclosures
             e.Cancel = false;
             keep_selected_fw = null;
             if (fw.Edited)
+            {
                 foreclosures.Save(fw.Model);
+                ForeclosuresUpdateView(fw);
+            }
         }
         ForeclosureView keep_selected_fw = null;
 
@@ -551,6 +554,7 @@ namespace Cliver.Foreclosures
             if (!Message.YesNo("You are about deleting record [Id=" + fw.Model.Id + "]. Proceed?"))
                 return;
             foreclosures.Delete(fw.Model.Id);
+            ForeclosuresDeleteView(fw);
         }
     }
 
