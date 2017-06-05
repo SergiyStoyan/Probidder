@@ -58,8 +58,8 @@ namespace Cliver.Foreclosures
                     NetworkWindow.OpenDialog();
 
                 //if (string.IsNullOrWhiteSpace(Settings.Location.County))
-                    //LocationWindow.OpenDialog();
-                                    
+                LocationWindow.OpenDialog();
+
                 Service.Running = true;
                 //Db.BeginRefresh();
                 ListWindow.OpenDialog();

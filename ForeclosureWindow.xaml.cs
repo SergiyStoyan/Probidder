@@ -55,7 +55,7 @@ namespace Cliver.Foreclosures
                 if (foreclosure_id != null)
                     f = foreclosures.GetById((int)foreclosure_id);
                 else
-                    f = new Db.Foreclosure();
+                    f = null;
                 ForeclosureView fw = set_context(f);
                 fw.InitialControlSetting = true;
             };
@@ -168,14 +168,12 @@ namespace Cliver.Foreclosures
                 Db.Foreclosure f2 = foreclosures.GetNext(f);
                 if (f2 == null)
                     f2 = foreclosures.GetPrevious(f);
-                if (f2 == null)
-                    f2 = new Db.Foreclosure();
 
                 foreclosures.Delete(f.Id);
                 set_context(f2);
             }
             else
-                set_context(new Db.Foreclosure());
+                set_context(null);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -229,7 +227,7 @@ namespace Cliver.Foreclosures
         {
             if (!save_current_Foreclosure())
                 return;
-            set_context(new Db.Foreclosure());
+            set_context(null);
         }
 
         private bool save_current_Foreclosure()

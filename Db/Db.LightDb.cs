@@ -44,7 +44,7 @@ namespace Cliver.Foreclosures
                     lock (table_types2table_info)
                     {
                         base.Dispose();
-                        if (table_types2table_info.Where(x=>x.Value.IsAlive).Count() < 1 && db != null)
+                        if (table_types2table_info.Count < 1 && db != null)
                         {
                             db.Dispose();
                             db = null;
@@ -54,7 +54,7 @@ namespace Cliver.Foreclosures
 
                 public D GetById(int id)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.FindById(id);
                     }
@@ -62,7 +62,7 @@ namespace Cliver.Foreclosures
 
                 public virtual void Save(D document)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         if (document.Id == 0)
                         {
@@ -79,7 +79,7 @@ namespace Cliver.Foreclosures
 
                 public List<D> GetAll()
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.FindAll().ToList();
                     }
@@ -87,7 +87,7 @@ namespace Cliver.Foreclosures
 
                 public List<D> Get(Query query)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.Find(query).ToList();
                     }
@@ -95,7 +95,7 @@ namespace Cliver.Foreclosures
 
                 public List<D> Get(System.Linq.Expressions.Expression<Func<D, bool>> query)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.Find(query).ToList();
                     }
@@ -103,7 +103,7 @@ namespace Cliver.Foreclosures
 
                 public void Drop()
                 {
-                    lock (o)
+                    lock (db)
                     {
                         db.DropCollection(table.Name);
                     }
@@ -111,7 +111,7 @@ namespace Cliver.Foreclosures
 
                 public virtual void Delete(int document_id)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         bool success = table.Delete(document_id);
                         get_table_info().InvokeDeleted(document_id, success);
@@ -121,7 +121,7 @@ namespace Cliver.Foreclosures
                
                 public int Count()
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.Count();
                     }
@@ -129,7 +129,7 @@ namespace Cliver.Foreclosures
 
                 public D GetPrevious(D d)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         if (d == null)
                             d = GetLast();
@@ -139,7 +139,7 @@ namespace Cliver.Foreclosures
 
                 public D GetNext(D d)
                 {
-                    lock (o)
+                    lock (db)
                     {
                         if (d == null)
                             d = GetFirst();
@@ -149,7 +149,7 @@ namespace Cliver.Foreclosures
 
                 public D GetFirst()
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.FindAll().OrderBy(x => x.Id).FirstOrDefault();
                     }
@@ -157,13 +157,11 @@ namespace Cliver.Foreclosures
 
                 public D GetLast()
                 {
-                    lock (o)
+                    lock (db)
                     {
                         return table.FindAll().OrderByDescending(x => x.Id).FirstOrDefault();
                     }
                 }
-
-                static readonly object o = new object();
             }
         }
     }
