@@ -120,7 +120,8 @@ namespace Cliver.Foreclosures
               };
 
             OrderColumns();
-            fill();
+            list.ItemsSource = new ObservableCollection<ForeclosureView>(foreclosures.GetAll().Select(x => new ForeclosureView(x)).ToList());
+            update_indicator();
 
             ContentRendered += delegate
              {
@@ -182,32 +183,11 @@ namespace Cliver.Foreclosures
             }
         }
 
-        void fill()
+        void update_indicator()
         {
-            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (cv != null)
-            {
-                if (cv.IsEditingItem)
-                    cv.CommitEdit();
-                if (cv.IsAddingNew)
-                    cv.CommitNew();
-
-                //if (edited_item != null)
-                //{
-                //    edited_item = null;
-                //    foreclosures.Save(edited_item);
-                //}
-            }
-
-            var fs = foreclosures.GetAll();
-            list.ItemsSource = new ObservableCollection<ForeclosureView>(foreclosures.GetAll().Select(x => new ForeclosureView(x)).ToList());
-
-            indicator_total.Content = "Total: " + fs.Count;
-            filter();
+            indicator_total.Content = "Total: " + foreclosures.Count();
+            //filter();
         }
-
-        //ListCollectionView Items { get { return items; } set { items = value; } }
-        //ListCollectionView items = new ListCollectionView((new Db.Foreclosures()).GetAll().Select(x => new ForeclosureView(x)).ToList());
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
@@ -236,17 +216,37 @@ namespace Cliver.Foreclosures
 
         public void ForeclosuresUpdateView(ForeclosureView fw)
         {
-            var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
+            Dispatcher.Invoke(() =>
+            {
+                var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
             if (fvs.Where(x => x == fw).FirstOrDefault() == null)
+            {
                 fvs.Add(fw);
+                update_indicator();
+            }
             else
                 fw.OnPropertyChanged(null);
+            });
         }
 
         public void ForeclosuresDeleteView(ForeclosureView fw)
         {
-            var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
+            Dispatcher.Invoke(() =>
+            {
+                var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
             fvs.Remove(fw);
+            update_indicator();
+            });
+        }
+
+        public void ForeclosuresDropTable()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
+                fvs.Clear();
+                update_indicator();
+            });
         }
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -259,7 +259,6 @@ namespace Cliver.Foreclosures
                 return;
             }
             indicator_selected.Content = "Selected ID: " + fw.Model.Id;
-            //show_AuctionWindow(f);
         }
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
@@ -529,10 +528,6 @@ namespace Cliver.Foreclosures
             if(e.Row.IsNewItem)//added from the grid (not clear how to commit it)
                 ForeclosuresDeleteView(fw);
             ForeclosuresUpdateView(fw);
-            //var c = list.GetCell(e.Row, 0);
-            //var template = c.Template;
-            //c.Template = null;
-            //c.Template = template;
         }
 
         private void delete_Click(object sender, RoutedEventArgs e)
@@ -548,7 +543,6 @@ namespace Cliver.Foreclosures
 
         private void list_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
-            //list.
         }
     }
 
