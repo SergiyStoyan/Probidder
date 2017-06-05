@@ -59,9 +59,7 @@ namespace Cliver.Foreclosures
 
                 //if (string.IsNullOrWhiteSpace(Settings.Location.County))
                     //LocationWindow.OpenDialog();
-
-                Db.Mode = Db.Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE;
-                
+                                    
                 Service.Running = true;
                 //Db.BeginRefresh();
                 ListWindow.OpenDialog();

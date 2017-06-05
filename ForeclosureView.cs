@@ -396,20 +396,20 @@ namespace Cliver.Foreclosures
                     }
                     return null;
                 case "FILING_DATE":
-                    if (FILING_DATE == null || Regex.IsMatch(FILING_DATE, @"\d") && Regex.IsMatch(FILING_DATE, @"_"))
-                        return "Error";
                     //if (FILING_DATE == null)
                     //    return "Error";
+                    if (DatePickerControl.ParseText(FILING_DATE) == null)
+                        return "Error";
                     return null;
                 case "AUCTION_DATE":
                     return null;
                 case "AUCTION_TIME":
                     return null;
                 case "ENTRY_DATE":
-                    if (ENTRY_DATE == null || Regex.IsMatch(ENTRY_DATE, @"\d") && Regex.IsMatch(ENTRY_DATE, @"_"))
-                        return "Error";
                     //if (ENTRY_DATE == null)
                     //    return "Error";
+                    if (DatePickerControl.ParseText(ENTRY_DATE) == null)
+                        return "Error";
                     return null;
                 case "LENDOR":
                     if (string.IsNullOrEmpty(LENDOR))
@@ -418,7 +418,7 @@ namespace Cliver.Foreclosures
                 case "ORIGINAL_MTG":
                     //if (ORIGINAL_MTG == null)
                     //    return "Error";
-                    if (ORIGINAL_MTG == null || Regex.IsMatch(ORIGINAL_MTG, @"\d") && Regex.IsMatch(ORIGINAL_MTG, @"_"))
+                    if (DatePickerControl.ParseText(ORIGINAL_MTG) == null)
                         return "Error";
                     return null;
                 case "DOCUMENT_N":
@@ -454,13 +454,13 @@ namespace Cliver.Foreclosures
                 case "DATE_OF_CA":
                     //if (DATE_OF_CA == null)
                     //    return "Error";
-                    if (DATE_OF_CA == null || Regex.IsMatch(DATE_OF_CA, @"\d") && Regex.IsMatch(DATE_OF_CA, @"_"))
+                    if (DatePickerControl.ParseText(DATE_OF_CA) == null)
                         return "Error";
                     return null;
                 case "LAST_PAY_DATE":
                     //if (LAST_PAY_DATE == null)
                     //    return "Error";
-                    if (LAST_PAY_DATE == null || Regex.IsMatch(LAST_PAY_DATE, @"\d") && Regex.IsMatch(LAST_PAY_DATE, @"_"))
+                    if (DatePickerControl.ParseText(LAST_PAY_DATE) == null)
                         return "Error";
                     return null;
                 case "BALANCE_DU":

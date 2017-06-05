@@ -24,37 +24,6 @@ namespace Cliver.Foreclosures
         {
         }
 
-        static public Modes Mode
-        {
-            set
-            {
-                mode = value;
-                switch (mode)
-                {
-                    case Modes.CLOSE_TABLE_ON_DISPOSE:
-                        break;
-                    case Modes.KEEP_ALL_OPEN_TABLES_FOREVER:
-                        break;
-                    case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
-                        break;
-                    default:
-                        throw new Exception("No option: " + mode);
-                }
-            }
-            get
-            {
-                return mode;
-            }
-        }
-        static Modes mode = Modes.CLOSE_TABLE_ON_DISPOSE;
-
-        public enum Modes
-        {
-            KEEP_ALL_OPEN_TABLES_FOREVER,//requires explicite call Close()
-            KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE,
-            CLOSE_TABLE_ON_DISPOSE,
-        }
-
         static public void Close()
         {
             lock (table_types2table_info)
@@ -73,7 +42,6 @@ namespace Cliver.Foreclosures
             public Table()
             {
                 Name = GetType().Name;
-                get_table_info().Count++;
             }
             public readonly string Name;
 
@@ -81,13 +49,16 @@ namespace Cliver.Foreclosures
             { 
                 lock (table_types2table_info)
                 {
-                    TableInfo ti;
-                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
+                    WeakReference wr;
+                    if (!table_types2table_info.TryGetValue(GetType(), out wr)
+                        || !wr.IsAlive
+                        )
                     {
-                        ti = new TableInfo { Count = 0, Core = create_table_core() };
-                        table_types2table_info[GetType()] = ti;
+                        TableInfo ti = new TableInfo { Core = create_table_core() };
+                        wr = new WeakReference(ti);
+                        table_types2table_info[GetType()] = wr;
                     }
-                    return ti;
+                    return (TableInfo)wr.Target;
                 }
             }
 
@@ -122,35 +93,10 @@ namespace Cliver.Foreclosures
 
             virtual public void Dispose()
             {
-                lock (table_types2table_info)
-                {
-                    TableInfo ti;
-                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
-                        return;
-                    ti.Count--;
-                    switch (mode)
-                    {
-                        case Modes.CLOSE_TABLE_ON_DISPOSE:
-                            if (ti.Count < 1)
-                                table_types2table_info.Remove(GetType());
-                            break;
-                        case Modes.KEEP_ALL_OPEN_TABLES_FOREVER:
-                            break;
-                        case Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE:
-                            foreach (TableInfo t in table_types2table_info.Values)
-                                if (t.Count > 0)
-                                    return;
-                            table_types2table_info.Clear();
-                            break;
-                        default:
-                            throw new Exception("No option: " + mode);
-                    }
-                }
             }
         }
         public class TableInfo
         {
-            public int Count = 0;
             public object Core = null;
 
             public delegate void SavedHandler(Document document, bool inserted);
@@ -167,7 +113,7 @@ namespace Cliver.Foreclosures
                 Deleted?.Invoke(document_id, sucess);
             }
         }
-        static readonly Dictionary<Type, TableInfo> table_types2table_info = new Dictionary<Type, TableInfo>();
+        static readonly Dictionary<Type, WeakReference> table_types2table_info = new Dictionary<Type, WeakReference>();
 
         public static string GetNormalized(string s)
         {

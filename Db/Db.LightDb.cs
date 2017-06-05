@@ -44,7 +44,7 @@ namespace Cliver.Foreclosures
                     lock (table_types2table_info)
                     {
                         base.Dispose();
-                        if (table_types2table_info.Count < 1 && db != null)
+                        if (table_types2table_info.Where(x=>x.Value.IsAlive).Count() < 1 && db != null)
                         {
                             db.Dispose();
                             db = null;
