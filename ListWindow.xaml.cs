@@ -110,48 +110,23 @@ namespace Cliver.Foreclosures
                         upload.IsEnabled = true;
                     }
                 });
+
+                AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
             };
-
-            //foreclosures.Saved += Foreclosures_Saved;
-            //foreclosures.Deleted += Foreclosures_Deleted;
-
+            
             list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
               {//needed for highlighting search keyword
                   highlight(list);
               };
 
             OrderColumns();
-            Set();
+            fill();
 
             ContentRendered += delegate
              {
                  WpfRoutines.TrimWindowSize(this);
              };
         }
-
-        public void Set()
-        {
-            Dispatcher.BeginInvoke((Action)(() =>
-            {
-                fill();
-            }));
-        }
-
-        //private void Foreclosures_Deleted(int document_id, bool sucess)
-        //{
-        //    if (_This == null || !_This.IsLoaded)
-        //        return;
-
-        //    fill();
-        //}
-
-        //private void Foreclosures_Saved(Db.Document document, bool inserted)
-        //{
-        //    if (_This == null || !_This.IsLoaded)
-        //        return;
-
-        //    fill();
-        //}
 
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
@@ -251,7 +226,27 @@ namespace Cliver.Foreclosures
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            ForeclosureWindow.OpenDialog();
+            ForeclosureWindow.OpenDialog(null);
+        }
+
+        public ForeclosureView ForeclosuresGetViewByModel(Db.Foreclosure f)
+        {
+            return ((ObservableCollection<ForeclosureView>)list.ItemsSource).Where(x => x.Model == f).FirstOrDefault();
+        }
+
+        public void ForeclosuresUpdateView(ForeclosureView fw)
+        {
+            var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
+            if (fvs.Where(x => x == fw).FirstOrDefault() == null)
+                fvs.Add(fw);
+            else
+                fw.OnPropertyChanged(null);
+        }
+
+        public void ForeclosuresDeleteView(ForeclosureView fw)
+        {
+            var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
+            fvs.Remove(fw);
         }
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -272,11 +267,6 @@ namespace Cliver.Foreclosures
             }
             indicator_selected.Content = "Selected ID: " + fw.Model.Id;
             //show_AuctionWindow(f);
-        }
-
-        void show_ForeclosureWindow(ForeclosureView fw)
-        {
-            ForeclosureWindow.OpenDialog(fw.Model.Id);
         }
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
@@ -347,12 +337,7 @@ namespace Cliver.Foreclosures
         private void open_Click(object sender, RoutedEventArgs e)
         {
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
-            if (fw == null)
-            {
-                ForeclosureWindow.OpenDialog();
-                return;
-            }
-            show_ForeclosureWindow(fw);
+            ForeclosureWindow.OpenDialog(fw);
         }
 
         private void show_search_Click(object sender, RoutedEventArgs e)

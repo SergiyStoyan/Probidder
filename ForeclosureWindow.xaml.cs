@@ -28,43 +28,29 @@ namespace Cliver.Foreclosures
 {
     public partial class ForeclosureWindow : Window
     {
-        public static ForeclosureWindow OpenNew(int? foreclosure_id = null)
+        public static void OpenDialog(ForeclosureView fw)
         {
-            ForeclosureWindow w = new ForeclosureWindow(foreclosure_id);
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
-            w.Show();
-            return w;
-        }
-
-        public static void OpenDialog(int? foreclosure_id = null)
-        {
-            ForeclosureWindow w = new ForeclosureWindow(foreclosure_id);
+            ForeclosureWindow w = new ForeclosureWindow(fw);
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.ShowDialog();
         }
 
-        ForeclosureWindow(int? foreclosure_id = null)
+        ForeclosureWindow(ForeclosureView fw)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
-            
+
+            if (fw == null)
+                fw = new ForeclosureView();
+
             Loaded += delegate
             {
-                Db.Foreclosure f;
-                if (foreclosure_id != null)
-                    f = foreclosures.GetById((int)foreclosure_id);
-                else
-                    f = null;
-                ForeclosureView fw = set_context(f);
-                fw.InitialControlSetting = true;
             };
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
             {
-                ForeclosureView fw = (ForeclosureView)fields.DataContext;
-                if (fw != null)
-                    fw.InitialControlSetting = false;
+                set_context(fw);
             }));
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
@@ -105,8 +91,11 @@ namespace Cliver.Foreclosures
         }
         Db.Foreclosures foreclosures = new Db.Foreclosures();
 
-        ForeclosureView set_context(Db.Foreclosure f)
+        ForeclosureView set_context(ForeclosureView fw)
         {
+            if (fw == null)
+                fw = new ForeclosureView();
+
             this.MarkValid();
 
             FILING_DATE.Reset();
@@ -114,11 +103,10 @@ namespace Cliver.Foreclosures
             ORIGINAL_MTG.Reset();
             DATE_OF_CA.Reset();
             LAST_PAY_DATE.Reset();
-
-            ForeclosureView fw = new ForeclosureView(f);
+            
             fw.ErrorsChanged += delegate
               {
-                  check_validity();
+                  check_validity(fw);
               };
             fw.InitialControlSetting = true;
             fields.DataContext = fw;
@@ -126,9 +114,11 @@ namespace Cliver.Foreclosures
             return fw;
         }
 
-        void check_validity()
+        void check_validity(ForeclosureView fw)
         {
-            if (!fields.IsValid())
+            if (fw == null)
+                return;
+            if (fw.HasErrors)// !fields.IsValid())
             {
                 Next.IsEnabled = false;
                 Prev.IsEnabled = false;
@@ -137,9 +127,6 @@ namespace Cliver.Foreclosures
             else
             {
                 New.IsEnabled = true;
-                ForeclosureView fw = (ForeclosureView)fields.DataContext;
-                if (fw == null)
-                    return;
                 Db.Foreclosure f = fw.Model;
                 if (f.Id == 0)
                 {
@@ -170,7 +157,8 @@ namespace Cliver.Foreclosures
                     f2 = foreclosures.GetPrevious(f);
 
                 foreclosures.Delete(f.Id);
-                set_context(f2);
+                ListWindow.This.ForeclosuresDeleteView(fw);
+                set_context(ListWindow.This.ForeclosuresGetViewByModel(f2));
             }
             else
                 set_context(null);
@@ -198,7 +186,7 @@ namespace Cliver.Foreclosures
                 Prev.IsEnabled = false;
                 return;
             }
-            set_context(f);
+            set_context(fw);
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
@@ -220,7 +208,7 @@ namespace Cliver.Foreclosures
                 Next.IsEnabled = false;
                 return;
             }
-            set_context(f);
+            set_context(fw);
         }
 
         private void New_Click(object sender, RoutedEventArgs e)
@@ -246,7 +234,7 @@ namespace Cliver.Foreclosures
                     return false;
                 }
                 foreclosures.Save(fw.Model);
-                fw.OnPropertyChanged(null);
+                ListWindow.This.ForeclosuresUpdateView(fw);
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{

@@ -53,7 +53,7 @@ namespace Cliver.Foreclosures
             Model.MONTHLY_PAY = 30;
         }
         public readonly Db.Foreclosure Model;
-        
+
         //public bool Save()
         //{
         //    try
