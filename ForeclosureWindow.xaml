@@ -87,11 +87,11 @@
                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Content="Case #"/>
                     <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Grid.Column="1" Grid.Row="1" x:Name="CASE_N" Text="{Binding CASE_N, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding CASE_Ns, Mode=OneWay}"/>
                     <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Content="Filling Date"/>
-                    <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" SelectedDate="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
+                    <local:DatePickerControl  Grid.Column="3" Grid.Row="1" x:Name="FILING_DATE" Text2="{Binding FILING_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                               />
                     <Label  Grid.Column="0" Grid.Row="2"  HorizontalAlignment="Right" Content="Entry Date"/>
                     <local:DatePickerControl  Grid.Column="1" Grid.Row="2" x:Name="ENTRY_DATE" 
-                                              SelectedDate="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
+                                              Text2="{Binding ENTRY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Content="Plaintiff Code"/>
 
@@ -99,7 +99,7 @@
                     
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Content="Or MTG D"/>
                     <local:DatePickerControl Grid.Column="1" Grid.Row="4" x:Name="ORIGINAL_MTG" 
-                                              SelectedDate="{Binding ORIGINAL_MTG, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
+                                              Text2="{Binding ORIGINAL_MTG, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4"  HorizontalAlignment="Right"  VerticalAlignment="Top">
                         <Label Content="Doc_#" />
@@ -123,11 +123,11 @@
                                         Mask="&amp;&amp;-&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;-&amp;&amp;&amp;&amp;"/>
                     <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right" Content="Date of Calcul"/>
                     <local:DatePickerControl Grid.Column="1" Grid.Row="10" x:Name="DATE_OF_CA" 
-                                              SelectedDate="{Binding DATE_OF_CA, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
+                                              Text2="{Binding DATE_OF_CA, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right" Content="Last Pay Date"/>
                     <local:DatePickerControl Grid.Column="3" Grid.Row="10" x:Name="LAST_PAY_DATE" 
-                                              SelectedDate="{Binding LAST_PAY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
+                                              Text2="{Binding LAST_PAY_DATE, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" 
                                              />
                     <Label Grid.Column="0" Grid.Row="11" HorizontalAlignment="Right" Content="Balance Due"/>
                     <TextBox Grid.Column="1" Grid.Row="11" x:Name="BALANCE_DU" Text="{Binding BALANCE_DU, Mode=TwoWay, StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>

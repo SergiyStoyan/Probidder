@@ -175,32 +175,70 @@ namespace Cliver.Foreclosures
             }
         }        
         public string CASE_N { get { return Model.CASE_N; } set { InitialControlSetting = false; Model.CASE_N = value; } }
-        //public string FILING_DATE
-        //{
-        //    get
-        //    {
-        //        if (_FILING_DATE != null)
-        //            return _FILING_DATE;
-        //        return DatePickerControl.GetMaskedString(Model.FILING_DATE);
-        //    }
-        //    set
-        //    {
-        //        InitialControlSetting = false;
-        //        if (_FILING_DATE == value)
-        //            return;
-        //        _FILING_DATE = value;
-        //        DateTime? dt = DatePickerControl.ParseText(value);
-        //        Model.FILING_DATE = dt;
-        //    }
-        //}
-        //string _FILING_DATE = null;
-        public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { InitialControlSetting = false; Model.FILING_DATE = value; } }
+        //public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { InitialControlSetting = false; Model.FILING_DATE = value; } }
+        public string FILING_DATE
+        {
+            get
+            {
+                if (_FILING_DATE != null)
+                    return _FILING_DATE;
+                return DatePickerControl.GetMaskedString(Model.FILING_DATE);
+            }
+            set
+            {
+                InitialControlSetting = false;
+                if (_FILING_DATE == value)
+                    return;
+                _FILING_DATE = value;
+                DateTime? dt = DatePickerControl.ParseText(value);
+                Model.FILING_DATE = dt;
+            }
+        }
+        string _FILING_DATE = null;
         public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { InitialControlSetting = false; Model.AUCTION_DATE = value; } }  
         public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { InitialControlSetting = false; Model.AUCTION_TIME = value; } }  
-        public string SALE_LOC { get { return Model.SALE_LOC; } set { InitialControlSetting = false; Model.SALE_LOC = value; } }  
-        public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { InitialControlSetting = false; Model.ENTRY_DATE = value; } }
-        public string LENDOR { get { return Model.LENDOR; } set { InitialControlSetting = false; Model.LENDOR = value; } }  
-        public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { InitialControlSetting = false; Model.ORIGINAL_MTG = value; } }  
+        public string SALE_LOC { get { return Model.SALE_LOC; } set { InitialControlSetting = false; Model.SALE_LOC = value; } }
+        //public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { InitialControlSetting = false; Model.ENTRY_DATE = value; } }
+        public string ENTRY_DATE
+        {
+            get
+            {
+                if (_ENTRY_DATE != null)
+                    return _ENTRY_DATE;
+                return DatePickerControl.GetMaskedString(Model.ENTRY_DATE);
+            }
+            set
+            {
+                InitialControlSetting = false;
+                if (_ENTRY_DATE == value)
+                    return;
+                _ENTRY_DATE = value;
+                DateTime? dt = DatePickerControl.ParseText(value);
+                Model.ENTRY_DATE = dt;
+            }
+        }
+        string _ENTRY_DATE = null;
+        public string LENDOR { get { return Model.LENDOR; } set { InitialControlSetting = false; Model.LENDOR = value; } }
+        //public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { InitialControlSetting = false; Model.ORIGINAL_MTG = value; } }  
+        public string ORIGINAL_MTG
+        {
+            get
+            {
+                if (_ORIGINAL_MTG != null)
+                    return _ORIGINAL_MTG;
+                return DatePickerControl.GetMaskedString(Model.ORIGINAL_MTG);
+            }
+            set
+            {
+                InitialControlSetting = false;
+                if (_ORIGINAL_MTG == value)
+                    return;
+                _ORIGINAL_MTG = value;
+                DateTime? dt = DatePickerControl.ParseText(value);
+                Model.ORIGINAL_MTG = dt;
+            }
+        }
+        string _ORIGINAL_MTG = null;
         public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { InitialControlSetting = false; Model.DOCUMENT_N = value; } }  
         public uint? ORIGINAL_I { get { return Model.ORIGINAL_I; } set { InitialControlSetting = false; Model.ORIGINAL_I = value; } }  
         public string LEGAL_D { get { return Model.LEGAL_D; } set { InitialControlSetting = false; Model.LEGAL_D = value; } }  
@@ -216,9 +254,47 @@ namespace Cliver.Foreclosures
             }
         }  
         public string ZIP { get { return Model.ZIP; } set { InitialControlSetting = false; Model.ZIP = value; } }  
-        public string PIN { get { return Model.PIN; } set { InitialControlSetting = false; Model.PIN = value; } }  
-        public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { InitialControlSetting = false; Model.DATE_OF_CA = value; } }  
-        public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { InitialControlSetting = false; Model.LAST_PAY_DATE = value; } }  
+        public string PIN { get { return Model.PIN; } set { InitialControlSetting = false; Model.PIN = value; } }
+        //public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { InitialControlSetting = false; Model.DATE_OF_CA = value; } }  
+        public string DATE_OF_CA
+        {
+            get
+            {
+                if (_DATE_OF_CA != null)
+                    return _DATE_OF_CA;
+                return DatePickerControl.GetMaskedString(Model.DATE_OF_CA);
+            }
+            set
+            {
+                InitialControlSetting = false;
+                if (_DATE_OF_CA == value)
+                    return;
+                _DATE_OF_CA = value;
+                DateTime? dt = DatePickerControl.ParseText(value);
+                Model.DATE_OF_CA = dt;
+            }
+        }
+        string _DATE_OF_CA = null;
+        //public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { InitialControlSetting = false; Model.LAST_PAY_DATE = value; } }  
+        public string LAST_PAY_DATE
+        {
+            get
+            {
+                if (_LAST_PAY_DATE != null)
+                    return _LAST_PAY_DATE;
+                return DatePickerControl.GetMaskedString(Model.LAST_PAY_DATE);
+            }
+            set
+            {
+                InitialControlSetting = false;
+                if (_LAST_PAY_DATE == value)
+                    return;
+                _LAST_PAY_DATE = value;
+                DateTime? dt = DatePickerControl.ParseText(value);
+                Model.LAST_PAY_DATE = dt;
+            }
+        }
+        string _LAST_PAY_DATE = null;
         public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { InitialControlSetting = false; Model.BALANCE_DU = value; } }  
         public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { InitialControlSetting = false; Model.PER_DIEM_I = value; } }  
         public string CURRENT_OW { get { return Model.CURRENT_OW; } set { Model.CURRENT_OW = value; } }  
@@ -320,25 +396,29 @@ namespace Cliver.Foreclosures
                     }
                     return null;
                 case "FILING_DATE":
-                    //if (FILING_DATE == null || Regex.IsMatch(FILING_DATE, @"\d") && Regex.IsMatch(FILING_DATE, @"_"))
-                    //    return "Error";              
-                    if (FILING_DATE == null)
+                    if (FILING_DATE == null || Regex.IsMatch(FILING_DATE, @"\d") && Regex.IsMatch(FILING_DATE, @"_"))
                         return "Error";
+                    //if (FILING_DATE == null)
+                    //    return "Error";
                     return null;
                 case "AUCTION_DATE":
                     return null;
                 case "AUCTION_TIME":
                     return null;
                 case "ENTRY_DATE":
-                    if (ENTRY_DATE == null)
+                    if (ENTRY_DATE == null || Regex.IsMatch(ENTRY_DATE, @"\d") && Regex.IsMatch(ENTRY_DATE, @"_"))
                         return "Error";
+                    //if (ENTRY_DATE == null)
+                    //    return "Error";
                     return null;
                 case "LENDOR":
                     if (string.IsNullOrEmpty(LENDOR))
                         return "Error";
                     return null;
                 case "ORIGINAL_MTG":
-                    if (ORIGINAL_MTG == null)
+                    //if (ORIGINAL_MTG == null)
+                    //    return "Error";
+                    if (ORIGINAL_MTG == null || Regex.IsMatch(ORIGINAL_MTG, @"\d") && Regex.IsMatch(ORIGINAL_MTG, @"_"))
                         return "Error";
                     return null;
                 case "DOCUMENT_N":
@@ -372,11 +452,15 @@ namespace Cliver.Foreclosures
                         return "Error";
                     return null;
                 case "DATE_OF_CA":
-                    if (DATE_OF_CA == null)
+                    //if (DATE_OF_CA == null)
+                    //    return "Error";
+                    if (DATE_OF_CA == null || Regex.IsMatch(DATE_OF_CA, @"\d") && Regex.IsMatch(DATE_OF_CA, @"_"))
                         return "Error";
                     return null;
                 case "LAST_PAY_DATE":
-                    if (LAST_PAY_DATE == null)
+                    //if (LAST_PAY_DATE == null)
+                    //    return "Error";
+                    if (LAST_PAY_DATE == null || Regex.IsMatch(LAST_PAY_DATE, @"\d") && Regex.IsMatch(LAST_PAY_DATE, @"_"))
                         return "Error";
                     return null;
                 case "BALANCE_DU":

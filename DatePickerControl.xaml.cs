@@ -22,7 +22,7 @@ using System.ComponentModel;
 
 namespace Cliver.Foreclosures
 {
-    public partial class DatePickerControl : DatePicker//, INotifyPropertyChanged
+    public partial class DatePickerControl : DatePicker
     {
         static DatePickerControl()
         {
@@ -87,24 +87,19 @@ namespace Cliver.Foreclosures
         //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
         //}
 
-        //public string Text2 { get { return (string)GetValue(Text2Property); } set { SetValue(Text2Property, value); } }
-        //public static DependencyProperty Text2Property = DependencyProperty.Register("Text2", typeof(string), typeof(DatePickerControl),
-        //    new FrameworkPropertyMetadata(
-        //        mask,
-        //        FrameworkPropertyMetadataOptions.AffectsRender,
-        //        OnText2Changed
-        //        )
-        //    );
-        //private static void OnText2Changed(DependencyObject control, DependencyPropertyChangedEventArgs eventArgs)
-        //{
-        //    var c = (DatePickerControl)control;
-        //    c.tb.Text = (string)eventArgs.NewValue;
-        //}
-        //public void OnText2PropertyChanged()
-        //{
-        //    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs("Text2"));
-        //}
-        //public event PropertyChangedEventHandler PropertyChanged;
+        public string Text2 { get { return (string)GetValue(Text2Property); } set { SetValue(Text2Property, value); } }
+        public static DependencyProperty Text2Property = DependencyProperty.Register("Text2", typeof(string), typeof(DatePickerControl),
+            new FrameworkPropertyMetadata(
+                mask,
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnText2Changed
+                )
+            );
+        private static void OnText2Changed(DependencyObject control, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var c = (DatePickerControl)control;
+            c.tb.Text = (string)eventArgs.NewValue;
+        }
 
         public void Reset()
         {
@@ -113,19 +108,7 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //if (SelectedDate != null)
-            //    tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yyyy");
-            DateTime? dt = ParseText(tb.Text);
-            if (dt != SelectedDate)
-                SelectedDate = dt;
-            else
-                DatePicker_SelectedDateChanged(null, null);
-            if (dt == null && Regex.IsMatch(tb.Text, @"\d"))
-            {
-                this.MarkInvalid("Error");
-                return;
-            }
-            this.MarkValid();
+            DatePicker_SelectedDateChanged(null, null);
         }
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -205,8 +188,8 @@ namespace Cliver.Foreclosures
                 else
                     tb.Text = ((DateTime)dt).ToString("MM/dd/yyyy");
                 //select(p, tb.Text.Length);
-                this.MarkValid();
             }
+            Text2 = tb.Text;
             ignore_text_change = false;
         }
 
@@ -215,13 +198,11 @@ namespace Cliver.Foreclosures
             e.Handled = true;
             if (ignore_text_change)
                 return;
-            string t = apply_mask(tb.Text);
-            DateTime? td = ParseText(t);
+            DateTime? td = ParseText(tb.Text);
             if (SelectedDate != td)
                 SelectedDate = td;
             else
                 DatePicker_SelectedDateChanged(null, null);
-            //OnText2PropertyChanged();
         }
         bool ignore_text_change = false;
         
