@@ -251,13 +251,6 @@ namespace Cliver.Foreclosures
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (keep_selected_fw != null)
-            {
-                list.SelectedItem = keep_selected_fw;
-                keep_selected_fw = null;
-                return;
-            }
-
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
 
             if (fw == null || fw.Model == null)
@@ -529,22 +522,18 @@ namespace Cliver.Foreclosures
             if (!e.Row.IsValid() || fw.HasErrors)
             {
                 e.Cancel = true;
-                //keep_selected_fw = fw;
-                //var presenters = e.Row.FindVisualChildrenOfType<System.Windows.Controls.Primitives.DataGridCellsPresenter>().ToList();
-                //foreach (var p in presenters)
-                //    if (!p.IsValid())
                 return;
-                //e.Row.MarkValid();
             }
             e.Cancel = false;
-            keep_selected_fw = null;
-            if (fw.Edited)
-            {
-                foreclosures.Save(fw.Model);
-                ForeclosuresUpdateView(fw);
-            }
+            foreclosures.Save(fw.Model);
+            if(e.Row.IsNewItem)//added from the grid (not clear how to commit it)
+                ForeclosuresDeleteView(fw);
+            ForeclosuresUpdateView(fw);
+            //var c = list.GetCell(e.Row, 0);
+            //var template = c.Template;
+            //c.Template = null;
+            //c.Template = template;
         }
-        ForeclosureView keep_selected_fw = null;
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
@@ -555,6 +544,11 @@ namespace Cliver.Foreclosures
                 return;
             foreclosures.Delete(fw.Model.Id);
             ForeclosuresDeleteView(fw);
+        }
+
+        private void list_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            //list.
         }
     }
 
