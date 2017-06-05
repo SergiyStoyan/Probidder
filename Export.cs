@@ -28,6 +28,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Cliver.Foreclosures
 {
@@ -44,26 +45,26 @@ namespace Cliver.Foreclosures
         public delegate void OnToServerStateChanged();
         public static event OnToServerStateChanged ToServerStateChanged = null;
 
-        public static Thread BeginToServer<D>(Db.LiteDb.Table<D> table) where D : Db.Document, new()
+        public static Thread BeginToServer<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D : Db.Document, new()
         {
             if (to_server_t != null && to_server_t.IsAlive)
                 return to_server_t;
 
-            //MessageForm mf = null;
+            MessageForm mf = null;
             to_server_t = ThreadRoutines.StartTry(() =>
             {
                 ToServerStateChanged?.BeginInvoke(null, null);
-
-                //if (show_start_notification)
-                //{
-                //    ThreadRoutines.StartTry(() =>
-                //    {
-                //        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. Please wait...", new string[1] { "OK" }, 0, null);
-                //        mf.ShowDialog();
-                //    });
-                //    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
-                //        Log.Main.Exit("SleepRoutines.WaitForObject got null");
-                //}
+                
+                if (show_start_notification)
+                {
+                    ThreadRoutines.StartTry(() =>
+                    {
+                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. It is preferable to wait until completion to avoid mixing data...", new string[1] { "OK" }, 0, null);
+                        mf.ShowDialog();
+                    });
+                    if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
+                        Log.Main.Exit("SleepRoutines.WaitForObject got null");
+                }
 
                 HttpClientHandler handler = new HttpClientHandler();
                 HttpClient http_client = new HttpClient(handler);
@@ -73,22 +74,22 @@ namespace Cliver.Foreclosures
             (Exception e) =>
             {
                 Log.Main.Error("Could not upload data.", e);
-                //try
-                //{
-                //    mf?.Close();
-                //}
-                //catch { }
+                try
+                {
+                    mf?.Close();
+                }
+                catch { }
                 InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
             },
             () =>
             {
                 Settings.Database.Save();
                 ToServerStateChanged?.BeginInvoke(null, null);
-                //try
-                //{
-                //    mf?.Close();
-                //}
-                //catch { }
+                try
+                {
+                    mf?.Close();
+                }
+                catch { }
             }
             );
             return to_server_t;
@@ -106,7 +107,16 @@ namespace Cliver.Foreclosures
             string url;
             if (table is Db.Foreclosures)
             {
-                rs = table.GetAll().ToList<object>();
+                rs = new List<object>();
+                List<D> fs = table.GetAll();
+                foreach (D f in fs)
+                {
+                    Dictionary<string, object> r = new Dictionary<string, object>();
+                    r["recorder"] = Settings.Network.UserName;
+                    foreach (PropertyInfo pi in typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
+                        r[pi.Name] = pi.GetValue(f);
+                    rs.Add(r);
+                }
                 url = Settings.Network.ExportUrl + "?mode=estate";
             }
             else

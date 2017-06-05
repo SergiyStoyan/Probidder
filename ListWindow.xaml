@@ -89,7 +89,7 @@
                   AlternationCount="2" CellEditEnding="list_CellEditEnding"
                   ItemContainerStyle="{StaticResource AlternateItemStyle}"   SelectionMode="Single"                           
                         AutoGenerateColumns="False" AutoGeneratingColumn="list_AutoGeneratingColumn"
-                               CanUserAddRows="True" CanUserDeleteRows="True" AddingNewItem="list_AddingNewItem"
+                               CanUserAddRows="True" CanUserDeleteRows="True" 
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridRow}">

@@ -45,7 +45,7 @@ namespace Cliver.Foreclosures
                     {
                         if (disposed)
                             return;
-                        base.Dispose();
+                        base.Dispose(); 
                         if (table_types2table_info.Count < 1 && db != null)
                         {
                             db.Dispose();

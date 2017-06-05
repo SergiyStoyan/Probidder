@@ -55,14 +55,14 @@ namespace Cliver.Foreclosures
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
               {
-                  //while (true)
-                  //{
-                  //    Thread.Sleep(300);
-                  //    Dispatcher.Invoke(() =>
-                  //    {
-                  //        check_validity();
-                  //    });
-                  //}
+                  while (true)
+                  {
+                      Thread.Sleep(300);
+                      Dispatcher.Invoke(() =>
+                      {
+                          check_validity((ForeclosureView)fields.DataContext);
+                      });
+                  }
               });
 
             PreviewKeyDown += delegate
@@ -77,7 +77,6 @@ namespace Cliver.Foreclosures
             {
                 if (check_validity_t != null && check_validity_t.IsAlive)
                     check_validity_t.Abort();
-                foreclosures.Dispose();
             };
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
@@ -89,7 +88,6 @@ namespace Cliver.Foreclosures
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
-        Db.Foreclosures foreclosures = new Db.Foreclosures();
 
         ForeclosureView set_context(ForeclosureView fw)
         {
@@ -127,16 +125,15 @@ namespace Cliver.Foreclosures
             else
             {
                 New.IsEnabled = true;
-                Db.Foreclosure f = fw.Model;
-                if (f.Id == 0)
+                if (fw.Id == 0)
                 {
-                    Prev.IsEnabled = foreclosures.GetLast() != null;
+                    Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetLast() != null;
                     Next.IsEnabled = false;
                 }
                 else
                 {
-                    Prev.IsEnabled = foreclosures.GetPrevious(f) != null;
-                    Next.IsEnabled = foreclosures.GetNext(f) != null;
+                    Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetPrevious(fw) != null;
+                    Next.IsEnabled = ListWindow.This.ForeclosureViews.GetNext(fw) != null;
                 }
             }
         }
@@ -149,16 +146,14 @@ namespace Cliver.Foreclosures
             ForeclosureView fw = (ForeclosureView)fields.DataContext;
             if (fw == null)
                 return;
-            Db.Foreclosure f = fw.Model;
-            if (f.Id != 0)
+            if (fw.Id != 0)
             {
-                Db.Foreclosure f2 = foreclosures.GetNext(f);
-                if (f2 == null)
-                    f2 = foreclosures.GetPrevious(f);
-
-                foreclosures.Delete(f.Id);
-                ListWindow.This.ForeclosuresDeleteView(fw);
-                set_context(ListWindow.This.ForeclosuresGetViewByModel(f2));
+                ForeclosureView fw2 = ListWindow.This.ForeclosureViews.GetNext(fw);
+                if (fw2 == null)
+                    fw2 = ListWindow.This.ForeclosureViews.GetPrevious(fw);
+                
+                ListWindow.This.ForeclosureViews.Delete(fw);
+                set_context(fw2);
             }
             else
                 set_context(null);
@@ -176,12 +171,11 @@ namespace Cliver.Foreclosures
             ForeclosureView fw = (ForeclosureView)fields.DataContext;
             if (fw == null)
                 return;
-            Db.Foreclosure f = fw.Model;
-            if (f.Id == 0)
-                f = foreclosures.GetLast();
+            if (fw.Id == 0)
+                fw = ListWindow.This.ForeclosureViews.GetLast();
             else
-                f = foreclosures.GetPrevious(f);
-            if (f == null)
+                fw = ListWindow.This.ForeclosureViews.GetPrevious(fw);
+            if (fw == null)
             {
                 Prev.IsEnabled = false;
                 return;
@@ -196,14 +190,13 @@ namespace Cliver.Foreclosures
             ForeclosureView fw = (ForeclosureView)fields.DataContext;
             if (fw == null)
                 return;
-            Db.Foreclosure f = fw.Model;
-            if (f.Id == 0)
+            if (fw.Id == 0)
             {
                 Next.IsEnabled = false;
                 return;
             }
-            f = foreclosures.GetNext(f);
-            if (f == null)
+            fw = ListWindow.This.ForeclosureViews.GetNext(fw);
+            if (fw == null)
             {
                 Next.IsEnabled = false;
                 return;
@@ -225,7 +218,7 @@ namespace Cliver.Foreclosures
                 ForeclosureView fw = (ForeclosureView)fields.DataContext;
                 if (fw == null)
                     return false;
-                if (fw.Model.Id != 0 && !fw.Edited)
+                if (!fw.Edited)
                     return true;
                 fw.OnPropertyChanged(null);
                 if (!fields.IsValid() || fw.HasErrors)
@@ -233,8 +226,7 @@ namespace Cliver.Foreclosures
                     //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
                     return false;
                 }
-                foreclosures.Save(fw.Model);
-                ListWindow.This.ForeclosuresUpdateView(fw);
+                ListWindow.This.ForeclosureViews.Update(fw);
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{
@@ -261,20 +253,20 @@ namespace Cliver.Foreclosures
             if (fw == null)
                 return;
 
-            if (fw.Model.Id == 0)
+            if (fw.Id == 0)
             {
-                Prev.IsEnabled = foreclosures.GetLast() != null;
+                Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetLast() != null;
                 Next.IsEnabled = false;
 
-                indicator.Content = "Record: [id=new] - / " + foreclosures.Count();
+                indicator.Content = "Record: [id=new] - / " + ListWindow.This.ForeclosureViews.Count();
 
                 return;
             }
 
-            Prev.IsEnabled = foreclosures.GetPrevious(fw.Model) != null;
-            Next.IsEnabled = foreclosures.GetNext(fw.Model) != null;
+            Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetPrevious(fw) != null;
+            Next.IsEnabled = ListWindow.This.ForeclosureViews.GetNext(fw) != null;
 
-            indicator.Content = "Record: [id=" + fw.Model.Id + "] " + (foreclosures.Get(x => x.Id < fw.Model.Id).Count() + 1) + " / " + foreclosures.Count();
+            indicator.Content = "Record: [id=" + fw.Id + "] " + (ListWindow.This.ForeclosureViews.Get(x => x.Id < fw.Id).Count() + 1) + " / " + ListWindow.This.ForeclosureViews.Count();
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
