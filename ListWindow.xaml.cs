@@ -117,7 +117,7 @@ namespace Cliver.Foreclosures
               {//needed for highlighting search keyword
                   highlight(list);
               };
-            
+
             order_columns();
             Set();
 
@@ -178,12 +178,8 @@ namespace Cliver.Foreclosures
                     list.Columns.RemoveAt(i);
                     continue;
                 }
-                dgc.CanUserSort = true;
-                dgc.CanUserResize = true;
-                dgc.CanUserReorder = true;
                 if (h != null)//data
                 {
-                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
                     list.Columns.RemoveAt(i);
                     dgcs.Add(dgc);
                 }
@@ -192,10 +188,14 @@ namespace Cliver.Foreclosures
             {
                 DataGridColumn dgc = dgcs.Where(x => get_column_name(x) == cn).First();
                 list.Columns.Add(dgc);
+                dgc.CanUserSort = true;
+                dgc.CanUserResize = true;
+                dgc.CanUserReorder = true;
+                dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
             }
         }
 
-            void fill()
+        void fill()
         {
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (cv != null)
@@ -513,6 +513,12 @@ namespace Cliver.Foreclosures
             if (fw == null)
                 return;
             fw.InitialControlSetting = true;
+            //for (int i = 0; i < list.Columns.Count; i++)
+            //{
+            //    var c = list.Columns[i];
+            //    if (!c.IsReadOnly)
+            //        list.GetCell(e.Row, i).IsEditing = true;
+            //}
         }
 
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)

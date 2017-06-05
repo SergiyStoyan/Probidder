@@ -49,8 +49,9 @@ namespace Cliver.Foreclosures
                 
                 tb.PreviewTextInput += TextBox_PreviewTextInput;
                 tb.TextChanged += TextBox_TextChanged;
-                tb.GotFocus += TextBox_GotFocus; 
-                tb.Focus();               
+                tb.GotFocus += TextBox_GotFocus;
+                //tb.Focus();
+                //this.FocusOnText();
             };
         }
 
@@ -151,8 +152,8 @@ namespace Cliver.Foreclosures
 
         private void DatePickerControl_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //tb.Focus();
-            //select(0, tb.Text.Length);
+            tb.Focus();
+            select(0, tb.Text.Length);
         }
 
         static readonly string mask = "__/__/__";
@@ -315,21 +316,21 @@ namespace Cliver.Foreclosures
         }
     }
 
-    static public class WpfControlRoutines
-    {
-        public static void FocusOnText(this DatePicker datePicker)
-        {
-            if (datePicker == last_focused)
-                return;
-            last_focused = datePicker;
-            Keyboard.Focus(datePicker);
-            var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
-                                             Keyboard.PrimaryDevice.ActiveSource,
-                                             0,
-                                             Key.Up);
-            eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
-            datePicker.RaiseEvent(eventArgs);
-        }
-        static IInputElement last_focused = null;
-    }
+    //static public class WpfControlRoutines
+    //{
+    //    public static void FocusOnText(this DatePicker datePicker)
+    //    {
+    //        if (datePicker == last_focused)
+    //            return;
+    //        last_focused = datePicker;
+    //        Keyboard.Focus(datePicker);
+    //        var eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice,
+    //                                         Keyboard.PrimaryDevice.ActiveSource,
+    //                                         0,
+    //                                         Key.Up);
+    //        eventArgs.RoutedEvent = DatePicker.KeyDownEvent;
+    //        datePicker.RaiseEvent(eventArgs);
+    //    }
+    //    static IInputElement last_focused = null;
+    //}
 }

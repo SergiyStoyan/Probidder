@@ -132,7 +132,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False" x:Name="FILING_DATE">
+                        <DataGridTemplateColumn SortMemberPath="FILING_DATE" IsReadOnly="False">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>FILING_DATE</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -147,7 +147,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False" x:Name="ENTRY_DATE">
+                        <DataGridTemplateColumn  SortMemberPath="ENTRY_DATE" IsReadOnly="False">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ENTRY_DATE</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -162,7 +162,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False" x:Name="ORIGINAL_MTG">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ORIGINAL_MTG">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ORIGINAL_MTG</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -177,7 +177,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False" x:Name="DATE_OF_CA">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="DATE_OF_CA">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>DATE_OF_CA</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -192,7 +192,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False" x:Name="LAST_PAY_DATE">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="LAST_PAY_DATE">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>LAST_PAY_DATE</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -207,7 +207,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="TYPE_OF_EN">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>TYPE_OF_EN</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -222,9 +222,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        
-                        
-                        <DataGridTemplateColumn IsReadOnly="True">
+
+
+                        <DataGridTemplateColumn IsReadOnly="True" SortMemberPath="COUNTY">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>COUNTY</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -239,7 +239,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="DOCUMENT_N">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>DOCUMENT_N</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -254,7 +254,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ORIGINAL_I">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ORIGINAL_I</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -269,7 +269,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="LEGAL_D">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>LEGAL_D</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -284,7 +284,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ADDRESS">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ADDRESS</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -299,7 +299,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="BALANCE_DU">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>BALANCE_DU</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -314,7 +314,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="PER_DIEM_I">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>PER_DIEM_I</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -329,7 +329,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="CURRENT_OW">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>CURRENT_OW</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -344,7 +344,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="OTHER_LIENS">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>OTHER_LIENS</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -359,7 +359,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ADDL_DEF">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ADDL_DEF</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -374,7 +374,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="PUB_COMMENTS">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>PUB_COMMENTS</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -389,7 +389,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="INT_COMMENTS">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>INT_COMMENTS</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -404,7 +404,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="INTEREST_R">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>INTEREST_R</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -419,7 +419,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="MONTHLY_PAY">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>MONTHLY_PAY</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -434,7 +434,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="TERM_OF_MTG">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>TERM_OF_MTG</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -449,7 +449,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="DEF_ADDRESS">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>DEF_ADDRESS</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -467,7 +467,7 @@
 
 
 
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="CASE_N">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>CASE_N</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -482,7 +482,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="LENDOR">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>LENDOR</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -497,7 +497,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="CITY">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>CITY</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -512,7 +512,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ZIP">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ZIP</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -527,7 +527,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="OWNER_ROLE">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>OWNER_ROLE</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -542,7 +542,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ATTY">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ATTY</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -557,7 +557,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="TYPE_OF_MO">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>TYPE_OF_MO</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -572,7 +572,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="PROP_DESC">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>PROP_DESC</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -587,8 +587,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        
-                        <DataGridTemplateColumn IsReadOnly="False">
+
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="ATTORNEY_S">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>ATTORNEY_S</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -605,7 +605,7 @@
                         </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="PIN">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>PIN</TextBlock>
                             </DataGridTemplateColumn.Header>
@@ -620,7 +620,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn IsReadOnly="False">
+                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="DEF_PHONE">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>DEF_PHONE</TextBlock>
                             </DataGridTemplateColumn.Header>
