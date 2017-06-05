@@ -59,9 +59,11 @@ namespace Cliver.Foreclosures
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
-                Settings.View.ShowedColumns = new List<string>();
-                foreach (DataGridColumn dgc in list.Columns.OrderBy(x=>x.DisplayIndex))
+                Settings.View.ShowedColumns.Clear();
+                foreach (DataGridColumn dgc in list.Columns.OrderBy(x => x.DisplayIndex))
                 {
+                    if (dgc.Visibility != Visibility.Visible)
+                        continue;
                     string cn = get_column_name(dgc);
                     if (cn == null)//buttons
                         continue;
@@ -118,7 +120,7 @@ namespace Cliver.Foreclosures
                   highlight(list);
               };
 
-            order_columns();
+            OrderColumns();
             Set();
 
             ContentRendered += delegate
@@ -166,28 +168,38 @@ namespace Cliver.Foreclosures
             return tb.Text;
         }
 
-        void order_columns()
+        public void OrderColumns()
         {
-            List<DataGridColumn> dgcs = new List<DataGridColumn>();
-            for (int i = list.Columns.Count - 1; i >= 0; i--)
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (cv != null)
             {
-                DataGridColumn dgc = list.Columns[i];
-                string h = get_column_name(dgc);
-                if (h != null && !Settings.View.ShowedColumns.Contains(h))
+                if (cv.IsEditingItem)
+                    cv.CommitEdit();
+                if (cv.IsAddingNew)
+                    cv.CommitNew();
+            }
+            int non_data_columns_count = 0;
+            foreach (DataGridColumn dgc in list.Columns)
+            {
+                string cn = get_column_name(dgc);
+                if (cn == null)
                 {
-                    list.Columns.RemoveAt(i);
-                    continue;
+                    dgc.Visibility = Visibility.Visible;
+                    dgc.DisplayIndex = non_data_columns_count;
+                    non_data_columns_count++;
                 }
-                if (h != null)//data
+                else
                 {
-                    list.Columns.RemoveAt(i);
-                    dgcs.Add(dgc);
+                    if (Settings.View.ShowedColumns.Where(x => x == cn).FirstOrDefault() == null)
+                        dgc.Visibility = Visibility.Collapsed;
                 }
             }
-            foreach (string cn in Settings.View.ShowedColumns)
+            for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
             {
-                DataGridColumn dgc = dgcs.Where(x => get_column_name(x) == cn).First();
-                list.Columns.Add(dgc);
+                string cn = Settings.View.ShowedColumns[i];
+                DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).First();
+                dgc.Visibility = Visibility.Visible;
+                dgc.DisplayIndex = non_data_columns_count + i;
                 dgc.CanUserSort = true;
                 dgc.CanUserResize = true;
                 dgc.CanUserReorder = true;
@@ -221,7 +233,7 @@ namespace Cliver.Foreclosures
 
         //ListCollectionView Items { get { return items; } set { items = value; } }
         //ListCollectionView items = new ListCollectionView((new Db.Foreclosures()).GetAll().Select(x => new ForeclosureView(x)).ToList());
-        
+
         private void close_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -233,7 +245,7 @@ namespace Cliver.Foreclosures
         }
 
         private void upload_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             Export.BeginToServer(new Db.Foreclosures());
         }
 
@@ -253,7 +265,7 @@ namespace Cliver.Foreclosures
 
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
 
-            if (fw == null||fw.Model==null)
+            if (fw == null || fw.Model == null)
             {
                 indicator_selected.Content = null;
                 return;
@@ -331,7 +343,7 @@ namespace Cliver.Foreclosures
         {
             ViewWindow.OpenDialog();
         }
-        
+
         private void open_Click(object sender, RoutedEventArgs e)
         {
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
@@ -404,8 +416,8 @@ namespace Cliver.Foreclosures
 
             int count = 0;
             foreach (object o in cv)
-                if(o is ForeclosureView)
-                    count++;        
+                if (o is ForeclosureView)
+                    count++;
             indicator_filtered.Content = "Filtered: " + count;
         }
         Regex filter_regex = null;
@@ -504,7 +516,7 @@ namespace Cliver.Foreclosures
         readonly string DATE_FORMAT = "MM/dd/yyyy";
 
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {            
+        {
         }
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -549,7 +561,7 @@ namespace Cliver.Foreclosures
         private void delete_Click(object sender, RoutedEventArgs e)
         {
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
-            if (fw == null||fw.Model==null)
+            if (fw == null || fw.Model == null)
                 return;
             if (!Message.YesNo("You are about deleting record [Id=" + fw.Model.Id + "]. Proceed?"))
                 return;

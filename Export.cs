@@ -53,7 +53,6 @@ namespace Cliver.Foreclosures
             to_server_t = ThreadRoutines.StartTry(() =>
             {
                 ToServerStateChanged?.BeginInvoke(null, null);
-                Log.Main.Inform("Uploading database.");
 
                 //if (show_start_notification)
                 //{
@@ -113,7 +112,7 @@ namespace Cliver.Foreclosures
             else
                 throw new Exception("Unknown option: " + table.GetType());
 
-            Log.Main.Inform("Exporting to: " + url);
+            Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
 
             try
             {
@@ -142,6 +141,7 @@ namespace Cliver.Foreclosures
                 }
                 else
                 {
+                    Log.Main.Inform("The table has been uploaded successfully.");
                     //InfoWindow.Create(ProgramRoutines.GetAppName(), "The table has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
                     if (Message.YesNo("Table " + table.GetType() + " has been uploaded succesfully to the server.\r\n\r\nClean up the table?"))
                     {
@@ -158,11 +158,12 @@ namespace Cliver.Foreclosures
                 Log.Error("Could not upload: " + Log.GetExceptionMessage(ex));
             }
             return false;
-
         }
 
         static public string getOAuthTAccessToken(ref HttpClient http_client)
         {
+            Log.Main.Inform("Getting OAuthTAccessToken");
+
             byte[] privateKey = File.ReadAllBytes(Log.AppDir + "\\win_recording_app.key");
             var payload = new
             {
@@ -190,6 +191,8 @@ namespace Cliver.Foreclosures
 
         static public bool loginByUsername(ref HttpClient http_client, string access_token, string username, string password)
         {
+            Log.Main.Inform("Loging in as " + username);
+
             FormUrlEncodedContent fuec = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 { "username", username },

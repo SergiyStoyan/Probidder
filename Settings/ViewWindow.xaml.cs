@@ -86,14 +86,29 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                Settings.View.ShowedColumns.Clear();
                 Settings.View.SearchedColumns.Clear();
                 foreach (Item i in list.ItemsSource)
                 {
-                    if (i.Show)
-                        Settings.View.ShowedColumns.Add(i.Column);
                     if (i.Search)
                         Settings.View.SearchedColumns.Add(i.Column);
+                }
+
+                List<string> showed_columns0 = Settings.View.ShowedColumns.ToList();
+                Settings.View.ShowedColumns.Clear();
+                List<Item> column_items = ((List<Item>)list.ItemsSource);
+                foreach (string c in showed_columns0)
+                {
+                    Item i = column_items.Where(x => x.Show && x.Column == c).FirstOrDefault();
+                    if (i != null)
+                    {
+                        Settings.View.ShowedColumns.Add(c);
+                        column_items.Remove(i);
+                    }
+                }
+                foreach (Item i in column_items)
+                {
+                    if (i.Show)
+                        Settings.View.ShowedColumns.Insert(0, i.Column);
                 }
 
                 Settings.View.Save();

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
 using System.Configuration;
+using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -35,10 +36,12 @@ namespace Cliver.Foreclosures
             {
                 if (ShowedColumns == null)
                     ShowedColumns = new List<string> { "FILING_DATE", "CITY", "ADDRESS" };
+                ShowedColumns = ShowedColumns.Select(x => x).Distinct().ToList();
                 if (SearchedColumns == null)
-                    SearchedColumns = new List<string> { "CITY", "ZIP", "PIN", "ADDRESS" };
+                    SearchedColumns = new List<string> { "CITY", "ADDRESS" };
+                SearchedColumns = SearchedColumns.Select(x => x).Distinct().ToList();
 
-                ListWindow.This?.Set();
+                ListWindow.This?.OrderColumns();
             }
 
             public override void Saving()
