@@ -87,7 +87,17 @@ namespace Cliver.Foreclosures
         //        tb = this.FindVisualChildrenOfType<TextBox>().FirstOrDefault();
         //}
 
-        public string Text2 { get { return (string)GetValue(Text2Property); } set { SetValue(Text2Property, value); } }
+        public string Text2 { get { return (string)GetValue(Text2Property); }
+            set
+            {
+                if (Text2 == value)
+                    return;
+                DateTime? dt = ParseText(value);
+                if (text2_dt == dt && dt != null)
+                    return;
+                SetValue(Text2Property, value);
+            }
+        }
         public static DependencyProperty Text2Property = DependencyProperty.Register("Text2", typeof(string), typeof(DatePickerControl),
             new FrameworkPropertyMetadata(
                 mask,
@@ -99,7 +109,9 @@ namespace Cliver.Foreclosures
         {
             var c = (DatePickerControl)control;
             c.tb.Text = (string)eventArgs.NewValue;
+            c.text2_dt = ParseText((string)eventArgs.NewValue);
         }
+        DateTime? text2_dt = null;
 
         public void Reset()
         {
@@ -232,6 +244,17 @@ namespace Cliver.Foreclosures
         }
 
         public static DateTime? ParseText(string text)
+        {
+            DateTime? dt;
+            if (!texts2DateTime.TryGetValue(text, out dt))
+            {
+                dt = _ParseText(text);
+                texts2DateTime[text] = dt;
+            }
+            return dt;
+        }
+        static Dictionary<string, DateTime?> texts2DateTime = new Dictionary<string, DateTime?>();
+        static DateTime? _ParseText(string text)
         {
             //try
             //{

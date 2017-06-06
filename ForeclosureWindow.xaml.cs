@@ -106,9 +106,7 @@ namespace Cliver.Foreclosures
               {
                   check_validity(fw);
               };
-            fw.InitialControlSetting = true;
             fields.DataContext = fw;
-            fw.InitialControlSetting = false;
             return fw;
         }
 
@@ -218,9 +216,9 @@ namespace Cliver.Foreclosures
                 ForeclosureView fw = (ForeclosureView)fields.DataContext;
                 if (fw == null)
                     return false;
-                if (!fw.Edited)
+                if (fw.Id != 0 && !fw.Edited)
                     return true;
-                fw.OnPropertyChanged(null);
+                fw.ValidateAllProperties();
                 if (/*!fields.IsValid() ||*/ fw.HasErrors)
                 {
                     //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");

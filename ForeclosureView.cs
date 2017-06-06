@@ -20,7 +20,7 @@ using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
-    public partial class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo, INotifyDataErrorInfo
+    public partial class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo//, INotifyDataErrorInfo
     {
         public ForeclosureView()
         {
@@ -50,7 +50,7 @@ namespace Cliver.Foreclosures
             Model.OWNER_ROLE = "OWNER";
             Model.TYPE_OF_MO = "CNV";
             Model.PROP_DESC = "SINGLE FAMILY";
-            Model.MONTHLY_PAY = 30;
+            Model.TERM_OF_MTG = 30;
         }
         readonly Db.Foreclosure Model;
 
@@ -64,7 +64,7 @@ namespace Cliver.Foreclosures
                     return null;
                 return (new Db.CaseNumbers()).GetBy(COUNTY).case_ns.OrderBy(x => x);
             }
-        }    
+        }
         public IEnumerable<string> LENDORs
         {
             get
@@ -130,32 +130,31 @@ namespace Cliver.Foreclosures
         {
             get
             {
-                return  (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
+                return (new Db.PropertyCodes()).GetAll().OrderBy(x => x.type).Select(x => x.type);
             }
         }
 
-        public string TYPE_OF_EN { get { return Model.TYPE_OF_EN; } set { InitialControlSetting = false; Model.TYPE_OF_EN = value; } }
-        public string COUNTY {
+        public string TYPE_OF_EN { get { return Model.TYPE_OF_EN; } set { edited = true; Model.TYPE_OF_EN = value; } }
+        public string COUNTY
+        {
             get
             {
                 return Model.COUNTY;
             }
             set
             {
-                InitialControlSetting = false;
-                if (Model.COUNTY == value)
-                    return;
+                edited = true;
                 Model.COUNTY = value;
-                OnPropertyChanged("CASE_Ns"); 
-                OnPropertyChanged("LENDORs"); 
-                OnPropertyChanged("CITYs"); 
-                OnPropertyChanged("ZIPs"); 
-                OnPropertyChanged("ATTYs"); 
-                OnPropertyChanged("ATTORNEY_Ss"); 
+                OnPropertyChanged("CASE_Ns");
+                OnPropertyChanged("LENDORs");
+                OnPropertyChanged("CITYs");
+                OnPropertyChanged("ZIPs");
+                OnPropertyChanged("ATTYs");
+                OnPropertyChanged("ATTORNEY_Ss");
             }
-        }        
-        public string CASE_N { get { return Model.CASE_N; } set { InitialControlSetting = false; Model.CASE_N = value; } }
-        //public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { InitialControlSetting = false; Model.FILING_DATE = value; } }
+        }
+        public string CASE_N { get { return Model.CASE_N; } set { edited = true; Model.CASE_N = value; } }
+        //public DateTime? FILING_DATE { get { return Model.FILING_DATE; } set { edited = true; Model.FILING_DATE = value; } }
         public string FILING_DATE
         {
             get
@@ -166,19 +165,16 @@ namespace Cliver.Foreclosures
             }
             set
             {
-                InitialControlSetting = false;
-                if (_FILING_DATE == value)
-                    return;
+                edited = true;
                 _FILING_DATE = value;
-                DateTime? dt = DatePickerControl.ParseText(value);
-                Model.FILING_DATE = dt;
+                Model.FILING_DATE = DatePickerControl.ParseText(value);
             }
         }
         string _FILING_DATE = null;
-        public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { InitialControlSetting = false; Model.AUCTION_DATE = value; } }  
-        public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { InitialControlSetting = false; Model.AUCTION_TIME = value; } }  
-        public string SALE_LOC { get { return Model.SALE_LOC; } set { InitialControlSetting = false; Model.SALE_LOC = value; } }
-        //public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { InitialControlSetting = false; Model.ENTRY_DATE = value; } }
+        public DateTime? AUCTION_DATE { get { return Model.AUCTION_DATE; } set { edited = true; Model.AUCTION_DATE = value; } }
+        public DateTime? AUCTION_TIME { get { return Model.AUCTION_TIME; } set { edited = true; Model.AUCTION_TIME = value; } }
+        public string SALE_LOC { get { return Model.SALE_LOC; } set { edited = true; Model.SALE_LOC = value; } }
+        //public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set { edited = true; Model.ENTRY_DATE = value; } }
         public string ENTRY_DATE
         {
             get
@@ -189,17 +185,14 @@ namespace Cliver.Foreclosures
             }
             set
             {
-                InitialControlSetting = false;
-                if (_ENTRY_DATE == value)
-                    return;
+                edited = true;
                 _ENTRY_DATE = value;
-                DateTime? dt = DatePickerControl.ParseText(value);
-                Model.ENTRY_DATE = dt;
+                Model.ENTRY_DATE = DatePickerControl.ParseText(value);
             }
         }
         string _ENTRY_DATE = null;
-        public string LENDOR { get { return Model.LENDOR; } set { InitialControlSetting = false; Model.LENDOR = value; } }
-        //public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { InitialControlSetting = false; Model.ORIGINAL_MTG = value; } }  
+        public string LENDOR { get { return Model.LENDOR; } set { edited = true; Model.LENDOR = value; } }
+        //public DateTime? ORIGINAL_MTG { get { return Model.ORIGINAL_MTG; } set { edited = true; Model.ORIGINAL_MTG = value; } }  
         public string ORIGINAL_MTG
         {
             get
@@ -210,32 +203,29 @@ namespace Cliver.Foreclosures
             }
             set
             {
-                InitialControlSetting = false;
-                if (_ORIGINAL_MTG == value)
-                    return;
+                edited = true;
                 _ORIGINAL_MTG = value;
-                DateTime? dt = DatePickerControl.ParseText(value);
-                Model.ORIGINAL_MTG = dt;
+                Model.ORIGINAL_MTG = DatePickerControl.ParseText(value);
             }
         }
         string _ORIGINAL_MTG = null;
-        public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { InitialControlSetting = false; Model.DOCUMENT_N = value; } }  
-        public uint? ORIGINAL_I { get { return Model.ORIGINAL_I; } set { InitialControlSetting = false; Model.ORIGINAL_I = value; } }  
-        public string LEGAL_D { get { return Model.LEGAL_D; } set { InitialControlSetting = false; Model.LEGAL_D = value; } }  
-        public string ADDRESS { get { return Model.ADDRESS; } set { InitialControlSetting = false; Model.ADDRESS = value; } }  
-        public string CITY { get { return Model.CITY; }
+        public string DOCUMENT_N { get { return Model.DOCUMENT_N; } set { edited = true; Model.DOCUMENT_N = value; } }
+        public uint? ORIGINAL_I { get { return Model.ORIGINAL_I; } set { edited = true; Model.ORIGINAL_I = value; } }
+        public string LEGAL_D { get { return Model.LEGAL_D; } set { edited = true; Model.LEGAL_D = value; } }
+        public string ADDRESS { get { return Model.ADDRESS; } set { edited = true; Model.ADDRESS = value; } }
+        public string CITY
+        {
+            get { return Model.CITY; }
             set
             {
-                InitialControlSetting = false;
-                if (Model.CITY == value)
-                    return;
+                edited = true;
                 Model.CITY = value;
                 OnPropertyChanged("ZIPs");
             }
-        }  
-        public string ZIP { get { return Model.ZIP; } set { InitialControlSetting = false; Model.ZIP = value; } }  
-        public string PIN { get { return Model.PIN; } set { InitialControlSetting = false; Model.PIN = value; } }
-        //public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { InitialControlSetting = false; Model.DATE_OF_CA = value; } }  
+        }
+        public string ZIP { get { return Model.ZIP; } set { edited = true; Model.ZIP = value; } }
+        public string PIN { get { return Model.PIN; } set { edited = true; Model.PIN = value; } }
+        //public DateTime? DATE_OF_CA { get { return Model.DATE_OF_CA; } set { edited = true; Model.DATE_OF_CA = value; } }  
         public string DATE_OF_CA
         {
             get
@@ -246,16 +236,13 @@ namespace Cliver.Foreclosures
             }
             set
             {
-                InitialControlSetting = false;
-                if (_DATE_OF_CA == value)
-                    return;
+                edited = true;
                 _DATE_OF_CA = value;
-                DateTime? dt = DatePickerControl.ParseText(value);
-                Model.DATE_OF_CA = dt;
+                Model.DATE_OF_CA = DatePickerControl.ParseText(value);
             }
         }
         string _DATE_OF_CA = null;
-        //public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { InitialControlSetting = false; Model.LAST_PAY_DATE = value; } }  
+        //public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set { edited = true; Model.LAST_PAY_DATE = value; } }  
         public string LAST_PAY_DATE
         {
             get
@@ -266,43 +253,51 @@ namespace Cliver.Foreclosures
             }
             set
             {
-                InitialControlSetting = false;
-                if (_LAST_PAY_DATE == value)
-                    return;
+                edited = true;
                 _LAST_PAY_DATE = value;
-                DateTime? dt = DatePickerControl.ParseText(value);
-                Model.LAST_PAY_DATE = dt;
+                Model.LAST_PAY_DATE = DatePickerControl.ParseText(value);
             }
         }
         string _LAST_PAY_DATE = null;
-        public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { InitialControlSetting = false; Model.BALANCE_DU = value; } }  
-        public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { InitialControlSetting = false; Model.PER_DIEM_I = value; } }  
-        public string CURRENT_OW { get { return Model.CURRENT_OW; } set { Model.CURRENT_OW = value; } }  
-        public bool IS_ORG { get { return Model.IS_ORG; } set { InitialControlSetting = false; Model.IS_ORG = value; } }
-        public bool DECEASED { get { return Model.DECEASED; } set { InitialControlSetting = false; Model.DECEASED = value; } }
-        public string OWNER_ROLE { get { return Model.OWNER_ROLE; } set { InitialControlSetting = false; Model.OWNER_ROLE = value; } }
-        public string OTHER_LIENS { get { return Model.OTHER_LIENS; } set { InitialControlSetting = false; Model.OTHER_LIENS = value; } }  
-        public string ADDL_DEF { get { return Model.ADDL_DEF; } set { InitialControlSetting = false; Model.ADDL_DEF = value; } }  
-        public string PUB_COMMENTS { get { return Model.PUB_COMMENTS; } set { InitialControlSetting = false; Model.PUB_COMMENTS = value; } }  
-        public string INT_COMMENTS { get { return Model.INT_COMMENTS; } set { InitialControlSetting = false; Model.INT_COMMENTS = value; } }  
-        public string ATTY { get { return Model.ATTY; }
+        public uint? BALANCE_DU { get { return Model.BALANCE_DU; } set { edited = true; Model.BALANCE_DU = value; } }
+        public decimal? PER_DIEM_I { get { return Model.PER_DIEM_I; } set { edited = true; Model.PER_DIEM_I = value; } }
+        public string CURRENT_OW { get { return Model.CURRENT_OW; } set { edited = true; Model.CURRENT_OW = value; } }
+        public bool IS_ORG { get { return Model.IS_ORG; } set { edited = true; Model.IS_ORG = value; } }
+        public bool DECEASED { get { return Model.DECEASED; } set { edited = true; Model.DECEASED = value; } }
+        public string OWNER_ROLE { get { return Model.OWNER_ROLE; } set { edited = true; Model.OWNER_ROLE = value; } }
+        public string OTHER_LIENS { get { return Model.OTHER_LIENS; } set { edited = true; Model.OTHER_LIENS = value; } }
+        public string ADDL_DEF { get { return Model.ADDL_DEF; } set { edited = true; Model.ADDL_DEF = value; } }
+        public string PUB_COMMENTS { get { return Model.PUB_COMMENTS; } set { edited = true; Model.PUB_COMMENTS = value; } }
+        public string INT_COMMENTS { get { return Model.INT_COMMENTS; } set { edited = true; Model.INT_COMMENTS = value; } }
+        public string ATTY
+        {
+            get { return Model.ATTY; }
             set
             {
-                InitialControlSetting = false;
-                if (Model.ATTY == value)
-                    return;
+                edited = true;
                 Model.ATTY = value;
                 OnPropertyChanged("ATTORNEY_Ss");
-            } }  
-        public string ATTORNEY_S { get { return Model.ATTORNEY_S; } set { InitialControlSetting = false; Model.ATTORNEY_S = value; } }  
-        public string TYPE_OF_MO { get { return Model.TYPE_OF_MO; } set { InitialControlSetting = false; Model.TYPE_OF_MO = value; } }
-        public string PROP_DESC { get { return Model.PROP_DESC; } set { InitialControlSetting = false; Model.PROP_DESC = value; } }
-        public decimal? INTEREST_R { get { return Model.INTEREST_R; } set { InitialControlSetting = false; Model.INTEREST_R = value; } }  
-        public decimal? MONTHLY_PAY { get { return Model.MONTHLY_PAY; } set { InitialControlSetting = false; Model.MONTHLY_PAY = value; } }
-        public uint? TERM_OF_MTG { get { return Model.TERM_OF_MTG; } set { InitialControlSetting = false; Model.TERM_OF_MTG = value; } }  
-        public string DEF_ADDRESS { get { return Model.DEF_ADDRESS; } set { InitialControlSetting = false; Model.DEF_ADDRESS = value; } }  
-        public string DEF_PHONE { get { return Model.DEF_PHONE; } set { InitialControlSetting = false; Model.DEF_PHONE = value; } }
+            }
+        }
+        public string ATTORNEY_S { get { return Model.ATTORNEY_S; } set { edited = true; Model.ATTORNEY_S = value; } }
+        public string TYPE_OF_MO { get { return Model.TYPE_OF_MO; } set { edited = true; Model.TYPE_OF_MO = value; } }
+        public string PROP_DESC { get { return Model.PROP_DESC; } set { edited = true; Model.PROP_DESC = value; } }
+        public decimal? INTEREST_R { get { return Model.INTEREST_R; } set { edited = true; Model.INTEREST_R = value; } }
+        public decimal? MONTHLY_PAY { get { return Model.MONTHLY_PAY; } set { edited = true; Model.MONTHLY_PAY = value; } }
+        public uint? TERM_OF_MTG { get { return Model.TERM_OF_MTG; } set { edited = true; Model.TERM_OF_MTG = value; } }
+        public string DEF_ADDRESS { get { return Model.DEF_ADDRESS; } set { edited = true; Model.DEF_ADDRESS = value; } }
+        public string DEF_PHONE { get { return Model.DEF_PHONE; } set { edited = true; Model.DEF_PHONE = value; } }
         
+        public bool Edited
+        {
+            get
+            {
+                //return columnNames2error.Select(x => x.Key).FirstOrDefault() != null;
+                return edited;
+            }
+        }
+        bool edited = false;
+
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
@@ -311,7 +306,9 @@ namespace Cliver.Foreclosures
 
         public void ValidateAllProperties()
         {
-
+            forced_validation = true;
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(null));
+            forced_validation = false;
         }
 
         public string Error
@@ -326,7 +323,7 @@ namespace Cliver.Foreclosures
         {
             get
             {
-                if (InitialControlSetting)
+                if (!edited && !forced_validation)
                     return null;
                 string e = validate(columnName);
                 string e0 = null;
@@ -334,10 +331,10 @@ namespace Cliver.Foreclosures
                 columnNames2error[columnName] = e;
                 if (e0 != e)
                     ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
-                //PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(columnName));
                 return e;
             }
         }
+        bool forced_validation = false;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public bool HasErrors
@@ -348,15 +345,10 @@ namespace Cliver.Foreclosures
             }
         }
 
-        public bool InitialControlSetting = true;
-
-        public bool Edited
-        {
-            get
-            {
-                return columnNames2error.Select(x => x.Key).FirstOrDefault() != null;
-            }
-        }
+        //public IEnumerable GetErrors(string propertyName)
+        //{
+        //    return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
+        //}
 
         private string validate(string propertyName)
         {
@@ -502,11 +494,6 @@ namespace Cliver.Foreclosures
                 default:
                     throw new Exception("Field " + propertyName + " is absent in validation.");
             }
-        }
-
-        public IEnumerable GetErrors(string propertyName)
-        {
-            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
         }
     }
 }

@@ -476,7 +476,6 @@ namespace Cliver.Foreclosures
             var fw = e.Row.DataContext as ForeclosureView;
             if (fw == null)
                 return;
-            fw.InitialControlSetting = true;
             //for (int i = 0; i < list.Columns.Count; i++)
             //{
             //    var c = list.Columns[i];
@@ -492,7 +491,7 @@ namespace Cliver.Foreclosures
                 return;
             if (fw.Id != 0 && !fw.Edited)
                 return;
-            fw.OnPropertyChanged(null);
+            fw.ValidateAllProperties();
             if (/*!e.Row.IsValid() ||*/ fw.HasErrors)
             {
                 e.Cancel = true;

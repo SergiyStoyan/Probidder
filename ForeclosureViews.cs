@@ -104,11 +104,11 @@ namespace Cliver.Foreclosures
                     }
                     //else
                     //    fw.OnPropertyChanged(null);
+                    fw.edited = false;
                 });
             }
             public delegate void AddedHandler();
             public event AddedHandler Added = null;
-
         }
     }
 }
