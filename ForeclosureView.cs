@@ -439,8 +439,8 @@ namespace Cliver.Foreclosures
                 case "LAST_PAY_DATE":
                     //if (LAST_PAY_DATE == null)
                     //    return "Error";
-                    if (DatePickerControl.ParseText(LAST_PAY_DATE) == null)
-                        return "Error";
+                    //if (DatePickerControl.ParseText(LAST_PAY_DATE) == null)
+                    //    return "Error";
                     return null;
                 case "BALANCE_DU":
                     return null;
