@@ -37,15 +37,14 @@ namespace Cliver.Foreclosures
                     return refresh_t;
 
                 DateTime refresh_started = DateTime.Now;
-                MessageForm mf = null;
-                refresh_t = ThreadRoutines.StartTry(() => { Refresh(show_start_notification); });
+                refresh_t = ThreadRoutines.StartTry(() => { refresh(show_start_notification); });
                 return refresh_t;
             }
         }
         static Thread refresh_t = null;
         static readonly object o = new object();
 
-        public static bool Refresh(bool show_start_notification)
+        static bool refresh(bool show_start_notification)
         {
             lock (o1)
             {
@@ -128,7 +127,11 @@ namespace Cliver.Foreclosures
                     if (Settings.Database.RefreshPeriodInSecs > 0)
                         Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshPeriodInSecs);
                     Db.Close();
-                    mf?.Close();
+                    try
+                    {
+                        mf?.Close();
+                    }
+                    catch { }
                     InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
                     return true;
                 }
@@ -139,14 +142,21 @@ namespace Cliver.Foreclosures
                     if (Settings.Database.RefreshRetryPeriodInSecs > 0)
                         Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshRetryPeriodInSecs);
 
-                    mf?.Close();
+                    try
+                    {
+                        mf?.Close();
+                    }
+                    catch { }
                     InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
                     return false;
                 }
                 finally
                 {
                     Settings.Database.Save();
-                    RefreshStateChanged?.BeginInvoke(null, null);
+                    ThreadRoutines.StartTry(() => {
+                        refresh_t.Join();
+                        RefreshStateChanged?.BeginInvoke(null, null);
+                    });
                 }
             }
         }

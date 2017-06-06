@@ -52,7 +52,7 @@ namespace Cliver.Foreclosures
                     {
                         if (!Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
                             Environment.Exit(0);
-                        Refresh(true);
+                        refresh(true);
                         if (!File.Exists(file))
                         {
                             Message.Error("Unfrotunately the required data has not been downloaded. Please try later.");

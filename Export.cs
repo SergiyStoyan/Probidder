@@ -47,14 +47,31 @@ namespace Cliver.Foreclosures
 
         public static Thread BeginToServer<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D : Db.Document, new()
         {
-            if (to_server_t != null && to_server_t.IsAlive)
-                return to_server_t;
+            lock (o)
+            {
+                if (to_server_t != null && to_server_t.IsAlive)
+                    return to_server_t;
 
+                to_server_t = ThreadRoutines.StartTry(() => { to_server(table, show_start_notification); });
+                return to_server_t;
+            }
+        }
+        static Thread to_server_t = null;
+        static readonly object o = new object();
+
+        public enum Table
+        {
+            Foreclosures,
+        }
+
+        static void to_server<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D:Db.Document, new()
+        {
             MessageForm mf = null;
-            to_server_t = ThreadRoutines.StartTry(() =>
+
+            try
             {
                 ToServerStateChanged?.BeginInvoke(null, null);
-                
+
                 if (show_start_notification)
                 {
                     ThreadRoutines.StartTry(() =>
@@ -66,74 +83,30 @@ namespace Cliver.Foreclosures
                         Log.Main.Exit("SleepRoutines.WaitForObject got null");
                 }
 
-                HttpClientHandler handler = new HttpClientHandler();
-                HttpClient http_client = new HttpClient(handler);
-
-                _ToServer(table);                  
-            },
-            (Exception e) =>
-            {
-                Log.Main.Error("Could not upload data.", e);
-                try
+                List<object> records;
+                string url;
+                if (table is Db.Foreclosures)
                 {
-                    mf?.Close();
+                    records = new List<object>();
+                    List<D> fs = table.GetAll();
+                    foreach (D f in fs)
+                    {
+                        Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
+                        d["recorder"] = Settings.Network.UserName;
+                        records.Add(d);
+                    }
+                    url = Settings.Network.ExportUrl + "?mode=estate";
                 }
-                catch { }
-                InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
-            },
-            () =>
-            {
-                Settings.Database.Save();
-                ToServerStateChanged?.BeginInvoke(null, null);
-                try
-                {
-                    mf?.Close();
-                }
-                catch { }
-            }
-            );
-            return to_server_t;
-        }
-        static Thread to_server_t = null;
-        
-        public enum Table
-        {
-            Foreclosures,
-        }
+                else
+                    throw new Exception("Unknown option: " + table.GetType());
 
-        static bool _ToServer<D>(Db.LiteDb.Table<D> table) where D:Db.Document, new()
-        {
-            List<object> rs;
-            string url;
-            if (table is Db.Foreclosures)
-            {
-                rs = new List<object>();
-                List<D> fs = table.GetAll();
-                foreach (D f in fs)
-                {
-                    Dictionary<string, object> r = new Dictionary<string, object>();
-                    r["recorder"] = Settings.Network.UserName;
-                    foreach (PropertyInfo pi in typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
-                        r[pi.Name] = pi.GetValue(f);
-                    rs.Add(r);
-                }
-                url = Settings.Network.ExportUrl + "?mode=estate";
-            }
-            else
-                throw new Exception("Unknown option: " + table.GetType());
+                Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
 
-            Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
-
-            try
-            {
                 HttpClient http_client = new HttpClient();
                 if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Network.UserName, Settings.Network.Password()))
-                {
-                    Message.Error("Could not login with Username: " + Settings.Network.UserName);
-                    return false;
-                }
+                    throw new Exception("Could not login with Username: " + Settings.Network.UserName);
 
-                string s = SerializationRoutines.Json.Serialize(rs);
+                string s = SerializationRoutines.Json.Serialize(records);
                 StringContent post_data = new StringContent(s);
                 post_data.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 HttpResponseMessage rm = http_client.PostAsync(url, post_data).Result;
@@ -142,12 +115,16 @@ namespace Cliver.Foreclosures
                 string r = rm.Content.ReadAsStringAsync().Result;
                 JObject jo = SerializationRoutines.Json.Deserialize<JObject>(r);
                 Log.Main.Inform("Inserted records: " + jo["records_inserted"].ToString());
+                try
+                {
+                    mf?.Close();
+                }
+                catch { }
                 if (jo["failed_records"].Count() > 0)
                 {
                     Log.Main.Error2("Failed insert records: \r\n" + jo["failed_records"].ToString());
                     //InfoWindow.Create(ProgramRoutines.GetAppName() + ": some records could not be uploaded!", "See log for more details.", null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
                     Message.Error("Some records could not be uploaded!\r\nSee log for more details.");
-                    return false;
                 }
                 else
                 {
@@ -161,14 +138,25 @@ namespace Cliver.Foreclosures
                         ListWindow.This.ForeclosuresDropTable();
                     }
                 }
-                return true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Message.Error("Could not upload: " + ex.Message);
-                Log.Error("Could not upload: " + Log.GetExceptionMessage(ex));
+                try
+                {
+                    mf?.Close();
+                }
+                catch { }
+                Log.Main.Error("Could not upload data.", e);
+                Message.Error("Could not upload data:\r\n" + e.Message);
+                //InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
             }
-            return false;
+            finally
+            {
+                ThreadRoutines.StartTry(() => {
+                    to_server_t.Join();
+                    ToServerStateChanged?.BeginInvoke(null, null);
+                });
+            }
         }
 
         static public string getOAuthTAccessToken(ref HttpClient http_client)
