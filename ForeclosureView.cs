@@ -309,6 +309,11 @@ namespace Cliver.Foreclosures
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public void ValidateAllProperties()
+        {
+
+        }
+
         public string Error
         {
             get { return "...."; }

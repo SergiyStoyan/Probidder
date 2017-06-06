@@ -96,13 +96,14 @@ namespace Cliver.Foreclosures
             {
                 owner.Dispatcher.Invoke(() =>
                 {
+                    fs.Save(fw.Model);
                     if (Items.Where(x => x == fw).FirstOrDefault() == null)
                     {
                         Items.Add(fw);
                         Added?.Invoke();
                     }
-                    else
-                        fw.OnPropertyChanged(null);
+                    //else
+                    //    fw.OnPropertyChanged(null);
                 });
             }
             public delegate void AddedHandler();
