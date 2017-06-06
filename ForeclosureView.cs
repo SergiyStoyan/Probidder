@@ -20,7 +20,7 @@ using System.Collections.ObjectModel;
 
 namespace Cliver.Foreclosures
 {
-    public partial class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo//, INotifyDataErrorInfo
+    public partial class ForeclosureView : INotifyPropertyChanged, IDataErrorInfo, INotifyDataErrorInfo
     {
         public ForeclosureView()
         {
@@ -345,10 +345,10 @@ namespace Cliver.Foreclosures
             }
         }
 
-        //public IEnumerable GetErrors(string propertyName)
-        //{
-        //    return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
-        //}
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
+        }
 
         private string validate(string propertyName)
         {
