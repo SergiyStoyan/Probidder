@@ -317,20 +317,20 @@ namespace Cliver.Foreclosures
             set { }
         }
 
-        Dictionary<string, string> columnNames2error = new Dictionary<string, string>();
+        Dictionary<string, string> propertyNames2error = new Dictionary<string, string>();
 
-        public string this[string columnName]
+        public string this[string propertyName]
         {
             get
             {
                 if (!edited && !forced_validation)
                     return null;
-                string e = validate(columnName);
+                string e = validate(propertyName);
                 string e0 = null;
-                columnNames2error.TryGetValue(columnName, out e0);
-                columnNames2error[columnName] = e;
+                propertyNames2error.TryGetValue(propertyName, out e0);
+                propertyNames2error[propertyName] = e;
                 if (e0 != e)
-                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(columnName));
+                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
                 return e;
             }
         }
@@ -341,13 +341,13 @@ namespace Cliver.Foreclosures
         {
             get
             {
-                return columnNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
+                return propertyNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
             }
         }
 
         public IEnumerable GetErrors(string propertyName)
         {
-            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
+            return propertyNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
         }
 
         private string validate(string propertyName)
