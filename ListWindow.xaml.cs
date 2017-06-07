@@ -80,7 +80,7 @@ namespace Cliver.Foreclosures
 
             Db.RefreshStateChanged += delegate
             {
-                refresh_db.Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke((Action)(() =>
                 {
                     if (Db.RefreshRuns)
                     {
@@ -92,12 +92,12 @@ namespace Cliver.Foreclosures
                         refresh_db.Header = "Refresh Database";
                         refresh_db.IsEnabled = true;
                     }
-                });
+                }));
             };
 
             Export.ToServerStateChanged += delegate
             {
-                refresh_db.Dispatcher.Invoke(() =>
+                refresh_db.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     if (Export.ToServerRuns)
                     {
@@ -109,7 +109,7 @@ namespace Cliver.Foreclosures
                         upload.Header = "Upload";
                         upload.IsEnabled = true;
                     }
-                });
+                }));
 
                 AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
             };

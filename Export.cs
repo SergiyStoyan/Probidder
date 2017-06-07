@@ -123,7 +123,7 @@ namespace Cliver.Foreclosures
                 if (jo["failed_records"].Count() > 0)
                 {
                     Log.Main.Error2("Failed insert records: \r\n" + jo["failed_records"].ToString());
-                    //InfoWindow.Create(ProgramRoutines.GetAppName() + ": some records could not be uploaded!", "See log for more details.", null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                    //InfoWindow.Create(ProgramRoutines.GetAppName(), "Some records could not be uploaded!\r\nSee log for more details.", null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
                     Message.Error("Some records could not be uploaded!\r\nSee log for more details.");
                 }
                 else
@@ -147,8 +147,8 @@ namespace Cliver.Foreclosures
                 }
                 catch { }
                 Log.Main.Error("Could not upload data.", e);
-                Message.Error("Could not upload data:\r\n" + e.Message);
-                //InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                //Message.Error("Could not upload data:\r\n" + e.Message);
+                InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload data!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
             }
             finally
             {

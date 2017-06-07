@@ -46,8 +46,9 @@ namespace Cliver.Foreclosures
 
             Loaded += delegate
             {
-                EventManager.RegisterClassHandler(typeof(Control), GotKeyboardFocusEvent, new RoutedEventHandler(got_focus));
+                //EventManager.RegisterClassHandler(typeof(Control), GotKeyboardFocusEvent, new RoutedEventHandler(got_focus));
             };
+            //PreviewGotKeyboardFocus += ForeclosureWindow_PreviewGotKeyboardFocus;
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
             {
@@ -56,14 +57,14 @@ namespace Cliver.Foreclosures
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
               {
-                  while (true)
-                  {
-                      Thread.Sleep(300);
-                      Dispatcher.Invoke(() =>
-                      {
-                          check_validity((ForeclosureView)fields.DataContext);
-                      });
-                  }
+                  //while (true)
+                  //{
+                  //    Thread.Sleep(300);
+                  //    Dispatcher.Invoke(() =>
+                  //    {
+                  //        check_validity((ForeclosureView)fields.DataContext);
+                  //    });
+                  //}
               });
 
             PreviewKeyDown += delegate
@@ -86,12 +87,18 @@ namespace Cliver.Foreclosures
                        e.Cancel = true;
                };
 
-            //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
+            AddHandler(FocusManager.GotFocusEvent, (RoutedEventHandler)got_focus);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
 
+        //private void ForeclosureWindow_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        //{
+        //    got_focus(e.OriginalSource, e);
+        //}
+
         void got_focus(object sender, RoutedEventArgs e)
         {
+            sender = e.Source;
             if (sender is Window || sender is ScrollViewer)
                 return;
 

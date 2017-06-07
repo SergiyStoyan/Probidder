@@ -31,7 +31,7 @@ namespace Cliver.Foreclosures
             public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.Yellow;
             public List<string> ShowedColumns = null;
             public List<string> SearchedColumns = null;
-            public System.Windows.Media.Brush FocusedControlColor = System.Windows.Media.Brushes.Bisque;
+            public System.Windows.Media.Brush FocusedControlColor = System.Windows.Media.Brushes.Gold;
 
             public override void Loaded()
             {
