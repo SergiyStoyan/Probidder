@@ -65,8 +65,6 @@
                 <MenuItem Header="Database" Name="database" Click="database_Click"/>
                 <MenuItem Header="View" Name="view" Click="view_Click"/>
                 <MenuItem Header="Auto Complete" Name="auto_complete" Click="auto_complete_Click"/>
-                <Separator></Separator>
-                <MenuItem Header="Reset All" Name="reset" Click="reset_Click"/>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Name="about" Click="about_Click"/>

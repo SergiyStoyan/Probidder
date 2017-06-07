@@ -53,10 +53,20 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
+            set(Settings.Location);
+        }
+
+        void set(Settings.LocationSettings s)
+        {
             County.Items.Clear();
             foreach (Db.County c in (new Db.Counties()).GetAll())
                 County.Items.Add(c.county);
-            County.SelectedItem = Settings.Location.County;
+            County.SelectedItem = s.County;
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            set(Settings.Location.GetResetInstance<Settings.LocationSettings>());
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

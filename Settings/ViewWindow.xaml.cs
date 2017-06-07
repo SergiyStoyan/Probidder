@@ -55,13 +55,7 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            list.ItemsSource = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
-            {
-                Show = Settings.View.ShowedColumns.Contains(x.Name),
-                Search = Settings.View.SearchedColumns.Contains(x.Name),
-                Column = x.Name
-            }
-            ).ToList();
+            set(Settings.View);
         }
 
         class Item: INotifyPropertyChanged
@@ -75,6 +69,22 @@ namespace Cliver.Foreclosures
                 PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
             public event PropertyChangedEventHandler PropertyChanged;
+        }
+        
+        void set(Settings.ViewSettings s)
+        {
+            list.ItemsSource = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
+            {
+                Show = s.ShowedColumns.Contains(x.Name),
+                Search = s.SearchedColumns.Contains(x.Name),
+                Column = x.Name
+            }
+            ).ToList();
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            set(Settings.View.GetResetInstance<Settings.ViewSettings>());
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

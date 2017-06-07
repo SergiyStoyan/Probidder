@@ -290,12 +290,6 @@ namespace Cliver.Foreclosures
             LocationWindow.OpenDialog();
         }
 
-        private void reset_Click(object sender, RoutedEventArgs e)
-        {
-            if (Message.YesNo("This will reset all the settings to their initial values. Proceed?"))
-                Config.Reset();
-        }
-
         private void view_Click(object sender, RoutedEventArgs e)
         {
             ViewWindow.OpenDialog();

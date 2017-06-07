@@ -58,10 +58,20 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            UserName.Text = Settings.Network.UserName;
-            if (!string.IsNullOrWhiteSpace(Settings.Network.EncryptedPassword))
-                Password.Password = Settings.Network.Password();
-            ExportUrl.Text = Settings.Network.ExportUrl;
+            set(Settings.Network);
+        }
+
+        void set(Settings.NetworkSettings s)
+        {
+            UserName.Text = s.UserName;
+            if (!string.IsNullOrWhiteSpace(s.EncryptedPassword))
+                Password.Password = s.Password();
+            ExportUrl.Text = s.ExportUrl;
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            set(Settings.Network.GetResetInstance<Settings.NetworkSettings>());
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

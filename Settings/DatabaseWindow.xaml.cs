@@ -58,25 +58,35 @@ namespace Cliver.Foreclosures
                 //SizeToContent = SizeToContent.Manual;
             };
 
+            set(Settings.Database);
+        }
+
+        void set(Settings.DatabaseSettings s)
+        { 
             if (Settings.Database.RefreshPeriodInSecs > 0)
             {
-                RefreshPeriodInDays.Text = ((float)Settings.Database.RefreshPeriodInSecs / (24 * 60 * 60)).ToString();
+                RefreshPeriodInDays.Text = ((float)s.RefreshPeriodInSecs / (24 * 60 * 60)).ToString();
                 DoRefresh.IsChecked = true;
             }
             else
                 DoRefresh.IsChecked = false;
             DoRefresh_Checked(null, null);
 
-            if (Settings.Database.RefreshRetryPeriodInSecs > 0)
+            if (s.RefreshRetryPeriodInSecs > 0)
             {
-                RefreshRetryPeriodInSecs.Text = Settings.Database.RefreshRetryPeriodInSecs.ToString();
+                RefreshRetryPeriodInSecs.Text = s.RefreshRetryPeriodInSecs.ToString();
                 DoRefreshRetry.IsChecked = true;
             }
             else
                 DoRefreshRetry.IsChecked = false;
             DoRefreshRetry_Checked(null, null);
 
-            NextRefreshTime.Value = Settings.Database.NextRefreshTime;
+            NextRefreshTime.Value = s.NextRefreshTime;
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            set(Settings.Database.GetResetInstance<Settings.DatabaseSettings>());
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

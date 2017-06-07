@@ -55,16 +55,14 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            items = new ObservableCollection<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
-            //items = new List<Item>(Settings.AutoComplete.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
-            list.ItemsSource = items;
-
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
             show_TriggerKey();
 
             Loaded += delegate
               {
               };
+
+            set(Settings.AutoComplete);
         }
 
         private ObservableCollection<Item> items;
@@ -94,6 +92,17 @@ namespace Cliver.Foreclosures
             {
                 original = null;
             }
+        }
+
+        void set(Settings.AutoCompleteSettings s)
+        {
+            items = new ObservableCollection<Item>(s.Keys2Phrase.Select(x => new Item { Key = x.Key, Phrase = x.Value }));
+            list.ItemsSource = items;
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            set(Settings.AutoComplete.GetResetInstance<Settings.AutoCompleteSettings>());
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
