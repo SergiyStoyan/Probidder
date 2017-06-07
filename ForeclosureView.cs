@@ -50,7 +50,7 @@ namespace Cliver.Foreclosures
             Model.OWNER_ROLE = "OWNER";
             Model.TYPE_OF_MO = "CNV";
             Model.PROP_DESC = "SINGLE FAMILY";
-            Model.MONTHLY_PAY = 30;
+            Model.TERM_OF_MTG = 30;
         }
         readonly Db.Foreclosure Model;
 

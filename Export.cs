@@ -92,6 +92,7 @@ namespace Cliver.Foreclosures
                     foreach (D f in fs)
                     {
                         Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
+                        normalize_record(d);
                         d["recorder"] = Settings.Network.UserName;
                         records.Add(d);
                     }
@@ -224,19 +225,14 @@ namespace Cliver.Foreclosures
             try
             {
                 TextWriter tw = new StreamWriter(file);
-                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
+                Dictionary<string, object> hs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (object)null);
+                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(hs.Keys, FieldPreparation.FieldSeparator.COMMA));
                 Db.Foreclosures fs = new Db.Foreclosures();
                 foreach (Db.Foreclosure f in fs.GetAll())
                 {
                     Dictionary<string, object> d = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                    set_date(d, "FILING_DATE");
-                    set_date(d, "ENTRY_DATE");
-                    set_date(d, "DATE_OF_CA");
-                    set_date(d, "ORIGINAL_MTG");
-                    set_date(d, "LAST_PAY_DATE");
-                    set_date(d, "AUCTION_DATE");
-                    set_date(d, "AUCTION_TIME");
-                    tw.WriteLine(FieldPreparation.GetCsvLine(d, FieldPreparation.FieldSeparator.COMMA));
+                    normalize_record(d);
+                    tw.WriteLine(FieldPreparation.GetCsvLine(d.Values, FieldPreparation.FieldSeparator.COMMA));
                 }
                 tw.Close();
 
@@ -254,10 +250,24 @@ namespace Cliver.Foreclosures
             return false;
         }
 
-        static void set_date(Dictionary<string, object> d, string field)
+        static void normalize_date(Dictionary<string, object> d, string field)
         {
             if (d[field] != null)
                 d[field] = Regex.Replace(((DateTime)d[field]).ToString(), @"\s.*", "");
+        }
+
+        static void normalize_record(Dictionary<string, object> d)
+        {
+            normalize_date(d, "FILING_DATE");
+            normalize_date(d, "ENTRY_DATE");
+            normalize_date(d, "DATE_OF_CA");
+            normalize_date(d, "ORIGINAL_MTG");
+            normalize_date(d, "LAST_PAY_DATE");
+            normalize_date(d, "AUCTION_DATE");
+            normalize_date(d, "AUCTION_TIME");
+
+            if (d["PIN"] != null)
+                d["PIN"] = ((string)d["PIN"]).Replace("____", "0000");
         }
     }
 
