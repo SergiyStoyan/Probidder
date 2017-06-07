@@ -64,7 +64,7 @@ namespace Cliver.Foreclosures
             Foreclosures,
         }
 
-        static void to_server<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D:Db.Document, new()
+        static void to_server<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D : Db.Document, new()
         {
             MessageForm mf = null;
 
@@ -152,7 +152,8 @@ namespace Cliver.Foreclosures
             }
             finally
             {
-                ThreadRoutines.StartTry(() => {
+                ThreadRoutines.StartTry(() =>
+                {
                     to_server_t.Join();
                     ToServerStateChanged?.BeginInvoke(null, null);
                 });
@@ -206,7 +207,7 @@ namespace Cliver.Foreclosures
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not get login: " + rm.ReasonPhrase);
             dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
-            return d["status"]; 
+            return d["status"];
         }
 
         public static bool ToDisk()
@@ -226,7 +227,17 @@ namespace Cliver.Foreclosures
                 tw.WriteLine(FieldPreparation.GetCsvHeaderLine(typeof(Db.Foreclosure), FieldPreparation.FieldSeparator.COMMA));
                 Db.Foreclosures fs = new Db.Foreclosures();
                 foreach (Db.Foreclosure f in fs.GetAll())
-                    tw.WriteLine(FieldPreparation.GetCsvLine(f, FieldPreparation.FieldSeparator.COMMA));
+                {
+                    Dictionary<string, object> d = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
+                    set_date(d, "FILING_DATE");
+                    set_date(d, "ENTRY_DATE");
+                    set_date(d, "DATE_OF_CA");
+                    set_date(d, "ORIGINAL_MTG");
+                    set_date(d, "LAST_PAY_DATE");
+                    set_date(d, "AUCTION_DATE");
+                    set_date(d, "AUCTION_TIME");
+                    tw.WriteLine(FieldPreparation.GetCsvLine(d, FieldPreparation.FieldSeparator.COMMA));
+                }
                 tw.Close();
 
                 if (Message.YesNo("Data has been exported succesfully to " + file + "\r\n\r\nClean up the database?"))
@@ -242,7 +253,14 @@ namespace Cliver.Foreclosures
             }
             return false;
         }
+
+        static void set_date(Dictionary<string, object> d, string field)
+        {
+            if (d[field] != null)
+                d[field] = Regex.Replace(((DateTime)d[field]).ToString(), @"\s.*", "");
+        }
     }
+
     public enum JwtHashAlgorithm
     {
         RS256,
