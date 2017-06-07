@@ -246,7 +246,7 @@ namespace Cliver.Foreclosures
                 ForeclosureView fw = (ForeclosureView)fields.DataContext;
                 if (fw == null)
                     return false;
-                if (fw.Id != 0 && !fw.Edited)
+                if (/*fw.Id != 0 && */!fw.Edited)
                     return true;
                 fw.ValidateAllProperties();
                 if (/*!fields.IsValid() ||*/ fw.HasErrors)
