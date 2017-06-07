@@ -66,13 +66,11 @@ namespace Cliver.Foreclosures
         }
 
         private ObservableCollection<Item> items;
-        //private List<Item> items;
 
         class Item : System.ComponentModel.IEditableObject
         {
             public string Key { set; get; }
             public string Phrase { set; get; }
-
 
             public void BeginEdit()
             {
@@ -153,6 +151,7 @@ namespace Cliver.Foreclosures
                 list.ItemsSource = null;
                 list.ItemsSource = items;
                 e.Cancel = true;
+                return;
             }
             if (items.Where(x => x.Key == i.Key).Count() > 1)
             {
@@ -162,6 +161,7 @@ namespace Cliver.Foreclosures
                 list.ItemsSource = null;
                 list.ItemsSource = items;
                 e.Cancel = true;
+                return;
             }
             i.EndEdit();
         }
