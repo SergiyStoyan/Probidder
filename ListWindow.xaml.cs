@@ -214,16 +214,6 @@ namespace Cliver.Foreclosures
             ForeclosureWindow.OpenDialog(null);
         }
 
-        public void ForeclosuresDropTable()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var fvs = ((ObservableCollection<ForeclosureView>)list.ItemsSource);
-                fvs.Clear();
-                update_indicator();
-            });
-        }
-
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ForeclosureView fw = list.SelectedItem as ForeclosureView;
@@ -246,6 +236,13 @@ namespace Cliver.Foreclosures
             System.Diagnostics.Process.Start(Log.WorkDir);
         }
 
+        private void drop_db_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Message.YesNo("Foreclosures table will be dropped. Are you sure to proceed?"))
+                return;
+            ForeclosureViews.Drop();
+        }
+        
         private void about_Click(object sender, RoutedEventArgs e)
         {
             AboutForm.Open();

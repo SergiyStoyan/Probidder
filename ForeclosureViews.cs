@@ -109,6 +109,16 @@ namespace Cliver.Foreclosures
             }
             public delegate void AddedHandler();
             public event AddedHandler Added = null;
+
+            public void Drop()
+            {
+                owner.Dispatcher.Invoke(() =>
+                {
+                    fs.Drop();
+                    Items.Clear();
+                    Deleted?.Invoke();
+                });
+            }
         }
     }
 }

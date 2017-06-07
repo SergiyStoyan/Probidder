@@ -134,9 +134,7 @@ namespace Cliver.Foreclosures
                     if (Message.YesNo("Table " + table.GetType() + " has been uploaded succesfully to the server.\r\n\r\nClean up the table?"))
                     {
                         Log.Inform("Dropping table " + table.GetType());
-                        Db.Foreclosures fs = new Db.Foreclosures();
-                        fs.Drop();
-                        ListWindow.This.ForeclosuresDropTable();
+                        ListWindow.This.ForeclosureViews.Drop();
                     }
                 }
             }
@@ -238,8 +236,7 @@ namespace Cliver.Foreclosures
 
                 if (Message.YesNo("Data has been exported succesfully to " + file + "\r\n\r\nClean up the database?"))
                 {
-                    fs.Drop();
-                    ListWindow.This.ForeclosuresDropTable();
+                    ListWindow.This.ForeclosureViews.Drop();
                     return true;
                 }
             }
