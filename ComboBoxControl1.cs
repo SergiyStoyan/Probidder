@@ -45,6 +45,18 @@ namespace Cliver.Foreclosures
             tb.SelectionLength = length;
             tb.ScrollToHome();
             tb.EndChange();
-        }        
+        }  
+        
+        new public Brush Background
+        {
+            get
+            {
+                return tb.Background;
+            }
+            set
+            {
+                tb.Background = value;
+            }
+        }
     }
 }

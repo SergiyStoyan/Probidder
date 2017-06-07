@@ -256,22 +256,7 @@ namespace Cliver.Foreclosures
         static Dictionary<string, DateTime?> texts2DateTime = new Dictionary<string, DateTime?>();
         static DateTime? _ParseText(string text)
         {
-            //try
-            //{
-            //    return DateTime.Parse(text);
-            //}
-            //catch
-            //{
-            //}
-            try
-            {
-                return DateTime.ParseExact(text, "MM/dd/yyyy", null);
-            }
-            catch
-            {
-            }
-            text = strip_mask(text);
-            Match m = Regex.Match(text, @"^(\d{2})(\d{2})(\d{2})$");
+            Match m = Regex.Match(text, @"^(\d{2})/(\d{2})/(\d{2}(\d{2})?)$");
             if (!m.Success)
                 return null;
             try
@@ -279,7 +264,7 @@ namespace Cliver.Foreclosures
                 int y = int.Parse(m.Groups[3].Value);
                 if (y < 30)
                     y += 2000;
-                else
+                else if (y < 100)
                     y += 1900;
                 return new DateTime(y, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
             }
@@ -296,6 +281,18 @@ namespace Cliver.Foreclosures
             else
                 tb.Text = ((DateTime)SelectedDate).ToString("MM/dd/yy");
             select(0, tb.Text.Length);
+        }
+
+        new public Brush Background
+        {
+            get
+            {
+                return tb.Background;
+            }
+            set
+            {
+                tb.Background = value;
+            }
         }
     }
 

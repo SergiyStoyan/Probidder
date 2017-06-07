@@ -46,6 +46,7 @@ namespace Cliver.Foreclosures
 
             Loaded += delegate
             {
+                EventManager.RegisterClassHandler(typeof(Control), GotKeyboardFocusEvent, new RoutedEventHandler(got_focus));
             };
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
@@ -88,6 +89,28 @@ namespace Cliver.Foreclosures
             //AddHandler(FocusManager.GotFocusEvent, (GotFocusHandler)GotFocusHandler);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
+
+        void got_focus(object sender, RoutedEventArgs e)
+        {
+            if (sender is Window || sender is ScrollViewer)
+                return;
+
+            if (focused_control != null)
+            {
+                if (focused_control is DatePickerControl)
+                    ((DatePickerControl)focused_control).Background = Brushes.White;
+                else
+                    focused_control.Background = Brushes.White;
+            }
+            if (sender is TextBox || sender is CheckBox || sender is ComboBox)
+                ((Control)sender).Background = Settings.View.FocusedControlColor;
+            else if (sender is DatePickerControl)
+                ((DatePickerControl)sender).Background = Settings.View.FocusedControlColor;
+            else
+                return;
+            focused_control = (Control)sender;            
+        }
+        Control focused_control = null;
 
         ForeclosureView set_context(ForeclosureView fw)
         {
