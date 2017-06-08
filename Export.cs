@@ -279,7 +279,7 @@ namespace Cliver.Foreclosures
 
     public class JsonWebToken
     {
-        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;        
+        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
 
         static JsonWebToken()
         {
@@ -287,11 +287,26 @@ namespace Cliver.Foreclosures
             {
                 { JwtHashAlgorithm.RS256, (key, value) => { using (var sha = new HMACSHA256(key)) { return sha.ComputeHash(value); } } },
                 { JwtHashAlgorithm.RS512, (key, value) => {
+
                     //string k = Regex.Replace(Encoding.UTF8.GetString(  key), @"^\s*-----BEGIN PRIVATE KEY-----", "");
                     // k = Regex.Replace( k, @"-----END PRIVATE KEY-----\s*$", "").Trim();
                     //using (RSA rsa = RSA.Create())
                     //{
                     //    return rsa.SignHash(value, HashAlgorithmName.SHA512, RSASignaturePadding.Pkcs1);
+                    //}
+                    //{
+                    //RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                    //rsa.FromXmlString(key);
+                    //SHA512Managed hash = new SHA512Managed();
+                    //byte[] hashedData = hash.ComputeHash(value);
+                    //byte[] signedData = RSA.SignHash( hashedData,                                    CryptoConfig.MapNameToOID("SHA512")                                  );
+                    //}
+
+                    //byte[] bs;
+                    //using (SHA512Managed sha = new SHA512Managed())
+                    //{sha.Initialize();
+                    //    sha.
+                    //   bs = sha.ComputeHash(value);
                     //}
 
                     string key_file = Path.GetTempPath() + "\\key.bin";
@@ -299,7 +314,9 @@ namespace Cliver.Foreclosures
                     string signed_file = Path.GetTempPath() + "\\payload.bin.signed";
                     File.WriteAllBytes(key_file, key);
                     File.WriteAllBytes(value_file, value);
-                    ProcessStartInfo psi = new ProcessStartInfo("openssl\\openssl.exe", "dgst -sha512 -sign \"" + key_file + "\" -out \"" + signed_file + "\" \"" + value_file + "\"");
+                    string ssl_command = "dgst -sha512 -sign \"" + key_file + "\" -out \"" + signed_file + "\" \"" + value_file + "\"";
+                    Log.Main.Inform("Launching openssl: " + ssl_command);
+                    ProcessStartInfo psi = new ProcessStartInfo("openssl\\openssl.exe",ssl_command);
                     psi.RedirectStandardOutput = true;
                     psi.RedirectStandardError = true;
                     psi.UseShellExecute = false;
@@ -307,8 +324,24 @@ namespace Cliver.Foreclosures
                     Process p = new Process();
                     p.StartInfo = psi;
                     p.Start();
+                    string output = "";
+                    while (!p.StandardOutput.EndOfStream || !p.StandardError.EndOfStream)
+                    {
+                        output+= p.StandardOutput.ReadLine();
+                        output+= p.StandardOutput.ReadLine();
+                    }
+                    Log.Main.Inform("openssl output: " + output);
                     p.WaitForExit();
-                    return File.ReadAllBytes(signed_file);
+                    byte[] bs = File.ReadAllBytes(signed_file);
+
+                    //bool g = true;
+                    //for(int i=0;i<bs.Length; i++)
+                    //    if(bs[i]!=bs2[i])
+                    //    {
+                    //        g=false;
+                    //        break;
+                    //    }
+                    return bs;
                 } },
                 { JwtHashAlgorithm.HS384, (key, value) => { using (var sha = new HMACSHA384(key)) { return sha.ComputeHash(value); } } },
                 { JwtHashAlgorithm.HS512, (key, value) => { using (var sha = new HMACSHA512(key)) { return sha.ComputeHash(value); } } },
@@ -316,7 +349,7 @@ namespace Cliver.Foreclosures
         }
 
         public static string Encode(object payload, string key, JwtHashAlgorithm algorithm)
-        {            
+        {
             return Encode(payload, Encoding.UTF8.GetBytes(key), algorithm);
         }
 
@@ -327,7 +360,7 @@ namespace Cliver.Foreclosures
 
             byte[] headerBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(header, Formatting.None));
             byte[] payloadBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload, Formatting.None));
-           
+
             segments.Add(Base64UrlEncode(headerBytes));
             segments.Add(Base64UrlEncode(payloadBytes));
 
