@@ -153,7 +153,8 @@ namespace Cliver.Foreclosures
             {
                 ThreadRoutines.StartTry(() =>
                 {
-                    to_server_t.Join();
+                    if (to_server_t != null)
+                        to_server_t.Join();
                     ToServerStateChanged?.BeginInvoke(null, null);
                 });
             }
@@ -173,7 +174,7 @@ namespace Cliver.Foreclosures
                 iat = DateTime.Now.GetSecondsSinceUnixEpoch(),
             };
             string jwt = JsonWebToken.Encode(payload, privateKey, JwtHashAlgorithm.RS512);
-
+            //Log.Main.Warning(jwt);
             FormUrlEncodedContent fuec = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 { "grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer" },

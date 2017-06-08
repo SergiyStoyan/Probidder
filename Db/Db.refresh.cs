@@ -154,7 +154,8 @@ namespace Cliver.Foreclosures
                 {
                     Settings.Database.Save();
                     ThreadRoutines.StartTry(() => {
-                        refresh_t.Join();
+                        if (refresh_t != null)
+                            refresh_t.Join();
                         RefreshStateChanged?.BeginInvoke(null, null);
                     });
                 }
