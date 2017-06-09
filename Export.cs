@@ -104,7 +104,8 @@ namespace Cliver.Foreclosures
                 Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
 
                 HttpClient http_client = new HttpClient();
-                if (!loginByUsername(ref http_client, getOAuthTAccessToken(ref http_client), Settings.Network.UserName, Settings.Network.Password()))
+                //if (!loginByUsername(ref http_client, Settings.Network.UserName, Settings.Network.Password()))
+                if (!loginByUsername(ref http_client, null, Settings.Network.UserName, Settings.Network.Password()))
                     throw new Exception("Could not login with Username: " + Settings.Network.UserName);
 
                 string s = SerializationRoutines.Json.Serialize(records);
@@ -112,7 +113,7 @@ namespace Cliver.Foreclosures
                 post_data.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 HttpResponseMessage rm = http_client.PostAsync(url, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
-                    throw new Exception(rm.ReasonPhrase);
+                    throw new Exception(rm.StatusCode + "\r\n" + rm.ReasonPhrase);
                 string r = rm.Content.ReadAsStringAsync().Result;
                 JObject jo = SerializationRoutines.Json.Deserialize<JObject>(r);
                 Log.Main.Inform("Inserted records: " + jo["records_inserted"].ToString());
@@ -184,7 +185,7 @@ namespace Cliver.Foreclosures
                 http_client = new HttpClient();
             HttpResponseMessage rm = http_client.PostAsync("https://dev-auth.probidder.com/api/oauth/token", fuec).Result;
             if (!rm.IsSuccessStatusCode)
-                throw new Exception("Could not get AuthTAccessToken: " + rm.ReasonPhrase);
+                throw new Exception("Could not get AuthTAccessToken: " + rm.StatusCode + "\r\n" + rm.ReasonPhrase);
             dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
             return (string)d["access_token"];
         }
@@ -200,12 +201,13 @@ namespace Cliver.Foreclosures
             });
 
             HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, "https://dev-auth.probidder.com/api/authenticate/recorders/win/app?" + fuec.ReadAsStringAsync().Result);
-            hrm.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", access_token);
+            if (access_token != null)
+                hrm.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", access_token);
             if (http_client == null)
                 http_client = new HttpClient();
             HttpResponseMessage rm = http_client.SendAsync(hrm).Result;
             if (!rm.IsSuccessStatusCode)
-                throw new Exception("Could not get login: " + rm.ReasonPhrase);
+                throw new Exception("Could not get login: " + rm.StatusCode + "\r\n" + rm.ReasonPhrase);
             dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
             return d["status"];
         }
@@ -308,10 +310,10 @@ namespace Cliver.Foreclosures
                     //    sha.
                     //   bs = sha.ComputeHash(value);
                     //}
-
-                    string key_file = Path.GetTempPath() + "\\key.bin";
-                    string value_file = Path.GetTempPath() + "\\payload.bin";
-                    string signed_file = Path.GetTempPath() + "\\payload.bin.signed";
+                    
+                    string key_file = ProgramRoutines.GetAppTempDirectory() + "\\key.bin";
+                    string value_file = ProgramRoutines.GetAppTempDirectory() + "\\payload.bin";
+                    string signed_file = ProgramRoutines.GetAppTempDirectory() + "\\payload.bin.signed";
                     File.WriteAllBytes(key_file, key);
                     File.WriteAllBytes(value_file, value);
                     string ssl_command = "dgst -sha512 -sign \"" + key_file + "\" -out \"" + signed_file + "\" \"" + value_file + "\"";
