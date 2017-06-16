@@ -43,9 +43,6 @@ namespace Cliver.Probidder
 
             this.vs = vs;
 
-            if (v == null)
-                v = new ForeclosureView();
-
             Loaded += delegate
             {
                 //EventManager.RegisterClassHandler(typeof(Control), GotKeyboardFocusEvent, new RoutedEventHandler(got_focus));
@@ -94,11 +91,6 @@ namespace Cliver.Probidder
         }
         readonly IViews vs;
 
-        //private void ForeclosureWindow_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        //{
-        //    got_focus(e.OriginalSource, e);
-        //}
-
         void got_focus(object sender, RoutedEventArgs e)
         {
             sender = e.Source;
@@ -125,7 +117,17 @@ namespace Cliver.Probidder
         IView set_context(IView v)
         {
             if (v == null)
-                v = new ForeclosureView();
+                switch (Settings.View.ActiveTable)
+                {
+                    case Settings.ViewSettings.Tables.Foreclosures:
+                        v = new ForeclosureView();
+                        break;
+                    case Settings.ViewSettings.Tables.Probates:
+                        v = new ProbateView();
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+                }
 
             this.MarkValid();
 
@@ -174,7 +176,7 @@ namespace Cliver.Probidder
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
 
-            ForeclosureView v = (ForeclosureView)fields.DataContext;
+            IView v = (IView)fields.DataContext;
             if (v == null)
                 return;
             if (v.Id != 0)
@@ -199,7 +201,7 @@ namespace Cliver.Probidder
         {
             if (!save_current_View())
                 return;
-            IView v = (ForeclosureView)fields.DataContext;
+            IView v = (IView)fields.DataContext;
             if (v == null)
                 return;
             if (v.Id == 0)
