@@ -94,7 +94,7 @@ namespace Cliver.Probidder
                 Settings.Network.ExportUrl = ExportUrl.Text;
 
                 Settings.Network.Save();
-                Config.Reload();
+                //Config.Reload();
 
                 Close();
             }

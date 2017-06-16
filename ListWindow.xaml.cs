@@ -106,21 +106,17 @@ namespace Cliver.Probidder
                 AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
             };
 
+            fvs = new View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>(this);
             fvs.Deleted += delegate { update_indicator(); };
             fvs.Added += delegate { update_indicator(); };
             listForeclosures.ItemsSource = fvs;
 
+            pvs = new View<Db.Probate>.Views<ProbateView, Db.Probates>(this);
             pvs.Deleted += delegate { update_indicator(); };
             pvs.Added += delegate { update_indicator(); };
             listProbates.ItemsSource = pvs;
 
-            list_changed();
-
-            list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
-              {//needed for highlighting search keyword
-                  highlight(list);
-              };
-
+            ActiveTableChanged();
             //OrderColumns();
 
             ContentRendered += delegate
@@ -143,19 +139,20 @@ namespace Cliver.Probidder
             }
         }
 
-        void list_changed()
+        public void ActiveTableChanged()
         {
-            list.Visibility = Visibility.Collapsed;
             switch (Settings.View.ActiveTable)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
                     {
+                        listProbates.Visibility = Visibility.Collapsed;
                         list = listForeclosures;
                         views = fvs;
                     }
                     break;
                 case Settings.ViewSettings.Tables.Probates:
                     {
+                        listForeclosures.Visibility = Visibility.Collapsed;
                         list = listProbates;
                         views = pvs;
                     }
@@ -169,8 +166,8 @@ namespace Cliver.Probidder
         DataGrid list;
         public IViews Views { get { return views; } }
         IViews views;
-        ForeclosureView.Views<ForeclosureView, Db.Foreclosures> fvs;
-        ProbateView.Views<ProbateView, Db.Probates> pvs;
+        readonly ForeclosureView.Views<ForeclosureView, Db.Foreclosures> fvs;
+        readonly ProbateView.Views<ProbateView, Db.Probates> pvs;
 
         static string get_column_name(DataGridColumn dgc)
         {

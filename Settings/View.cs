@@ -30,7 +30,19 @@ namespace Cliver.Probidder
             public int InfoToastRight = 0;
             public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.Yellow;
             public System.Windows.Media.Brush FocusedControlColor = System.Windows.Media.Brushes.Gold;
-            public Tables ActiveTable = Tables.Foreclosures;
+            public Tables ActiveTable
+            {
+                get
+                {
+                    return _ActiveTable;
+                }
+                set
+                {
+                    _ActiveTable = value;
+                    ListWindow.This?.ActiveTableChanged();
+                }
+            }
+            Tables _ActiveTable = Tables.Foreclosures;
             public enum Tables
             {
                 Foreclosures,

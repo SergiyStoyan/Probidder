@@ -83,7 +83,7 @@ namespace Cliver.Probidder
                 Settings.Location.County = County.SelectedItem.ToString();
 
                 Settings.Location.Save();
-                Config.Reload();
+                //Config.Reload();
 
                 Close();
             }
