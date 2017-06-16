@@ -24,25 +24,27 @@ using System.IO;
 using System.Management;
 using System.Threading;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
-    public partial class ForeclosureWindow : Window
+    public partial class RecordWindow : Window
     {
-        public static void OpenDialog(ForeclosureView fw)
+        public static void OpenDialog(IView v, IViews vs)
         {
-            ForeclosureWindow w = new ForeclosureWindow(fw);
+            RecordWindow w = new RecordWindow(v, vs);
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.ShowDialog();
         }
 
-        ForeclosureWindow(ForeclosureView fw)
+        RecordWindow(IView v, IViews vs)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
-            if (fw == null)
-                fw = new ForeclosureView();
+            this.vs = vs;
+
+            if (v == null)
+                v = new ForeclosureView();
 
             Loaded += delegate
             {
@@ -52,7 +54,7 @@ namespace Cliver.Foreclosures
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
             {
-                set_context(fw);
+                set_context(v);
             }));
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
@@ -83,13 +85,14 @@ namespace Cliver.Foreclosures
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
                {
-                   if (!save_current_Foreclosure() && !Message.YesNo("Close without saving the current entry?"))
+                   if (!save_current_View() && !Message.YesNo("Close without saving the current entry?"))
                        e.Cancel = true;
                };
 
             AddHandler(FocusManager.GotFocusEvent, (RoutedEventHandler)got_focus);
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
+        readonly IViews vs;
 
         //private void ForeclosureWindow_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         //{
@@ -119,10 +122,10 @@ namespace Cliver.Foreclosures
         }
         Control focused_control = null;
 
-        ForeclosureView set_context(ForeclosureView fw)
+        IView set_context(IView v)
         {
-            if (fw == null)
-                fw = new ForeclosureView();
+            if (v == null)
+                v = new ForeclosureView();
 
             this.MarkValid();
 
@@ -132,19 +135,19 @@ namespace Cliver.Foreclosures
             DATE_OF_CA.Reset();
             LAST_PAY_DATE.Reset();
             
-            fw.ErrorsChanged += delegate
+            v.ErrorsChanged += delegate
               {
-                  check_validity(fw);
+                  check_validity(v);
               };
-            fields.DataContext = fw;
-            return fw;
+            fields.DataContext = v;
+            return v;
         }
 
-        void check_validity(ForeclosureView fw)
+        void check_validity(IView v)
         {
-            if (fw == null)
+            if (v == null)
                 return;
-            if (fw.HasErrors)// !fields.IsValid())
+            if (v.HasErrors)// !fields.IsValid())
             {
                 Next.IsEnabled = false;
                 Prev.IsEnabled = false;
@@ -153,15 +156,15 @@ namespace Cliver.Foreclosures
             else
             {
                 New.IsEnabled = true;
-                if (fw.Id == 0)
+                if (v.Id == 0)
                 {
-                    Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetLast() != null;
+                    Prev.IsEnabled = vs.GetLast_() != null;
                     Next.IsEnabled = false;
                 }
                 else
                 {
-                    Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetPrevious(fw) != null;
-                    Next.IsEnabled = ListWindow.This.ForeclosureViews.GetNext(fw) != null;
+                    Prev.IsEnabled = vs.GetPrevious(v) != null;
+                    Next.IsEnabled = vs.GetNext(v) != null;
                 }
             }
         }
@@ -171,16 +174,16 @@ namespace Cliver.Foreclosures
             if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
 
-            ForeclosureView fw = (ForeclosureView)fields.DataContext;
-            if (fw == null)
+            ForeclosureView v = (ForeclosureView)fields.DataContext;
+            if (v == null)
                 return;
-            if (fw.Id != 0)
+            if (v.Id != 0)
             {
-                ForeclosureView fw2 = ListWindow.This.ForeclosureViews.GetNext(fw);
+                IView fw2 = vs.GetNext(v);
                 if (fw2 == null)
-                    fw2 = ListWindow.This.ForeclosureViews.GetPrevious(fw);
-                
-                ListWindow.This.ForeclosureViews.Delete(fw);
+                    fw2 = vs.GetPrevious(v);
+
+                vs.Delete(v);
                 set_context(fw2);
             }
             else
@@ -194,67 +197,67 @@ namespace Cliver.Foreclosures
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
-            if (!save_current_Foreclosure())
+            if (!save_current_View())
                 return;
-            ForeclosureView fw = (ForeclosureView)fields.DataContext;
-            if (fw == null)
+            IView v = (ForeclosureView)fields.DataContext;
+            if (v == null)
                 return;
-            if (fw.Id == 0)
-                fw = ListWindow.This.ForeclosureViews.GetLast();
+            if (v.Id == 0)
+                v = vs.GetLast_();
             else
-                fw = ListWindow.This.ForeclosureViews.GetPrevious(fw);
-            if (fw == null)
+                v = vs.GetPrevious(v);
+            if (v == null)
             {
                 Prev.IsEnabled = false;
                 return;
             }
-            set_context(fw);
+            set_context(v);
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (!save_current_Foreclosure())
+            if (!save_current_View())
                 return;
-            ForeclosureView fw = (ForeclosureView)fields.DataContext;
-            if (fw == null)
+            IView v = (IView)fields.DataContext;
+            if (v == null)
                 return;
-            if (fw.Id == 0)
+            if (v.Id == 0)
             {
                 Next.IsEnabled = false;
                 return;
             }
-            fw = ListWindow.This.ForeclosureViews.GetNext(fw);
-            if (fw == null)
+            v = vs.GetNext(v);
+            if (v == null)
             {
                 Next.IsEnabled = false;
                 return;
             }
-            set_context(fw);
+            set_context(v);
         }
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            if (!save_current_Foreclosure())
+            if (!save_current_View())
                 return;
             set_context(null);
         }
 
-        private bool save_current_Foreclosure()
+        private bool save_current_View()
         {
             try
             {
-                ForeclosureView fw = (ForeclosureView)fields.DataContext;
-                if (fw == null)
+                IView v = (IView)fields.DataContext;
+                if (v == null)
                     return false;
-                if (/*fw.Id != 0 && */!fw.Edited)
+                if (/*v.Id != 0 && */!v.Edited)
                     return true;
-                fw.ValidateAllProperties();
-                if (/*!fields.IsValid() ||*/ fw.HasErrors)
+                v.ValidateAllProperties();
+                if (/*!fields.IsValid() ||*/ v.HasErrors)
                 {
                     //throw new Exception("Some values are incorrect. Please correct fields surrounded with red borders before saving.");
                     return false;
                 }
-                ListWindow.This.ForeclosureViews.Update(fw);
+                vs.Update(v);
                 //fields.IsEnabled = false;
                 //ThreadRoutines.StartTry(() =>
                 //{
@@ -272,29 +275,29 @@ namespace Cliver.Foreclosures
 
         private void fields_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            ForeclosureView fw = (ForeclosureView)e.NewValue;
+            IView v = (IView)e.NewValue;
             
             //Keyboard.Focus(TYPE_OF_EN);
 
-            if (fw == null)
-                fw = (ForeclosureView)fields.DataContext;
-            if (fw == null)
+            if (v == null)
+                v = (IView)fields.DataContext;
+            if (v == null)
                 return;
 
-            if (fw.Id == 0)
+            if (v.Id == 0)
             {
-                Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetLast() != null;
+                Prev.IsEnabled = vs.GetLast_() != null;
                 Next.IsEnabled = false;
 
-                indicator.Content = "Record: [id=new] - / " + ListWindow.This.ForeclosureViews.Count();
+                indicator.Content = "Record: [id=new] - / " + vs.Count();
 
                 return;
             }
 
-            Prev.IsEnabled = ListWindow.This.ForeclosureViews.GetPrevious(fw) != null;
-            Next.IsEnabled = ListWindow.This.ForeclosureViews.GetNext(fw) != null;
+            Prev.IsEnabled = vs.GetPrevious(v) != null;
+            Next.IsEnabled = vs.GetNext(v) != null;
 
-            indicator.Content = "Record: [id=" + fw.Id + "] " + (ListWindow.This.ForeclosureViews.Get(x => x.Id < fw.Id).Count() + 1) + " / " + ListWindow.This.ForeclosureViews.Count();
+            indicator.Content = "Record: [id=" + v.Id + "] " + (vs.Get(x => ((IView)x).Id < v.Id).Count() + 1) + " / " + vs.Count();
         }
 
         private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)

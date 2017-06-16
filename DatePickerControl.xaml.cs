@@ -20,7 +20,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class DatePickerControl : DatePicker
     {

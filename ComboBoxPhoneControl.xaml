@@ -1,9 +1,9 @@
-﻿<ComboBox x:Class="Cliver.Foreclosures.ComboBoxPhoneControl"
+﻿<ComboBox x:Class="Cliver.Probidder.ComboBoxPhoneControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Cliver.Foreclosures"
+             xmlns:local="clr-namespace:Cliver.Probidder"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
              mc:Ignorable="d">
     <ComboBox.Resources>

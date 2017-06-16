@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foreclosures", "Foreclosures.csproj", "{99BD0A06-0D5E-4EC0-BFE2-B88BEEBB9568}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Probidder", "Probidder.csproj", "{99BD0A06-0D5E-4EC0-BFE2-B88BEEBB9568}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj", "{ACA94788-BED1-4B8E-94EF-E54293E8D139}"
 EndProject

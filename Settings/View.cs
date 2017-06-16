@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Script.Serialization;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Settings
     {
@@ -29,18 +29,34 @@ namespace Cliver.Foreclosures
             public int InfoToastBottom = 100;
             public int InfoToastRight = 0;
             public System.Windows.Media.Brush SearchHighlightColor = System.Windows.Media.Brushes.Yellow;
-            public List<string> ShowedColumns = null;
-            public List<string> SearchedColumns = null;
             public System.Windows.Media.Brush FocusedControlColor = System.Windows.Media.Brushes.Gold;
+            public Tables ActiveTable = Tables.Foreclosures;
+            public enum Tables
+            {
+                Foreclosures,
+                Probates
+            }
+            public class Columns
+            {
+                public List<string> Showed = null;
+                public List<string> Searched = null;
+            }
+            public Dictionary<Tables, Columns> Tables2Columns = null;
 
             public override void Loaded()
             {
-                if (ShowedColumns == null)
-                    ShowedColumns = new List<string> { "FILING_DATE", "CITY", "ADDRESS" };
-                ShowedColumns = ShowedColumns.Select(x => x).Distinct().ToList();
-                if (SearchedColumns == null)
-                    SearchedColumns = new List<string> { "CITY", "ADDRESS" };
-                SearchedColumns = SearchedColumns.Select(x => x).Distinct().ToList();
+                if (Tables2Columns == null)
+                {
+                    Tables2Columns = new Dictionary<Tables, Columns>();
+
+                    List<string> fs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
+                    //showed = showed.Select(x => x).Distinct().ToList();
+                    //searched = searched.Select(x => x).Distinct().ToList();
+                    Tables2Columns[Tables.Foreclosures] = new Columns { Showed = fs, Searched = fs };
+
+                    fs = typeof(Db.Probate).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
+                    Tables2Columns[Tables.Probates] = new Columns { Showed = fs, Searched = fs };
+                }
 
                 ListWindow.This?.OrderColumns();
             }

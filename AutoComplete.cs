@@ -22,7 +22,7 @@ using Microsoft.Win32;
 using System.Windows.Input;
 //using GlobalHotKey;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class AutoComplete
     {

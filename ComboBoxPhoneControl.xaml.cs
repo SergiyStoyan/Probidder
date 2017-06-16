@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Collections;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     /// <summary>
     /// Interaction logic for ComboBoxControl.xaml

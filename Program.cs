@@ -23,7 +23,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public class Program
     {

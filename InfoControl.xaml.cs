@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     /// <summary>
     /// Interaction logic for InfoControl.xaml

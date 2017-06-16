@@ -18,28 +18,28 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
-    public partial class ForeclosureView : INotifyPropertyChanged, INotifyDataErrorInfo
+    public partial class ForeclosureView : View<Db.Foreclosure>
     {
-        public ForeclosureView()
-        {
-            Model = new Db.Foreclosure();
-            set_new_model();
-        }
+        //public ForeclosureView()
+        //{
+        //    Model = new Db.Foreclosure();
+        //    set_new_model();
+        //}
 
-        public ForeclosureView(Db.Foreclosure f)
-        {
-            if (f != null)
-                Model = f;
-            else
-            {
-                Model = new Db.Foreclosure();
-                set_new_model();
-            }
-        }
+        //public ForeclosureView(Db.Foreclosure f)
+        //{
+        //    if (f != null)
+        //        Model = f;
+        //    else
+        //    {
+        //        Model = new Db.Foreclosure();
+        //        set_new_model();
+        //    }
+        //}
 
-        void set_new_model()
+        override protected void set_new_model()
         {
             Model.COUNTY = Settings.Location.County;
             Model.TYPE_OF_EN = "CHA";
@@ -52,9 +52,6 @@ namespace Cliver.Foreclosures
             Model.PROP_DESC = "SINGLE FAMILY";
             Model.TERM_OF_MTG = 30;
         }
-        readonly Db.Foreclosure Model;
-
-        public int Id { get { return Model.Id; } }
 
         public IEnumerable<string> CASE_Ns
         {
@@ -62,7 +59,7 @@ namespace Cliver.Foreclosures
             {
                 if (string.IsNullOrEmpty(COUNTY))
                     return null;
-                return (new Db.CaseNumbers()).GetBy(COUNTY).case_ns.OrderBy(x => x);
+                return (new Db.ForeclosureCaseNumbers()).GetBy(COUNTY).case_ns.OrderBy(x => x);
             }
         }
         public IEnumerable<string> LENDORs
@@ -204,32 +201,32 @@ namespace Cliver.Foreclosures
             }
         }
         string _FILING_DATE = null;
-        public DateTime? AUCTION_DATE
-        {
-            get
-            {
-                check("AUCTION_DATE", null);
-                return Model.AUCTION_DATE;
-            }
-            set
-            {
-                edited = true;
-                Model.AUCTION_DATE = value;
-            }
-        }
-        public DateTime? AUCTION_TIME
-        {
-            get
-            {
-                check("AUCTION_TIME", null);
-                return Model.AUCTION_TIME;
-            }
-            set
-            {
-                edited = true;
-                Model.AUCTION_TIME = value;
-            }
-        }
+        //public DateTime? AUCTION_DATE
+        //{
+        //    get
+        //    {
+        //        check("AUCTION_DATE", null);
+        //        return Model.AUCTION_DATE;
+        //    }
+        //    set
+        //    {
+        //        edited = true;
+        //        Model.AUCTION_DATE = value;
+        //    }
+        //}
+        //public DateTime? AUCTION_TIME
+        //{
+        //    get
+        //    {
+        //        check("AUCTION_TIME", null);
+        //        return Model.AUCTION_TIME;
+        //    }
+        //    set
+        //    {
+        //        edited = true;
+        //        Model.AUCTION_TIME = value;
+        //    }
+        //}
         public string SALE_LOC
         {
             get
@@ -693,65 +690,6 @@ namespace Cliver.Foreclosures
                 edited = true;
                 Model.DEF_PHONE = value;
             }
-        }
-
-        public void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void ValidateAllProperties()
-        {
-            forced_validation = true;
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(null));
-            forced_validation = false;
-        }
-
-        void check(string property, string error)
-        {
-            if (!edited && !forced_validation)
-                return;
-            string e0 = null;
-            if (columnNames2error.TryGetValue(property, out e0))
-                InitialControlSetting = false;
-            columnNames2error[property] = error;
-            if (e0 != error)
-                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
-        }
-        readonly Dictionary<string, string> columnNames2error = new Dictionary<string, string>();
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        public bool InitialControlSetting = true;
-
-        public IEnumerable GetErrors(string propertyName)
-        {
-            if (string.IsNullOrEmpty(propertyName))
-                return null;
-            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
-        }
-        bool forced_validation = false;
-
-        public bool HasErrors
-        {
-            get
-            {
-                return columnNames2error.Where(x => x.Value != null).Select(x => x.Key).FirstOrDefault() != null;
-            }
-        }
-
-        public bool Edited
-        {
-            get
-            {
-                //return columnNames2error.Select(x => x.Key).FirstOrDefault() != null;
-                return edited;
-            }
-        }
-        bool edited
-        {
-            get;
-            set;
         }
     }
 }

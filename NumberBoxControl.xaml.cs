@@ -19,7 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class NumberBoxControl : TextBox
     {

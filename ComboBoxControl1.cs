@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public class ComboBoxControl1 : ComboBox
     {

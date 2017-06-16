@@ -27,7 +27,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Collections.ObjectModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class ListWindow : Window
     {
@@ -59,22 +59,14 @@ namespace Cliver.Foreclosures
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
-                Settings.View.ShowedColumns.Clear();
-                foreach (DataGridColumn dgc in list.Columns.OrderBy(x => x.DisplayIndex))
-                {
-                    if (dgc.Visibility != Visibility.Visible)
-                        continue;
-                    string cn = get_column_name(dgc);
-                    if (cn == null)//buttons
-                        continue;
-                    Settings.View.ShowedColumns.Add(cn);
-                }
+                save_columns_order(Settings.ViewSettings.Tables.Foreclosures, listForeclosures);
+                save_columns_order(Settings.ViewSettings.Tables.Probates, listProbates);
                 Settings.View.Save();
             };
 
             Closed += delegate
             {
-                ForeclosureViews.Dispose();
+                views.Dispose();
                 _This = null;
             };
 
@@ -113,33 +105,74 @@ namespace Cliver.Foreclosures
 
                 AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
             };
-            
+
+            fvs.Deleted += delegate { update_indicator(); };
+            fvs.Added += delegate { update_indicator(); };
+            listForeclosures.ItemsSource = fvs;
+
+            pvs.Deleted += delegate { update_indicator(); };
+            pvs.Added += delegate { update_indicator(); };
+            listProbates.ItemsSource = pvs;
+
+            list_changed();
+
             list.ItemContainerGenerator.StatusChanged += delegate (object sender, EventArgs e)
               {//needed for highlighting search keyword
                   highlight(list);
               };
 
-            OrderColumns();
-            ForeclosureViews = new ForeclosureView.Collection(this);
-            list.ItemsSource = ForeclosureViews.Items;
-            update_indicator();
-            ForeclosureViews.Deleted += delegate { update_indicator(); };
-            ForeclosureViews.Added += delegate { update_indicator(); };
+            //OrderColumns();
 
             ContentRendered += delegate
              {
                  WpfRoutines.TrimWindowSize(this);
              };
         }
-
-        public readonly ForeclosureView.Collection ForeclosureViews;
-
-        public static string GetName(DependencyObject obj)
+        
+        static void save_columns_order(Settings.ViewSettings.Tables t, DataGrid g)
         {
-            return (string)obj.GetValue(NameProperty);
+            Settings.View.Tables2Columns[t].Showed.Clear();
+            foreach (DataGridColumn dgc in g.Columns.OrderBy(x => x.DisplayIndex))
+            {
+                if (dgc.Visibility != Visibility.Visible)
+                    continue;
+                string cn = get_column_name(dgc);
+                if (cn == null)//buttons
+                    continue;
+                Settings.View.Tables2Columns[t].Showed.Add(cn);
+            }
         }
 
-        string get_column_name(DataGridColumn dgc)
+        void list_changed()
+        {
+            list.Visibility = Visibility.Collapsed;
+            switch (Settings.View.ActiveTable)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    {
+                        list = listForeclosures;
+                        views = fvs;
+                    }
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    {
+                        list = listProbates;
+                        views = pvs;
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+            }
+            list.Visibility = Visibility.Visible;
+            update_indicator();
+        }
+        DataGrid list;
+        public IViews Views { get { return views; } }
+        IViews views;
+        ForeclosureView.Views<ForeclosureView, Db.Foreclosures> fvs;
+        ProbateView.Views<ProbateView, Db.Probates> pvs;
+
+        static string get_column_name(DataGridColumn dgc)
         {
             TextBlock tb = dgc.Header as TextBlock;
             if (tb == null)
@@ -169,13 +202,13 @@ namespace Cliver.Foreclosures
                 }
                 else
                 {
-                    if (Settings.View.ShowedColumns.Where(x => x == cn).FirstOrDefault() == null)
+                    if (Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Where(x => x == cn).FirstOrDefault() == null)
                         dgc.Visibility = Visibility.Collapsed;
                 }
             }
-            for (int i = 0; i < Settings.View.ShowedColumns.Count; i++)
+            for (int i = 0; i < Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Count; i++)
             {
-                string cn = Settings.View.ShowedColumns[i];
+                string cn = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed[i];
                 DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
                 if (dgc == null)
                     continue;
@@ -190,7 +223,7 @@ namespace Cliver.Foreclosures
 
         void update_indicator()
         {
-            indicator_total.Content = "Total: " + ForeclosureViews.Count();
+            indicator_total.Content = "Total: " + views.Count();
             //filter();
         }
 
@@ -201,29 +234,48 @@ namespace Cliver.Foreclosures
 
         private void export_Click(object sender, RoutedEventArgs e)
         {
-            Export.ToDisk();
+            switch (Settings.View.ActiveTable)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    Export.ToDisk(new Db.Foreclosures());
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    Export.ToDisk(new Db.Probates());
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+            }
         }
 
         private void upload_Click(object sender, RoutedEventArgs e)
         {
-            Export.BeginToServer(new Db.Foreclosures());
+            switch (Settings.View.ActiveTable)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    Export.BeginToServer(new Db.Foreclosures());
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    Export.BeginToServer(new Db.Probates());
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+            }
         }
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            ForeclosureWindow.OpenDialog(null);
+            RecordWindow.OpenDialog(null, views);
         }
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ForeclosureView fw = list.SelectedItem as ForeclosureView;
-
-            if (fw == null)
+            IView v = list.SelectedItem as IView;
+            if (v == null)
             {
                 indicator_selected.Content = null;
                 return;
             }
-            indicator_selected.Content = "Selected ID: " + fw.Id;
+            indicator_selected.Content = "Selected ID: " + v.Id;
         }
 
         private void refresh_db_Click(object sender, RoutedEventArgs e)
@@ -238,9 +290,9 @@ namespace Cliver.Foreclosures
 
         private void drop_db_Click(object sender, RoutedEventArgs e)
         {
-            if (!Message.YesNo("Foreclosures table will be dropped. Are you sure to proceed?"))
+            if (!Message.YesNo(Settings.View.ActiveTable + " table will be dropped. Are you sure to proceed?"))
                 return;
-            ForeclosureViews.Drop();
+            views.Drop();
         }
         
         private void about_Click(object sender, RoutedEventArgs e)
@@ -294,8 +346,8 @@ namespace Cliver.Foreclosures
 
         private void open_Click(object sender, RoutedEventArgs e)
         {
-            ForeclosureView fw = list.SelectedItem as ForeclosureView;
-            ForeclosureWindow.OpenDialog(fw);
+            IView v = list.SelectedItem as IView;
+            RecordWindow.OpenDialog(v, views);
         }
 
         private void show_search_Click(object sender, RoutedEventArgs e)
@@ -327,9 +379,20 @@ namespace Cliver.Foreclosures
                 return;
             }
 
-            PropertyInfo[] pis_ = typeof(ForeclosureView).GetProperties();
+            PropertyInfo[] pis_;
+            switch (Settings.View.ActiveTable)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                   pis_ = typeof(ForeclosureView).GetProperties();
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    pis_ = typeof(ProbateView).GetProperties();
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+            }          
             List<PropertyInfo> pis = new List<PropertyInfo>();
-            foreach (string c in Settings.View.SearchedColumns)
+            foreach (string c in Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched)
             {
                 PropertyInfo pi = pis_.FirstOrDefault(x => x.Name == c);
                 if (pi == null)
@@ -340,10 +403,10 @@ namespace Cliver.Foreclosures
             filter_regex = new Regex("(" + Regex.Escape(k) + ")", RegexOptions.IgnoreCase);
             cv.Filter = o =>
             {
-                ForeclosureView fw = (ForeclosureView)o;
+                IView iv = (IView)o;
                 foreach (PropertyInfo pi in pis)
                 {
-                    object v = pi.GetValue(fw);
+                    object v = pi.GetValue(iv);
                     if (v == null)
                         continue;
                     string s;
@@ -359,7 +422,7 @@ namespace Cliver.Foreclosures
 
             int count = 0;
             foreach (object o in cv)
-                if (o is ForeclosureView)
+                if (o is IView)
                     count++;
             indicator_filtered.Content = "Filtered: " + count;
         }
@@ -371,7 +434,7 @@ namespace Cliver.Foreclosures
 
             HashSet<int> searched_columns = new HashSet<int>();
             for (int i = 0; i < list.Columns.Count; i++)
-                if (Settings.View.SearchedColumns.Contains(get_column_name(list.Columns[i])))
+                if (Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Contains(get_column_name(list.Columns[i])))
                     searched_columns.Add(i);
 
             foreach (DataGridRow r in grid.FindChildrenOfType<DataGridRow>())
@@ -407,11 +470,11 @@ namespace Cliver.Foreclosures
 
         private void list_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
-            {
-                e.Cancel = true;
-                return;
-            }
+            //if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
+            //{
+            //    e.Cancel = true;
+            //    return;
+            //}
 
             //e.Column.IsReadOnly = false;
             //e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
@@ -464,9 +527,9 @@ namespace Cliver.Foreclosures
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            var fw = e.Row.DataContext as ForeclosureView;
-            if (fw == null)
-                return;
+            //var fw = e.Row.DataContext as ForeclosureView;
+            //if (fw == null)
+            //    return;
             //for (int i = 0; i < list.Columns.Count; i++)
             //{
             //    var c = list.Columns[i];
@@ -477,38 +540,31 @@ namespace Cliver.Foreclosures
 
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            var fw = e.Row.DataContext as ForeclosureView;
-            if (fw == null)
+            var v = e.Row.DataContext as IView;
+            if (v == null)
                 return;
-            if (fw.Id != 0 && !fw.Edited)
+            if (v.Id != 0 && !v.Edited)
                 return;
-            fw.ValidateAllProperties();
-            if (/*!e.Row.IsValid() ||*/ fw.HasErrors)
+            v.ValidateAllProperties();
+            if (/*!e.Row.IsValid() ||*/ v.HasErrors)
             {
                 e.Cancel = true;
                 return;
             }
             e.Cancel = false;
-            if(e.Row.IsNewItem)//added from the grid (not clear how to commit it)
-                ForeclosureViews.Delete(fw);
-            ForeclosureViews.Update(fw);
+            if (e.Row.IsNewItem)//added from the grid (not clear how to commit it)
+                views.Delete(v);
+            views.Update(v);
         }
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-            ForeclosureView fw = list.SelectedItem as ForeclosureView;
-            if (fw == null)
+            IView v = list.SelectedItem as IView;
+            if (v == null)
                 return;
-            if (!Message.YesNo("You are about deleting record [Id=" + fw.Id + "]. Proceed?"))
+            if (!Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
-            ForeclosureViews.Delete(fw);
+            views.Delete(v);
         }
     }
-
-    //public class ForeclosuresView
-    //{
-    //  static  ObservableCollection<ForeclosureView> list = new ObservableCollection<ForeclosureView>((new Db.Foreclosures()).GetAll().Select(x => new ForeclosureView(x)));
-
-    //   static public ObservableCollection<ForeclosureView> List { get { return list; } set { list = value; } }
-    //}
 }

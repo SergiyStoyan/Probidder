@@ -14,7 +14,7 @@ using System.IO;
 using LiteDB;
 using System.Reflection;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {
@@ -80,7 +80,13 @@ namespace Cliver.Foreclosures
                     tasks.Add(t);
                     t = new Task(() =>
                     {
-                        CaseNumbers.RefreshFile();
+                        ForeclosureCaseNumbers.RefreshFile();
+                    });
+                    t.Start();
+                    tasks.Add(t);
+                    t = new Task(() =>
+                    {
+                        ProbateCaseNumbers.RefreshFile();
                     });
                     t.Start();
                     tasks.Add(t);

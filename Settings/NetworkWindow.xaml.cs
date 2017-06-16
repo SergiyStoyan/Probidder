@@ -23,7 +23,7 @@ using System.IO;
 using System.Management;
 using System.Threading;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class NetworkWindow : Window
     {

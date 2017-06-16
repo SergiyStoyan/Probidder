@@ -12,7 +12,7 @@ using System.Net.Http;
 using System.IO;
 using System.Reflection;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {

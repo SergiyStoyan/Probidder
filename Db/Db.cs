@@ -13,7 +13,7 @@ using System.Net.Http;
 using System.IO;
 using LiteDB;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {
@@ -65,6 +65,8 @@ namespace Cliver.Foreclosures
         
         public class Document
         {
+            public class ObligatoryField : Attribute { }
+
             public int Id { get; set; }
         }
 

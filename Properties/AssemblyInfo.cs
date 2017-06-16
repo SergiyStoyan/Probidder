@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Foreclosures")]
-[assembly: AssemblyDescription("Foreclosures, by Sergey Stoyan, CliverSoft.com")]
+[assembly: AssemblyTitle("Probidder")]
+[assembly: AssemblyDescription("Probidder, by Sergey Stoyan, CliverSoft.com")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft.com")]
-[assembly: AssemblyProduct("Foreclosures")]
+[assembly: AssemblyProduct("Probidder")]
 [assembly: AssemblyCopyright("Copyright © 2017 CliverSoft.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

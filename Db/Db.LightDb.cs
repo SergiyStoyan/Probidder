@@ -10,7 +10,7 @@ using System.Text;
 using System.IO;
 using LiteDB;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {

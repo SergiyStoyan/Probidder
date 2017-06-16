@@ -25,7 +25,7 @@ using System.Threading;
 using System.Reflection;
 using System.Collections.ObjectModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class AutoCompleteWindow : Window
     {

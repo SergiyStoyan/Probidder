@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Script.Serialization;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Settings
     {
@@ -62,7 +62,7 @@ namespace Cliver.Foreclosures
 {"WEL","MTG: [WELLS FARGO] #R" },
                     };
                 
-                Cliver.Foreclosures.AutoComplete.UpdateRegex(Keys2Phrase);
+                Cliver.Probidder.AutoComplete.UpdateRegex(Keys2Phrase);
             }
 
             public override void Saving()

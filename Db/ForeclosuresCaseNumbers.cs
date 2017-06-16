@@ -13,18 +13,18 @@ using System.Net.Http;
 using System.IO;
 using System.Reflection;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {
-        public class CaseNumbers : Db.Json.Table<CountyCaseNumbers>
+        public class ForeclosureCaseNumbers : Db.Json.Table<CountyForeclosureCaseNumbers>
         {
             new static public void RefreshFile()
             {
                 Type t = MethodBase.GetCurrentMethod().DeclaringType;
                 Log.Main.Inform("Refreshing table: " + t.Name);
                 string[] ls = File.ReadAllLines(Log.AppDir + "\\counties.csv");
-                List<CountyCaseNumbers> ccns = new List<CountyCaseNumbers>();
+                List<CountyForeclosureCaseNumbers> ccns = new List<CountyForeclosureCaseNumbers>();
                 for (int i = 1; i < ls.Length; i++)
                     ccns.Add(get_CountyCaseNumbers(ls[i]));
                 //if(string.IsNullOrEmpty(Settings.Location.County))
@@ -37,7 +37,7 @@ namespace Cliver.Foreclosures
                 System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
             }
 
-            static CountyCaseNumbers get_CountyCaseNumbers(string county)
+            static CountyForeclosureCaseNumbers get_CountyCaseNumbers(string county)
             {
                 county = GetNormalized(county);
                 HttpClient http_client = new HttpClient();
@@ -51,17 +51,17 @@ namespace Cliver.Foreclosures
                 dynamic ccns = SerializationRoutines.Json.Deserialize<dynamic>(s);
                 foreach (dynamic ccn in ccns)
                     case_ns.Add(((string)ccn.Name).Trim());
-                return new CountyCaseNumbers { county = county, case_ns = case_ns };
+                return new CountyForeclosureCaseNumbers { county = county, case_ns = case_ns };
             }
 
-            public CountyCaseNumbers GetBy(string county)
+            public CountyForeclosureCaseNumbers GetBy(string county)
             {
                 lock (table)
                 {
                     county = GetNormalized(county);
-                    CountyCaseNumbers ccns = table.Where(x => GetNormalized(x.county) == county).FirstOrDefault();
+                    CountyForeclosureCaseNumbers ccns = table.Where(x => GetNormalized(x.county) == county).FirstOrDefault();
                     if (ccns == null)
-                        return new CountyCaseNumbers { case_ns = new List<string>()};
+                        return new CountyForeclosureCaseNumbers { case_ns = new List<string>()};
                     Db.Foreclosures fs = new Foreclosures();
                     //List<string> used_cns = fs.Get(x => GetNormalized(x.COUNTY) == county).ToList(); !!!does not work!!!
                     HashSet<string> used_cns = new HashSet<string>(fs.GetAll().Where(x => GetNormalized(x.COUNTY) == county).Select(x => x.CASE_N));
@@ -71,7 +71,7 @@ namespace Cliver.Foreclosures
             }
         }
 
-        public class CountyCaseNumbers : Document
+        public class CountyForeclosureCaseNumbers : Document
         {
             public string county { get; set; }
             public List<string> case_ns { get; set; }

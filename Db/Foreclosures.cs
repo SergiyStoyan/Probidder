@@ -18,7 +18,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class Db
     {
@@ -44,27 +44,38 @@ namespace Cliver.Foreclosures
 
         public class Foreclosure : Document
         {
+            [ObligatoryField]
             public string TYPE_OF_EN { get; set; }
             public string COUNTY { get; set; }
+            [ObligatoryField]
             public string CASE_N { get; set; }
+            [ObligatoryField]
             public DateTime? FILING_DATE { get; set; }
-            public DateTime? AUCTION_DATE { get; set; }
-            public DateTime? AUCTION_TIME { get; set; }
+            //public DateTime? AUCTION_DATE { get; set; }
+            //public DateTime? AUCTION_TIME { get; set; }
             public string SALE_LOC { get; set; }
+            [ObligatoryField]
             public DateTime? ENTRY_DATE { get; set; }
+            [ObligatoryField]
             public string LENDOR { get; set; }
+            [ObligatoryField]
             public DateTime? ORIGINAL_MTG { get; set; }
             public string DOCUMENT_N { get; set; }
             public uint? ORIGINAL_I { get; set; }
             public string LEGAL_D { get; set; }
+            [ObligatoryField]
             public string ADDRESS { get; set; }
+            [ObligatoryField]
             public string CITY { get; set; }
             public string ZIP { get; set; }
             public string PIN { get; set; }
+            [ObligatoryField]
             public DateTime? DATE_OF_CA { get; set; }
+            [ObligatoryField]
             public DateTime? LAST_PAY_DATE { get; set; }
             public uint? BALANCE_DU { get; set; }
             public decimal? PER_DIEM_I { get; set; }
+            [ObligatoryField]
             public string CURRENT_OW { get; set; }
             public bool IS_ORG { get; set; }
             public bool DECEASED { get; set; }
@@ -76,6 +87,7 @@ namespace Cliver.Foreclosures
             public string ATTY { get; set; }
             public string ATTORNEY_S { get; set; }
             public string TYPE_OF_MO { get; set; }
+            [ObligatoryField]
             public string PROP_DESC { get; set; }
             public decimal? INTEREST_R { get; set; }
             public decimal? MONTHLY_PAY { get; set; }

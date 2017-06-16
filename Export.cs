@@ -30,7 +30,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public class Export
     {
@@ -52,7 +52,7 @@ namespace Cliver.Foreclosures
                 if (to_server_t != null && to_server_t.IsAlive)
                     return to_server_t;
 
-                to_server_t = ThreadRoutines.StartTry(() => { to_server(table, show_start_notification); });
+                to_server_t = ThreadRoutines.StartTry(() => { to_server<D>(table, show_start_notification); });
                 return to_server_t;
             }
         }
@@ -92,7 +92,7 @@ namespace Cliver.Foreclosures
                     foreach (D f in fs)
                     {
                         Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                        normalize_record(d);
+                        normalize_record<D>(d);
                         d["recorder"] = Settings.Network.UserName;
                         records.Add(d);
                     }
@@ -135,7 +135,7 @@ namespace Cliver.Foreclosures
                     if (Message.YesNo("Table " + table.GetType() + " has been uploaded succesfully to the server.\r\n\r\nClean up the table?"))
                     {
                         Log.Inform("Dropping table " + table.GetType());
-                        ListWindow.This.ForeclosureViews.Drop();
+                        ListWindow.This.Views.Drop();
                     }
                 }
             }
@@ -212,7 +212,7 @@ namespace Cliver.Foreclosures
             return d["status"];
         }
 
-        public static bool ToDisk()
+        public static bool ToDisk<D>(Db.LiteDb.Table<D> table) where D : Db.Document, new()
         {
             string file;
             using (var d = new System.Windows.Forms.FolderBrowserDialog())
@@ -220,26 +220,26 @@ namespace Cliver.Foreclosures
                 d.Description = "Choose the folder where to save the exported file.";
                 if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                     return false;
-                file = d.SelectedPath + "\\foreclosure_" + DateTime.Now.ToString("yy-MM-dd_HH-mm-ss") + ".csv";
+                file = d.SelectedPath + "\\" + table.GetType().Name + "_" + DateTime.Now.ToString("yy-MM-dd_HH-mm-ss") + ".csv";
             }
 
             try
             {
                 TextWriter tw = new StreamWriter(file);
-                Dictionary<string, object> hs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (object)null);
+                Dictionary<string, object> hs = table.GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (object)null);
                 tw.WriteLine(FieldPreparation.GetCsvHeaderLine(hs.Keys, FieldPreparation.FieldSeparator.COMMA));
                 Db.Foreclosures fs = new Db.Foreclosures();
                 foreach (Db.Foreclosure f in fs.GetAll())
                 {
-                    Dictionary<string, object> d = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                    normalize_record(d);
+                    Dictionary<string, object> d = table.GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
+                    normalize_record<D>(d);
                     tw.WriteLine(FieldPreparation.GetCsvLine(d.Values, FieldPreparation.FieldSeparator.COMMA));
                 }
                 tw.Close();
 
-                if (Message.YesNo("Data has been exported succesfully to " + file + "\r\n\r\nClean up the database?"))
+                if (Message.YesNo("Table " + table.GetType() + " has been exported succesfully to " + file + "\r\n\r\nClean up the table?"))
                 {
-                    ListWindow.This.ForeclosureViews.Drop();
+                    ListWindow.This.Views.Drop();
                     return true;
                 }
             }
@@ -256,18 +256,27 @@ namespace Cliver.Foreclosures
                 d[field] = Regex.Replace(((DateTime)d[field]).ToString(), @"\s.*", "");
         }
 
-        static void normalize_record(Dictionary<string, object> d)
+        static void normalize_record<D>(Dictionary<string, object> d) where D : Db.Document, new()
         {
-            normalize_date(d, "FILING_DATE");
-            normalize_date(d, "ENTRY_DATE");
-            normalize_date(d, "DATE_OF_CA");
-            normalize_date(d, "ORIGINAL_MTG");
-            normalize_date(d, "LAST_PAY_DATE");
-            normalize_date(d, "AUCTION_DATE");
-            normalize_date(d, "AUCTION_TIME");
+            if (typeof(D) == typeof(Db.Foreclosure))
+            {
+                normalize_date(d, "FILING_DATE");
+                normalize_date(d, "ENTRY_DATE");
+                normalize_date(d, "DATE_OF_CA");
+                normalize_date(d, "ORIGINAL_MTG");
+                normalize_date(d, "LAST_PAY_DATE");
+                //normalize_date(d, "AUCTION_DATE");
+                //normalize_date(d, "AUCTION_TIME");
 
-            if (d["PIN"] != null)
-                d["PIN"] = ((string)d["PIN"]).Replace("____", "0000");
+                if (d["PIN"] != null)
+                    d["PIN"] = ((string)d["PIN"]).Replace("____", "0000");
+            }
+            else if (typeof(D) == typeof(Db.Probate))
+            {
+                normalize_date(d, "FillingDate");
+                normalize_date(d, "DeathDate");
+                normalize_date(d, "WillDate");
+            }
         }
     }
 

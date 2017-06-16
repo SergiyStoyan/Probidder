@@ -22,7 +22,7 @@ using System.Windows.Interop;
 using System.Threading;
 using System.Windows.Media.Animation;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class InfoWindow : Window
     {

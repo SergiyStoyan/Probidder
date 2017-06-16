@@ -25,7 +25,7 @@ using System.Threading;
 using System.Reflection;
 using System.ComponentModel;
 
-namespace Cliver.Foreclosures
+namespace Cliver.Probidder
 {
     public partial class ViewWindow : Window
     {
@@ -55,10 +55,23 @@ namespace Cliver.Foreclosures
                 WpfRoutines.TrimWindowSize(this);
             };
 
+            switch (Settings.View.ActiveTable)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    document_type = typeof(Db.Foreclosure);
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    document_type = typeof(Db.Probate);
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+            }
+
             set(Settings.View);
         }
+        readonly Type document_type;
 
-        class Item: INotifyPropertyChanged
+        class Item : INotifyPropertyChanged
         {
             public bool Show { set; get; }
             public bool Search { set; get; }
@@ -70,13 +83,13 @@ namespace Cliver.Foreclosures
             }
             public event PropertyChangedEventHandler PropertyChanged;
         }
-        
+
         void set(Settings.ViewSettings s)
         {
-            list.ItemsSource = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
+            list.ItemsSource = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
             {
-                Show = s.ShowedColumns.Contains(x.Name),
-                Search = s.SearchedColumns.Contains(x.Name),
+                Show = s.Tables2Columns[s.ActiveTable].Showed.Contains(x.Name) || x.GetCustomAttribute<Db.Document.ObligatoryField>() != null,
+                Search = s.Tables2Columns[s.ActiveTable].Searched.Contains(x.Name),
                 Column = x.Name
             }
             ).ToList();
@@ -96,29 +109,33 @@ namespace Cliver.Foreclosures
         {
             try
             {
-                Settings.View.SearchedColumns.Clear();
+                Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Clear();
                 foreach (Item i in list.ItemsSource)
                 {
                     if (i.Search)
-                        Settings.View.SearchedColumns.Add(i.Column);
+                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Add(i.Column);
                 }
 
-                List<string> showed_columns0 = Settings.View.ShowedColumns.ToList();
-                Settings.View.ShowedColumns.Clear();
+                PropertyInfo pi = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<Db.Document.ObligatoryField>() != null && !Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Contains(x.Name)).FirstOrDefault();
+                if (pi != null)
+                    throw new Exception("Column " + pi.Name + " must be showed!");
+
+                List<string> showed_columns0 = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.ToList();
+                Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Clear();
                 List<Item> column_items = ((List<Item>)list.ItemsSource);
                 foreach (string c in showed_columns0)
                 {
                     Item i = column_items.Where(x => x.Show && x.Column == c).FirstOrDefault();
                     if (i != null)
                     {
-                        Settings.View.ShowedColumns.Add(c);
+                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Add(c);
                         column_items.Remove(i);
                     }
                 }
                 foreach (Item i in column_items)
                 {
                     if (i.Show)
-                        Settings.View.ShowedColumns.Insert(0, i.Column);
+                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Insert(0, i.Column);
                 }
 
                 Settings.View.Save();
