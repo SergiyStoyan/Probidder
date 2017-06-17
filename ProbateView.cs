@@ -43,7 +43,7 @@ namespace Cliver.Probidder
         {
             Model.FillingCounty = Settings.Location.County;
             Model.FillingState = "IL";
-            Model.CaseNumber = CASE_Ns.FirstOrDefault();
+            Model.CaseNumber = CASE_Ns?.FirstOrDefault();
         }
         
         public IEnumerable<string> CASE_Ns

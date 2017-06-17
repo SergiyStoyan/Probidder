@@ -57,6 +57,11 @@ namespace Cliver.Probidder
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
+            Loaded += delegate
+            {
+                AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
+            };
+
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
                 get_columns_order2settings(Settings.ViewSettings.Tables.Foreclosures);
@@ -102,9 +107,9 @@ namespace Cliver.Probidder
                         upload.IsEnabled = true;
                     }
                 }));
-
-                AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
             };
+
+            PreviewKeyDown += ListWindow_PreviewKeyDown;
 
             fvs = new View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>(this);
             fvs.Deleted += delegate { update_indicator(); };
@@ -121,12 +126,20 @@ namespace Cliver.Probidder
             ActiveTableChanged();
             //OrderColumns();
 
-            ContentRendered += delegate
-             {
-                 WpfRoutines.TrimWindowSize(this);
-             };
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                SizeToContent = SizeToContent.Manual;
+                WpfRoutines.TrimWindowSize(this);
+            }));
         }
-        
+
+        private void ListWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+            }
+        }
+
         void get_columns_order2settings(Settings.ViewSettings.Tables table)
         {
             DataGrid g;

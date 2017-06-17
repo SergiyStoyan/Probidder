@@ -43,7 +43,7 @@ namespace Cliver.Probidder
         {
             Model.COUNTY = Settings.Location.County;
             Model.TYPE_OF_EN = "CHA";
-            Model.CASE_N = CASE_Ns.FirstOrDefault();
+            Model.CASE_N = CASE_Ns?.FirstOrDefault();
             Model.ENTRY_DATE = DateTime.Now;
             Model.IS_ORG = false;
             Model.DECEASED = false;
