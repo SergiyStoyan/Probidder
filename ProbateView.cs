@@ -22,22 +22,7 @@ namespace Cliver.Probidder
 {
     public partial class ProbateView : View<Db.Probate>
     {
-        //public ProbateView()
-        //{
-        //    Model = new Db.Probate();
-        //    set_new_model();
-        //}
-
-        //public ProbateView(Db.Probate f)
-        //{
-        //    if (f != null)
-        //        Model = f;
-        //    else
-        //    {
-        //        Model = new Db.Probate();
-        //        set_new_model();
-        //    }
-        //}
+        public ProbateView(Db.Probate p) : base(p) { }
 
         override protected void set_new_model()
         {

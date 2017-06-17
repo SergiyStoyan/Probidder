@@ -57,8 +57,8 @@ namespace Cliver.Probidder
                 if (string.IsNullOrWhiteSpace(Settings.Network.UserName) || string.IsNullOrWhiteSpace(Settings.Network.EncryptedPassword))
                     NetworkWindow.OpenDialog();
 
-                //if (string.IsNullOrWhiteSpace(Settings.Location.County))
-                //LocationWindow.OpenDialog();
+                if (string.IsNullOrWhiteSpace(Settings.Location.County))
+                    LocationWindow.OpenDialog();
 
                 Service.Running = true;
                 //Db.BeginRefresh();

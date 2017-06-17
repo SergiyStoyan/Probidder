@@ -111,15 +111,13 @@ namespace Cliver.Probidder
 
             PreviewKeyDown += ListWindow_PreviewKeyDown;
 
-            fvs = new View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>(this);
-            fvs.Deleted += delegate { update_indicator(); };
-            fvs.Added += delegate { update_indicator(); };
+            fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
+            fvs.CollectionChanged += delegate { update_indicator(); };
             listForeclosures.ItemsSource = fvs;
             OrderColumns(Settings.ViewSettings.Tables.Foreclosures);
 
-            pvs = new View<Db.Probate>.Views<ProbateView, Db.Probates>(this);
-            pvs.Deleted += delegate { update_indicator(); };
-            pvs.Added += delegate { update_indicator(); };
+            pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
+            pvs.CollectionChanged += delegate { update_indicator(); };
             listProbates.ItemsSource = pvs;
             OrderColumns(Settings.ViewSettings.Tables.Probates);
 

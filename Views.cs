@@ -21,21 +21,12 @@ using System.Windows;
 
 namespace Cliver.Probidder
 {
-        public class Views
-        {
-            public delegate void DeletedHandler();
-            public delegate void AddedHandler();
-        }
-
-        public interface IViews : IDisposable
-        {
-            int Count();
-            void Drop();
-            void Delete(IView v);
-            event Views.DeletedHandler Deleted;
-            void Update(IView v);
-            event Views.AddedHandler Added;
-
+    public interface IViews : IDisposable
+    {
+        int Count();
+        void Drop();
+        void Delete(IView v);
+        void Update(IView v);
         IView GetPrevious(IView v);
         IView GetNext(IView v);
         IView GetFirst_();
@@ -47,13 +38,19 @@ namespace Cliver.Probidder
     {
         public class Views<V, T> :ObservableCollection<V>, IViews where V : View<D> where T : Db.LiteDb.Table<D>, new()
         {
-            public Views(Window owner)
+            static public Views<V, T> Create(Window owner)
             {
-                Items = new ObservableCollection<V>(Table.GetAll().Select(x => (V)Activator.CreateInstance(typeof(V), new[] { x })).ToList());
+                T t = new T();
+                List<V> vs = t.GetAll().Select(x => (V)Activator.CreateInstance(typeof(V), new[] { x })).ToList();
+                return new Views<V, T>(owner, t, vs);
+            }
+
+            Views(Window owner, T table, List<V> vs):base(vs)
+            {
+                this.table = table;
                 this.owner = owner;
             }
-            new public readonly ObservableCollection<V> Items;
-            public readonly T Table = new T();
+            readonly T table = new T();
             readonly Window owner;
 
             ~Views()
@@ -63,16 +60,16 @@ namespace Cliver.Probidder
 
             public void Dispose()
             {
-                if (Table != null)
+                if (table != null)
                 {
-                    Table.Dispose();
-                    //Table = null;
+                    table.Dispose();
+                    //table = null;
                 }
             }
 
             public int Count()
             {
-                return Table.Count();
+                return table.Count();
             }
 
             public List<V> Get(Func<V, bool> query)
@@ -124,14 +121,12 @@ namespace Cliver.Probidder
 
             public void Delete(V fw)
             {
-                Table.Delete(fw.Model.Id);
+                table.Delete(fw.Model.Id);
                 owner.Dispatcher.Invoke(() =>
                 {
                     Items.Remove(fw);
-                    Deleted?.Invoke();
                 });
             }
-            public event Views.DeletedHandler Deleted = null;
             public void Delete(IView v)
             {
                 Delete((V)v);
@@ -141,18 +136,16 @@ namespace Cliver.Probidder
             {
                 owner.Dispatcher.Invoke(() =>
                 {
-                    Table.Save(fw.Model);
+                    table.Save(fw.Model);
                     if (Items.Where(x => x == fw).FirstOrDefault() == null)
                     {
                         Items.Add(fw);
-                        Added?.Invoke();
                     }
                     //else
                     //    fw.OnPropertyChanged(null);
                     fw.edited = false;
                 });
             }
-            public event Views.AddedHandler Added = null;
             public void Update(IView v)
             {
                 Update((V)v);
@@ -162,9 +155,8 @@ namespace Cliver.Probidder
             {
                 owner.Dispatcher.Invoke(() =>
                 {
-                    Table.Drop();
+                    table.Drop();
                     Items.Clear();
-                    Deleted?.Invoke();
                 });
             }
         }
