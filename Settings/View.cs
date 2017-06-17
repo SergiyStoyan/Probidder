@@ -71,6 +71,13 @@ namespace Cliver.Probidder
 
             public override void Saving()
             {
+                if (Tables2Columns != null)
+                {
+                    Tables2Columns[Tables.Foreclosures].Showed = Tables2Columns[Tables.Foreclosures].Showed.Distinct().ToList();
+                    Tables2Columns[Tables.Foreclosures].Searched = Tables2Columns[Tables.Foreclosures].Searched.Distinct().ToList();
+                    Tables2Columns[Tables.Probates].Showed = Tables2Columns[Tables.Probates].Showed.Distinct().ToList();
+                    Tables2Columns[Tables.Probates].Searched = Tables2Columns[Tables.Probates].Searched.Distinct().ToList();                    
+                }
             }            
         }
     }

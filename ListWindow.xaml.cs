@@ -199,57 +199,65 @@ namespace Cliver.Probidder
 
         public void OrderColumns(Settings.ViewSettings.Tables table)
         {
-            DataGrid list;
-            switch (table)
+            ignore_list_ColumnDisplayIndexChanged = true;
+            try
             {
-                case Settings.ViewSettings.Tables.Foreclosures:
-                    {
-                        list = listForeclosures;
-                    }
-                    break;
-                case Settings.ViewSettings.Tables.Probates:
-                    {
-                        list = listProbates;
-                    }
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + table);
-            }
+                DataGrid list;
+                switch (table)
+                {
+                    case Settings.ViewSettings.Tables.Foreclosures:
+                        {
+                            list = listForeclosures;
+                        }
+                        break;
+                    case Settings.ViewSettings.Tables.Probates:
+                        {
+                            list = listProbates;
+                        }
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + table);
+                }
 
-            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (cv != null)
-            {
-                if (cv.IsEditingItem)
-                    cv.CommitEdit();
-                if (cv.IsAddingNew)
-                    cv.CommitNew();
-            }
-            int non_data_columns_count = 0;
-            foreach (DataGridColumn dgc in list.Columns)
-            {
-                string cn = get_column_name(dgc);
-                if (cn == null)
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                if (cv != null)
                 {
+                    if (cv.IsEditingItem)
+                        cv.CommitEdit();
+                    if (cv.IsAddingNew)
+                        cv.CommitNew();
+                }
+                int non_data_columns_count = 0;
+                foreach (DataGridColumn dgc in list.Columns)
+                {
+                    string cn = get_column_name(dgc);
+                    if (cn == null)
+                    {
+                        dgc.Visibility = Visibility.Visible;
+                        dgc.DisplayIndex = non_data_columns_count;
+                        non_data_columns_count++;
+                    }
+                    else
+                    {
+                        if (Settings.View.Tables2Columns[table].Showed.Where(x => x == cn).FirstOrDefault() == null)
+                            dgc.Visibility = Visibility.Collapsed;
+                    }
+                }
+                for (int i = 0; i < Settings.View.Tables2Columns[table].Showed.Count; i++)
+                {
+                    string cn = Settings.View.Tables2Columns[table].Showed[i];
+                    DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
                     dgc.Visibility = Visibility.Visible;
-                    dgc.DisplayIndex = non_data_columns_count;
-                    non_data_columns_count++;
-                }
-                else
-                {
-                    if (Settings.View.Tables2Columns[table].Showed.Where(x => x == cn).FirstOrDefault() == null)
-                        dgc.Visibility = Visibility.Collapsed;
+                    dgc.DisplayIndex = non_data_columns_count + i;
+                    dgc.CanUserSort = true;
+                    dgc.CanUserResize = true;
+                    dgc.CanUserReorder = true;
+                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
                 }
             }
-            for (int i = 0; i < Settings.View.Tables2Columns[table].Showed.Count; i++)
+            finally
             {
-                string cn = Settings.View.Tables2Columns[table].Showed[i];
-                DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
-                dgc.Visibility = Visibility.Visible;
-                dgc.DisplayIndex = non_data_columns_count + i;
-                dgc.CanUserSort = true;
-                dgc.CanUserResize = true;
-                dgc.CanUserReorder = true;
-                dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+                ignore_list_ColumnDisplayIndexChanged = false;
             }
         }
 
@@ -601,8 +609,11 @@ namespace Cliver.Probidder
 
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
         {
+            if (ignore_list_ColumnDisplayIndexChanged)
+                return;
             get_columns_order2settings(Settings.View.ActiveTable);
         }
+        bool ignore_list_ColumnDisplayIndexChanged = false;
 
         public void list_KeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
