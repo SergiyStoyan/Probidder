@@ -465,9 +465,11 @@ namespace Cliver.Probidder
                 if (o is IView)
                     count++;
             indicator_filtered.Content = "Filtered: " + count;
+
+            highlight();
         }
         Regex filter_regex = null;
-        private void highlight(DataGrid grid)
+        private void highlight()
         {
             if (filter_regex == null)
                 return;
@@ -477,13 +479,16 @@ namespace Cliver.Probidder
                 if (Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Contains(get_column_name(list.Columns[i])))
                     searched_columns.Add(i);
 
-            foreach (DataGridRow r in grid.FindChildrenOfType<DataGridRow>())
-            {
-                for (int j = 0; j < grid.Columns.Count; j++)
+            foreach (DataGridRow r in list.FindChildrenOfType<DataGridRow>())
+            { 
+            //for (int i = 0; i < list.Items.Count; i++)
+            //{
+                //DataGridRow r = (DataGridRow)list.ItemContainerGenerator.ContainerFromIndex(i);
+                for (int j = 0; j < list.Columns.Count; j++)
                 {
                     if (!searched_columns.Contains(j))
                         continue;
-                    foreach (TextBlock tb in grid.GetCell(r, j).FindChildrenOfType<TextBlock>())
+                    foreach (TextBlock tb in list.GetCell(r, j).FindChildrenOfType<TextBlock>())
                         highlight_TextBlock(tb);
                 }
             }
@@ -506,59 +511,7 @@ namespace Cliver.Probidder
                     tb.Inlines.Add(new Run() { Text = t });
                 match = !match;
             }
-        }
-
-        private void list_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            //if (!Settings.View.ShowedColumns.Contains(e.PropertyName))
-            //{
-            //    e.Cancel = true;
-            //    return;
-            //}
-
-            //e.Column.IsReadOnly = false;
-            //e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
-            //e.Column.HeaderTemplate = Resources["Header"] as DataTemplate;//to keep '_' in names
-            //e.Column.CanUserSort = true;
-            //e.Column.CanUserResize = true;
-            //e.Column.CanUserReorder = true;
-
-            //var tc = new DataGridTemplateColumn();
-            //var dt = new DataTemplate();
-            //var dtc = new FrameworkElementFactory(typeof(TextBlock));
-            //Binding b = new Binding(e.PropertyName);
-            //dtc.SetBinding(TextBlock.TextProperty, b);
-            //dt.VisualTree = dtc;
-            //tc.CellTemplate = dt;
-
-            //{
-            //    tc = new DataGridTemplateColumn();
-            //    dt = new DataTemplate();
-            //    dtc = new FrameworkElementFactory(typeof(TextBlock));
-            //    b = new Binding(e.PropertyName);
-            //    b.Mode = BindingMode.OneWay;
-            //    b.NotifyOnSourceUpdated = true;
-            //    b.NotifyOnTargetUpdated = true;
-            //    b.NotifyOnValidationError = true;
-
-            //    if (e.PropertyType == typeof(DateTime?))
-            //    {
-            //        b.StringFormat = DATE_FORMAT;
-            //        dtc.SetBinding(DatePickerControl.TextProperty, b);
-            //        dt.VisualTree = dtc;
-            //        tc.CellEditingTemplate = dt;
-            //    }
-            //    else if (e.PropertyType == typeof(DateTime?))
-            //    {
-            //        b.StringFormat = DATE_FORMAT;
-            //        dtc.SetBinding(DatePickerControl.TextProperty, b);
-            //        dt.VisualTree = dtc;
-            //        tc.CellEditingTemplate = dt;
-            //    }
-            //}
-
-            //e.Column = tc;
-        }
+        }        
         readonly string DATE_FORMAT = "MM/dd/yyyy";
 
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -567,15 +520,6 @@ namespace Cliver.Probidder
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            //var fw = e.Row.DataContext as ForeclosureView;
-            //if (fw == null)
-            //    return;
-            //for (int i = 0; i < list.Columns.Count; i++)
-            //{
-            //    var c = list.Columns[i];
-            //    if (!c.IsReadOnly)
-            //        list.GetCell(e.Row, i).IsEditing = true;
-            //}
         }
 
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -594,6 +538,7 @@ namespace Cliver.Probidder
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it)
                 views.Delete(v);
+                //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
             views.Update(v);
         }
 
