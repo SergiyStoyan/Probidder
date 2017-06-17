@@ -22,6 +22,7 @@ namespace Cliver.Probidder
 {
     public partial class ForeclosureView : View<Db.Foreclosure>
     {
+        public ForeclosureView() : base() { }
         public ForeclosureView(Db.Foreclosure f) : base(f) { }
 
         override protected void set_new_model()

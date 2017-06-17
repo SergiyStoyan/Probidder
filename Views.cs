@@ -74,16 +74,16 @@ namespace Cliver.Probidder
 
             public List<V> Get(Func<V, bool> query)
             {
-                return Items.Where(query).ToList();
+                return this.Where(query).ToList();
             }
             public List<object> Get(Func<object, bool> query)
             {
-                return Items.Where(query).ToList();
+                return this.Where(query).ToList();
             }
 
             public V GetPrevious(V fw)
             {
-                return Items.Where(x => x.Id < fw.Id).OrderByDescending(x => x.Id).FirstOrDefault();
+                return this.Where(x => x.Id < fw.Id).OrderByDescending(x => x.Id).FirstOrDefault();
             }
             public IView GetPrevious(IView v)
             {
@@ -94,7 +94,7 @@ namespace Cliver.Probidder
             {
                 if (fw == null)
                     fw = GetFirst();
-                return Items.Where(x => x.Id > fw.Id).OrderBy(x => x.Id).FirstOrDefault();
+                return this.Where(x => x.Id > fw.Id).OrderBy(x => x.Id).FirstOrDefault();
             }
             public IView GetNext(IView v)
             {
@@ -103,7 +103,7 @@ namespace Cliver.Probidder
 
             public V GetFirst()
             {
-                return Items.OrderBy(x => x.Id).FirstOrDefault();
+                return this.OrderBy(x => x.Id).FirstOrDefault();
             }
             public IView GetFirst_()
             {
@@ -112,7 +112,7 @@ namespace Cliver.Probidder
 
             public V GetLast()
             {
-                return Items.OrderByDescending(x => x.Id).FirstOrDefault();
+                return this.OrderByDescending(x => x.Id).FirstOrDefault();
             }
             public IView GetLast_()
             {
@@ -124,7 +124,7 @@ namespace Cliver.Probidder
                 table.Delete(fw.Model.Id);
                 owner.Dispatcher.Invoke(() =>
                 {
-                    Items.Remove(fw);
+                    this.Remove(fw);
                 });
             }
             public void Delete(IView v)
@@ -137,9 +137,9 @@ namespace Cliver.Probidder
                 owner.Dispatcher.Invoke(() =>
                 {
                     table.Save(fw.Model);
-                    if (Items.Where(x => x == fw).FirstOrDefault() == null)
+                    if (this.Where(x => x == fw).FirstOrDefault() == null)
                     {
-                        Items.Add(fw);
+                        this.Add(fw);
                     }
                     //else
                     //    fw.OnPropertyChanged(null);
@@ -156,7 +156,7 @@ namespace Cliver.Probidder
                 owner.Dispatcher.Invoke(() =>
                 {
                     table.Drop();
-                    Items.Clear();
+                    this.Clear();
                 });
             }
         }

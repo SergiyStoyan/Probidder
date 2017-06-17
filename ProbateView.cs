@@ -22,6 +22,7 @@ namespace Cliver.Probidder
 {
     public partial class ProbateView : View<Db.Probate>
     {
+        public ProbateView() : base() { }
         public ProbateView(Db.Probate p) : base(p) { }
 
         override protected void set_new_model()

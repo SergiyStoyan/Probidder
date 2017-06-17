@@ -32,6 +32,12 @@ namespace Cliver.Probidder
 
     public partial class View<D> : IView where D: Db.Document, new()
     {
+        public View()
+        {
+            Model = new D();
+            set_new_model();
+        }
+
         public View(D d)
         {
             if (d != null)

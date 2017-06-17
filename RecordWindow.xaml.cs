@@ -120,10 +120,10 @@ namespace Cliver.Probidder
                 switch (Settings.View.ActiveTable)
                 {
                     case Settings.ViewSettings.Tables.Foreclosures:
-                        v = new ForeclosureView(null);
+                        v = new ForeclosureView();
                         break;
                     case Settings.ViewSettings.Tables.Probates:
-                        v = new ProbateView(null);
+                        v = new ProbateView();
                         break;
                     default:
                         throw new Exception("Unknown option: " + Settings.View.ActiveTable);
