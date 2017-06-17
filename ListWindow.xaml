@@ -14,12 +14,6 @@
          AllowDrop="True"
             >
     <Window.Resources>
-        <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#F6F6F6" Offset="0.25"/>
-            <GradientStop Color="#EAE8E8" Offset="0.25"/>
-            <GradientStop Color="#DCD9D9" Offset="0.8"/>
-            <GradientStop Color="White" Offset="1"/>
-        </LinearGradientBrush>
     </Window.Resources>
     <Grid >
         <Grid.RowDefinitions>
@@ -31,7 +25,9 @@
             <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
         </Popup>
         <Menu Name="menu" Grid.Row="0">
-            <ComboBox Name="tables" SelectionChanged="tables_SelectionChanged"/>
+            <!--RadioButton Name="qq" Content="fddsgd"  IsChecked="False" Style="{StaticResource {x:Type ToggleButton}}"/>
+            <RadioButton Name="ww" Content="jkfgyh" IsChecked="False" Style="{StaticResource {x:Type ToggleButton}}"/-->
+            <ComboBox Name="tables" FontWeight="Bold" SelectionChanged="tables_SelectionChanged" MinWidth="150" HorizontalContentAlignment="Center"/>
             <MenuItem Header="File">
                 <MenuItem Header="Export" Name="export" Click="export_Click"/>
                 <MenuItem Header="Upload" Name="upload" Click="upload_Click"/>
@@ -1183,22 +1179,6 @@
                         
                         
                      
-
-                        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="CaseNumber">
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock>CaseNumber</TextBlock>
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CaseNumber, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding CaseNumber, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding CASE_Ns, Mode=OneWay}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="DeceasedCity">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock>DeceasedCity</TextBlock>
@@ -1297,7 +1277,7 @@
             </StackPanel>
         </ScrollViewer>
         <Border Grid.Row="2" BorderBrush="#aaa" BorderThickness="0 1 0 0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{StaticResource MenuBackground}" Height="{Binding ActualHeight, ElementName=CASE_N}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{Binding Background, ElementName=menu}" Height="{Binding ActualHeight, ElementName=CASE_N}">
                     <Label Name="indicator_total"  Margin="10,0,0,0"></Label>
                 <Label Name="indicator_filtered" Margin="10,0,0,0"></Label>
                 <Label Name="indicator_selected"  Margin="10,0,0,0"></Label>
