@@ -227,19 +227,19 @@ namespace Cliver.Probidder
         //        Model.AUCTION_TIME = value;
         //    }
         //}
-        public string SALE_LOC
-        {
-            get
-            {
-                check("SALE_LOC", null);
-                return Model.SALE_LOC;
-            }
-            set
-            {
-                edited = true;
-                Model.SALE_LOC = value;
-            }
-        }
+        //public string SALE_LOC
+        //{
+        //    get
+        //    {
+        //        check("SALE_LOC", null);
+        //        return Model.SALE_LOC;
+        //    }
+        //    set
+        //    {
+        //        edited = true;
+        //        Model.SALE_LOC = value;
+        //    }
+        //}
         //public DateTime? ENTRY_DATE { get { return Model.ENTRY_DATE; } set {  Model.ENTRY_DATE = value; } }
         public string ENTRY_DATE
         {

@@ -58,7 +58,7 @@ namespace Cliver.Probidder
                     NetworkWindow.OpenDialog();
 
                 //if (string.IsNullOrWhiteSpace(Settings.Location.County))
-                LocationWindow.OpenDialog();
+                //LocationWindow.OpenDialog();
 
                 Service.Running = true;
                 //Db.BeginRefresh();

@@ -128,7 +128,7 @@ namespace Cliver.Probidder
                 Settings.Database.NextRefreshTime = (DateTime)NextRefreshTime.Value;
 
                 Settings.Database.Save();
-                Config.Reload();
+                //Config.Reload();
 
                 Close();
             }

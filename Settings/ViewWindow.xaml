@@ -27,7 +27,10 @@
                                        IsReadOnly="False" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" Unchecked="ShowCheckBox_Unchecked" HorizontalAlignment="Center"/>
+                                        <CheckBox
+                                            IsChecked="{Binding Path=Show, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}" 
+                                            IsEnabled="{Binding Path=Editable, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"
+                                            Unchecked="ShowCheckBox_Unchecked" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

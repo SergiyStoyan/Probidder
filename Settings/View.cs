@@ -69,8 +69,6 @@ namespace Cliver.Probidder
                     fs = typeof(Db.Probate).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
                     Tables2Columns[Tables.Probates] = new Columns { Showed = fs, Searched = fs };
                 }
-
-                ListWindow.This?.OrderColumns();
             }
 
             public override void Saving()

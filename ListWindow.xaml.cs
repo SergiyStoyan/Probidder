@@ -59,8 +59,8 @@ namespace Cliver.Probidder
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
-                save_columns_order(Settings.ViewSettings.Tables.Foreclosures, listForeclosures);
-                save_columns_order(Settings.ViewSettings.Tables.Probates, listProbates);
+                get_columns_order2settings(Settings.ViewSettings.Tables.Foreclosures);
+                get_columns_order2settings(Settings.ViewSettings.Tables.Probates);
                 Settings.View.Save();
             };
 
@@ -110,11 +110,13 @@ namespace Cliver.Probidder
             fvs.Deleted += delegate { update_indicator(); };
             fvs.Added += delegate { update_indicator(); };
             listForeclosures.ItemsSource = fvs;
+            OrderColumns(Settings.ViewSettings.Tables.Foreclosures);
 
             pvs = new View<Db.Probate>.Views<ProbateView, Db.Probates>(this);
             pvs.Deleted += delegate { update_indicator(); };
             pvs.Added += delegate { update_indicator(); };
             listProbates.ItemsSource = pvs;
+            OrderColumns(Settings.ViewSettings.Tables.Probates);
 
             ActiveTableChanged();
             //OrderColumns();
@@ -125,9 +127,21 @@ namespace Cliver.Probidder
              };
         }
         
-        static void save_columns_order(Settings.ViewSettings.Tables t, DataGrid g)
+        void get_columns_order2settings(Settings.ViewSettings.Tables table)
         {
-            Settings.View.Tables2Columns[t].Showed.Clear();
+            DataGrid g;
+            switch (table)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                        g = listForeclosures;
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                        g = listProbates;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + table);
+            }
+            Settings.View.Tables2Columns[table].Showed.Clear();
             foreach (DataGridColumn dgc in g.Columns.OrderBy(x => x.DisplayIndex))
             {
                 if (dgc.Visibility != Visibility.Visible)
@@ -135,7 +149,7 @@ namespace Cliver.Probidder
                 string cn = get_column_name(dgc);
                 if (cn == null)//buttons
                     continue;
-                Settings.View.Tables2Columns[t].Showed.Add(cn);
+                Settings.View.Tables2Columns[table].Showed.Add(cn);
             }
         }
 
@@ -177,8 +191,25 @@ namespace Cliver.Probidder
             return tb.Text;
         }
 
-        public void OrderColumns()
+        public void OrderColumns(Settings.ViewSettings.Tables table)
         {
+            DataGrid list;
+            switch (table)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    {
+                        list = listForeclosures;
+                    }
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    {
+                        list = listProbates;
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + table);
+            }
+
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (cv != null)
             {
@@ -199,16 +230,14 @@ namespace Cliver.Probidder
                 }
                 else
                 {
-                    if (Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Where(x => x == cn).FirstOrDefault() == null)
+                    if (Settings.View.Tables2Columns[table].Showed.Where(x => x == cn).FirstOrDefault() == null)
                         dgc.Visibility = Visibility.Collapsed;
                 }
             }
-            for (int i = 0; i < Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Count; i++)
+            for (int i = 0; i < Settings.View.Tables2Columns[table].Showed.Count; i++)
             {
-                string cn = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed[i];
+                string cn = Settings.View.Tables2Columns[table].Showed[i];
                 DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
-                if (dgc == null)
-                    continue;
                 dgc.Visibility = Visibility.Visible;
                 dgc.DisplayIndex = non_data_columns_count + i;
                 dgc.CanUserSort = true;
@@ -562,6 +591,11 @@ namespace Cliver.Probidder
             if (!Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
+        }
+
+        private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
+        {
+            get_columns_order2settings(Settings.View.ActiveTable);
         }
     }
 }

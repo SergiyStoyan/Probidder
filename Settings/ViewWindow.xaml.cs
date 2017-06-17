@@ -74,6 +74,7 @@ namespace Cliver.Probidder
         class Item : INotifyPropertyChanged
         {
             public bool Show { set; get; }
+            public bool Editable { set; get; }
             public bool Search { set; get; }
             public string Column { set; get; }
 
@@ -86,13 +87,22 @@ namespace Cliver.Probidder
 
         void set(Settings.ViewSettings s)
         {
-            list.ItemsSource = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<FieldPreparation.IgnoredField>() == null).Select(x => new Item
+            Dictionary<string, Item> ns2i = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => new Item
             {
                 Show = s.Tables2Columns[s.ActiveTable].Showed.Contains(x.Name) || x.GetCustomAttribute<Db.Document.ObligatoryField>() != null,
+                Editable = x.GetCustomAttribute<Db.Document.ObligatoryField>() == null,
                 Search = s.Tables2Columns[s.ActiveTable].Searched.Contains(x.Name),
                 Column = x.Name
+            }).ToDictionary(x => x.Column, x => x);
+            List<Item> ii = new List<Item>();
+            foreach (string n in Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed)
+            {
+                ii.Add(ns2i[n]);
+                ns2i.Remove(n);
             }
-            ).ToList();
+            foreach (Item i in ns2i.Values)
+                ii.Add(i);
+            list.ItemsSource = ii;
         }
 
         private void reset_Click(object sender, RoutedEventArgs e)
@@ -109,16 +119,22 @@ namespace Cliver.Probidder
         {
             try
             {
+                foreach (Item i in list.ItemsSource)
+                {
+                    if (!i.Show)
+                    {
+                        PropertyInfo pi = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.Name == i.Column).FirstOrDefault();
+                        if (pi.GetCustomAttribute<Db.Document.ObligatoryField>() != null)
+                            throw new Exception("Column " + pi.Name + " must be showed!");
+                    }
+                }
+
                 Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Clear();
                 foreach (Item i in list.ItemsSource)
                 {
                     if (i.Search)
                         Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Add(i.Column);
                 }
-
-                PropertyInfo pi = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Where(x => x.GetCustomAttribute<Db.Document.ObligatoryField>() != null && !Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Contains(x.Name)).FirstOrDefault();
-                if (pi != null)
-                    throw new Exception("Column " + pi.Name + " must be showed!");
 
                 List<string> showed_columns0 = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.ToList();
                 Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Clear();
@@ -139,7 +155,8 @@ namespace Cliver.Probidder
                 }
 
                 Settings.View.Save();
-                Config.Reload();
+                //Config.Reload();
+                ListWindow.This?.OrderColumns(Settings.View.ActiveTable);
 
                 Close();
             }

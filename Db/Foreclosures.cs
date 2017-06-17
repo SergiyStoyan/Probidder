@@ -53,7 +53,7 @@ namespace Cliver.Probidder
             public DateTime? FILING_DATE { get; set; }
             //public DateTime? AUCTION_DATE { get; set; }
             //public DateTime? AUCTION_TIME { get; set; }
-            public string SALE_LOC { get; set; }
+            //public string SALE_LOC { get; set; }
             [ObligatoryField]
             public DateTime? ENTRY_DATE { get; set; }
             [ObligatoryField]

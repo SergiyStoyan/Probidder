@@ -117,7 +117,7 @@ namespace Cliver.Probidder
                 Settings.AutoComplete.Keys2Phrase = items.ToDictionary(x => x.Key, x => x.Phrase);
                 Settings.AutoComplete.Save();
 
-                Config.Reload();
+                //Config.Reload();
 
                 Close();
             }
