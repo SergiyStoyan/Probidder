@@ -109,8 +109,6 @@ namespace Cliver.Probidder
                 }));
             };
 
-            PreviewKeyDown += ListWindow_PreviewKeyDown;
-
             fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
             fvs.CollectionChanged += delegate { update_indicator(); };
             listForeclosures.ItemsSource = fvs;
@@ -129,13 +127,6 @@ namespace Cliver.Probidder
                 SizeToContent = SizeToContent.Manual;
                 WpfRoutines.TrimWindowSize(this);
             }));
-        }
-
-        private void ListWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Tab)
-            {
-            }
         }
 
         void get_columns_order2settings(Settings.ViewSettings.Tables table)
@@ -607,6 +598,18 @@ namespace Cliver.Probidder
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
         {
             get_columns_order2settings(Settings.View.ActiveTable);
+        }
+
+        public void list_KeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            DataGridCell c = e.NewFocus as DataGridCell;
+            if (c == null)
+                return;
+            list.BeginEdit(e);
+            Control co = c.FindVisualChildrenOfType<Control>().FirstOrDefault();
+            if (co == null)
+                return;
+            bool? g = co.Focus();
         }
     }
 }

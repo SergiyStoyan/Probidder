@@ -14,22 +14,6 @@
          AllowDrop="True"
             >
     <Window.Resources>
-        <DataTemplate x:Key="Header">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding}" />
-            </DockPanel>
-        </DataTemplate>
-        <Style x:Key="AlternateItemStyle" TargetType="{x:Type DataGridRow}">
-            <Style.Triggers>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" Value="#f5f5ff"></Setter>
-                </Trigger>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="#ffffff"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
         <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#F6F6F6" Offset="0.25"/>
             <GradientStop Color="#EAE8E8" Offset="0.25"/>
@@ -86,16 +70,21 @@
                 <DataGrid  Margin="0"  Height="auto" Name="listForeclosures" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"    BeginningEdit="list_BeginningEdit" RowEditEnding="list_RowEditEnding"                      
-                  AlternationCount="2" CellEditEnding="list_CellEditEnding"
-                  ItemContainerStyle="{StaticResource AlternateItemStyle}"   SelectionMode="Single"                           
+                  AlternationCount="2" CellEditEnding="list_CellEditEnding" 
+                   SelectionMode="Single" DataGridCell.GotKeyboardFocus="list_KeyboardFocusChangedEventHandler"                          
                         AutoGenerateColumns="False" AutoGeneratingColumn="list_AutoGeneratingColumn"
                                CanUserAddRows="True" CanUserDeleteRows="True" ColumnDisplayIndexChanged="list_ColumnDisplayIndexChanged" 
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
-                                </DataTrigger>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                    <Setter Property="Background" Value="#f5f5ff"></Setter>
+                                </Trigger>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                    <Setter Property="Background" Value="#ffffff"></Setter>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}"/>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>
@@ -681,15 +670,20 @@
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"    BeginningEdit="list_BeginningEdit" RowEditEnding="list_RowEditEnding"                      
                   AlternationCount="2" CellEditEnding="list_CellEditEnding"
-                  ItemContainerStyle="{StaticResource AlternateItemStyle}"   SelectionMode="Single"                           
+                   SelectionMode="Single"     DataGridCell.PreviewGotKeyboardFocus="list_KeyboardFocusChangedEventHandler"                              
                         AutoGenerateColumns="False" AutoGeneratingColumn="list_AutoGeneratingColumn"
                                CanUserAddRows="True" CanUserDeleteRows="True"  ColumnDisplayIndexChanged="list_ColumnDisplayIndexChanged"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
-                                </DataTrigger>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                    <Setter Property="Background" Value="#f5f5ff"></Setter>
+                                </Trigger>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                    <Setter Property="Background" Value="#ffffff"></Setter>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}"/>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>

@@ -45,14 +45,18 @@ namespace Cliver.Probidder
 
             Loaded += delegate
             {
+            };
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
+            {
                 tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_TextBox").FirstOrDefault();
-                
+
                 tb.PreviewTextInput += TextBox_PreviewTextInput;
                 tb.TextChanged += TextBox_TextChanged;
                 tb.GotFocus += TextBox_GotFocus;
                 //tb.Focus();
                 //this.FocusOnText();
-            };
+            }));
         }
 
         TextBox tb0;
