@@ -138,10 +138,10 @@ namespace Cliver.Probidder
 
                 List<string> showed_columns0 = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.ToList();
                 Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Clear();
-                List<Item> column_items = ((List<Item>)list.ItemsSource);
+                List<Item> column_items = ((List<Item>)list.ItemsSource).ToList();
                 foreach (string c in showed_columns0)
                 {
-                    Item i = column_items.Where(x => x.Show && x.Column == c).FirstOrDefault();
+                    Item i = column_items.Where(x => x.Column == c && x.Show).FirstOrDefault();
                     if (i != null)
                     {
                         Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Add(c);

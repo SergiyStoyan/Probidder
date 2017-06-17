@@ -61,9 +61,7 @@ namespace Cliver.Probidder
                 {
                     Tables2Columns = new Dictionary<Tables, Columns>();
 
-                    List<string> fs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
-                    //showed = showed.Select(x => x).Distinct().ToList();
-                    //searched = searched.Select(x => x).Distinct().ToList();
+                    List<string> fs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();                   
                     Tables2Columns[Tables.Foreclosures] = new Columns { Showed = fs, Searched = fs };
 
                     fs = typeof(Db.Probate).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();

@@ -109,6 +109,8 @@ namespace Cliver.Probidder
                 }));
             };
 
+            tables.ItemsSource = new List<Settings.ViewSettings.Tables> { Settings.ViewSettings.Tables.Foreclosures, Settings.ViewSettings.Tables.Probates };
+
             fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
             fvs.CollectionChanged += delegate { update_indicator(); };
             listForeclosures.ItemsSource = fvs;
@@ -164,6 +166,7 @@ namespace Cliver.Probidder
                         listProbates.Visibility = Visibility.Collapsed;
                         list = listForeclosures;
                         views = fvs;
+                        tables.SelectedItem = Settings.ViewSettings.Tables.Foreclosures;
                     }
                     break;
                 case Settings.ViewSettings.Tables.Probates:
@@ -171,6 +174,7 @@ namespace Cliver.Probidder
                         listForeclosures.Visibility = Visibility.Collapsed;
                         list = listProbates;
                         views = pvs;
+                        tables.SelectedItem = Settings.ViewSettings.Tables.Probates;
                     }
                     break;
                 default:
@@ -610,6 +614,11 @@ namespace Cliver.Probidder
             if (co == null)
                 return;
             bool? g = co.Focus();
+        }
+
+        private void tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;
         }
     }
 }

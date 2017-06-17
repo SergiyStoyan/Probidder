@@ -31,6 +31,7 @@
             <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
         </Popup>
         <Menu Name="menu" Grid.Row="0">
+            <ComboBox Name="tables" SelectionChanged="tables_SelectionChanged"/>
             <MenuItem Header="File">
                 <MenuItem Header="Export" Name="export" Click="export_Click"/>
                 <MenuItem Header="Upload" Name="upload" Click="upload_Click"/>
