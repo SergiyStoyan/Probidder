@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,17 +45,14 @@ namespace Cliver.Probidder
             switch (table)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
-                    fieldsProbate.Visibility = Visibility.Collapsed;
-                    fields = fieldsForeclosure;
+                    fields.Content = new ForeclosureControl();
                     break;
                 case Settings.ViewSettings.Tables.Probates:
-                    fieldsForeclosure.Visibility = Visibility.Collapsed;
-                    fields = fieldsProbate;
+                    fields.Content = new ProbateControl();
                     break;
                 default:
                     throw new Exception("Unknown option: " + table);
             }
-            fields.Visibility = Visibility.Visible;
 
             Loaded += delegate
             {
@@ -105,7 +101,6 @@ namespace Cliver.Probidder
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
         readonly IViews vs;
-        readonly Grid fields;
 
         void got_focus(object sender, RoutedEventArgs e)
         {
@@ -147,11 +142,11 @@ namespace Cliver.Probidder
 
             this.MarkValid();
 
-            FILING_DATE.Reset();
-            ENTRY_DATE.Reset();
-            ORIGINAL_MTG.Reset();
-            DATE_OF_CA.Reset();
-            LAST_PAY_DATE.Reset();
+            //FILING_DATE.Reset();
+            //ENTRY_DATE.Reset();
+            //ORIGINAL_MTG.Reset();
+            //DATE_OF_CA.Reset();
+            //LAST_PAY_DATE.Reset();
             
             v.ErrorsChanged += delegate
               {
@@ -316,24 +311,6 @@ namespace Cliver.Probidder
             Next.IsEnabled = vs.GetNext(v) != null;
 
             indicator.Content = "Record: [id=" + v.Id + "] " + (vs.Get(x => ((IView)x).Id < v.Id).Count() + 1) + " / " + vs.Count();
-        }
-
-        private void Integer_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (Regex.IsMatch(e.Text, @"[^\d\,]"))
-            {
-                Console.Beep(5000, 200);
-                e.Handled = true;
-            }
-        }
-
-        private void Decimal_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (Regex.IsMatch(e.Text, @"[^\d\.\,]"))
-            {
-                Console.Beep(5000, 200);
-                e.Handled = true;
-            }
         }
     }
 }

@@ -96,6 +96,11 @@ namespace Cliver.Probidder
             {
                 if (Text2 == value)
                     return;
+                if (value == null)
+                {
+                    SetValue(Text2Property, mask);
+                    return;
+                }
                 DateTime? dt = ParseText(value);
                 if (text2_dt == dt && dt != null)
                     return;
@@ -116,11 +121,6 @@ namespace Cliver.Probidder
             c.text2_dt = ParseText((string)eventArgs.NewValue);
         }
         DateTime? text2_dt = null;
-
-        public void Reset()
-        {
-            tb.Text = mask;
-        }
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
