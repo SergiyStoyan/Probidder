@@ -69,7 +69,7 @@
           VerticalGridLinesBrush="#eed"    BeginningEdit="list_BeginningEdit" RowEditEnding="list_RowEditEnding"                      
                   AlternationCount="2" CellEditEnding="list_CellEditEnding" 
                    SelectionMode="Single" DataGridCell.GotKeyboardFocus="list_KeyboardFocusChangedEventHandler"                          
-                        AutoGenerateColumns="False"
+                        AutoGenerateColumns="False" 
                                CanUserAddRows="True" CanUserDeleteRows="True" ColumnDisplayIndexChanged="list_ColumnDisplayIndexChanged" 
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
                     <DataGrid.Resources>

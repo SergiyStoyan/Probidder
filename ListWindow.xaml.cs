@@ -113,11 +113,13 @@ namespace Cliver.Probidder
 
             fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
             fvs.CollectionChanged += delegate { update_indicator(); };
+            listForeclosures.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
             listForeclosures.ItemsSource = fvs;
             OrderColumns(Settings.ViewSettings.Tables.Foreclosures);
 
             pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
             pvs.CollectionChanged += delegate { update_indicator(); };
+            listProbates.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
             listProbates.ItemsSource = pvs;
             OrderColumns(Settings.ViewSettings.Tables.Probates);
 
@@ -129,6 +131,15 @@ namespace Cliver.Probidder
                 SizeToContent = SizeToContent.Manual;
                 WpfRoutines.TrimWindowSize(this);
             }));
+        }
+
+        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        {//needed for highlighting search keyword            
+            ItemContainerGenerator c = sender as ItemContainerGenerator;
+            if (c == null)
+                return;
+            if (c.Status == System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+                highlight();
         }
 
         void get_columns_order2settings(Settings.ViewSettings.Tables table)
@@ -465,8 +476,6 @@ namespace Cliver.Probidder
                 if (o is IView)
                     count++;
             indicator_filtered.Content = "Filtered: " + count;
-
-            highlight();
         }
         Regex filter_regex = null;
         private void highlight()
@@ -479,11 +488,10 @@ namespace Cliver.Probidder
                 if (Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Contains(get_column_name(list.Columns[i])))
                     searched_columns.Add(i);
 
+            var g = list.FindChildrenOfType<DataGridRow>();
+
             foreach (DataGridRow r in list.FindChildrenOfType<DataGridRow>())
-            { 
-            //for (int i = 0; i < list.Items.Count; i++)
-            //{
-                //DataGridRow r = (DataGridRow)list.ItemContainerGenerator.ContainerFromIndex(i);
+            {
                 for (int j = 0; j < list.Columns.Count; j++)
                 {
                     if (!searched_columns.Contains(j))
@@ -493,7 +501,7 @@ namespace Cliver.Probidder
                 }
             }
         }
-        private void highlight_TextBlock(TextBlock tb)
+        void highlight_TextBlock(TextBlock tb)
         {
             if (tb == null || filter_regex == null)
                 return;
@@ -577,4 +585,19 @@ namespace Cliver.Probidder
             Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;
         }
     }
+    //public class ConvertToFormatedRuns : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        var tb = new TextBlock();
+    //        tb.Inlines.Add(new Run() { Text = (string)value, Background = Brushes.Yellow });
+
+    //        return tb;
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        return null;
+    //    }
+    //}
 }
