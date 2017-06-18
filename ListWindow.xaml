@@ -24,46 +24,43 @@
         <Popup Grid.Row="0" Name="refresh_db_last_time0" Placement="Top" PlacementTarget="{Binding ElementName=refresh_db}" IsOpen="False">
             <TextBlock Name="refresh_db_last_time" Padding="5,2,5,2" Background="Bisque" FontStyle="Italic" Foreground="#000">Refreshed at: ?</TextBlock>
         </Popup>
-        <Menu Name="menu" Grid.Row="0">
+        <Menu Name="menu" Grid.Row="0" VerticalContentAlignment="Center" VerticalAlignment="Center">
             <!--RadioButton Name="qq" Content="fddsgd"  IsChecked="False" Style="{StaticResource {x:Type ToggleButton}}"/>
             <RadioButton Name="ww" Content="jkfgyh" IsChecked="False" Style="{StaticResource {x:Type ToggleButton}}"/-->
             <ComboBox Name="tables" FontWeight="Bold" SelectionChanged="tables_SelectionChanged" MinWidth="150" HorizontalContentAlignment="Center"/>
-            <MenuItem Header="File">
+            <MenuItem Header="File" VerticalAlignment="Center">
                 <MenuItem Header="Export" Name="export" Click="export_Click"/>
                 <MenuItem Header="Upload" Name="upload" Click="upload_Click"/>
-                <MenuItem Header="Refresh Database" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
+                <MenuItem Header="Refresh Initial Data" Name="refresh_db" Click="refresh_db_Click" GotFocus="refresh_db_last_time_GotFocus" LostFocus="refresh_db_LostFocus"/>
                 <MenuItem Header="Open Logs" Name="work_dir" Click="work_dir_Click"/>
                 <Separator />
-                <MenuItem Header="Clear Database" Name="drop_db" Click="drop_db_Click"/>
+                <MenuItem Header="Clear Table" Name="drop_db" Click="drop_db_Click"/>
                 <Separator />
                 <MenuItem Header="Exit" Name="exit" Click="exit_Click"/>
             </MenuItem>
-            <MenuItem Header="New" Click="new_Click">
+            <MenuItem Header="New" Click="new_Click" VerticalAlignment="Center">
             </MenuItem>
-            <MenuItem Header="Filter" Name="show_search" Click="show_search_Click" IsChecked="False">
+            <MenuItem Name="show_search" Click="show_search_Click" IsChecked="False" VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Filter</Label>
+                        <TextBox Name="keyword" Width="auto" MinWidth="100" TextChanged="keyword_TextChanged" Visibility="Collapsed"></TextBox>
+                    </StackPanel>
+                </MenuItem.Header>   
             </MenuItem>
-            <MenuItem Header="Settings">
+            <MenuItem Header="Settings" VerticalAlignment="Center">
                 <MenuItem Header="Network" Name="network" Click="network_Click"/>
                 <MenuItem Header="Location" Name="location" Click="location_Click"/>
                 <MenuItem Header="Database" Name="database" Click="database_Click"/>
                 <MenuItem Header="View" Name="view" Click="view_Click"/>
                 <MenuItem Header="Auto Complete" Name="auto_complete" Click="auto_complete_Click"/>
             </MenuItem>
-            <MenuItem Header="Help">
+            <MenuItem Header="Help" VerticalAlignment="Center">
                 <MenuItem Header="About" Name="about" Click="about_Click"/>
             </MenuItem>
         </Menu>
         <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="WhiteSmoke">
             <StackPanel>
-                <Grid Name="search" Visibility="Collapsed">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Find:" Grid.Column="0"/>
-                    <TextBox Name="keyword" Grid.Column="1" HorizontalAlignment="Stretch" TextChanged="keyword_TextChanged"></TextBox>
-                </Grid>
                 <DataGrid  Margin="0"  Height="auto" Name="listForeclosures" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" SelectionChanged="list_SelectionChanged" HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"    BeginningEdit="list_BeginningEdit" RowEditEnding="list_RowEditEnding"                      

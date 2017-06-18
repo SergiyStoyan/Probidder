@@ -192,7 +192,8 @@ namespace Cliver.Probidder
                     throw new Exception("Unknown option: " + Settings.View.ActiveTable);
             }
             list.Visibility = Visibility.Visible;
-            update_indicator();
+            filter();
+            //update_indicator();
         }
         DataGrid list;
         public IViews Views { get { return views; } }
@@ -404,7 +405,7 @@ namespace Cliver.Probidder
         private void show_search_Click(object sender, RoutedEventArgs e)
         {
             show_search.IsChecked = !show_search.IsChecked;
-            search.Visibility = ((MenuItem)e.Source).IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            keyword.Visibility = ((MenuItem)e.Source).IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
             filter();
         }
 
@@ -422,7 +423,7 @@ namespace Cliver.Probidder
             if (cv.IsAddingNew)
                 cv.CommitNew();
 
-            if (string.IsNullOrEmpty(k) || search.Visibility != Visibility.Visible)
+            if (string.IsNullOrEmpty(k) || keyword.Visibility != Visibility.Visible)
             {
                 filter_regex = null;
                 cv.Filter = null;
