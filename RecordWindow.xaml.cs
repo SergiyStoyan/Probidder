@@ -28,20 +28,35 @@ namespace Cliver.Probidder
 {
     public partial class RecordWindow : Window
     {
-        public static void OpenDialog(IView v, IViews vs)
+        public static void OpenDialog(Settings.ViewSettings.Tables table, IView v, IViews vs)
         {
-            RecordWindow w = new RecordWindow(v, vs);
+            RecordWindow w = new RecordWindow(table, v, vs);
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.ShowDialog();
         }
 
-        RecordWindow(IView v, IViews vs)
+        RecordWindow(Settings.ViewSettings.Tables table, IView v, IViews vs)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             this.vs = vs;
+            
+            switch (table)
+            {
+                case Settings.ViewSettings.Tables.Foreclosures:
+                    fieldsProbate.Visibility = Visibility.Collapsed;
+                    fields = fieldsForeclosure;
+                    break;
+                case Settings.ViewSettings.Tables.Probates:
+                    fieldsForeclosure.Visibility = Visibility.Collapsed;
+                    fields = fieldsProbate;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + table);
+            }
+            fields.Visibility = Visibility.Visible;
 
             Loaded += delegate
             {
@@ -90,6 +105,7 @@ namespace Cliver.Probidder
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
         readonly IViews vs;
+        readonly Grid fields;
 
         void got_focus(object sender, RoutedEventArgs e)
         {

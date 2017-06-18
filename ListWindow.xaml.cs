@@ -315,7 +315,7 @@ namespace Cliver.Probidder
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            RecordWindow.OpenDialog(null, views);
+            RecordWindow.OpenDialog(Settings.View.ActiveTable, null, views);
         }
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -398,7 +398,7 @@ namespace Cliver.Probidder
         private void open_Click(object sender, RoutedEventArgs e)
         {
             IView v = list.SelectedItem as IView;
-            RecordWindow.OpenDialog(v, views);
+            RecordWindow.OpenDialog(Settings.View.ActiveTable, v, views);
         }
 
         private void show_search_Click(object sender, RoutedEventArgs e)
