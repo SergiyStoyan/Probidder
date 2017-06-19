@@ -263,7 +263,7 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="FillingCounty">
+        <DataGridTemplateColumn IsReadOnly="true" SortMemberPath="FillingCounty">
             <DataGridTemplateColumn.Header>
                 <TextBlock>FillingCounty</TextBlock>
             </DataGridTemplateColumn.Header>
@@ -308,7 +308,7 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="FillingState">
+        <DataGridTemplateColumn IsReadOnly="true" SortMemberPath="FillingState">
             <DataGridTemplateColumn.Header>
                 <TextBlock>FillingState</TextBlock>
             </DataGridTemplateColumn.Header>

@@ -163,7 +163,7 @@ namespace Cliver.Probidder
                     g.BeginningEdit += list_BeginningEdit;
                     g.RowEditEnding += list_RowEditEnding;
                     g.CellEditEnding += list_CellEditEnding;
-                    g.PreviewGotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
+                    g.GotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
                     g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
                 }
                 return t;
