@@ -143,8 +143,7 @@ namespace Cliver.Probidder
                 }
                 catch (Exception e)
                 {
-                    Log.Main.Error(e);
-                    Log.Main.Error("Could not refresh database.");
+                    Log.Main.Error("Could not refresh database.", e);
                     if (Settings.Database.RefreshRetryPeriodInSecs > 0)
                         Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshRetryPeriodInSecs);
 
@@ -153,7 +152,7 @@ namespace Cliver.Probidder
                         mf?.Close();
                     }
                     catch { }
-                    InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not refresh!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                    InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not be refreshed. Check connection to the internet.", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
                     return false;
                 }
                 finally

@@ -129,8 +129,8 @@ namespace Cliver.Probidder
                 }
                 else
                 {
-                    Log.Main.Inform("The table has been uploaded successfully.");
-                    //InfoWindow.Create(ProgramRoutines.GetAppName(), "The table has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
+                    Log.Main.Inform("Table " + table.GetType() + " has been uploaded successfully.");
+                    //InfoWindow.Create(ProgramRoutines.GetAppName(), "Table " + table.GetType() + " has been uploaded successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
                     if (Message.YesNo("Table " + table.GetType() + " has been uploaded succesfully to the server.\r\n\r\nClean up the table?"))
                     {
                         Log.Inform("Dropping table " + table.GetType());
@@ -146,8 +146,7 @@ namespace Cliver.Probidder
                 }
                 catch { }
                 Log.Main.Error("Could not upload data.", e);
-                //Message.Error("Could not upload data:\r\n" + e.Message);
-                InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload data!", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
+                InfoWindow.Create(ProgramRoutines.GetAppName() + ": could not upload data! Check connection to the intenet.", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);
             }
             finally
             {
