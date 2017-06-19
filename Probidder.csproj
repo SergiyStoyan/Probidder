@@ -326,8 +326,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y "$(ProjectDir)config_files" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config_files\openssl" "$(TargetDir)openssl\"
-
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

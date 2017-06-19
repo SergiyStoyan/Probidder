@@ -194,6 +194,20 @@ namespace Cliver.Probidder
                 Model.Administrator_Full_Name = value;
             }
         }
+        public string Administrator_Phone
+        {
+            get
+            {
+                string value = Model.Administrator_Phone;
+                check("Administrator_Phone", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"_") && Regex.IsMatch(value, @"\d")) ? "Error" : null);
+                return value;
+            }
+            set
+            {
+                edited = true;
+                Model.Administrator_Phone = value;
+            }
+        }
         public string Deceased_Street_Logo
         {
             get
@@ -244,7 +258,7 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.Attorney = value;
-                OnPropertyChanged("Attorneys");
+                OnPropertyChanged("AttorneyPhones");
             }
         }
         public string Attorney_Phone

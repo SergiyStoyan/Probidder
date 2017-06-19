@@ -76,7 +76,7 @@ namespace Cliver.Probidder
                 {
                     ThreadRoutines.StartTry(() =>
                     {
-                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Uploading database to the server. It is preferable to wait until completion to avoid mixing data...", new string[1] { "OK" }, 0, null);
+                        mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Information, "Uploading database to the server. It is preferable to wait until completion to avoid mixing data...", new string[1] { "OK" }, 0, null);
                         mf.ShowDialog();
                     });
                     if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)

@@ -53,6 +53,7 @@ namespace Cliver.Probidder
             public string Deceased_Street_Logo { get; set; }
             public string Administrator_Street_Logo { get; set; }
             public string Administrator_Address { get; set; }
+            public string Administrator_Phone { get; set; }
             public string Attorney { get; set; }
             public string Attorney_Phone { get; set; }
             public string Deceased_Address { get; set; }
