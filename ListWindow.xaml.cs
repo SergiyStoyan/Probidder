@@ -210,8 +210,8 @@ namespace Cliver.Probidder
                     n2v.Value.List.Visibility = Visibility.Visible;
                 else
                     n2v.Value.List.Visibility = Visibility.Collapsed;
+            update_indicator();
             filter();
-            //update_indicator();
         }
         DataGrid list;
         public IViews Views { get { return views; } }
