@@ -10,7 +10,7 @@
           
           Margin="0" Height="auto" Name="listForeclosures" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch" HorizontalGridLinesBrush="#eed"
-          VerticalGridLinesBrush="#eed"                   
+          VerticalGridLinesBrush="#eed"              
                   AlternationCount="2"
                    SelectionMode="Single"                     
                         AutoGenerateColumns="False" 

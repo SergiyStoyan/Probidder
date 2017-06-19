@@ -371,7 +371,7 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_DeathDate != null)
+                    if (_DeathDate != null)
                     value = _DeathDate;
                 else
                     value = DatePickerControl.GetMaskedString(Model.DeathDate);

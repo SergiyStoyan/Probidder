@@ -117,13 +117,15 @@ namespace Cliver.Probidder
         private static void OnText2Changed(DependencyObject control, DependencyPropertyChangedEventArgs eventArgs)
         {
             var c = (DatePickerControl)control;
-            c.tb.Text = (string)eventArgs.NewValue;
+            if (c.tb != null)//it can be in some unclear conditions (when sorting)
+                c.tb.Text = (string)eventArgs.NewValue;
             c.text2_dt = ParseText((string)eventArgs.NewValue);
         }
         DateTime? text2_dt = null;
 
         private void DatePickerControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            SelectedDate = ParseText(tb.Text);
             DatePicker_SelectedDateChanged(null, null);
         }
 
