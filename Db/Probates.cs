@@ -42,31 +42,20 @@ namespace Cliver.Probidder
             }
         }
 
-        public class Probate: Document
+        public class Probate : Document
         {
             [ObligatoryField]
             public string CaseNumber { get; set; }
             [ObligatoryField]
             public DateTime? FillingDate { get; set; }
-            public string DeceasedFirst { get; set; }
-            public string DeceasedMiddle { get; set; }
-            public string DeceasedLast { get; set; }
-            public string AdministratorFirst { get; set; }
-            public string AdministratorMiddle { get; set; }
-            public string AdministratorLast { get; set; }
-            public string DeceasedPlaceLogo { get; set; }
+            public string DeceasedFullName { get; set; }
+            public string AdministratorFullName { get; set; }
+            public string DeceasedStreetLogo { get; set; }
             public string AdministratorStreetLogo { get; set; }
-            public string DeceasedStreetNumber { get; set; }
-            public string AdministratorStreetNumber { get; set; }
-            public string DeceasedStreetDirect { get; set; }
+            public string AdministratorAddress { get; set; }
             public string Attorney { get; set; }
             public string AttorneyPhone { get; set; }
-            public string AdministratorStreetDirect { get; set; }
-            public string HeirsOrOthers { get; set; }
-            public string DeceasedStreetName { get; set; }
-            public string AdministratorStreetName { get; set; }
-            public string DeceasedUnitNumber { get; set; }
-            public string AdministratorUnitNumber { get; set; }
+            public string DeceasedAddress { get; set; }
             public string Comments { get; set; }
             public string DeceasedCity { get; set; }
             public string AdministratorCity { get; set; }
@@ -84,6 +73,30 @@ namespace Cliver.Probidder
             [ObligatoryField]
             public string Testate { get; set; }
             public string PersonalValue { get; set; }
+
+            public enum HeirOrOthers
+            {
+                H,
+                H_L
+            }
+            public string H_L_Name_0 { get; set; }
+            public HeirOrOthers HeirOrOther_0 { get; set; }
+            public string H_L_Address_0 { get; set; }
+            public string H_L_Name_1 { get; set; }
+            public HeirOrOthers HeirOrOther_1 { get; set; }
+            public string H_L_Address_1 { get; set; }
+            public string H_L_Name_2 { get; set; }
+            public HeirOrOthers HeirOrOther_2 { get; set; }
+            public string H_L_Address_2 { get; set; }
+            public string H_L_Name_3 { get; set; }
+            public HeirOrOthers HeirOrOther_3 { get; set; }
+            public string H_L_Address_3 { get; set; }
+            public string H_L_Name_4 { get; set; }
+            public HeirOrOthers HeirOrOther_4 { get; set; }
+            public string H_L_Address_4 { get; set; }
+            public string H_L_Name_5 { get; set; }
+            public HeirOrOthers HeirOrOther_5 { get; set; }
+            public string H_L_Address_5 { get; set; }
         }
     }
 }

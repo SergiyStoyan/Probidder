@@ -90,6 +90,13 @@ namespace Cliver.Probidder
                 return ComboBoxPhoneControl.GetItemsNormalized((new Db.AttorneyPhones()).GetBy(FillingCounty, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
             }
         }
+        public IEnumerable<string> HeirOrOthers
+        {
+            get
+            {
+                return Enum.GetNames(typeof(Db.Probate.HeirOrOthers));
+            }
+        }        
 
         public string FillingCounty
         {
@@ -146,95 +153,43 @@ namespace Cliver.Probidder
             }
         }
         string _FillingDate = null;
-        public string DeceasedFirst
+        public string DeceasedFullName
         {
             get
             {
-                check("DeceasedFirst", null);
-                return Model.DeceasedFirst;
+                check("DeceasedFullName", null);
+                return Model.DeceasedFullName;
             }
             set
             {
                 edited = true;
-                Model.DeceasedFirst = value;
+                Model.DeceasedFullName = value;
             }
         }
-        public string DeceasedMiddle
+        public string AdministratorFullName
         {
             get
             {
-                check("DeceasedMiddle", null);
-                return Model.DeceasedMiddle;
+                check("AdministratorFullName", null);
+                return Model.AdministratorFullName;
             }
             set
             {
                 edited = true;
-                Model.DeceasedMiddle = value;
+                Model.AdministratorFullName = value;
             }
         }
-        public string DeceasedLast
+        public string DeceasedStreetLogo
         {
             get
             {
-                check("DeceasedLast", null);
-                return Model.DeceasedLast;
+                check("DeceasedStreetLogo", null);
+                return Model.DeceasedStreetLogo;
             }
             set
             {
                 edited = true;
-                Model.DeceasedLast = value;
-            }
-        }
-        public string AdministratorFirst
-        {
-            get
-            {
-                check("AdministratorFirst", null);
-                return Model.AdministratorFirst;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorFirst = value;
-            }
-        }
-        public string AdministratorMiddle
-        {
-            get
-            {
-                check("AdministratorMiddle", null);
-                return Model.AdministratorMiddle;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorMiddle = value;
-            }
-        }
-        public string AdministratorLast
-        {
-            get
-            {
-                check("AdministratorLast", null);
-                return Model.AdministratorLast;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorLast = value;
-            }
-        }
-        public string DeceasedPlaceLogo
-        {
-            get
-            {
-                check("DeceasedPlaceLogo", null);
-                return Model.DeceasedPlaceLogo;
-            }
-            set
-            {
-                edited = true;
-                Model.DeceasedPlaceLogo = value;
+                Model.DeceasedStreetLogo = value;
             }
         }
         public string AdministratorStreetLogo
@@ -250,30 +205,17 @@ namespace Cliver.Probidder
                 Model.AdministratorStreetLogo = value;
             }
         }
-        public string DeceasedStreetNumber
+        public string AdministratorAddress
         {
             get
             {
-                check("DeceasedStreetNumber", null);
-                return Model.DeceasedStreetNumber;
+                check("AdministratorAddress", null);
+                return Model.AdministratorAddress;
             }
             set
             {
                 edited = true;
-                Model.DeceasedStreetNumber = value;
-            }
-        }
-        public string AdministratorStreetNumber
-        {
-            get
-            {
-                check("AdministratorStreetNumber", null);
-                return Model.AdministratorStreetNumber;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorStreetNumber = value;
+                Model.AdministratorAddress = value;
             }
         }
         public string Attorney
@@ -304,82 +246,17 @@ namespace Cliver.Probidder
                 Model.AttorneyPhone = value;
             }
         }
-        public string AdministratorStreetDirect
+        public string DeceasedAddress
         {
             get
             {
-                check("AdministratorStreetDirect", null);
-                return Model.AdministratorStreetDirect;
+                check("DeceasedAddress", null);
+                return Model.DeceasedAddress;
             }
             set
             {
                 edited = true;
-                Model.AdministratorStreetDirect = value;
-            }
-        }
-        public string HeirsOrOthers
-        {
-            get
-            {
-                check("HeirsOrOthers", null);
-                return Model.HeirsOrOthers;
-            }
-            set
-            {
-                edited = true;
-                Model.HeirsOrOthers = value;
-            }
-        }
-        public string DeceasedStreetName
-        {
-            get
-            {
-                check("DeceasedStreetName", null);
-                return Model.DeceasedStreetName;
-            }
-            set
-            {
-                edited = true;
-                Model.DeceasedStreetName = value;
-            }
-        }
-        public string AdministratorStreetName
-        {
-            get
-            {
-                check("AdministratorStreetName", null);
-                return Model.AdministratorStreetName;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorStreetName = value;
-            }
-        }
-        public string DeceasedUnitNumber
-        {
-            get
-            {
-                check("DeceasedUnitNumber", null);
-                return Model.DeceasedUnitNumber;
-            }
-            set
-            {
-                edited = true;
-                Model.DeceasedUnitNumber = value;
-            }
-        }
-        public string AdministratorUnitNumber
-        {
-            get
-            {
-                check("AdministratorUnitNumber", null);
-                return Model.AdministratorUnitNumber;
-            }
-            set
-            {
-                edited = true;
-                Model.AdministratorUnitNumber = value;
+                Model.DeceasedAddress = value;
             }
         }
         public string Comments
@@ -451,8 +328,9 @@ namespace Cliver.Probidder
         {
             get
             {
-                check("FillingState", null);
-                return Model.FillingState;
+                string value = Model.FillingState;
+                check("FillingState", string.IsNullOrEmpty(value) ? "Error" : null);
+                return value;
             }
             set
             {
@@ -518,7 +396,7 @@ namespace Cliver.Probidder
                     value = _WillDate;
                 else
                     value = DatePickerControl.GetMaskedString(Model.WillDate);
-                check("WillDate", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
+                check("WillDate", null);
                 return value;
             }
             set
@@ -534,8 +412,9 @@ namespace Cliver.Probidder
         {
             get
             {
-                check("ReProperty", null);
-                return Model.ReProperty;
+                string value = Model.ReProperty;
+                check("ReProperty", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                return value;
             }
             set
             {
@@ -560,8 +439,9 @@ namespace Cliver.Probidder
         {
             get
             {
-                check("Testate", null);
-                return Model.Testate;
+                string value = Model.Testate;
+                check("Testate", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                return value;
             }
             set
             {
@@ -580,6 +460,246 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.PersonalValue = value;
+            }
+        }
+
+        public string H_L_Name_0
+        {
+            get
+            {
+                check("H_L_Name_0", null);
+                return Model.H_L_Name_0;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_0 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_0
+        {
+            get
+            {
+                check("HeirOrOther_0", null);
+                return Model.HeirOrOther_0;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_0 = value;
+            }
+        }
+        public string H_L_Address_0
+        {
+            get
+            {
+                check("H_L_Address_0", null);
+                return Model.H_L_Address_0;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_0 = value;
+            }
+        }
+
+        public string H_L_Name_1
+        {
+            get
+            {
+                check("H_L_Name_1", null);
+                return Model.H_L_Name_1;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_1 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_1
+        {
+            get
+            {
+                check("HeirOrOther_1", null);
+                return Model.HeirOrOther_1;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_1 = value;
+            }
+        }
+        public string H_L_Address_1
+        {
+            get
+            {
+                check("H_L_Address_1", null);
+                return Model.H_L_Address_1;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_1 = value;
+            }
+        }
+
+        public string H_L_Name_2
+        {
+            get
+            {
+                check("H_L_Name_2", null);
+                return Model.H_L_Name_2;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_2 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_2
+        {
+            get
+            {
+                check("HeirOrOther_2", null);
+                return Model.HeirOrOther_2;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_2 = value;
+            }
+        }
+        public string H_L_Address_2
+        {
+            get
+            {
+                check("H_L_Address_2", null);
+                return Model.H_L_Address_2;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_2 = value;
+            }
+        }
+
+        public string H_L_Name_3
+        {
+            get
+            {
+                check("H_L_Name_3", null);
+                return Model.H_L_Name_3;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_3 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_3
+        {
+            get
+            {
+                check("HeirOrOther_3", null);
+                return Model.HeirOrOther_3;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_3 = value;
+            }
+        }
+        public string H_L_Address_3
+        {
+            get
+            {
+                check("H_L_Address_3", null);
+                return Model.H_L_Address_3;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_3 = value;
+            }
+        }
+
+        public string H_L_Name_4
+        {
+            get
+            {
+                check("H_L_Name_4", null);
+                return Model.H_L_Name_4;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_4 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_4
+        {
+            get
+            {
+                check("HeirOrOther_4", null);
+                return Model.HeirOrOther_4;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_4 = value;
+            }
+        }
+        public string H_L_Address_4
+        {
+            get
+            {
+                check("H_L_Address_4", null);
+                return Model.H_L_Address_4;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_4 = value;
+            }
+        }
+
+        public string H_L_Name_5
+        {
+            get
+            {
+                check("H_L_Name_5", null);
+                return Model.H_L_Name_5;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Name_5 = value;
+            }
+        }
+        public Db.Probate.HeirOrOthers HeirOrOther_5
+        {
+            get
+            {
+                check("HeirOrOther_5", null);
+                return Model.HeirOrOther_5;
+            }
+            set
+            {
+                edited = true;
+                Model.HeirOrOther_5 = value;
+            }
+        }
+        public string H_L_Address_5
+        {
+            get
+            {
+                check("H_L_Address_5", null);
+                return Model.H_L_Address_5;
+            }
+            set
+            {
+                edited = true;
+                Model.H_L_Address_5 = value;
             }
         }
     }
