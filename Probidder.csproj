@@ -150,8 +150,14 @@
     <Compile Include="ForeclosureControl.xaml.cs">
       <DependentUpon>ForeclosureControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ForeclosuresControl.xaml.cs">
+      <DependentUpon>ForeclosuresControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProbateControl.xaml.cs">
       <DependentUpon>ProbateControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProbatesControl.xaml.cs">
+      <DependentUpon>ProbatesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View.cs" />
     <Compile Include="ProbateView.cs" />
@@ -257,6 +263,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ForeclosuresControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NumberBoxControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -266,6 +276,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProbateControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProbatesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

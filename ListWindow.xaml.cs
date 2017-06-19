@@ -64,8 +64,8 @@ namespace Cliver.Probidder
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
-                get_columns_order2settings(Settings.ViewSettings.Tables.Foreclosures);
-                get_columns_order2settings(Settings.ViewSettings.Tables.Probates);
+                foreach(var n2v in tables2Table)
+                    get_columns_order2settings(n2v.Key);
                 Settings.View.Save();
             };
 
@@ -110,27 +110,68 @@ namespace Cliver.Probidder
             };
 
             tables.ItemsSource = new List<Settings.ViewSettings.Tables> { Settings.ViewSettings.Tables.Foreclosures, Settings.ViewSettings.Tables.Probates };
-
-            fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
-            fvs.CollectionChanged += delegate { update_indicator(); };
-            listForeclosures.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-            listForeclosures.ItemsSource = fvs;
-            OrderColumns(Settings.ViewSettings.Tables.Foreclosures);
-
-            pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
-            pvs.CollectionChanged += delegate { update_indicator(); };
-            listProbates.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-            listProbates.ItemsSource = pvs;
-            OrderColumns(Settings.ViewSettings.Tables.Probates);
-
+            
             ActiveTableChanged();
-            //OrderColumns();
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
             {
                 SizeToContent = SizeToContent.Manual;
                 WpfRoutines.TrimWindowSize(this);
             }));
+        }
+
+        Table get_Table(Settings.ViewSettings.Tables table)
+        {
+            Table t;
+            if (!tables2Table.TryGetValue(table, out t))
+            {
+                DataGrid g;
+                IViews views;
+                switch (table)
+                {
+                    case Settings.ViewSettings.Tables.Foreclosures:
+                        View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures> fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
+                        g = new ForeclosuresControl();
+                        (g as ForeclosuresControl).OpenClick += open_Click;
+                        (g as ForeclosuresControl).DeleteClick += delete_Click;
+                        fvs.CollectionChanged += delegate { update_indicator(); };
+                        g.ItemsSource = fvs;
+                        views = fvs;
+                        break;
+                    case Settings.ViewSettings.Tables.Probates:
+                        View<Db.Probate>.Views<ProbateView, Db.Probates> pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
+                        g = new ProbatesControl();
+                        (g as ForeclosuresControl).OpenClick += open_Click;
+                        (g as ForeclosuresControl).DeleteClick += delete_Click;
+                        pvs.CollectionChanged += delegate { update_indicator(); };
+                        g.ItemsSource = pvs;
+                        views = pvs;
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + table);
+                }
+                list_container.Children.Add(g);
+
+                OrderColumns(table);
+
+                g.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                g.SelectionChanged += list_SelectionChanged;
+                g.BeginningEdit += list_BeginningEdit;
+                g.RowEditEnding += list_RowEditEnding;
+                g.CellEditEnding += list_CellEditEnding;
+                g.PreviewGotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
+                g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;                
+                
+                t = new Table { List = g, Views = views };
+                tables2Table[table] = t;
+            }
+            return t;
+        }
+        readonly Dictionary<Settings.ViewSettings.Tables, Table> tables2Table = new Dictionary<Settings.ViewSettings.Tables, Table>();
+        class Table
+        {
+            public DataGrid List;
+            public IViews Views;
         }
 
         private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
@@ -144,19 +185,8 @@ namespace Cliver.Probidder
 
         void get_columns_order2settings(Settings.ViewSettings.Tables table)
         {
-            DataGrid g;
-            switch (table)
-            {
-                case Settings.ViewSettings.Tables.Foreclosures:
-                        g = listForeclosures;
-                    break;
-                case Settings.ViewSettings.Tables.Probates:
-                        g = listProbates;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + table);
-            }
             Settings.View.Tables2Columns[table].Showed.Clear();
+            DataGrid g = get_Table(table).List;
             foreach (DataGridColumn dgc in g.Columns.OrderBy(x => x.DisplayIndex))
             {
                 if (dgc.Visibility != Visibility.Visible)
@@ -170,36 +200,20 @@ namespace Cliver.Probidder
 
         public void ActiveTableChanged()
         {
-            switch (Settings.View.ActiveTable)
-            {
-                case Settings.ViewSettings.Tables.Foreclosures:
-                    {
-                        listProbates.Visibility = Visibility.Collapsed;
-                        list = listForeclosures;
-                        views = fvs;
-                        tables.SelectedItem = Settings.ViewSettings.Tables.Foreclosures;
-                    }
-                    break;
-                case Settings.ViewSettings.Tables.Probates:
-                    {
-                        listForeclosures.Visibility = Visibility.Collapsed;
-                        list = listProbates;
-                        views = pvs;
-                        tables.SelectedItem = Settings.ViewSettings.Tables.Probates;
-                    }
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
-            }
-            list.Visibility = Visibility.Visible;
+            Table t = get_Table(Settings.View.ActiveTable);
+            list = t.List;
+            views = t.Views;
+            foreach (var n2v in tables2Table)
+                if (n2v.Key == Settings.View.ActiveTable)
+                    n2v.Value.List.Visibility = Visibility.Visible;
+                else
+                    n2v.Value.List.Visibility = Visibility.Collapsed;
             filter();
             //update_indicator();
         }
         DataGrid list;
         public IViews Views { get { return views; } }
         IViews views;
-        readonly ForeclosureView.Views<ForeclosureView, Db.Foreclosures> fvs;
-        readonly ProbateView.Views<ProbateView, Db.Probates> pvs;
 
         static string get_column_name(DataGridColumn dgc)
         {
@@ -214,24 +228,9 @@ namespace Cliver.Probidder
             ignore_list_ColumnDisplayIndexChanged = true;
             try
             {
-                DataGrid list;
-                switch (table)
-                {
-                    case Settings.ViewSettings.Tables.Foreclosures:
-                        {
-                            list = listForeclosures;
-                        }
-                        break;
-                    case Settings.ViewSettings.Tables.Probates:
-                        {
-                            list = listProbates;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + table);
-                }
+                DataGrid g = get_Table(table).List;
 
-                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(g.ItemsSource);
                 if (cv != null)
                 {
                     if (cv.IsEditingItem)
@@ -240,7 +239,7 @@ namespace Cliver.Probidder
                         cv.CommitNew();
                 }
                 int non_data_columns_count = 0;
-                foreach (DataGridColumn dgc in list.Columns)
+                foreach (DataGridColumn dgc in g.Columns)
                 {
                     string cn = get_column_name(dgc);
                     if (cn == null)
@@ -258,7 +257,7 @@ namespace Cliver.Probidder
                 for (int i = 0; i < Settings.View.Tables2Columns[table].Showed.Count; i++)
                 {
                     string cn = Settings.View.Tables2Columns[table].Showed[i];
-                    DataGridColumn dgc = list.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
+                    DataGridColumn dgc = g.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
                     dgc.Visibility = Visibility.Visible;
                     dgc.DisplayIndex = non_data_columns_count + i;
                     dgc.CanUserSort = true;

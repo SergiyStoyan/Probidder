@@ -36,7 +36,7 @@ namespace Cliver.Probidder
 
     public partial class View<D> : IView where D : Db.Document, new()
     {
-        public class Views<V, T> :ObservableCollection<V>, IViews where V : View<D> where T : Db.LiteDb.Table<D>, new()
+        public class Views<V, T> : ObservableCollection<V>, IViews where V : View<D> where T : Db.LiteDb.Table<D>, new()
         {
             static public Views<V, T> Create(Window owner)
             {
