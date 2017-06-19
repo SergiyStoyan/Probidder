@@ -41,7 +41,7 @@ namespace Cliver.Probidder
             Icon = AssemblyRoutines.GetAppIconImageSource();
 
             this.vs = vs;
-            
+            this.table = table;
             switch (table)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
@@ -101,6 +101,7 @@ namespace Cliver.Probidder
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
         }
         readonly IViews vs;
+        readonly Settings.ViewSettings.Tables table;
 
         void got_focus(object sender, RoutedEventArgs e)
         {
@@ -128,7 +129,7 @@ namespace Cliver.Probidder
         IView set_context(IView v)
         {
             if (v == null)
-                switch (Settings.View.ActiveTable)
+                switch (table)
                 {
                     case Settings.ViewSettings.Tables.Foreclosures:
                         v = new ForeclosureView();
@@ -137,7 +138,7 @@ namespace Cliver.Probidder
                         v = new ProbateView();
                         break;
                     default:
-                        throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+                        throw new Exception("Unknown option: " + table);
                 }
 
             this.MarkValid();

@@ -394,7 +394,7 @@ namespace Cliver.Probidder
 
         private void view_Click(object sender, RoutedEventArgs e)
         {
-            ViewWindow.OpenDialog();
+            ViewWindow.OpenDialog(Settings.View.ActiveTable);
         }
 
         private void open_Click(object sender, RoutedEventArgs e)

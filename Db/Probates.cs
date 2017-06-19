@@ -45,57 +45,64 @@ namespace Cliver.Probidder
         public class Probate : Document
         {
             [ObligatoryField]
-            public string CaseNumber { get; set; }
+            public string Case_Number { get; set; }
             [ObligatoryField]
-            public DateTime? FillingDate { get; set; }
-            public string DeceasedFullName { get; set; }
-            public string AdministratorFullName { get; set; }
-            public string DeceasedStreetLogo { get; set; }
-            public string AdministratorStreetLogo { get; set; }
-            public string AdministratorAddress { get; set; }
+            public DateTime? Filling_Date { get; set; }
+            public string Deceased_Full_Name { get; set; }
+            public string Administrator_Full_Name { get; set; }
+            public string Deceased_Street_Logo { get; set; }
+            public string Administrator_Street_Logo { get; set; }
+            public string Administrator_Address { get; set; }
             public string Attorney { get; set; }
-            public string AttorneyPhone { get; set; }
-            public string DeceasedAddress { get; set; }
+            public string Attorney_Phone { get; set; }
+            public string Deceased_Address { get; set; }
             public string Comments { get; set; }
-            public string DeceasedCity { get; set; }
-            public string AdministratorCity { get; set; }
-            public string FillingCounty { get; set; }
-            public string DeceasedCounty { get; set; }
-            public string AdministratorState { get; set; }
-            public string FillingState { get; set; }
-            public string AdministratorZip { get; set; }
-            public string DeceasedZip { get; set; }
+            public string Deceased_City { get; set; }
+            public string Administrator_City { get; set; }
+            public string Filling_County { get; set; }
+            public string Deceased_County { get; set; }
+            public string Administrator_State { get; set; }
+            public string Filling_State { get; set; }
+            public string Administrator_Zip { get; set; }
+            public string Deceased_Zip { get; set; }
             [ObligatoryField]
-            public DateTime? DeathDate { get; set; }
-            public string ReProperty { get; set; }
-            public DateTime? WillDate { get; set; }
-            public string ReValue { get; set; }
-            [ObligatoryField]
-            public string Testate { get; set; }
-            public string PersonalValue { get; set; }
+            public DateTime? Death_Date { get; set; }
 
-            public enum HeirOrOthers
+            public enum YNs
+            {
+                Y,
+                N
+            }
+            [ObligatoryField]
+            public YNs Re_Property { get; set; }
+            [ObligatoryField]
+            public YNs Testate { get; set; }
+            public DateTime? Will_Date { get; set; }
+            public string Re_Value { get; set; }
+            public string Personal_Value { get; set; }
+
+            public enum Heir_Or_Others
             {
                 H,
                 H_L
             }
             public string H_L_Name_0 { get; set; }
-            public HeirOrOthers HeirOrOther_0 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_0 { get; set; }
             public string H_L_Address_0 { get; set; }
             public string H_L_Name_1 { get; set; }
-            public HeirOrOthers HeirOrOther_1 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_1 { get; set; }
             public string H_L_Address_1 { get; set; }
             public string H_L_Name_2 { get; set; }
-            public HeirOrOthers HeirOrOther_2 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_2 { get; set; }
             public string H_L_Address_2 { get; set; }
             public string H_L_Name_3 { get; set; }
-            public HeirOrOthers HeirOrOther_3 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_3 { get; set; }
             public string H_L_Address_3 { get; set; }
             public string H_L_Name_4 { get; set; }
-            public HeirOrOthers HeirOrOther_4 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_4 { get; set; }
             public string H_L_Address_4 { get; set; }
             public string H_L_Name_5 { get; set; }
-            public HeirOrOthers HeirOrOther_5 { get; set; }
+            public Heir_Or_Others Heir_Or_Other_5 { get; set; }
             public string H_L_Address_5 { get; set; }
         }
     }

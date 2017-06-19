@@ -29,18 +29,20 @@ namespace Cliver.Probidder
 {
     public partial class ViewWindow : Window
     {
-        public static void OpenDialog()
+        public static void OpenDialog(Settings.ViewSettings.Tables table)
         {
-            var w = new ViewWindow();
+            var w = new ViewWindow(table);
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(w);
             w.ShowDialog();
         }
 
-        ViewWindow()
+        ViewWindow(Settings.ViewSettings.Tables table)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIconImageSource();
+
+            this.table = table;
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
@@ -55,7 +57,7 @@ namespace Cliver.Probidder
                 WpfRoutines.TrimWindowSize(this);
             };
 
-            switch (Settings.View.ActiveTable)
+            switch (table)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
                     document_type = typeof(Db.Foreclosure);
@@ -64,12 +66,13 @@ namespace Cliver.Probidder
                     document_type = typeof(Db.Probate);
                     break;
                 default:
-                    throw new Exception("Unknown option: " + Settings.View.ActiveTable);
+                    throw new Exception("Unknown option: " + table);
             }
 
             set(Settings.View);
         }
         readonly Type document_type;
+        Settings.ViewSettings.Tables table;
 
         class Item : INotifyPropertyChanged
         {
@@ -89,13 +92,13 @@ namespace Cliver.Probidder
         {
             Dictionary<string, Item> ns2i = document_type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => new Item
             {
-                Show = s.Tables2Columns[s.ActiveTable].Showed.Contains(x.Name) || x.GetCustomAttribute<Db.Document.ObligatoryField>() != null,
+                Show = s.Tables2Columns[table].Showed.Contains(x.Name) || x.GetCustomAttribute<Db.Document.ObligatoryField>() != null,
                 Editable = x.GetCustomAttribute<Db.Document.ObligatoryField>() == null,
-                Search = s.Tables2Columns[s.ActiveTable].Searched.Contains(x.Name),
+                Search = s.Tables2Columns[table].Searched.Contains(x.Name),
                 Column = x.Name
             }).ToDictionary(x => x.Column, x => x);
             List<Item> ii = new List<Item>();
-            foreach (string n in Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed)
+            foreach (string n in Settings.View.Tables2Columns[table].Showed)
             {
                 ii.Add(ns2i[n]);
                 ns2i.Remove(n);
@@ -129,34 +132,34 @@ namespace Cliver.Probidder
                     }
                 }
 
-                Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Clear();
+                Settings.View.Tables2Columns[table].Searched.Clear();
                 foreach (Item i in list.ItemsSource)
                 {
                     if (i.Search)
-                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched.Add(i.Column);
+                        Settings.View.Tables2Columns[table].Searched.Add(i.Column);
                 }
 
-                List<string> showed_columns0 = Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.ToList();
-                Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Clear();
+                List<string> showed_columns0 = Settings.View.Tables2Columns[table].Showed.ToList();
+                Settings.View.Tables2Columns[table].Showed.Clear();
                 List<Item> column_items = ((List<Item>)list.ItemsSource).ToList();
                 foreach (string c in showed_columns0)
                 {
                     Item i = column_items.Where(x => x.Column == c && x.Show).FirstOrDefault();
                     if (i != null)
                     {
-                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Add(c);
+                        Settings.View.Tables2Columns[table].Showed.Add(c);
                         column_items.Remove(i);
                     }
                 }
                 foreach (Item i in column_items)
                 {
                     if (i.Show)
-                        Settings.View.Tables2Columns[Settings.View.ActiveTable].Showed.Insert(0, i.Column);
+                        Settings.View.Tables2Columns[table].Showed.Insert(0, i.Column);
                 }
 
                 Settings.View.Save();
                 //Config.Reload();
-                ListWindow.This?.OrderColumns(Settings.View.ActiveTable);
+                ListWindow.This?.OrderColumns(table);
 
                 Close();
             }

@@ -251,7 +251,7 @@ namespace Cliver.Probidder
         static void normalize_date(Dictionary<string, object> d, string field)
         {
             if (d[field] != null)
-                d[field] = Regex.Replace(((DateTime)d[field]).ToString(), @"\s.*", "");
+                d[field] = ((DateTime)d[field]).ToString("yyyy-MM-dd");
         }
 
         static void normalize_record<D>(Dictionary<string, object> d) where D : Db.Document, new()
@@ -271,9 +271,26 @@ namespace Cliver.Probidder
             }
             else if (typeof(D) == typeof(Db.Probate))
             {
-                normalize_date(d, "FillingDate");
-                normalize_date(d, "DeathDate");
-                normalize_date(d, "WillDate");
+                normalize_date(d, "Filling_Date");
+                normalize_date(d, "Death_Date");
+                normalize_date(d, "Will_Date");
+
+                if (d["Re_Property"] != null)
+                    d["Re_Property"] = d["Re_Property"].ToString();
+                if (d["Testate"] != null)
+                    d["Testate"] = d["Testate"].ToString();
+                if (d["Heir_Or_Other_0"] != null)
+                    d["Heir_Or_Other_0"] = d["Heir_Or_Other_0"].ToString();
+                if (d["Heir_Or_Other_1"] != null)
+                    d["Heir_Or_Other_1"] = d["Heir_Or_Other_1"].ToString();
+                if (d["Heir_Or_Other_2"] != null)
+                    d["Heir_Or_Other_2"] = d["Heir_Or_Other_2"].ToString();
+                if (d["Heir_Or_Other_3"] != null)
+                    d["Heir_Or_Other_3"] = d["Heir_Or_Other_3"].ToString();
+                if (d["Heir_Or_Other_4"] != null)
+                    d["Heir_Or_Other_4"] = d["Heir_Or_Other_4"].ToString();
+                if (d["Heir_Or_Other_5"] != null)
+                    d["Heir_Or_Other_5"] = d["Heir_Or_Other_5"].ToString();
             }
         }
     }

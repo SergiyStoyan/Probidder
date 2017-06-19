@@ -27,89 +27,104 @@ namespace Cliver.Probidder
 
         override protected void set_new_model()
         {
-            Model.FillingCounty = Settings.Location.County;
-            Model.FillingState = "IL";
-            Model.CaseNumber = CASE_Ns?.FirstOrDefault();
+            Model.Filling_County = Settings.Location.County;
+            Model.Deceased_County = Settings.Location.County;
+            Model.Filling_State = "IL";
+            Model.Case_Number = CASE_Ns?.FirstOrDefault();
         }
         
         public IEnumerable<string> CASE_Ns
         {
             get
             {
-                if (string.IsNullOrEmpty(FillingCounty))
+                if (string.IsNullOrEmpty(Filling_County))
                     return null;
-                return (new Db.ProbateCaseNumbers()).GetBy(FillingCounty).case_ns.OrderBy(x => x);
+                return (new Db.ProbateCaseNumbers()).GetBy(Filling_County).case_ns.OrderBy(x => x);
             }
         }
+        //public IEnumerable<string> DeceasedCitys
+        //{
+        //    get
+        //    {
+        //        return (new Db.Cities()).GetBy(Deceased_County).OrderBy(x => x.city).Select(x => x.city);
+        //    }
+        //}
         public IEnumerable<string> CITYs
         {
             get
             {
-                return (new Db.Cities()).GetBy(FillingCounty).OrderBy(x => x.city).Select(x => x.city);
+                return (new Db.Cities()).GetBy(Filling_County).OrderBy(x => x.city).Select(x => x.city);
             }
         }
         public IEnumerable<string> DeceasedZips
         {
             get
             {
-                if (string.IsNullOrEmpty(FillingCounty))
+                if (string.IsNullOrEmpty(Deceased_County))
                     return null;
-                if (string.IsNullOrEmpty(DeceasedCity))
+                if (string.IsNullOrEmpty(Deceased_City))
                     return null;
-                return (new Db.Zips()).GetBy(FillingCounty, DeceasedCity).OrderBy(x => x.zip).Select(x => x.zip);
+                return (new Db.Zips()).GetBy(Deceased_County, Deceased_City).OrderBy(x => x.zip).Select(x => x.zip);
             }
         }
         public IEnumerable<string> AdministratorZips
         {
             get
             {
-                if (string.IsNullOrEmpty(FillingCounty))
+                if (string.IsNullOrEmpty(Filling_County))
                     return null;
-                if (string.IsNullOrEmpty(AdministratorCity))
+                if (string.IsNullOrEmpty(Administrator_City))
                     return null;
-                return (new Db.Zips()).GetBy(FillingCounty, AdministratorCity).OrderBy(x => x.zip).Select(x => x.zip);
+                return (new Db.Zips()).GetBy(Filling_County, Administrator_City).OrderBy(x => x.zip).Select(x => x.zip);
             }
         }
         public IEnumerable<string> Attorneys
         {
             get
             {
-                if (string.IsNullOrEmpty(FillingCounty))
+                if (string.IsNullOrEmpty(Filling_County))
                     return null;
-                return (new Db.Attorneys()).GetBy(FillingCounty).OrderBy(x => x.attorney).Select(x => x.attorney);
+                return (new Db.Attorneys()).GetBy(Filling_County).OrderBy(x => x.attorney).Select(x => x.attorney);
             }
         }
         public IEnumerable<string> AttorneyPhones
         {
             get
             {
-                if (string.IsNullOrEmpty(FillingCounty))
+                if (string.IsNullOrEmpty(Filling_County))
                     return null;
                 if (string.IsNullOrEmpty(Attorney))
                     return null;
-                return ComboBoxPhoneControl.GetItemsNormalized((new Db.AttorneyPhones()).GetBy(FillingCounty, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
+                return ComboBoxPhoneControl.GetItemsNormalized((new Db.AttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
             }
         }
-        public IEnumerable<string> HeirOrOthers
+        public IEnumerable<string> Heir_Or_Others
         {
             get
             {
-                return Enum.GetNames(typeof(Db.Probate.HeirOrOthers));
+                return Enum.GetNames(typeof(Db.Probate.Heir_Or_Others));
             }
-        }        
-
-        public string FillingCounty
+        }
+        public IEnumerable<string> YNs
         {
             get
             {
-                string value = Model.FillingCounty;
-                check("FillingCounty", string.IsNullOrEmpty(value) ? "Error" : null);
+                return Enum.GetNames(typeof(Db.Probate.YNs));
+            }
+        }
+
+        public string Filling_County
+        {
+            get
+            {
+                string value = Model.Filling_County;
+                check("Filling_County", string.IsNullOrEmpty(value) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.FillingCounty = value;
+                Model.Filling_County = value;
                 OnPropertyChanged("CASE_Ns");
                 OnPropertyChanged("CITYs");
                 OnPropertyChanged("DeceasedZips");
@@ -118,21 +133,21 @@ namespace Cliver.Probidder
                 OnPropertyChanged("AttorneyPhones");
             }
         }
-        public string CaseNumber
+        public string Case_Number
         {
             get
             {
-                string value = Model.CaseNumber;
-                check("CaseNumber", value != null && (Regex.IsMatch(value, @"[^\w\-_]") || value.Length > 16) ? "Error" : null);
+                string value = Model.Case_Number;
+                check("Case_Number", value != null && (Regex.IsMatch(value, @"[^\w\-_]") || value.Length > 16) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.CaseNumber = value;
+                Model.Case_Number = value;
             }
         }
-        public string FillingDate
+        public string Filling_Date
         {
             get
             {
@@ -140,8 +155,8 @@ namespace Cliver.Probidder
                 if (_FillingDate != null)
                     value = _FillingDate;
                 else
-                    value = DatePickerControl.GetMaskedString(Model.FillingDate);
-                check("FillingDate", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
+                    value = DatePickerControl.GetMaskedString(Model.Filling_Date);
+                check("Filling_Date", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
             }
             set
@@ -149,73 +164,73 @@ namespace Cliver.Probidder
                 edited = true;
                 _FillingDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
-                Model.FillingDate = dt;
+                Model.Filling_Date = dt;
             }
         }
         string _FillingDate = null;
-        public string DeceasedFullName
+        public string Deceased_Full_Name
         {
             get
             {
-                check("DeceasedFullName", null);
-                return Model.DeceasedFullName;
+                check("Deceased_Full_Name", null);
+                return Model.Deceased_Full_Name;
             }
             set
             {
                 edited = true;
-                Model.DeceasedFullName = value;
+                Model.Deceased_Full_Name = value;
             }
         }
-        public string AdministratorFullName
+        public string Administrator_Full_Name
         {
             get
             {
-                check("AdministratorFullName", null);
-                return Model.AdministratorFullName;
+                check("Administrator_Full_Name", null);
+                return Model.Administrator_Full_Name;
             }
             set
             {
                 edited = true;
-                Model.AdministratorFullName = value;
+                Model.Administrator_Full_Name = value;
             }
         }
-        public string DeceasedStreetLogo
+        public string Deceased_Street_Logo
         {
             get
             {
-                check("DeceasedStreetLogo", null);
-                return Model.DeceasedStreetLogo;
+                check("Deceased_Street_Logo", null);
+                return Model.Deceased_Street_Logo;
             }
             set
             {
                 edited = true;
-                Model.DeceasedStreetLogo = value;
+                Model.Deceased_Street_Logo = value;
             }
         }
-        public string AdministratorStreetLogo
+        public string Administrator_Street_Logo
         {
             get
             {
-                check("AdministratorStreetLogo", null);
-                return Model.AdministratorStreetLogo;
+                check("Administrator_Street_Logo", null);
+                return Model.Administrator_Street_Logo;
             }
             set
             {
                 edited = true;
-                Model.AdministratorStreetLogo = value;
+                Model.Administrator_Street_Logo = value;
             }
         }
-        public string AdministratorAddress
+        public string Administrator_Address
         {
             get
             {
-                check("AdministratorAddress", null);
-                return Model.AdministratorAddress;
+                check("Administrator_Address", null);
+                return Model.Administrator_Address;
             }
             set
             {
                 edited = true;
-                Model.AdministratorAddress = value;
+                Model.Administrator_Address = value;
             }
         }
         public string Attorney
@@ -232,31 +247,31 @@ namespace Cliver.Probidder
                 OnPropertyChanged("Attorneys");
             }
         }
-        public string AttorneyPhone
+        public string Attorney_Phone
         {
             get
             {
-                string value = Model.AttorneyPhone;
-                check("AttorneyPhone", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"_") && Regex.IsMatch(value, @"\d")) ? "Error" : null);
+                string value = Model.Attorney_Phone;
+                check("Attorney_Phone", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"_") && Regex.IsMatch(value, @"\d")) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.AttorneyPhone = value;
+                Model.Attorney_Phone = value;
             }
         }
-        public string DeceasedAddress
+        public string Deceased_Address
         {
             get
             {
-                check("DeceasedAddress", null);
-                return Model.DeceasedAddress;
+                check("Deceased_Address", null);
+                return Model.Deceased_Address;
             }
             set
             {
                 edited = true;
-                Model.DeceasedAddress = value;
+                Model.Deceased_Address = value;
             }
         }
         public string Comments
@@ -272,103 +287,103 @@ namespace Cliver.Probidder
                 Model.Comments = value;
             }
         }
-        public string DeceasedCity
+        public string Deceased_City
         {
             get
             {
-                check("DeceasedCity", null);
-                return Model.DeceasedCity;
+                check("Deceased_City", null);
+                return Model.Deceased_City;
             }
             set
             {
                 edited = true;
-                Model.DeceasedCity = value;
+                Model.Deceased_City = value;
                 OnPropertyChanged("DeceasedZips");
             }
         }
-        public string AdministratorCity
+        public string Administrator_City
         {
             get
             {
-                check("AdministratorCity", null);
-                return Model.AdministratorCity;
+                check("Administrator_City", null);
+                return Model.Administrator_City;
             }
             set
             {
                 edited = true;
-                Model.AdministratorCity = value;
+                Model.Administrator_City = value;
                 OnPropertyChanged("AdministratorZips");
             }
         }
-        public string DeceasedCounty
+        public string Deceased_County
         {
             get
             {
-                check("DeceasedCounty", null);
-                return Model.DeceasedCounty;
+                check("Deceased_County", null);
+                return Model.Deceased_County;
             }
             set
             {
                 edited = true;
-                Model.DeceasedCounty = value;
+                Model.Deceased_County = value;
             }
         }
-        public string AdministratorState
+        public string Administrator_State
         {
             get
             {
-                check("AdministratorState", null);
-                return Model.AdministratorState;
+                check("Administrator_State", null);
+                return Model.Administrator_State;
             }
             set
             {
                 edited = true;
-                Model.AdministratorState = value;
+                Model.Administrator_State = value;
             }
         }
-        public string FillingState
+        public string Filling_State
         {
             get
             {
-                string value = Model.FillingState;
-                check("FillingState", string.IsNullOrEmpty(value) ? "Error" : null);
+                string value = Model.Filling_State;
+                check("Filling_State", string.IsNullOrEmpty(value) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.FillingState = value;
+                Model.Filling_State = value;
             }
         }
-        public string AdministratorZip
+        public string Administrator_Zip
         {
             get
             {
-                string value = Model.AdministratorZip;
-                check("AdministratorZip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
+                string value = Model.Administrator_Zip;
+                check("Administrator_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.AdministratorZip = value;
+                Model.Administrator_Zip = value;
             }
         }
-        public string DeceasedZip
+        public string Deceased_Zip
         {
             get
             {
-                string value = Model.DeceasedZip;
-                check("DeceasedZip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
+                string value = Model.Deceased_Zip;
+                check("Deceased_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.DeceasedZip = value;
+                Model.Deceased_Zip = value;
             }
         }
-        public string DeathDate
+        public string Death_Date
         {
             get
             {
@@ -376,8 +391,8 @@ namespace Cliver.Probidder
                     if (_DeathDate != null)
                     value = _DeathDate;
                 else
-                    value = DatePickerControl.GetMaskedString(Model.DeathDate);
-                check("DeathDate", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
+                    value = DatePickerControl.GetMaskedString(Model.Death_Date);
+                check("Death_Date", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
             }
             set
@@ -385,11 +400,11 @@ namespace Cliver.Probidder
                 edited = true;
                 _DeathDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
-                Model.DeathDate = dt;
+                Model.Death_Date = dt;
             }
         }
         string _DeathDate = null;
-        public string WillDate
+        public string Will_Date
         {
             get
             {
@@ -397,8 +412,8 @@ namespace Cliver.Probidder
                 if (_WillDate != null)
                     value = _WillDate;
                 else
-                    value = DatePickerControl.GetMaskedString(Model.WillDate);
-                check("WillDate", null);
+                    value = DatePickerControl.GetMaskedString(Model.Will_Date);
+                check("Will_Date", null);
                 return value;
             }
             set
@@ -406,43 +421,45 @@ namespace Cliver.Probidder
                 edited = true;
                 _WillDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
-                Model.WillDate = dt;
+                Model.Will_Date = dt;
             }
         }
         string _WillDate = null;
-        public string ReProperty
+        public Db.Probate.YNs Re_Property
         {
             get
             {
-                string value = Model.ReProperty;
-                check("ReProperty", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                Db.Probate.YNs value = Model.Re_Property;
+                //check("Re_Property", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                check("Re_Property", null);
                 return value;
             }
             set
             {
                 edited = true;
-                Model.ReProperty = value;
+                Model.Re_Property = value;
             }
         }
-        public string ReValue
+        public string Re_Value
         {
             get
             {
-                check("ReValue", null);
-                return Model.ReValue;
+                check("Re_Value", null);
+                return Model.Re_Value;
             }
             set
             {
                 edited = true;
-                Model.ReValue = value;
+                Model.Re_Value = value;
             }
         }
-        public string Testate
+        public Db.Probate.YNs Testate
         {
             get
             {
-                string value = Model.Testate;
-                check("Testate", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                Db.Probate.YNs value = Model.Testate;
+                //check("Testate", string.IsNullOrEmpty(value) || !Regex.IsMatch(value, @"^\s*[yn]\s*$", RegexOptions.IgnoreCase) ? "Error" : null);
+                check("Testate", null);
                 return value;
             }
             set
@@ -451,17 +468,17 @@ namespace Cliver.Probidder
                 Model.Testate = value;
             }
         }
-        public string PersonalValue
+        public string Personal_Value
         {
             get
             {
-                check("PersonalValue", null);
-                return Model.PersonalValue;
+                check("Personal_Value", null);
+                return Model.Personal_Value;
             }
             set
             {
                 edited = true;
-                Model.PersonalValue = value;
+                Model.Personal_Value = value;
             }
         }
 
@@ -478,17 +495,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_0 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_0
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_0
         {
             get
             {
-                check("HeirOrOther_0", null);
-                return Model.HeirOrOther_0;
+                check("Heir_Or_Other_0", null);
+                return Model.Heir_Or_Other_0;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_0 = value;
+                Model.Heir_Or_Other_0 = value;
             }
         }
         public string H_L_Address_0
@@ -518,17 +535,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_1 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_1
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_1
         {
             get
             {
-                check("HeirOrOther_1", null);
-                return Model.HeirOrOther_1;
+                check("Heir_Or_Other_1", null);
+                return Model.Heir_Or_Other_1;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_1 = value;
+                Model.Heir_Or_Other_1 = value;
             }
         }
         public string H_L_Address_1
@@ -558,17 +575,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_2 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_2
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_2
         {
             get
             {
-                check("HeirOrOther_2", null);
-                return Model.HeirOrOther_2;
+                check("Heir_Or_Other_2", null);
+                return Model.Heir_Or_Other_2;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_2 = value;
+                Model.Heir_Or_Other_2 = value;
             }
         }
         public string H_L_Address_2
@@ -598,17 +615,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_3 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_3
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_3
         {
             get
             {
-                check("HeirOrOther_3", null);
-                return Model.HeirOrOther_3;
+                check("Heir_Or_Other_3", null);
+                return Model.Heir_Or_Other_3;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_3 = value;
+                Model.Heir_Or_Other_3 = value;
             }
         }
         public string H_L_Address_3
@@ -638,17 +655,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_4 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_4
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_4
         {
             get
             {
-                check("HeirOrOther_4", null);
-                return Model.HeirOrOther_4;
+                check("Heir_Or_Other_4", null);
+                return Model.Heir_Or_Other_4;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_4 = value;
+                Model.Heir_Or_Other_4 = value;
             }
         }
         public string H_L_Address_4
@@ -678,17 +695,17 @@ namespace Cliver.Probidder
                 Model.H_L_Name_5 = value;
             }
         }
-        public Db.Probate.HeirOrOthers HeirOrOther_5
+        public Db.Probate.Heir_Or_Others Heir_Or_Other_5
         {
             get
             {
-                check("HeirOrOther_5", null);
-                return Model.HeirOrOther_5;
+                check("Heir_Or_Other_5", null);
+                return Model.Heir_Or_Other_5;
             }
             set
             {
                 edited = true;
-                Model.HeirOrOther_5 = value;
+                Model.Heir_Or_Other_5 = value;
             }
         }
         public string H_L_Address_5
