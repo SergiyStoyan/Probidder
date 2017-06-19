@@ -83,25 +83,24 @@ namespace Cliver.Probidder
                         Log.Main.Exit("SleepRoutines.WaitForObject got null");
                 }
 
-                List<object> records;
                 string url;
                 if (table is Db.Foreclosures)
-                {
-                    records = new List<object>();
-                    List<D> fs = table.GetAll();
-                    foreach (D f in fs)
-                    {
-                        Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                        normalize_record<D>(d);
-                        d["recorder"] = Settings.Network.UserName;
-                        records.Add(d);
-                    }
                     url = Settings.Network.ExportUrl + "?mode=estate";
-                }
+                else if (table is Db.Probates)
+                    url = Settings.Network.ExportUrl + "?mode=probate";
                 else
                     throw new Exception("Unknown option: " + table.GetType());
-
                 Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
+
+                List<object> records = new List<object>();
+                List<D> fs = table.GetAll();
+                foreach (D f in fs)
+                {
+                    Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
+                    normalize_record<D>(d);
+                    d["recorder"] = Settings.Network.UserName;
+                    records.Add(d);
+                }
 
                 HttpClient http_client = new HttpClient();
                 //if (!loginByUsername(ref http_client, Settings.Network.UserName, Settings.Network.Password()))
