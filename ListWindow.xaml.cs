@@ -110,7 +110,7 @@ namespace Cliver.Probidder
             };
 
             tables.ItemsSource = new List<Settings.ViewSettings.Tables> { Settings.ViewSettings.Tables.Foreclosures, Settings.ViewSettings.Tables.Probates };
-            
+            tables.SelectedItem = Settings.View.ActiveTable;
             ActiveTableChanged();
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
@@ -122,50 +122,52 @@ namespace Cliver.Probidder
 
         Table get_Table(Settings.ViewSettings.Tables table)
         {
-            Table t;
-            if (!tables2Table.TryGetValue(table, out t))
+            lock (tables2Table)
             {
-                DataGrid g;
-                IViews views;
-                switch (table)
+                Table t;
+                if (!tables2Table.TryGetValue(table, out t))
                 {
-                    case Settings.ViewSettings.Tables.Foreclosures:
-                        View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures> fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
-                        g = new ForeclosuresControl();
-                        (g as ForeclosuresControl).OpenClick += open_Click;
-                        (g as ForeclosuresControl).DeleteClick += delete_Click;
-                        fvs.CollectionChanged += delegate { update_indicator(); };
-                        g.ItemsSource = fvs;
-                        views = fvs;
-                        break;
-                    case Settings.ViewSettings.Tables.Probates:
-                        View<Db.Probate>.Views<ProbateView, Db.Probates> pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
-                        g = new ProbatesControl();
-                        (g as ForeclosuresControl).OpenClick += open_Click;
-                        (g as ForeclosuresControl).DeleteClick += delete_Click;
-                        pvs.CollectionChanged += delegate { update_indicator(); };
-                        g.ItemsSource = pvs;
-                        views = pvs;
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + table);
+                    DataGrid g;
+                    IViews views;
+                    switch (table)
+                    {
+                        case Settings.ViewSettings.Tables.Foreclosures:
+                            View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures> fvs = View<Db.Foreclosure>.Views<ForeclosureView, Db.Foreclosures>.Create(this);
+                            g = new ForeclosuresControl();
+                            (g as ForeclosuresControl).OpenClick += open_Click;
+                            (g as ForeclosuresControl).DeleteClick += delete_Click;
+                            fvs.CollectionChanged += delegate { update_indicator(); };
+                            g.ItemsSource = fvs;
+                            views = fvs;
+                            break;
+                        case Settings.ViewSettings.Tables.Probates:
+                            View<Db.Probate>.Views<ProbateView, Db.Probates> pvs = View<Db.Probate>.Views<ProbateView, Db.Probates>.Create(this);
+                            g = new ProbatesControl();
+                            (g as ProbatesControl).OpenClick += open_Click;
+                            (g as ProbatesControl).DeleteClick += delete_Click;
+                            pvs.CollectionChanged += delegate { update_indicator(); };
+                            g.ItemsSource = pvs;
+                            views = pvs;
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + table);
+                    }
+                    t = new Table { List = g, Views = views };
+                    tables2Table[table] = t;
+                    list_container.Children.Add(g);
+
+                    OrderColumns(table);
+
+                    g.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                    g.SelectionChanged += list_SelectionChanged;
+                    g.BeginningEdit += list_BeginningEdit;
+                    g.RowEditEnding += list_RowEditEnding;
+                    g.CellEditEnding += list_CellEditEnding;
+                    g.PreviewGotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
+                    g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
                 }
-                list_container.Children.Add(g);
-
-                OrderColumns(table);
-
-                g.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-                g.SelectionChanged += list_SelectionChanged;
-                g.BeginningEdit += list_BeginningEdit;
-                g.RowEditEnding += list_RowEditEnding;
-                g.CellEditEnding += list_CellEditEnding;
-                g.PreviewGotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
-                g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;                
-                
-                t = new Table { List = g, Views = views };
-                tables2Table[table] = t;
+                return t;
             }
-            return t;
         }
         readonly Dictionary<Settings.ViewSettings.Tables, Table> tables2Table = new Dictionary<Settings.ViewSettings.Tables, Table>();
         class Table
