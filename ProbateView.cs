@@ -283,6 +283,7 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.DeceasedCity = value;
+                OnPropertyChanged("DeceasedZips");
             }
         }
         public string AdministratorCity
@@ -296,6 +297,7 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.AdministratorCity = value;
+                OnPropertyChanged("AdministratorZips");
             }
         }
         public string DeceasedCounty

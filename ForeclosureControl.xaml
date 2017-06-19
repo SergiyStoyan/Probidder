@@ -6,18 +6,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Probidder"
              mc:Ignorable="d">
-
+    <UserControl.Resources>
+        <Style TargetType="{x:Type local:ComboBoxControl}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+        </Style>
+        <Style TargetType="{x:Type local:ComboBoxPhoneControl}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=CASE_N}"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+            <Setter Property="Padding" Value="0, 0, 0, 0"/>
+        </Style>
+        <Style TargetType="{x:Type local:DatePickerControl}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, -2, 0, 5"/>
+            <Setter Property="Padding" Value="0, 0, 0, 0"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+        </Style>
+        <Style TargetType="{x:Type xctk:MaskedTextBox}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=CASE_N}"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 0, 0, 5"/>
+        </Style>
+    </UserControl.Resources>
     <Grid Margin="0,10,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition MinWidth="120"/>
-            <ColumnDefinition MinWidth="120"/>
-            <ColumnDefinition MinWidth="120"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition MinWidth="120"/>
-            <ColumnDefinition MinWidth="120"/>
-            <ColumnDefinition MinWidth="120"/>
-            <ColumnDefinition MinWidth="10"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -50,7 +83,7 @@
                                              />
         <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Content="Plaintiff Code"/>
 
-        <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" Grid.Column="1" Grid.Row="3" x:Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3" Text="{Binding LENDOR, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" Height="{Binding ActualHeight, ElementName=CITY}"  ItemsSource="{Binding LENDORs, Mode=OneWay}"/>
+        <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" Grid.Column="1" Grid.Row="3" x:Name="LENDOR" IsEditable="True" Grid.ColumnSpan="3" Text="{Binding LENDOR, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding LENDORs, Mode=OneWay}"/>
 
         <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Content="Or MTG D"/>
         <local:DatePickerControl Grid.Column="1" Grid.Row="4" x:Name="ORIGINAL_MTG" 
@@ -119,15 +152,15 @@
         <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"   Grid.Column="5" Grid.Row="8"  x:Name="TYPE_OF_MO" IsEditable="True" Grid.ColumnSpan="1" Text="{Binding TYPE_OF_MO, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding TYPE_OF_MOs}"/>
         <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right" Content="Property Type"/>
         <local:ComboBoxControl1 IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" VerticalAlignment="Top"  Grid.Column="5" Grid.Row="9" x:Name="PROP_DESC" MinWidth="30"  Text="{Binding PROP_DESC, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsReadOnly="False" IsEditable="True" ItemsSource="{Binding PROP_DESCs}"/>
-        <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right" Content="Interest"/>
-        <TextBox Grid.Column="7" Grid.Row="8" x:Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right" Content="Monthly Payments"/>
-        <TextBox Grid.Column="7" Grid.Row="9" x:Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Label Grid.Column="6" Grid.Row="10" HorizontalAlignment="Right" Content="MTG Term"/>
-        <TextBox Grid.Column="7" Grid.Row="10" x:Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right" Content="Deff. Served Address"/>
-        <TextBox Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="3" x:Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Label Grid.Column="4" Grid.Row="12" HorizontalAlignment="Right" Content="Deff. Phone"/>
-        <xctk:MaskedTextBox Grid.Column="5" Grid.Row="12" x:Name="DEF_PHONE" VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
+        <Label Grid.Column="6" Grid.Row="7" HorizontalAlignment="Right" Content="Interest"/>
+        <TextBox Grid.Column="7" Grid.Row="7" x:Name="INTEREST_R" MinWidth="30" Text="{Binding INTEREST_R, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Label Grid.Column="6" Grid.Row="8" HorizontalAlignment="Right" Content="Monthly Payments"/>
+        <TextBox Grid.Column="7" Grid.Row="8" x:Name="MONTHLY_PAY" MinWidth="30" Text="{Binding MONTHLY_PAY, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#.##, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Decimal_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Label Grid.Column="6" Grid.Row="9" HorizontalAlignment="Right" Content="MTG Term"/>
+        <TextBox Grid.Column="7" Grid.Row="9" x:Name="TERM_OF_MTG" Text="{Binding TERM_OF_MTG, Mode=TwoWay, TargetNullValue='', StringFormat=#\,#, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  PreviewTextInput="Integer_PreviewTextInput" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Label Grid.Column="4" Grid.Row="10" HorizontalAlignment="Right" Content="Deff. Served Address"/>
+        <TextBox Grid.Column="5" Grid.Row="10" Grid.ColumnSpan="3" x:Name="DEF_ADDRESS" Text="{Binding DEF_ADDRESS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right" Content="Deff. Phone"/>
+        <xctk:MaskedTextBox Grid.Column="5" Grid.Row="11" x:Name="DEF_PHONE" VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding DEF_PHONE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>
