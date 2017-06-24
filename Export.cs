@@ -59,11 +59,6 @@ namespace Cliver.Probidder
         static Thread to_server_t = null;
         static readonly object o = new object();
 
-        public enum Table
-        {
-            Foreclosures,
-        }
-
         static void to_server<D>(Db.LiteDb.Table<D> table, bool show_start_notification = true) where D : Db.Document, new()
         {
             MessageForm mf = null;
@@ -93,13 +88,11 @@ namespace Cliver.Probidder
                 Log.Main.Inform("Uploading " + table.GetType() + " to: " + url);
 
                 List<object> records = new List<object>();
-                List<D> fs = table.GetAll();
-                foreach (D f in fs)
+                foreach (D d in table.GetAll())
                 {
-                    Dictionary<string, object> d = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                    normalize_record<D>(d);
-                    d["recorder"] = Settings.Network.UserName;
-                    records.Add(d);
+                    Dictionary<string, object> fs2v = get_record(d);
+                    fs2v["recorder"] = Settings.Network.UserName;
+                    records.Add(fs2v);
                 }
 
                 HttpClient http_client = new HttpClient();
@@ -224,14 +217,16 @@ namespace Cliver.Probidder
             try
             {
                 TextWriter tw = new StreamWriter(file);
-                Dictionary<string, object> hs = table.GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (object)null);
-                tw.WriteLine(FieldPreparation.GetCsvHeaderLine(hs.Keys, FieldPreparation.FieldSeparator.COMMA));
-                Db.Foreclosures fs = new Db.Foreclosures();
-                foreach (Db.Foreclosure f in fs.GetAll())
+                bool header_printed = false;
+                foreach (D d in table.GetAll())
                 {
-                    Dictionary<string, object> d = table.GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(f)));
-                    normalize_record<D>(d);
-                    tw.WriteLine(FieldPreparation.GetCsvLine(d.Values, FieldPreparation.FieldSeparator.COMMA));
+                    Dictionary<string, object> fs2v = get_record(d);
+                    if(!header_printed)
+                    {
+                        header_printed = true;
+                        tw.WriteLine(FieldPreparation.GetCsvHeaderLine(fs2v.Keys, FieldPreparation.FieldSeparator.COMMA));
+                    }
+                    tw.WriteLine(FieldPreparation.GetCsvLine(fs2v.Values, FieldPreparation.FieldSeparator.COMMA));
                 }
                 tw.Close();
 
@@ -254,44 +249,48 @@ namespace Cliver.Probidder
                 d[field] = ((DateTime)d[field]).ToString("yyyy-MM-dd");
         }
 
-        static void normalize_record<D>(Dictionary<string, object> d) where D : Db.Document, new()
+        static Dictionary<string, object> get_record<D>(D d) where D : Db.Document, new()
         {
+            Dictionary<string, object> fs2v = typeof(D).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).ToDictionary(x => x.Name, x => (x.GetValue(d)));
+
             if (typeof(D) == typeof(Db.Foreclosure))
             {
-                normalize_date(d, "FILING_DATE");
-                normalize_date(d, "ENTRY_DATE");
-                normalize_date(d, "DATE_OF_CA");
-                normalize_date(d, "ORIGINAL_MTG");
-                normalize_date(d, "LAST_PAY_DATE");
+                normalize_date(fs2v, "FILING_DATE");
+                normalize_date(fs2v, "ENTRY_DATE");
+                normalize_date(fs2v, "DATE_OF_CA");
+                normalize_date(fs2v, "ORIGINAL_MTG");
+                normalize_date(fs2v, "LAST_PAY_DATE");
                 //normalize_date(d, "AUCTION_DATE");
                 //normalize_date(d, "AUCTION_TIME");
 
-                if (d["PIN"] != null)
-                    d["PIN"] = ((string)d["PIN"]).Replace("____", "0000");
+                if (fs2v["PIN"] != null)
+                    fs2v["PIN"] = ((string)fs2v["PIN"]).Replace("____", "0000");
             }
             else if (typeof(D) == typeof(Db.Probate))
             {
-                normalize_date(d, "Filling_Date");
-                normalize_date(d, "Death_Date");
-                normalize_date(d, "Will_Date");
+                normalize_date(fs2v, "Filling_Date");
+                normalize_date(fs2v, "Death_Date");
+                normalize_date(fs2v, "Will_Date");
 
-                if (d["Re_Property"] != null)
-                    d["Re_Property"] = d["Re_Property"].ToString();
-                if (d["Testate"] != null)
-                    d["Testate"] = d["Testate"].ToString();
-                if (d["Heir_Or_Other_0"] != null)
-                    d["Heir_Or_Other_0"] = d["Heir_Or_Other_0"].ToString();
-                if (d["Heir_Or_Other_1"] != null)
-                    d["Heir_Or_Other_1"] = d["Heir_Or_Other_1"].ToString();
-                if (d["Heir_Or_Other_2"] != null)
-                    d["Heir_Or_Other_2"] = d["Heir_Or_Other_2"].ToString();
-                if (d["Heir_Or_Other_3"] != null)
-                    d["Heir_Or_Other_3"] = d["Heir_Or_Other_3"].ToString();
-                if (d["Heir_Or_Other_4"] != null)
-                    d["Heir_Or_Other_4"] = d["Heir_Or_Other_4"].ToString();
-                if (d["Heir_Or_Other_5"] != null)
-                    d["Heir_Or_Other_5"] = d["Heir_Or_Other_5"].ToString();
+                if (fs2v["Re_Property"] != null)
+                    fs2v["Re_Property"] = fs2v["Re_Property"].ToString();
+                if (fs2v["Testate"] != null)
+                    fs2v["Testate"] = fs2v["Testate"].ToString();
+                if (fs2v["Heir_Or_Other_0"] != null)
+                    fs2v["Heir_Or_Other_0"] = fs2v["Heir_Or_Other_0"].ToString();
+                if (fs2v["Heir_Or_Other_1"] != null)
+                    fs2v["Heir_Or_Other_1"] = fs2v["Heir_Or_Other_1"].ToString();
+                if (fs2v["Heir_Or_Other_2"] != null)
+                    fs2v["Heir_Or_Other_2"] = fs2v["Heir_Or_Other_2"].ToString();
+                if (fs2v["Heir_Or_Other_3"] != null)
+                    fs2v["Heir_Or_Other_3"] = fs2v["Heir_Or_Other_3"].ToString();
+                if (fs2v["Heir_Or_Other_4"] != null)
+                    fs2v["Heir_Or_Other_4"] = fs2v["Heir_Or_Other_4"].ToString();
+                if (fs2v["Heir_Or_Other_5"] != null)
+                    fs2v["Heir_Or_Other_5"] = fs2v["Heir_Or_Other_5"].ToString();
             }
+
+            return fs2v;
         }
     }
 
