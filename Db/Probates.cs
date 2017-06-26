@@ -81,30 +81,20 @@ namespace Cliver.Probidder
             public DateTime? Will_Date { get; set; }
             public string Re_Value { get; set; }
             public string Personal_Value { get; set; }
-
-            public enum Heir_Or_Others
-            {
-                H,
-                H_L
-            }
-            public string H_L_Name_0 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_0 { get; set; }
-            public string H_L_Address_0 { get; set; }
-            public string H_L_Name_1 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_1 { get; set; }
-            public string H_L_Address_1 { get; set; }
-            public string H_L_Name_2 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_2 { get; set; }
-            public string H_L_Address_2 { get; set; }
-            public string H_L_Name_3 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_3 { get; set; }
-            public string H_L_Address_3 { get; set; }
-            public string H_L_Name_4 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_4 { get; set; }
-            public string H_L_Address_4 { get; set; }
-            public string H_L_Name_5 { get; set; }
-            public Heir_Or_Others Heir_Or_Other_5 { get; set; }
-            public string H_L_Address_5 { get; set; }
+            public string Heirs_Or_Legatees { get; set; }
+            
+            public string Heir_Name_0 { get; set; }
+            public string Heir_Address_0 { get; set; }
+            public string Heir_Name_1 { get; set; }
+            public string Heir_Address_1 { get; set; }
+            public string Heir_Name_2 { get; set; }
+            public string Heir_Address_2 { get; set; }
+            public string Heir_Name_3 { get; set; }
+            public string Heir_Address_3 { get; set; }
+            public string Heir_Name_4 { get; set; }
+            public string Heir_Address_4 { get; set; }
+            public string Heir_Name_5 { get; set; }
+            public string Heir_Address_5 { get; set; }
         }
     }
 }

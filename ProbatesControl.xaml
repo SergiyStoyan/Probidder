@@ -497,283 +497,129 @@
         </DataGridTemplateColumn>
 
 
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_0">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_0">
             <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_0</TextBlock>
+                <TextBlock>Heir_Name_0</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Name_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Name_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_0">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_0">
             <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_0</TextBlock>
+                <TextBlock>Heir_Address_0</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_0, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Address_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_0, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_0">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_0</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Address_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
 
 
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_1">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_1">
             <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_1</TextBlock>
+                <TextBlock>Heir_Name_1</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_1, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Name_1, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_1, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Name_1, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_1">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_1">
             <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_1</TextBlock>
+                <TextBlock>Heir_Address_1</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_1, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Address_1, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_1, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_1">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_1</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_1, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_1, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Address_1, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
 
 
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_2">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_2">
             <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_2</TextBlock>
+                <TextBlock>Heir_Name_2</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_2, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Name_2, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_2, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Name_2, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_2">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_2">
             <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_2</TextBlock>
+                <TextBlock>Heir_Address_2</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_2, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Address_2, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_2, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_2">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_2</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_2, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_2, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Address_2, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
 
 
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_3">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_3">
             <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_3</TextBlock>
+                <TextBlock>Heir_Name_3</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_3, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Name_3, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_3, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Name_3, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_3">
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_3">
             <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_3</TextBlock>
+                <TextBlock>Heir_Address_3</TextBlock>
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_3, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                    <TextBlock Text="{Binding Heir_Address_3, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_3, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_3">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_3</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_3, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_3, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-
-
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_4">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_4</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_4, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_4, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_4">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_4</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_4, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_4, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_4">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_4</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_4, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_4, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-
-
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Name_5">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Name_5</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Name_5, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Name_5, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Or_Other_5">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Or_Other_5</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Or_Other_5, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Heir_Or_Other_5, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding Heir_Or_Others, Mode=OneWay}"/>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="H_L_Address_5">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>H_L_Address_5</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding H_L_Address_5, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding H_L_Address_5, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap"  Text="{Binding Heir_Address_3, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>

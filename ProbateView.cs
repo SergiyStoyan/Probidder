@@ -98,13 +98,6 @@ namespace Cliver.Probidder
                 return ComboBoxPhoneControl.GetItemsNormalized((new Db.AttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
             }
         }
-        public IEnumerable<string> Heir_Or_Others
-        {
-            get
-            {
-                return Enum.GetNames(typeof(Db.Probate.Heir_Or_Others));
-            }
-        }
         public IEnumerable<string> YNs
         {
             get
@@ -495,244 +488,179 @@ namespace Cliver.Probidder
                 Model.Personal_Value = value;
             }
         }
-
-        public string H_L_Name_0
+        public string Heirs_Or_Legatees
         {
             get
             {
-                check("H_L_Name_0", null);
-                return Model.H_L_Name_0;
+                check("Heirs_Or_Legatees", null);
+                return Model.Heirs_Or_Legatees;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_0 = value;
-            }
-        }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_0
-        {
-            get
-            {
-                check("Heir_Or_Other_0", null);
-                return Model.Heir_Or_Other_0;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Or_Other_0 = value;
-            }
-        }
-        public string H_L_Address_0
-        {
-            get
-            {
-                check("H_L_Address_0", null);
-                return Model.H_L_Address_0;
-            }
-            set
-            {
-                edited = true;
-                Model.H_L_Address_0 = value;
+                Model.Heirs_Or_Legatees = value;
             }
         }
 
-        public string H_L_Name_1
+        public string Heir_Name_0
         {
             get
             {
-                check("H_L_Name_1", null);
-                return Model.H_L_Name_1;
+                check("Heir_Name_0", null);
+                return Model.Heir_Name_0;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_1 = value;
+                Model.Heir_Name_0 = value;
             }
         }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_1
+        public string Heir_Address_0
         {
             get
             {
-                check("Heir_Or_Other_1", null);
-                return Model.Heir_Or_Other_1;
+                check("Heir_Address_0", null);
+                return Model.Heir_Address_0;
             }
             set
             {
                 edited = true;
-                Model.Heir_Or_Other_1 = value;
-            }
-        }
-        public string H_L_Address_1
-        {
-            get
-            {
-                check("H_L_Address_1", null);
-                return Model.H_L_Address_1;
-            }
-            set
-            {
-                edited = true;
-                Model.H_L_Address_1 = value;
+                Model.Heir_Address_0 = value;
             }
         }
 
-        public string H_L_Name_2
+        public string Heir_Name_1
         {
             get
             {
-                check("H_L_Name_2", null);
-                return Model.H_L_Name_2;
+                check("Heir_Name_1", null);
+                return Model.Heir_Name_1;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_2 = value;
+                Model.Heir_Name_1 = value;
             }
         }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_2
+        public string Heir_Address_1
         {
             get
             {
-                check("Heir_Or_Other_2", null);
-                return Model.Heir_Or_Other_2;
+                check("Heir_Address_1", null);
+                return Model.Heir_Address_1;
             }
             set
             {
                 edited = true;
-                Model.Heir_Or_Other_2 = value;
-            }
-        }
-        public string H_L_Address_2
-        {
-            get
-            {
-                check("H_L_Address_2", null);
-                return Model.H_L_Address_2;
-            }
-            set
-            {
-                edited = true;
-                Model.H_L_Address_2 = value;
+                Model.Heir_Address_1 = value;
             }
         }
 
-        public string H_L_Name_3
+        public string Heir_Name_2
         {
             get
             {
-                check("H_L_Name_3", null);
-                return Model.H_L_Name_3;
+                check("Heir_Name_2", null);
+                return Model.Heir_Name_2;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_3 = value;
+                Model.Heir_Name_2 = value;
             }
         }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_3
+        public string Heir_Address_2
         {
             get
             {
-                check("Heir_Or_Other_3", null);
-                return Model.Heir_Or_Other_3;
+                check("Heir_Address_2", null);
+                return Model.Heir_Address_2;
             }
             set
             {
                 edited = true;
-                Model.Heir_Or_Other_3 = value;
-            }
-        }
-        public string H_L_Address_3
-        {
-            get
-            {
-                check("H_L_Address_3", null);
-                return Model.H_L_Address_3;
-            }
-            set
-            {
-                edited = true;
-                Model.H_L_Address_3 = value;
+                Model.Heir_Address_2 = value;
             }
         }
 
-        public string H_L_Name_4
+        public string Heir_Name_3
         {
             get
             {
-                check("H_L_Name_4", null);
-                return Model.H_L_Name_4;
+                check("Heir_Name_3", null);
+                return Model.Heir_Name_3;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_4 = value;
+                Model.Heir_Name_3 = value;
             }
         }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_4
+        public string Heir_Address_3
         {
             get
             {
-                check("Heir_Or_Other_4", null);
-                return Model.Heir_Or_Other_4;
+                check("Heir_Address_3", null);
+                return Model.Heir_Address_3;
             }
             set
             {
                 edited = true;
-                Model.Heir_Or_Other_4 = value;
-            }
-        }
-        public string H_L_Address_4
-        {
-            get
-            {
-                check("H_L_Address_4", null);
-                return Model.H_L_Address_4;
-            }
-            set
-            {
-                edited = true;
-                Model.H_L_Address_4 = value;
+                Model.Heir_Address_3 = value;
             }
         }
 
-        public string H_L_Name_5
+        public string Heir_Name_4
         {
             get
             {
-                check("H_L_Name_5", null);
-                return Model.H_L_Name_5;
+                check("Heir_Name_4", null);
+                return Model.Heir_Name_4;
             }
             set
             {
                 edited = true;
-                Model.H_L_Name_5 = value;
+                Model.Heir_Name_4 = value;
             }
         }
-        public Db.Probate.Heir_Or_Others Heir_Or_Other_5
+        public string Heir_Address_4
         {
             get
             {
-                check("Heir_Or_Other_5", null);
-                return Model.Heir_Or_Other_5;
+                check("Heir_Address_4", null);
+                return Model.Heir_Address_4;
             }
             set
             {
                 edited = true;
-                Model.Heir_Or_Other_5 = value;
+                Model.Heir_Address_4 = value;
             }
         }
-        public string H_L_Address_5
+
+        public string Heir_Name_5
         {
             get
             {
-                check("H_L_Address_5", null);
-                return Model.H_L_Address_5;
+                check("Heir_Name_5", null);
+                return Model.Heir_Name_5;
             }
             set
             {
                 edited = true;
-                Model.H_L_Address_5 = value;
+                Model.Heir_Name_5 = value;
+            }
+        }
+        public string Heir_Address_5
+        {
+            get
+            {
+                check("Heir_Address_5", null);
+                return Model.Heir_Address_5;
+            }
+            set
+            {
+                edited = true;
+                Model.Heir_Address_5 = value;
             }
         }
     }

@@ -100,6 +100,21 @@ namespace Cliver.Probidder
             List<Item> ii = new List<Item>();
             foreach (string n in Settings.View.Tables2Columns[table].Showed)
             {
+                Item i;
+                if(!ns2i.TryGetValue(n, out i))
+                {
+                    string m = "Column " + n + " does not exist.";
+                    Log.Main.Error(m);
+                    if (ListWindow.This.IgnoreColumnDoesNotExist)
+                        continue;
+                    if (Message.YesNo(m + @"
+If the application has just been updated then this error can be ignored because it will be fixed automatically.
+However, if it will appear next launch, please contact the vendor as it means a fatal problem.
+Ignore this error now?", null, Message.Icons.Error
+                    ))
+                        ListWindow.This.IgnoreColumnDoesNotExist = true;
+                    continue;
+                }
                 ii.Add(ns2i[n]);
                 ns2i.Remove(n);
             }

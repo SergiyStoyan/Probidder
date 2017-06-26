@@ -92,7 +92,7 @@
         <TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" x:Name="Deceased_Full_Name" Text="{Binding Deceased_Full_Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
         <Label Grid.Column="4" Grid.Row="1" HorizontalAlignment="Right" Content="Adm Full Name"/>
         <TextBox Grid.Column="5" Grid.Row="1"  Grid.ColumnSpan="3" x:Name="Administrator_Full_Name" Text="{Binding Administrator_Full_Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
-        
+
         <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Content="Dec Str Logo"/>
         <TextBox Grid.Column="1" Grid.Row="3" x:Name="Deceased_Street_Logo" Text="{Binding Deceased_Street_Logo, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
         <Label Grid.Column="2" Grid.Row="3" HorizontalAlignment="Right" Content="Dec Address"/>
@@ -112,7 +112,7 @@
         <TextBox Grid.Column="1" Grid.Row="6" x:Name="Administrator_Street_Logo" Text="{Binding Administrator_Street_Logo, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
         <Label Grid.Column="2" Grid.Row="6" HorizontalAlignment="Right" Content="Adm Address"/>
         <TextBox Grid.Column="3" Grid.Row="6" Grid.ColumnSpan="5" x:Name="Administrator_Address" Text="{Binding Administrator_Address, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        
+
         <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" Content="Adm City"/>
         <local:ComboBoxControl1 Grid.Column="1" Grid.Row="7" x:Name="Administrator_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Administrator_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
         <Label Grid.Column="2" Grid.Row="7" HorizontalAlignment="Right" Content="Adm State"/>
@@ -121,7 +121,7 @@
         <local:ComboBoxControl1 Grid.Column="5" Grid.Row="7"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" x:Name="Administrator_Zip" IsEditable="True"  Text="{Binding Administrator_Zip, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AdministratorZips}"/>
         <Label Grid.Column="6" Grid.Row="7" HorizontalAlignment="Right" Content="Adm Phone"/>
         <xctk:MaskedTextBox Grid.Column="7" Grid.Row="7" x:Name="Administrator_Phone"  VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding Administrator_Phone, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
-        
+
 
         <Label Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right" Content="Death Date"/>
         <local:DatePickerControl  Grid.Column="1" Grid.Row="9" x:Name="Death_Date" Text2="{Binding Death_Date, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
@@ -129,7 +129,7 @@
         <local:DatePickerControl  Grid.Column="3" Grid.Row="9" x:Name="Will_Date" Text2="{Binding Will_Date, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
         <Label Grid.Column="4" Grid.Row="9" HorizontalAlignment="Right" Content="Testate"/>
         <local:ComboBoxControl1  Grid.Column="5" Grid.Row="9" x:Name="Testate" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Testate, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding YNs}"/>
-       
+
         <Label Grid.Column="0" Grid.Row="10" HorizontalAlignment="Right" Content="RE Prop"/>
         <local:ComboBoxControl1   Grid.Column="1" Grid.Row="10" x:Name="Re_Property" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Re_Property, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding YNs}"/>
         <Label Grid.Column="2" Grid.Row="10" HorizontalAlignment="Right" Content="RE Value"/>
@@ -142,52 +142,32 @@
         <local:ComboBoxControl1  Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="3"  IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top" IsEditable="True" x:Name="Attorney"  Text="{Binding Attorney, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding Attorneys}"/>
         <Label Grid.Column="4" Grid.Row="11" HorizontalAlignment="Right" Content="Attorney Phone"/>
         <local:ComboBoxPhoneControl VerticalAlignment="Top" Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="1" IsEditable="True" x:Name="Attorney_Phone" Text="{Binding Attorney_Phone, Mode=TwoWay, TargetNullValue='', StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AttorneyPhones}"/>
-        
+
         <Label Grid.Column="0" Grid.Row="12" HorizontalAlignment="Right" Content="Comments"/>
-        <TextBox Grid.Column="1" Grid.Row="12" Grid.ColumnSpan="7"  x:Name="Comments" Text="{Binding Comments, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox Grid.Column="1" Grid.Row="12" Grid.ColumnSpan="5"  x:Name="Comments" Text="{Binding Comments, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Label Grid.Column="6" Grid.Row="12" HorizontalAlignment="Right" Content="Heirs/Legatees"/>
+        <TextBox Grid.Column="7" Grid.Row="12" x:Name="Heirs_Or_Legatees" Text="{Binding Heirs_Or_Legatees, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
 
 
-        <Label Grid.Column="0" Grid.Row="13" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="13" x:Name="H_L_Name_0" Text="{Binding H_L_Name_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="13" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="13" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top" IsEditable="True" Text="{Binding Heir_Or_Other_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="13" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="13" x:Name="H_L_Address_0" Text="{Binding H_L_Address_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="0" Grid.Row="13" HorizontalAlignment="Right" Content="Heir Name"/>
+        <TextBox Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" x:Name="Heir_Name_0" Text="{Binding Heir_Name_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="4" Grid.Row="13" HorizontalAlignment="Right" Content="Heir Address"/>
+        <TextBox Grid.Column="5" Grid.Row="13" Grid.ColumnSpan="3"  x:Name="Heir_Address_0" Text="{Binding Heir_Address_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
 
-        <Label Grid.Column="0" Grid.Row="14" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="14" x:Name="H_L_Name_1" Text="{Binding H_L_Name_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="14" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="14" x:Name="Heir_Or_Other_1"  IsEditable="True"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" Text="{Binding Heir_Or_Other_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="14" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="14" x:Name="H_L_Address_1" Text="{Binding H_L_Address_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="0" Grid.Row="14" HorizontalAlignment="Right" Content="Heir Name"/>
+        <TextBox Grid.Column="1" Grid.Row="14" x:Name="Heir_Name_1" Grid.ColumnSpan="3"  Text="{Binding Heir_Name_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="4" Grid.Row="14" HorizontalAlignment="Right" Content="Heir Address"/>
+        <TextBox Grid.Column="5" Grid.Row="14" Grid.ColumnSpan="3"  x:Name="Heir_Address_1" Text="{Binding Heir_Address_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
-        <Label Grid.Column="0" Grid.Row="15" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="15" x:Name="H_L_Name_2" Text="{Binding H_L_Name_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="15" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="15" x:Name="Heir_Or_Other_2"  IsEditable="True"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" Text="{Binding Heir_Or_Other_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="15" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="15" x:Name="H_L_Address_2" Text="{Binding H_L_Address_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="0" Grid.Row="15" HorizontalAlignment="Right" Content="Heir Name"/>
+        <TextBox Grid.Column="1" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Name_2" Text="{Binding Heir_Name_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="4" Grid.Row="15" HorizontalAlignment="Right" Content="Heir Address"/>
+        <TextBox Grid.Column="5" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Address_2" Text="{Binding Heir_Address_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
-        <Label Grid.Column="0" Grid.Row="16" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="16" x:Name="H_L_Name_3" Text="{Binding H_L_Name_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="16" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="16" x:Name="Heir_Or_Other_3"  IsEditable="True"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" Text="{Binding Heir_Or_Other_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="16" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="16" x:Name="H_L_Address_3" Text="{Binding H_L_Address_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-
-        <Label Grid.Column="0" Grid.Row="17" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="17" x:Name="H_L_Name_4" Text="{Binding H_L_Name_4, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="17" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="17" x:Name="Heir_Or_Other_4"  IsEditable="True"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" Text="{Binding Heir_Or_Other_4, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="17" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="17" x:Name="H_L_Address_4" Text="{Binding H_L_Address_4, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-
-        <Label Grid.Column="0" Grid.Row="18" HorizontalAlignment="Right" Content="H L Name"/>
-        <TextBox Grid.Column="1" Grid.Row="18" x:Name="H_L_Name_5" Text="{Binding H_L_Name_5, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-        <Label Grid.Column="2" Grid.Row="18" HorizontalAlignment="Right" Content="Heirs / Legatees"/>
-        <local:ComboBoxControl1 Grid.Column="3" Grid.Row="18" x:Name="Heir_Or_Other_5"  IsEditable="True"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" Text="{Binding Heir_Or_Other_5, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  ItemsSource="{Binding Heir_Or_Others}"/>
-        <Label Grid.Column="4" Grid.Row="18" HorizontalAlignment="Right" Content="H L Address"/>
-        <TextBox Grid.Column="5" Grid.Row="18" x:Name="H_L_Address_5" Text="{Binding H_L_Address_5, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
-    </Grid>
+        <Label Grid.Column="0" Grid.Row="16" HorizontalAlignment="Right" Content="Heir Name"/>
+        <TextBox Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Name_3" Text="{Binding Heir_Name_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <Label Grid.Column="4" Grid.Row="16" HorizontalAlignment="Right" Content="Heir Address"/>
+        <TextBox Grid.Column="5" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Address_3" Text="{Binding Heir_Address_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+   </Grid>
 </UserControl>

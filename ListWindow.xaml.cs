@@ -260,6 +260,20 @@ namespace Cliver.Probidder
                 {
                     string cn = Settings.View.Tables2Columns[table].Showed[i];
                     DataGridColumn dgc = g.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
+                    if(dgc == null)
+                    {
+                        string m = "Column " + cn + " does not exist.";
+                        Log.Main.Error(m);
+                        if (IgnoreColumnDoesNotExist)
+                            continue;
+                        if (Message.YesNo(m + @"
+If the application has just been updated then this error can be ignored because it will be fixed while exiting.
+However, if it will appear next launch, please contact the vendor as it means a fatal problem.
+Ignore this error now?", null, Message.Icons.Error
+                        ))
+                            IgnoreColumnDoesNotExist = true;
+                        continue;
+                    }
                     dgc.Visibility = Visibility.Visible;
                     dgc.DisplayIndex = non_data_columns_count + i;
                     dgc.CanUserSort = true;
@@ -273,6 +287,7 @@ namespace Cliver.Probidder
                 ignore_list_ColumnDisplayIndexChanged = false;
             }
         }
+        public bool IgnoreColumnDoesNotExist = false;
 
         void update_indicator()
         {
