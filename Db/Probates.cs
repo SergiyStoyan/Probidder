@@ -91,10 +91,6 @@ namespace Cliver.Probidder
             public string Heir_Address_2 { get; set; }
             public string Heir_Name_3 { get; set; }
             public string Heir_Address_3 { get; set; }
-            public string Heir_Name_4 { get; set; }
-            public string Heir_Address_4 { get; set; }
-            public string Heir_Name_5 { get; set; }
-            public string Heir_Address_5 { get; set; }
         }
     }
 }

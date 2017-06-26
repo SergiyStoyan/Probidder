@@ -609,59 +609,5 @@ namespace Cliver.Probidder
                 Model.Heir_Address_3 = value;
             }
         }
-
-        public string Heir_Name_4
-        {
-            get
-            {
-                check("Heir_Name_4", null);
-                return Model.Heir_Name_4;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Name_4 = value;
-            }
-        }
-        public string Heir_Address_4
-        {
-            get
-            {
-                check("Heir_Address_4", null);
-                return Model.Heir_Address_4;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Address_4 = value;
-            }
-        }
-
-        public string Heir_Name_5
-        {
-            get
-            {
-                check("Heir_Name_5", null);
-                return Model.Heir_Name_5;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Name_5 = value;
-            }
-        }
-        public string Heir_Address_5
-        {
-            get
-            {
-                check("Heir_Address_5", null);
-                return Model.Heir_Address_5;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Address_5 = value;
-            }
-        }
     }
 }

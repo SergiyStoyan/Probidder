@@ -65,6 +65,12 @@ namespace Cliver.Probidder
                 set_context(v);
             }));
 
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                SizeToContent = SizeToContent.Manual;
+                WpfRoutines.TrimWindowSize(this);
+            }));
+
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
               {
                   //while (true)
