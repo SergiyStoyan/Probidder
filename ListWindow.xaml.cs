@@ -556,13 +556,13 @@ Ignore this error now?", null, Message.Icons.Error
             if (v.Id != 0 && !v.Edited)
                 return;
             v.ValidateAllProperties();
-            if (/*!e.Row.IsValid() ||*/ v.HasErrors)
+            if (v.HasErrors)
             {
-                e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
+                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
                 return;
             }
             e.Cancel = false;
-            if (e.Row.IsNewItem)//added from the grid (not clear how to commit it)
+            if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
                 views.Delete(v);
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
             views.Update(v);

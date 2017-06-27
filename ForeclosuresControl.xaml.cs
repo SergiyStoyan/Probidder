@@ -38,5 +38,11 @@ namespace Cliver.Probidder
         {
             DeleteClick?.Invoke(sender, e);
         }
+
+        protected override void OnCanExecuteBeginEdit(System.Windows.Input.CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
     }
 }

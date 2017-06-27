@@ -29,9 +29,9 @@
                     </Style.Triggers>
                 </Style>
     </DataGrid.Resources>
-    <!--<DataGrid.RowValidationRules>
+    <DataGrid.RowValidationRules>
         <local:RowValidationRule ValidationStep="UpdatedValue"/>
-    </DataGrid.RowValidationRules>-->
+    </DataGrid.RowValidationRules>
     <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
