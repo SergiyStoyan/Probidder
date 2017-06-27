@@ -171,9 +171,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_FILING_DATE != null)
-                    value = _FILING_DATE;
-                else
+                //if (_FILING_DATE != null)
+                //    value = _FILING_DATE;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.FILING_DATE);
                 check("FILING_DATE", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -181,12 +181,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _FILING_DATE = value;
+                //_FILING_DATE = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.FILING_DATE = dt;
             }
         }
-        string _FILING_DATE = null;
+        //string _FILING_DATE = null;
         //public DateTime? AUCTION_DATE
         //{
         //    get
@@ -232,9 +232,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_ENTRY_DATE != null)
-                    value = _ENTRY_DATE;
-                else
+                //if (_ENTRY_DATE != null)
+                //    value = _ENTRY_DATE;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.ENTRY_DATE);
                 check("ENTRY_DATE", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -242,12 +242,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _ENTRY_DATE = value;
+                //_ENTRY_DATE = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.ENTRY_DATE = dt;
             }
         }
-        string _ENTRY_DATE = null;
+        //string _ENTRY_DATE = null;
         public string LENDOR
         {
             get
@@ -268,9 +268,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_ORIGINAL_MTG != null)
-                    value = _ORIGINAL_MTG;
-                else
+                //if (_ORIGINAL_MTG != null)
+                //    value = _ORIGINAL_MTG;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.ORIGINAL_MTG);
                 check("ORIGINAL_MTG", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -278,12 +278,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _ORIGINAL_MTG = value;
+                //_ORIGINAL_MTG = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.ORIGINAL_MTG = dt;
             }
         }
-        string _ORIGINAL_MTG = null;
+        //string _ORIGINAL_MTG = null;
         public string DOCUMENT_N
         {
             get
@@ -386,9 +386,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_DATE_OF_CA != null)
-                    value = _DATE_OF_CA;
-                else
+                //if (_DATE_OF_CA != null)
+                //    value = _DATE_OF_CA;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.DATE_OF_CA);
                 check("DATE_OF_CA", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -396,21 +396,21 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _DATE_OF_CA = value;
+                //_DATE_OF_CA = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.DATE_OF_CA = dt;
             }
         }
-        string _DATE_OF_CA = null;
+        //string _DATE_OF_CA = null;
         //public DateTime? LAST_PAY_DATE { get { return Model.LAST_PAY_DATE; } set {  Model.LAST_PAY_DATE = value; } }  
         public string LAST_PAY_DATE
         {
             get
             {
                 string value;
-                if (_LAST_PAY_DATE != null)
-                    value = _LAST_PAY_DATE;
-                else
+                //if (_LAST_PAY_DATE != null)
+                //    value = _LAST_PAY_DATE;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.LAST_PAY_DATE);
                 check("LAST_PAY_DATE", null);
                 return value;
@@ -418,12 +418,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _LAST_PAY_DATE = value;
+                //_LAST_PAY_DATE = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.LAST_PAY_DATE = dt;
             }
         }
-        string _LAST_PAY_DATE = null;
+        //string _LAST_PAY_DATE = null;
         public uint? BALANCE_DU
         {
             get

@@ -28,6 +28,9 @@
             </Style.Triggers>
         </Style>
     </DataGrid.Resources>
+    <DataGrid.RowValidationRules>
+        <local:RowValidationRule ValidationStep="UpdatedValue"/>
+    </DataGrid.RowValidationRules>
     <DataGrid.Columns>
         <DataGridTemplateColumn>
             <DataGridTemplateColumn.CellTemplate>
@@ -70,12 +73,12 @@
             </DataGridTemplateColumn.Header>
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Filling_Date, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, StringFormat=MM/dd/yyyy}"></TextBlock>
+                    <TextBlock Text="{Binding Filling_Date, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnDataErrors=True,ValidatesOnNotifyDataErrors=True, StringFormat=MM/dd/yyyy}"></TextBlock>
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <local:DatePickerControl Text2="{Binding Filling_Date, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <local:DatePickerControl Text2="{Binding Filling_Date, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True,ValidatesOnNotifyDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>

@@ -28,8 +28,11 @@
                         <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}"/>
                     </Style.Triggers>
                 </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
+    </DataGrid.Resources>
+    <DataGrid.RowValidationRules>
+        <local:RowValidationRule ValidationStep="UpdatedValue"/>
+    </DataGrid.RowValidationRules>
+    <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

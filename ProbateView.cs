@@ -145,9 +145,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                if (_FillingDate != null)
-                    value = _FillingDate;
-                else
+                //if (_FillingDate != null)
+                //    value = _FillingDate;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.Filling_Date);
                 check("Filling_Date", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -155,12 +155,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _FillingDate = value;
+                //_FillingDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.Filling_Date = dt;
             }
         }
-        string _FillingDate = null;
+        //string _FillingDate = null;
         public string Deceased_Full_Name
         {
             get
@@ -395,9 +395,9 @@ namespace Cliver.Probidder
             get
             {
                 string value;
-                    if (_DeathDate != null)
-                    value = _DeathDate;
-                else
+                //if (_DeathDate != null)
+                //    value = _DeathDate;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.Death_Date);
                 check("Death_Date", (DatePickerControl.ParseText(value) == null) ? "Error" : null);
                 return value;
@@ -405,20 +405,20 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _DeathDate = value;
+                //_DeathDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.Death_Date = dt;
             }
         }
-        string _DeathDate = null;
+        //string _DeathDate = null;
         public string Will_Date
         {
             get
             {
                 string value;
-                if (_WillDate != null)
-                    value = _WillDate;
-                else
+                //if (_WillDate != null)
+                //    value = _WillDate;
+                //else
                     value = DatePickerControl.GetMaskedString(Model.Will_Date);
                 check("Will_Date", null);
                 return value;
@@ -426,12 +426,12 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                _WillDate = value;
+                //_WillDate = value;
                 DateTime? dt = DatePickerControl.ParseText(value);
                 Model.Will_Date = dt;
             }
         }
-        string _WillDate = null;
+        //string _WillDate = null;
         public Db.Probate.YNs Re_Property
         {
             get

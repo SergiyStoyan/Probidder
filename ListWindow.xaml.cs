@@ -557,7 +557,7 @@ Ignore this error now?", null, Message.Icons.Error
             v.ValidateAllProperties();
             if (/*!e.Row.IsValid() ||*/ v.HasErrors)
             {
-                e.Cancel = true;
+                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
                 return;
             }
             e.Cancel = false;
@@ -602,6 +602,19 @@ Ignore this error now?", null, Message.Icons.Error
             Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;
         }
     }
+
+    /// <summary>
+    /// allows to display/hide the exclamation mark on row
+    /// </summary>
+    public class RowValidationRule : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            var v = (value as BindingGroup).Items[0] as IView;
+            return v.HasErrors ? new ValidationResult(false, "error") : ValidationResult.ValidResult;
+        }
+    }
+
     //public class ConvertToFormatedRuns : IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -111,7 +111,7 @@ namespace Cliver.Probidder
 
         void got_focus(object sender, RoutedEventArgs e)
         {
-            sender = e.Source;
+            sender = e.OriginalSource;
             if (sender is Window || sender is ScrollViewer)
                 return;
 

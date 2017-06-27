@@ -88,8 +88,9 @@ namespace Cliver.Probidder
         public IEnumerable GetErrors(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
+                //return columnNames2error.Where(x => x.Value != null).Select(x => x.Value);
                 return null;
-            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Key);
+            return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Value);
         }
         bool forced_validation = false;
 
