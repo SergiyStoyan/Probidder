@@ -154,7 +154,7 @@ namespace Cliver.Probidder
                     }
                     t = new Table { List = g, Views = views };
                     tables2Table[table] = t;
-                    list_container.Children.Add(g);
+                    list_container.Content = g;
 
                     OrderColumns(table);
 
