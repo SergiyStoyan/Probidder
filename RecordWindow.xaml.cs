@@ -111,8 +111,8 @@ namespace Cliver.Probidder
 
         void got_focus(object sender, RoutedEventArgs e)
         {
-            sender = e.OriginalSource;
-            if (sender is Window || sender is ScrollViewer)
+            Control oc = (Control)e.OriginalSource;
+            if (oc is Window || oc is ScrollViewer || oc is Button)
                 return;
 
             if (focused_control != null)
@@ -122,13 +122,27 @@ namespace Cliver.Probidder
                 else
                     focused_control.Background = Brushes.White;
             }
-            if (sender is TextBox || sender is CheckBox || sender is ComboBox)
-                ((Control)sender).Background = Settings.View.FocusedControlColor;
-            else if (sender is DatePickerControl)
-                ((DatePickerControl)sender).Background = Settings.View.FocusedControlColor;
+            Control c = null;
+            c = oc.FindVisualParentOfType<ComboBox>();
+            if (c == null)
+            {
+                c = oc.FindVisualParentOfType<CheckBox>();
+                if (c == null)
+                {
+                    c = oc.FindVisualParentOfType<DatePickerControl>();
+                    if (c == null)
+                    {
+                        c = oc.FindVisualParentOfType<TextBox>();
+                        if (c == null)
+                            c = oc;
+                    }
+                }
+            }
+            if (c is DatePickerControl)
+                ((DatePickerControl)c).Background = Settings.View.FocusedControlColor;
             else
-                return;
-            focused_control = (Control)sender;            
+                c.Background = Settings.View.FocusedControlColor;
+            focused_control = c;            
         }
         Control focused_control = null;
 
