@@ -154,7 +154,7 @@ namespace Cliver.Probidder
                     }
                     t = new Table { List = g, Views = views };
                     tables2Table[table] = t;
-                    list_container.Content = g;
+                    list_container.Children.Add(g);
 
                     OrderColumns(table);
 
@@ -210,6 +210,7 @@ namespace Cliver.Probidder
                     n2v.Value.List.Visibility = Visibility.Visible;
                 else
                     n2v.Value.List.Visibility = Visibility.Collapsed;
+            //list_container.Content = list;
             update_indicator();
             filter();
         }
@@ -557,7 +558,7 @@ Ignore this error now?", null, Message.Icons.Error
             v.ValidateAllProperties();
             if (/*!e.Row.IsValid() ||*/ v.HasErrors)
             {
-                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
+                e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
                 return;
             }
             e.Cancel = false;

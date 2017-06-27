@@ -276,18 +276,6 @@ namespace Cliver.Probidder
                     fs2v["Re_Property"] = fs2v["Re_Property"].ToString();
                 if (fs2v["Testate"] != null)
                     fs2v["Testate"] = fs2v["Testate"].ToString();
-                if (fs2v["Heir_Or_Other_0"] != null)
-                    fs2v["Heir_Or_Other_0"] = fs2v["Heir_Or_Other_0"].ToString();
-                if (fs2v["Heir_Or_Other_1"] != null)
-                    fs2v["Heir_Or_Other_1"] = fs2v["Heir_Or_Other_1"].ToString();
-                if (fs2v["Heir_Or_Other_2"] != null)
-                    fs2v["Heir_Or_Other_2"] = fs2v["Heir_Or_Other_2"].ToString();
-                if (fs2v["Heir_Or_Other_3"] != null)
-                    fs2v["Heir_Or_Other_3"] = fs2v["Heir_Or_Other_3"].ToString();
-                if (fs2v["Heir_Or_Other_4"] != null)
-                    fs2v["Heir_Or_Other_4"] = fs2v["Heir_Or_Other_4"].ToString();
-                if (fs2v["Heir_Or_Other_5"] != null)
-                    fs2v["Heir_Or_Other_5"] = fs2v["Heir_Or_Other_5"].ToString();
             }
 
             return fs2v;

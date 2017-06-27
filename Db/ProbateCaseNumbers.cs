@@ -62,9 +62,9 @@ namespace Cliver.Probidder
                     CountyProbateCaseNumbers ccns = table.Where(x => GetNormalized(x.county) == county).FirstOrDefault();
                     if (ccns == null)
                         return new CountyProbateCaseNumbers { case_ns = new List<string>()};
-                    Db.Foreclosures fs = new Foreclosures();
+                    Db.Probates ps = new Probates();
                     //List<string> used_cns = fs.Get(x => GetNormalized(x.COUNTY) == county).ToList(); !!!does not work!!!
-                    HashSet<string> used_cns = new HashSet<string>(fs.GetAll().Where(x => GetNormalized(x.COUNTY) == county).Select(x => x.CASE_N));
+                    HashSet<string> used_cns = new HashSet<string>(ps.GetAll().Where(x => GetNormalized(x.Filling_County) == county).Select(x => x.Case_Number));
                     ccns.case_ns = ccns.case_ns.Where(x => !used_cns.Contains(x)).ToList();
                     return ccns;
                 }

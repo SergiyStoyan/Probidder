@@ -13,7 +13,7 @@
              Margin="0"  Height="auto"  HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch"  HorizontalGridLinesBrush="#eed"
           VerticalGridLinesBrush="#eed"  AlternationCount="2" SelectionMode="Single" AutoGenerateColumns="False"
-                               CanUserAddRows="True" CanUserDeleteRows="True" 
+                               CanUserAddRows="True" CanUserDeleteRows="True"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
     <DataGrid.Resources>
         <Style TargetType="{x:Type DataGridRow}">
@@ -28,9 +28,9 @@
             </Style.Triggers>
         </Style>
     </DataGrid.Resources>
-    <DataGrid.RowValidationRules>
+    <!--<DataGrid.RowValidationRules>
         <local:RowValidationRule ValidationStep="UpdatedValue"/>
-    </DataGrid.RowValidationRules>
+    </DataGrid.RowValidationRules>-->
     <DataGrid.Columns>
         <DataGridTemplateColumn>
             <DataGridTemplateColumn.CellTemplate>
@@ -125,7 +125,7 @@
             </DataGridTemplateColumn.CellTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Case_Number, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                    <local:ComboBoxControl1 VerticalAlignment="Top" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True" Text="{Binding Case_Number, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" IsEditable="True" ItemsSource="{Binding CASE_Ns, Mode=OneWay}"/>
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
