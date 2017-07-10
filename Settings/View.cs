@@ -52,6 +52,7 @@ namespace Cliver.Probidder
             {
                 public List<string> Showed = null;
                 public List<string> Searched = null;
+                public Dictionary<string, double> Names2Width = null;
             }
             public Dictionary<Tables, Columns> Tables2Columns = null;
 
@@ -61,11 +62,11 @@ namespace Cliver.Probidder
                 {
                     Tables2Columns = new Dictionary<Tables, Columns>();
 
-                    List<string> fs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();                   
-                    Tables2Columns[Tables.Foreclosures] = new Columns { Showed = fs, Searched = fs };
+                    List<string> fs = typeof(Db.Foreclosure).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
+                    Tables2Columns[Tables.Foreclosures] = new Columns { Showed = fs, Searched = fs, Names2Width = new Dictionary<string, double>() };
 
                     fs = typeof(Db.Probate).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance).Select(x => x.Name).ToList();
-                    Tables2Columns[Tables.Probates] = new Columns { Showed = fs, Searched = fs };
+                    Tables2Columns[Tables.Probates] = new Columns { Showed = fs, Searched = fs, Names2Width = new Dictionary<string, double>() };
                 }
             }
 

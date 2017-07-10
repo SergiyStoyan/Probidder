@@ -64,8 +64,11 @@ namespace Cliver.Probidder
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
-                foreach(var n2v in tables2Table)
+                foreach (var n2v in tables2Table)
+                {
                     get_columns_order2settings(n2v.Key);
+                    get_column_widths2settings(n2v.Key);
+                }
                 Settings.View.Save();
             };
 
@@ -200,6 +203,21 @@ namespace Cliver.Probidder
             }
         }
 
+        void get_column_widths2settings(Settings.ViewSettings.Tables table)
+        {
+            Settings.View.Tables2Columns[table].Names2Width.Clear();
+            DataGrid g = get_Table(table).List;
+            foreach (DataGridColumn dgc in g.Columns.OrderBy(x => x.DisplayIndex))
+            {
+                if (dgc.Visibility != Visibility.Visible)
+                    continue;
+                string cn = get_column_name(dgc);
+                if (cn == null)//buttons
+                    continue;
+                Settings.View.Tables2Columns[table].Names2Width[cn] = dgc.ActualWidth;
+            }
+        }
+
         public void ActiveTableChanged()
         {
             Table t = get_Table(Settings.View.ActiveTable);
@@ -248,8 +266,7 @@ namespace Cliver.Probidder
                     if (cn == null)
                     {
                         dgc.Visibility = Visibility.Visible;
-                        dgc.DisplayIndex = non_data_columns_count;
-                        non_data_columns_count++;
+                        dgc.DisplayIndex = non_data_columns_count++;
                     }
                     else
                     {
@@ -280,7 +297,11 @@ Ignore this error now?", null, Message.Icons.Error
                     dgc.CanUserSort = true;
                     dgc.CanUserResize = true;
                     dgc.CanUserReorder = true;
-                    dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
+                    double width;
+                    if(Settings.View.Tables2Columns[table].Names2Width.TryGetValue(cn, out width))
+                        dgc.Width = new DataGridLength(width, DataGridLengthUnitType.Pixel);
+                    else
+                        dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
                 }
             }
             finally
