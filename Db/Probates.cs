@@ -44,26 +44,30 @@ namespace Cliver.Probidder
 
         public class Probate : Document
         {
+            public string Filling_County { get; set; }
+            public string Filling_State { get; set; }
             [ObligatoryField]
             public string Case_Number { get; set; }
             [ObligatoryField]
             public DateTime? Filling_Date { get; set; }
             public string Deceased_Full_Name { get; set; }
+            public string Deceased_Medical_Center { get; set; }
+            public string Deceased_Address { get; set; }
+            public string Deceased_City { get; set; }
+            public string Deceased_County { get; set; }
+            public string Deceased_State { get; set; }
+            
+
+
             public string Administrator_Full_Name { get; set; }
-            public string Deceased_Street_Logo { get; set; }
-            public string Administrator_Street_Logo { get; set; }
+            public string Administrator_Business_Place { get; set; }
             public string Administrator_Address { get; set; }
             public string Administrator_Phone { get; set; }
             public string Attorney { get; set; }
             public string Attorney_Phone { get; set; }
-            public string Deceased_Address { get; set; }
             public string Comments { get; set; }
-            public string Deceased_City { get; set; }
             public string Administrator_City { get; set; }
-            public string Filling_County { get; set; }
-            public string Deceased_County { get; set; }
             public string Administrator_State { get; set; }
-            public string Filling_State { get; set; }
             public string Administrator_Zip { get; set; }
             public string Deceased_Zip { get; set; }
             [ObligatoryField]

@@ -30,6 +30,8 @@ namespace Cliver.Probidder
             Model.Filling_County = Settings.Location.County;
             Model.Deceased_County = Settings.Location.County;
             Model.Filling_State = "IL";
+            Model.Deceased_State = "IL";
+            Model.Administrator_State = "IL";
             Model.Case_Number = CASE_Ns?.FirstOrDefault();
         }
         
@@ -201,30 +203,30 @@ namespace Cliver.Probidder
                 Model.Administrator_Phone = value;
             }
         }
-        public string Deceased_Street_Logo
+        public string Deceased_Medical_Center
         {
             get
             {
-                check("Deceased_Street_Logo", null);
-                return Model.Deceased_Street_Logo;
+                check("Deceased_Medical_Center", null);
+                return Model.Deceased_Medical_Center;
             }
             set
             {
                 edited = true;
-                Model.Deceased_Street_Logo = value;
+                Model.Deceased_Medical_Center = value;
             }
         }
-        public string Administrator_Street_Logo
+        public string Administrator_Business_Place
         {
             get
             {
-                check("Administrator_Street_Logo", null);
-                return Model.Administrator_Street_Logo;
+                check("Administrator_Business_Place", null);
+                return Model.Administrator_Business_Place;
             }
             set
             {
                 edited = true;
-                Model.Administrator_Street_Logo = value;
+                Model.Administrator_Business_Place = value;
             }
         }
         public string Administrator_Address
@@ -346,6 +348,19 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.Administrator_State = value;
+            }
+        }
+        public string Deceased_State
+        {
+            get
+            {
+                check("Deceased_State", null);
+                return Model.Deceased_State;
+            }
+            set
+            {
+                edited = true;
+                Model.Deceased_State = value;
             }
         }
         public string Filling_State
