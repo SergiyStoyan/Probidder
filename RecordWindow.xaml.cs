@@ -42,6 +42,7 @@ namespace Cliver.Probidder
 
             this.vs = vs;
             this.table = table;
+            Title = table.ToString();
             switch (table)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:

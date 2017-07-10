@@ -34,12 +34,13 @@ namespace Cliver.Probidder
                 //}
                 //ccns.Add(get_CountyCaseNumbers(Settings.Location.County));
                 string s = SerializationRoutines.Json.Serialize(ccns);
+                s = GetJsonNormalized(s);
                 System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
             }
 
             static CountyForeclosureCaseNumbers get_CountyCaseNumbers(string county)
             {
-                county = GetNormalized(county);
+                county = GetStringNormalized(county);
                 HttpClient http_client = new HttpClient();
                 HttpResponseMessage rm = http_client.GetAsync("https://i.probidder.com/api/record-gaps/index.php?foreclosures&county=" + county).Result;
                 if (!rm.IsSuccessStatusCode)
@@ -58,13 +59,13 @@ namespace Cliver.Probidder
             {
                 lock (table)
                 {
-                    county = GetNormalized(county);
-                    CountyForeclosureCaseNumbers ccns = table.Where(x => GetNormalized(x.county) == county).FirstOrDefault();
+                    county = GetStringNormalized(county);
+                    CountyForeclosureCaseNumbers ccns = table.Where(x => x.county == county).FirstOrDefault();
                     if (ccns == null)
                         return new CountyForeclosureCaseNumbers { case_ns = new List<string>()};
                     Db.Foreclosures fs = new Foreclosures();
                     //List<string> used_cns = fs.Get(x => GetNormalized(x.COUNTY) == county).ToList(); !!!does not work!!!
-                    HashSet<string> used_cns = new HashSet<string>(fs.GetAll().Where(x => GetNormalized(x.COUNTY) == county).Select(x => x.CASE_N));
+                    HashSet<string> used_cns = new HashSet<string>(fs.GetAll().Where(x => x.COUNTY == county).Select(x => x.CASE_N));
                     ccns.case_ns = ccns.case_ns.Where(x => !used_cns.Contains(x)).ToList();
                     return ccns;
                 }

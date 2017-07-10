@@ -30,9 +30,9 @@ namespace Cliver.Probidder
             {
                 lock (table)
                 {
-                    county = GetNormalized(county);
+                    county = GetStringNormalized(county);
                     int min_count = Settings.Database.GetMinCountFor(GetType());
-                    return table.Where(x => x.count > min_count && GetNormalized(x.county) == county).ToList();
+                    return table.Where(x => x.count > min_count && x.county == county).ToList();
                 }
             }
         }

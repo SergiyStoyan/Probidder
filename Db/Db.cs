@@ -12,6 +12,8 @@ using System.Threading;
 using System.Net.Http;
 using System.IO;
 using LiteDB;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 namespace Cliver.Probidder
 {
@@ -19,7 +21,7 @@ namespace Cliver.Probidder
     {
         static readonly string db_dir = Log.GetAppCommonDataDir();
         static readonly string db_file = db_dir + "\\db.litedb";
-        
+
         static Db()
         {
         }
@@ -62,7 +64,7 @@ namespace Cliver.Probidder
                 table_types2table_info.Clear();
             }
         }
-        
+
         public class Document
         {
             public class ObligatoryField : Attribute { }
@@ -80,7 +82,7 @@ namespace Cliver.Probidder
             public readonly string Name;
 
             protected TableInfo get_table_info()
-            { 
+            {
                 lock (table_types2table_info)
                 {
                     TableInfo ti;
@@ -175,11 +177,25 @@ namespace Cliver.Probidder
         }
         static readonly Dictionary<Type, TableInfo> table_types2table_info = new Dictionary<Type, TableInfo>();
 
-        public static string GetNormalized(string s)
+        public static string GetStringNormalized(string s)
         {
             if (s == null)
                 return null;
-            return System.Text.RegularExpressions.Regex.Replace(s.ToLower(), @" +", " ").Trim();
+            return Regex.Replace(s.ToUpper(), @"[^\S\r\n]+", " ").Trim();
+        }
+
+        public static string GetJsonNormalized(string s)
+        {
+            if (s == null)
+                return null;
+
+            s = Regex.Replace(s, @"(?'quotation'(?<![^\\]\\)\"").*?(?'-quotation'(?<![^\\]\\)\"")", (Match m) =>
+            {
+                string v = SerializationRoutines.Json.Deserialize<string>(m.Value);
+                v = SerializationRoutines.Json.Serialize(GetStringNormalized(v));
+                return v;
+            });
+            return s;
         }
     }
 }

@@ -30,8 +30,8 @@ namespace Cliver.Probidder
             {
                 lock (table)
                 {
-                    county = GetNormalized(county);
-                    return table.Where(x => GetNormalized(x.county) == county).ToList();
+                    county = GetStringNormalized(county);
+                    return table.Where(x => x.county == county).ToList();
                 }
             }
         }
