@@ -44,18 +44,11 @@ namespace Cliver.Probidder
                 return (new Db.ProbateCaseNumbers()).GetBy(Filling_County).case_ns.OrderBy(x => x);
             }
         }
-        //public IEnumerable<string> DeceasedCitys
-        //{
-        //    get
-        //    {
-        //        return (new Db.Cities()).GetBy(Deceased_County).OrderBy(x => x.city).Select(x => x.city);
-        //    }
-        //}
-        public IEnumerable<string> CITYs
+        public IEnumerable<string> DeceasedCitys
         {
             get
             {
-                return (new Db.Cities()).GetBy(Filling_County).OrderBy(x => x.city).Select(x => x.city);
+                return (new Db.Cities()).GetBy(Deceased_County).OrderBy(x => x.city).Select(x => x.city);
             }
         }
         public IEnumerable<string> AdministratorCitys
@@ -126,9 +119,6 @@ namespace Cliver.Probidder
                 edited = true;
                 Model.Filling_County = value;
                 OnPropertyChanged("CASE_Ns");
-                OnPropertyChanged("CITYs");
-                OnPropertyChanged("DeceasedZips");
-                OnPropertyChanged("AdministratorZips");
                 OnPropertyChanged("Attorneys");
                 OnPropertyChanged("AttorneyPhones");
             }
@@ -340,6 +330,8 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.Deceased_County = value;
+                OnPropertyChanged("DeceasedCitys");
+                OnPropertyChanged("DeceasedZips");
             }
         }
         public string Administrator_State

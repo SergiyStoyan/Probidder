@@ -101,7 +101,7 @@
         <TextBox Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" x:Name="Deceased_Address" Text="{Binding Deceased_Address, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
         
          <Label Grid.Column="0" Grid.Row="5" Content="Dec City"/>
-        <local:ComboBoxControl1  Grid.Column="1" Grid.Row="5" x:Name="Deceased_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Deceased_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
+        <local:ComboBoxControl1  Grid.Column="1" Grid.Row="5" x:Name="Deceased_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Deceased_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding DeceasedCitys}"/>
         
         <Label Grid.Column="2" Grid.Row="5" Content="Dec County"/>
         <TextBox Grid.Column="3" Grid.Row="5" x:Name="Deceased_County" Text="{Binding Deceased_County, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
