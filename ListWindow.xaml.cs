@@ -605,7 +605,7 @@ Ignore this error now?", null, Message.Icons.Error
             views.Delete(v);
             if(new_row)
             {
-                list.CanUserAddRows = false;
+                list.CanUserAddRows = false;//to make a new placeholder displayed
                 list.CanUserAddRows = true;
             }
             //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
@@ -642,29 +642,30 @@ Ignore this error now?", null, Message.Icons.Error
 
         public void list_PreviewKeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
-            DataGridCell c = e.NewFocus as DataGridCell;
-            if (c == null)
+            DataGridCell dgc = e.NewFocus as DataGridCell;
+            if (dgc == null)
             {
-                Control t = e.NewFocus as Control;
-                if (t == null)
-                    return;
-                c = t.FindVisualParentOfType<DataGridCell>();
+                Control c = e.NewFocus as Control;
                 if (c == null)
                     return;
-                cc = c;
+                dgc = c.FindVisualParentOfType<DataGridCell>();
+                if (dgc == null)
+                    return;
+                active_cell = dgc;
+                //dgc.Focus();
                 return;
             }
-            if (cc == c)
+            if (active_cell == dgc)
                 return;
             e.Handled = true;
-            cc = c;
+            active_cell = dgc;
             //list.CommitEdit();
-            c.Focus();
+            dgc.Focus();
             list.BeginEdit();
-            Control co = c.FindVisualChildrenOfType<Control>().FirstOrDefault();
+            Control co = dgc.FindVisualChildrenOfType<Control>().FirstOrDefault();
             co?.Focus();
         }
-        DataGridCell cc = null;
+        DataGridCell active_cell = null;
 
         private void tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
