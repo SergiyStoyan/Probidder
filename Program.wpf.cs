@@ -1,0 +1,66 @@
+//********************************************************************************************
+//Author: Sergey Stoyan, CliverSoft.com
+//        http://cliversoft.com
+//        stoyan@cliversoft.com
+//        sergey.stoyan@gmail.com
+//        27 February 2007
+//Copyright: (C) 2007, Sergey Stoyan
+//********************************************************************************************
+
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+
+namespace Cliver.Probidder
+{
+    public class ProgramWpf
+    {
+        static public void Initialize()
+        {
+
+        }
+
+        static ProgramWpf()
+        {
+            SetTextSelectOnFocus();
+        }
+
+        static void SetTextSelectOnFocus()
+        {
+            //EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
+            //    new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotKeyboardFocusEvent,
+                new RoutedEventHandler(SelectAllText));
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDoubleClickEvent,
+                new RoutedEventHandler(SelectAllText));
+        }
+
+        static void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        {
+            // Find the TextBox
+            DependencyObject parent = e.OriginalSource as UIElement;
+            while (parent != null && !(parent is TextBox))
+                parent = VisualTreeHelper.GetParent(parent);
+
+            if (parent != null)
+            {
+                var textBox = (TextBox)parent;
+                if (!textBox.IsKeyboardFocusWithin)
+                {
+                    // If the text box is not yet focused, give it the focus and
+                    // stop further processing of this click event.
+                    textBox.Focus();
+                    e.Handled = true;
+                }
+            }
+        }
+
+        static void SelectAllText(object sender, RoutedEventArgs e)
+        {
+            var textBox = e.OriginalSource as TextBox;
+            if (textBox != null)
+                textBox.SelectAll();
+        }
+    }
+}

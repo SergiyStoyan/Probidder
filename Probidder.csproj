@@ -158,6 +158,7 @@
     <Compile Include="ProbatesControl.xaml.cs">
       <DependentUpon>ProbatesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Program.wpf.cs" />
     <Compile Include="View.cs" />
     <Compile Include="ProbateView.cs" />
     <Compile Include="Views.cs" />

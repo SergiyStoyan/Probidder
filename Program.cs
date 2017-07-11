@@ -43,6 +43,8 @@ namespace Cliver.Probidder
             Log.Initialize(Log.Mode.ONLY_LOG);
             //Cliver.Config.Initialize(new string[] { "General" });
             Cliver.Config.Reload();
+
+            ProgramWpf.Initialize();
         }  
 
         [STAThread]
