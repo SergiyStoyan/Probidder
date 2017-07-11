@@ -63,7 +63,7 @@
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                   AncestorType={x:Type DataGridRow}}, 
                                   Path=IsNewItem}" Value="True">
-                                    <Setter TargetName="delete" Property="Visibility" Value="Hidden"></Setter>
+                                    <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

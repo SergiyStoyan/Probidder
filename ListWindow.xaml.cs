@@ -598,9 +598,17 @@ Ignore this error now?", null, Message.Icons.Error
             IView v = list.SelectedItem as IView;
             if (v == null)
                 return;
-            if (!Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
+            DataGridRow r = ((Control)sender).FindVisualParentOfType<DataGridRow>();
+            bool new_row = r.IsNewItem;
+            if (!new_row && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
+            if(new_row)
+            {
+                list.CanUserAddRows = false;
+                list.CanUserAddRows = true;
+            }
+            //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
         }
 
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
