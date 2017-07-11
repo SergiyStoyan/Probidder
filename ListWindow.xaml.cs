@@ -60,6 +60,7 @@ namespace Cliver.Probidder
             Loaded += delegate
             {
                 AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
+                AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
             };
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
@@ -122,6 +123,11 @@ namespace Cliver.Probidder
                 WpfRoutines.TrimWindowSize(this);
             }));
         }
+        
+        public void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+         //   return key == Settings.AutoComplete.TriggerKey && (Keyboard.Modifiers & Settings.AutoComplete.TriggerModifierKey) == Settings.AutoComplete.TriggerModifierKey;
+        }
 
         Table get_Table(Settings.ViewSettings.Tables table)
         {
@@ -167,11 +173,13 @@ namespace Cliver.Probidder
                     g.RowEditEnding += list_RowEditEnding;
                     g.CellEditEnding += list_CellEditEnding;
                     g.GotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
+                    g.PreviewGotKeyboardFocus += list_PreviewKeyboardFocusChangedEventHandler;
                     g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
                 }
                 return t;
             }
         }
+
         readonly Dictionary<Settings.ViewSettings.Tables, Table> tables2Table = new Dictionary<Settings.ViewSettings.Tables, Table>();
         class Table
         {
@@ -565,10 +573,6 @@ Ignore this error now?", null, Message.Icons.Error
         {
         }
 
-        private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-        }
-
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             var v = e.Row.DataContext as IView;
@@ -606,18 +610,54 @@ Ignore this error now?", null, Message.Icons.Error
             get_columns_order2settings(Settings.View.ActiveTable);
         }
         bool ignore_list_ColumnDisplayIndexChanged = false;
+        
+        private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+        }
 
         public void list_KeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
+            ////es.Add(e);
+            //DataGridCell c = e.NewFocus as DataGridCell;
+            //if (c == null)
+            //    return;
+            ////list.BeginEdit(e);
+            //Control co = c.FindVisualChildrenOfType<Control>().FirstOrDefault();
+            //if (co == null)
+            //    return;
+            //if (co.IsFocused)
+            //    return;
+            //bool? g = co.Focus();
+            //e.Handled = true;
+        }
+        //List<KeyboardFocusChangedEventArgs> es = new List<KeyboardFocusChangedEventArgs>();
+
+        public void list_PreviewKeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
+        {
             DataGridCell c = e.NewFocus as DataGridCell;
             if (c == null)
+            {
+                Control t = e.NewFocus as Control;
+                if (t == null)
+                    return;
+                c = t.FindVisualParentOfType<DataGridCell>();
+                if (c == null)
+                    return;
+                cc = c;
                 return;
-            list.BeginEdit(e);
+            }
+            if (cc == c)
+                return;
+            e.Handled = true;
+            cc = c;
+            //list.CommitEdit();
+            c.Focus();
+            list.BeginEdit();
             Control co = c.FindVisualChildrenOfType<Control>().FirstOrDefault();
-            if (co == null)
-                return;
-            bool? g = co.Focus();
+            co?.Focus();
         }
+        DataGridCell cc = null;
+
 
         private void tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

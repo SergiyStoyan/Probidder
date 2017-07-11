@@ -105,7 +105,7 @@
         <TextBox Grid.Column="3" Grid.Row="5" x:Name="Deceased_County" Text="{Binding Deceased_County, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
 
         <Label Grid.Column="0" Grid.Row="6" Content="Dec State"/>
-        <TextBox Grid.Column="1" Grid.Row="6" x:Name="Deceased_State" Text="{Binding Deceased_State, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+        <TextBox Grid.Column="1" Grid.Row="6" x:Name="Deceased_State" IsReadOnly="True"  Text="{Binding Deceased_State, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
 
         <Label Grid.Column="2" Grid.Row="6" Content="Dec Zip"/>
         <local:ComboBoxControl1 Grid.Column="3" Grid.Row="6"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" x:Name="Deceased_Zip" IsEditable="True"  Text="{Binding Deceased_Zip, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding DeceasedZips}"/>
@@ -137,7 +137,7 @@
        <Label Grid.Column="4" Grid.Row="5" Content="Adm City"/>
         <local:ComboBoxControl1 Grid.Column="5" Grid.Row="5" x:Name="Administrator_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Administrator_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
         <Label Grid.Column="6" Grid.Row="5" Content="Adm State"/>
-        <TextBox Grid.Column="7" Grid.Row="5" x:Name="Administrator_State" Text="{Binding Administrator_State, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
+        <TextBox Grid.Column="7" Grid.Row="5" x:Name="Administrator_State" IsReadOnly="True"  Text="{Binding Administrator_State, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
 
       <Label Grid.Column="4" Grid.Row="6" Content="Adm Zip"/>
         <local:ComboBoxControl1 Grid.Column="5" Grid.Row="6"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" x:Name="Administrator_Zip" IsEditable="True"  Text="{Binding Administrator_Zip, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AdministratorZips}"/>

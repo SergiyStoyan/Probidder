@@ -7,12 +7,13 @@
              xmlns:local="clr-namespace:Cliver.Probidder"
              mc:Ignorable="d" 
 
-    
              
              
              Margin="0"  Height="auto"  HorizontalAlignment="Stretch" 
                               VerticalAlignment="Stretch"  HorizontalGridLinesBrush="#eed"
-          VerticalGridLinesBrush="#eed"  AlternationCount="2" SelectionMode="Single" AutoGenerateColumns="False"
+          VerticalGridLinesBrush="#eed"  AlternationCount="2"
+          SelectionMode="Single" 
+          AutoGenerateColumns="False"
                                CanUserAddRows="True" CanUserDeleteRows="True"
      CanUserSortColumns="True" CanUserReorderColumns="True" IsTabStop="True" SelectionUnit="FullRow">
     <DataGrid.Resources>
@@ -266,7 +267,7 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Administrator_State">
+        <DataGridTemplateColumn IsReadOnly="True" SortMemberPath="Administrator_State">
             <DataGridTemplateColumn.Header>
                 <TextBlock>Administrator_State</TextBlock>
             </DataGridTemplateColumn.Header>
@@ -281,7 +282,7 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="true" SortMemberPath="Filling_State">
+        <DataGridTemplateColumn IsReadOnly="True" SortMemberPath="Filling_State">
             <DataGridTemplateColumn.Header>
                 <TextBlock>Filling_State</TextBlock>
             </DataGridTemplateColumn.Header>
@@ -296,7 +297,7 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="true" SortMemberPath="Deceased_State">
+        <DataGridTemplateColumn IsReadOnly="True" SortMemberPath="Deceased_State">
             <DataGridTemplateColumn.Header>
                 <TextBlock>Deceased_State</TextBlock>
             </DataGridTemplateColumn.Header>
