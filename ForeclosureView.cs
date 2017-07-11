@@ -357,7 +357,7 @@ namespace Cliver.Probidder
             get
             {
                 string value = Model.ZIP;
-                check("ZIP", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
+                check("ZIP", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 6 || value.Length < 4) ? "Error" : null);
                 return value;
             }
             set

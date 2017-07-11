@@ -379,7 +379,7 @@ namespace Cliver.Probidder
             get
             {
                 string value = Model.Administrator_Zip;
-                check("Administrator_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
+                check("Administrator_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 6 || value.Length < 4) ? "Error" : null);
                 return value;
             }
             set
@@ -393,7 +393,7 @@ namespace Cliver.Probidder
             get
             {
                 string value = Model.Deceased_Zip;
-                check("Deceased_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 5 || value.Length < 4) ? "Error" : null);
+                check("Deceased_Zip", !string.IsNullOrEmpty(value) && (Regex.IsMatch(value, @"[^\d]") || value.Length > 6 || value.Length < 4) ? "Error" : null);
                 return value;
             }
             set
