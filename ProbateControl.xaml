@@ -137,7 +137,7 @@
         <TextBox Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="3" x:Name="Administrator_Address" Text="{Binding Administrator_Address, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
        <Label Grid.Column="4" Grid.Row="5" Content="Adm City"/>
-        <local:ComboBoxControl1 Grid.Column="5" Grid.Row="5" x:Name="Administrator_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Administrator_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding CITYs}"/>
+        <local:ComboBoxControl1 Grid.Column="5" Grid.Row="5" x:Name="Administrator_City" IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True"  Text="{Binding Administrator_City, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AdministratorCitys}"/>
         <Label Grid.Column="6" Grid.Row="5" Content="Adm State"/>
         <TextBox Grid.Column="7" Grid.Row="5" x:Name="Administrator_State" IsReadOnly="True"  Text="{Binding Administrator_State, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"/>
 

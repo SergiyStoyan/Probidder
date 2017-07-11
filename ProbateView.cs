@@ -58,6 +58,13 @@ namespace Cliver.Probidder
                 return (new Db.Cities()).GetBy(Filling_County).OrderBy(x => x.city).Select(x => x.city);
             }
         }
+        public IEnumerable<string> AdministratorCitys
+        {
+            get
+            {
+                return (new Db.Cities()).GetAll().OrderBy(x => x.city).Select(x => x.city);
+            }
+        }
         public IEnumerable<string> DeceasedZips
         {
             get
@@ -72,12 +79,10 @@ namespace Cliver.Probidder
         public IEnumerable<string> AdministratorZips
         {
             get
-            {
-                if (string.IsNullOrEmpty(Filling_County))
-                    return null;
+            {               
                 if (string.IsNullOrEmpty(Administrator_City))
                     return null;
-                return (new Db.Zips()).GetBy(Filling_County, Administrator_City).OrderBy(x => x.zip).Select(x => x.zip);
+                return (new Db.Zips()).GetBy(Administrator_City).OrderBy(x => x.zip).Select(x => x.zip);
             }
         }
         public IEnumerable<string> Attorneys

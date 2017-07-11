@@ -35,6 +35,15 @@ namespace Cliver.Probidder
                     return table.Where(x => x.city == city && x.county == county).OrderBy(x => x.zip).ToList();
                 }
             }
+
+            public List<Zip> GetBy(string city)
+            {
+                lock (table)
+                {
+                    city = GetStringNormalized(city);
+                    return table.Where(x => x.city == city).OrderBy(x => x.zip).ToList();
+                }
+            }
         }
 
         public class Zip : Document
