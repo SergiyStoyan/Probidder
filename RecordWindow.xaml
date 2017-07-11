@@ -22,7 +22,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer x:Name="fields" Grid.Row="0"  DataContextChanged="fields_DataContextChanged" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="fields" Grid.Row="0"  DataContextChanged="fields_DataContextChanged" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 
             </ScrollViewer>
             <Grid Grid.Row="1" Margin="10,10,10,10" DockPanel.Dock="Top">
