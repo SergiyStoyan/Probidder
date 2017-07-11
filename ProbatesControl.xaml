@@ -28,6 +28,9 @@
                 <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}"/>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="AcceptsReturn" Value="True"/>
+        </Style>
     </DataGrid.Resources>
     <DataGrid.RowValidationRules>
         <local:RowValidationRule ValidationStep="UpdatedValue"/>

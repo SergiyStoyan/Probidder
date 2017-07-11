@@ -123,10 +123,10 @@ namespace Cliver.Probidder
                 WpfRoutines.TrimWindowSize(this);
             }));
         }
-        
+
         public void KeyDownHandler(object sender, KeyEventArgs e)
         {
-         //   return key == Settings.AutoComplete.TriggerKey && (Keyboard.Modifiers & Settings.AutoComplete.TriggerModifierKey) == Settings.AutoComplete.TriggerModifierKey;
+            //   return key == Settings.AutoComplete.TriggerKey && (Keyboard.Modifiers & Settings.AutoComplete.TriggerModifierKey) == Settings.AutoComplete.TriggerModifierKey;
         }
 
         Table get_Table(Settings.ViewSettings.Tables table)
@@ -286,7 +286,7 @@ namespace Cliver.Probidder
                 {
                     string cn = Settings.View.Tables2Columns[table].Showed[i];
                     DataGridColumn dgc = g.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
-                    if(dgc == null)
+                    if (dgc == null)
                     {
                         string m = "Column " + cn + " does not exist.";
                         Log.Main.Error(m);
@@ -306,7 +306,7 @@ Ignore this error now?", null, Message.Icons.Error
                     dgc.CanUserResize = true;
                     dgc.CanUserReorder = true;
                     double width;
-                    if(Settings.View.Tables2Columns[table].Names2Width.TryGetValue(cn, out width))
+                    if (Settings.View.Tables2Columns[table].Names2Width.TryGetValue(cn, out width))
                         dgc.Width = new DataGridLength(width, DataGridLengthUnitType.Pixel);
                     else
                         dgc.Width = new DataGridLength(100, DataGridLengthUnitType.SizeToHeader);
@@ -392,7 +392,7 @@ Ignore this error now?", null, Message.Icons.Error
                 return;
             views.Drop();
         }
-        
+
         private void about_Click(object sender, RoutedEventArgs e)
         {
             AboutForm.Open();
@@ -481,14 +481,14 @@ Ignore this error now?", null, Message.Icons.Error
             switch (Settings.View.ActiveTable)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
-                   pis_ = typeof(ForeclosureView).GetProperties();
+                    pis_ = typeof(ForeclosureView).GetProperties();
                     break;
                 case Settings.ViewSettings.Tables.Probates:
                     pis_ = typeof(ProbateView).GetProperties();
                     break;
                 default:
                     throw new Exception("Unknown option: " + Settings.View.ActiveTable);
-            }          
+            }
             List<PropertyInfo> pis = new List<PropertyInfo>();
             foreach (string c in Settings.View.Tables2Columns[Settings.View.ActiveTable].Searched)
             {
@@ -566,7 +566,7 @@ Ignore this error now?", null, Message.Icons.Error
                     tb.Inlines.Add(new Run() { Text = t });
                 match = !match;
             }
-        }        
+        }
         readonly string DATE_FORMAT = "MM/dd/yyyy";
 
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -589,7 +589,7 @@ Ignore this error now?", null, Message.Icons.Error
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
                 views.Delete(v);
-                //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
+            //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
             views.Update(v);
         }
 
@@ -610,7 +610,7 @@ Ignore this error now?", null, Message.Icons.Error
             get_columns_order2settings(Settings.View.ActiveTable);
         }
         bool ignore_list_ColumnDisplayIndexChanged = false;
-        
+
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
         }
@@ -658,9 +658,15 @@ Ignore this error now?", null, Message.Icons.Error
         }
         DataGridCell cc = null;
 
-
         private void tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (Settings.View.ActiveTable == (Settings.ViewSettings.Tables)tables.SelectedItem)
+                return;
+            if (!list.CommitEdit(DataGridEditingUnit.Row, true))
+            {
+                Message.Error("Cannot save the last change. Please correct the data.");
+                tables.SelectedItem = Settings.View.ActiveTable;
+            }
             Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;
         }
     }

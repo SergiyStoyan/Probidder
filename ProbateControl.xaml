@@ -26,6 +26,8 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
             <Setter Property="Padding" Value="0, 0, 0, 0"/>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
         </Style>
         <Style TargetType="{x:Type local:DatePickerControl}">
             <Setter Property="VerticalAlignment" Value="Top"/>
