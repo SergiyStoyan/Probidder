@@ -26,7 +26,7 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
             <Setter Property="Padding" Value="0, 0, 0, 0"/>
-            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="AcceptsReturn" Value="True"/>
         </Style>
         <Style TargetType="{x:Type local:DatePickerControl}">
@@ -144,7 +144,7 @@
       <Label Grid.Column="4" Grid.Row="6" Content="Adm Zip"/>
         <local:ComboBoxControl1 Grid.Column="5" Grid.Row="6"  IsTextSearchCaseSensitive="False" IsTextSearchEnabled="True"  VerticalAlignment="Top" x:Name="Administrator_Zip" IsEditable="True"  Text="{Binding Administrator_Zip, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AdministratorZips}"/>
         <Label Grid.Column="6" Grid.Row="6" Content="Adm Phone"/>
-        <xctk:MaskedTextBox Grid.Column="7" Grid.Row="6" x:Name="Administrator_Phone"  VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding Administrator_Phone, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" TextWrapping="Wrap"/>
+        <xctk:MaskedTextBox Grid.Column="7" Grid.Row="6" x:Name="Administrator_Phone"  VerticalAlignment="Top"  IsReadOnly="False" Text="{Binding Administrator_Phone, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" Mask="(000) 000-0000" />
 
        <Label Grid.Column="4" Grid.Row="9" Content="Attorney"/>
         <local:ComboBoxControl1  Grid.Column="5" Grid.Row="9"  IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"  VerticalAlignment="Top" IsEditable="True" x:Name="Attorney"  Text="{Binding Attorney, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding Attorneys}"/>
@@ -152,10 +152,10 @@
         <local:ComboBoxPhoneControl VerticalAlignment="Top" Grid.Column="7" Grid.Row="9" Grid.ColumnSpan="1" IsEditable="True" x:Name="Attorney_Phone" Text="{Binding Attorney_Phone, Mode=TwoWay, TargetNullValue='', StringFormat=\{0:(###)-###-####\}, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}" ItemsSource="{Binding AttorneyPhones}"/>
 
         <Label Grid.Column="4" Grid.Row="10" Content="Comments"/>
-        <TextBox Grid.Column="5" Grid.Row="10" Grid.ColumnSpan="3" Grid.RowSpan="2" x:Name="Comments" Text="{Binding Comments, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox Grid.Column="5" Grid.Row="10" Grid.ColumnSpan="3" Grid.RowSpan="2" x:Name="Comments" Text="{Binding Comments, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  />
        
         <Label Grid.Column="0" Grid.Row="12" Content="Heirs/Legatees"/>
-        <TextBox Grid.Column="1" Grid.Row="12" x:Name="Heirs_Or_Legatees" Text="{Binding Heirs_Or_Legatees, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox Grid.Column="1" Grid.Row="12" x:Name="Heirs_Or_Legatees" Text="{Binding Heirs_Or_Legatees, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  />
 
         <Label Grid.Column="0" Grid.Row="13" Content="Heir Name"/>
         <TextBox Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" x:Name="Heir_Name_0" Text="{Binding Heir_Name_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
