@@ -651,8 +651,11 @@ Ignore this error now?", null, Message.Icons.Error
                 dgc = c.FindVisualParentOfType<DataGridCell>();
                 if (dgc == null)
                     return;
-                active_cell = dgc;
-                //dgc.Focus();
+                if (active_cell != dgc)
+                {
+                    active_cell = dgc;
+                    //dgc.Focus();
+                }
                 return;
             }
             if (active_cell == dgc)
