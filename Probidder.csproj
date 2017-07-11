@@ -144,6 +144,8 @@
     <Compile Include="ComboBoxControl.xaml.cs">
       <DependentUpon>ComboBoxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Db\ForeclosureAttorneyPhones.cs" />
+    <Compile Include="Db\ForeclosureAttorneys.cs" />
     <Compile Include="Db\ProbateCaseNumbers.cs" />
     <Compile Include="Db\Probates.cs" />
     <Compile Include="ForeclosureControl.xaml.cs">
@@ -188,11 +190,11 @@
     <Compile Include="Settings\Location.cs" />
     <Compile Include="Db\Zips.cs" />
     <Compile Include="Db\Cities.cs" />
-    <Compile Include="Db\AttorneyPhones.cs" />
+    <Compile Include="Db\ProbateAttorneyPhones.cs" />
     <Compile Include="Db\Db.cs" />
     <Compile Include="Db\Db.LightDb.cs" />
     <Compile Include="Db\Foreclosures.cs" />
-    <Compile Include="Db\Attorneys.cs" />
+    <Compile Include="Db\ProbateAttorneys.cs" />
     <Compile Include="Db\Plaintiffs.cs" />
     <Compile Include="Db\Db.refresh.cs" />
     <Compile Include="Settings\DatabaseWindow.xaml.cs">

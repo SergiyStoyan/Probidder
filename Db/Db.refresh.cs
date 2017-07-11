@@ -92,13 +92,25 @@ namespace Cliver.Probidder
                     tasks.Add(t);
                     t = new Task(() =>
                     {
-                        AttorneyPhones.RefreshFile();
+                        ProbateAttorneyPhones.RefreshFile();
                     });
                     t.Start();
                     tasks.Add(t);
                     t = new Task(() =>
                     {
-                        Attorneys.RefreshFile();
+                        ProbateAttorneys.RefreshFile();
+                    });
+                    t.Start();
+                    tasks.Add(t);
+                    t = new Task(() =>
+                    {
+                        ForeclosureAttorneyPhones.RefreshFile();
+                    });
+                    t.Start();
+                    tasks.Add(t);
+                    t = new Task(() =>
+                    {
+                        ForeclosureAttorneys.RefreshFile();
                     });
                     t.Start();
                     tasks.Add(t);

@@ -19,14 +19,14 @@ namespace Cliver.Probidder
 {
     public partial class Db
     {
-        public class Attorneys : Db.Json.Table<Attorney>
+        public class ProbateAttorneys : Db.Json.Table<ProbateAttorney>
         {
             static public void RefreshFile()
             {
-                refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=foreclosures&field=attorney");
+                refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=probates&field=attorney");
             }
 
-            public List<Attorney> GetBy(string county)
+            public List<ProbateAttorney> GetBy(string county)
             {
                 lock (table)
                 {
@@ -37,7 +37,7 @@ namespace Cliver.Probidder
             }
         }
 
-        public class Attorney : Document
+        public class ProbateAttorney : Document
         {
             public string attorney { get; set; }
             public string county { get; set; }

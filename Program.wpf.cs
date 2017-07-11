@@ -13,20 +13,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Cliver.Probidder
-{
-    public class ProgramWpf
+{//WPF context
+    public partial class Program
     {
-        static public void Initialize()
-        {
-
-        }
-
-        static ProgramWpf()
-        {
-            SetTextSelectOnFocus();
-        }
-
-        static void SetTextSelectOnFocus()
+        public static void SetTextSelectOnFocus()
         {
             //EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
             //    new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));

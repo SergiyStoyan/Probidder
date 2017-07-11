@@ -25,7 +25,7 @@ using Microsoft.Win32;
 
 namespace Cliver.Probidder
 {
-    public class Program
+    public partial class Program
     {
         static Program()
         {
@@ -44,7 +44,7 @@ namespace Cliver.Probidder
             //Cliver.Config.Initialize(new string[] { "General" });
             Cliver.Config.Reload();
 
-            ProgramWpf.Initialize();
+            SetTextSelectOnFocus();
         }  
 
         [STAThread]

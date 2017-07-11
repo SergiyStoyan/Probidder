@@ -86,7 +86,7 @@ namespace Cliver.Probidder
             {
                 if (string.IsNullOrEmpty(Filling_County))
                     return null;
-                return (new Db.Attorneys()).GetBy(Filling_County).OrderBy(x => x.attorney).Select(x => x.attorney);
+                return (new Db.ProbateAttorneys()).GetBy(Filling_County).OrderBy(x => x.attorney).Select(x => x.attorney);
             }
         }
         public IEnumerable<string> AttorneyPhones
@@ -97,7 +97,7 @@ namespace Cliver.Probidder
                     return null;
                 if (string.IsNullOrEmpty(Attorney))
                     return null;
-                return ComboBoxPhoneControl.GetItemsNormalized((new Db.AttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
+                return ComboBoxPhoneControl.GetItemsNormalized((new Db.ProbateAttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
             }
         }
         public IEnumerable<string> YNs
