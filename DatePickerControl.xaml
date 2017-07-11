@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Cliver.Probidder"
-             mc:Ignorable="d"            
+             mc:Ignorable="d"  BorderThickness="0"          
             >
 
         <DatePicker.Resources>
@@ -15,7 +15,7 @@
                         <Grid>
                             <TextBox x:Name="PART_TextBox" Visibility="Hidden"
                                     Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
-                            <TextBox x:Name="TextBox" Visibility="Visible" Text="__/__/__"/>
+                            <TextBox x:Name="TextBox" Visibility="Visible" Text="__/__/__" />
                         </Grid>
                     </ControlTemplate>
                     </Setter.Value>

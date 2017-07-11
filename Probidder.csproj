@@ -154,6 +154,9 @@
     <Compile Include="ForeclosuresControl.xaml.cs">
       <DependentUpon>ForeclosuresControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DateBoxControl.xaml.cs">
+      <DependentUpon>DateBoxControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProbateControl.xaml.cs">
       <DependentUpon>ProbateControl.xaml</DependentUpon>
     </Compile>
@@ -268,6 +271,10 @@
     <Page Include="ForeclosuresControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DateBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="NumberBoxControl.xaml">
       <Generator>MSBuild:Compile</Generator>

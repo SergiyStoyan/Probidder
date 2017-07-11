@@ -66,10 +66,16 @@ namespace Cliver.Probidder
                     if (_tb != null)
                     {
                         //Width = ActualWidth;//to prevent auto-adjusting in some cases
-                        TextBox tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_TextBox").FirstOrDefault();
-                        tb0.Width = tb0.ActualWidth;
-                        tb.PreviewTextInput += TextBox_PreviewTextInput;
-                        tb.TextChanged += TextBox_TextChanged;
+                        //TextBox tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_TextBox").FirstOrDefault();
+                        //tb0.Width = tb0.ActualWidth;
+                        _tb.Height = ActualHeight - 2;
+                        //SizeChanged += delegate {
+                        //    _tb.Height = ActualHeight;
+                        //};
+                        
+
+                        _tb.PreviewTextInput += TextBox_PreviewTextInput;
+                        _tb.TextChanged += TextBox_TextChanged;
                         //Dispatcher.Invoke(() =>
                         //{
                         //    DatePicker_SelectedDateChanged(null, null);

@@ -14,10 +14,12 @@
             <Setter Property="Margin" Value="10, 0, 0, 5"/>
         </Style>
         <Style TargetType="{x:Type local:ComboBoxControl}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=Case_Number}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
         <Style TargetType="{x:Type local:ComboBoxPhoneControl}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=Case_Number}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
@@ -30,8 +32,9 @@
             <Setter Property="AcceptsReturn" Value="True"/>
         </Style>
         <Style TargetType="{x:Type local:DatePickerControl}">
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=Case_Number}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="0, -2, 0, 5"/>
+            <Setter Property="Margin" Value="0, 0, 0, 3"/>
             <Setter Property="Padding" Value="0, 0, 0, 0"/>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
@@ -39,7 +42,7 @@
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
         <Style TargetType="{x:Type xctk:MaskedTextBox}">
-            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=CASE_N}"/>
+            <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=Case_Number}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0, 0, 0, 5"/>
         </Style>
