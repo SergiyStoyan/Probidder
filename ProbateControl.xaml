@@ -34,7 +34,7 @@
         <Style TargetType="{x:Type local:DatePickerControl}">
             <Setter Property="MinHeight" Value="{Binding ActualHeight, ElementName=Case_Number}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="0, 0, 0, 3"/>
+            <Setter Property="Margin" Value="0, 0, 0, -6"/>
             <Setter Property="Padding" Value="0, 0, 0, 0"/>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
