@@ -45,8 +45,12 @@ namespace Cliver.Probidder
                     {
                         if (disposed)
                             return;
-                        base.Dispose(); 
-                        if (table_types2table_info.Count < 1 && db != null)
+                        base.Dispose();
+                        if (db == null)
+                            return;
+                        TableInfo ti;
+                        if (!table_types2table_info.TryGetValue(GetType(), out ti)
+                            || ti.Count < 1)
                         {
                             db.Dispose();
                             db = null;

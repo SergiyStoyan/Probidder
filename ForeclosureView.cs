@@ -674,7 +674,7 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                Model.DEF_PHONE = value;
+                Model.DEF_PHONE = value != ComboBoxPhoneControl.Mask ? value : null; 
             }
         }
     }

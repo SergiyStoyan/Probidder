@@ -33,7 +33,7 @@ namespace Cliver.Probidder
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            
+
             tb0 = this.FindVisualChildrenOfType<TextBox>().Where(x => x.Name == "PART_EditableTextBox").First();
             tb0.TextChanged += tb0_TextChanged;
 
@@ -59,7 +59,7 @@ namespace Cliver.Probidder
             PreviewKeyDown += ComboBoxControl_PreviewKeyDown;
             LostKeyboardFocus += ComboBoxControl_LostFocus;
         }
-        
+
         private void tb0_TextChanged(object sender, TextChangedEventArgs e)
         {
             //tb0.TextChanged -= tb0_TextChanged;
@@ -96,25 +96,25 @@ namespace Cliver.Probidder
 
         //protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         //{
-            //if (!ignore_OnItemsSourceChanged)
-            //{
-                //List<string> newValue2 = new List<string>();            
-                //foreach (string s in newValue)
-                //{
-                //    if (string.IsNullOrWhiteSpace(s))
-                //        continue;
-                //    string v = apply_mask(s);
-                //    if (!newValue2.Contains(v))
-                //        newValue2.Add(v);
-                //}
+        //if (!ignore_OnItemsSourceChanged)
+        //{
+        //List<string> newValue2 = new List<string>();            
+        //foreach (string s in newValue)
+        //{
+        //    if (string.IsNullOrWhiteSpace(s))
+        //        continue;
+        //    string v = apply_mask(s);
+        //    if (!newValue2.Contains(v))
+        //        newValue2.Add(v);
+        //}
 
-            //    //base.OnItemsSourceChanged(oldValue, newValue);
-            //    ignore_OnItemsSourceChanged = true;
-            //    ItemsSource = null;
-            //    ItemsSource = newValue2;
-            //    ignore_OnItemsSourceChanged = false;
-            //    base.OnItemsSourceChanged(oldValue, newValue2);
-            //}
+        //    //base.OnItemsSourceChanged(oldValue, newValue);
+        //    ignore_OnItemsSourceChanged = true;
+        //    ItemsSource = null;
+        //    ItemsSource = newValue2;
+        //    ignore_OnItemsSourceChanged = false;
+        //    base.OnItemsSourceChanged(oldValue, newValue2);
+        //}
         //}
         //bool ignore_OnItemsSourceChanged = false;
 
@@ -187,7 +187,7 @@ namespace Cliver.Probidder
             tb.Focus();
             select(0, tb.Text.Length);
         }
-        
+
         TextBox tb = null;
 
         void select(int index, int length)
@@ -199,7 +199,7 @@ namespace Cliver.Probidder
             tb.EndChange();
         }
 
-      static  string apply_mask(string t)
+        static string apply_mask(string t)
         {
             if (t == null)
                 return null;
@@ -226,7 +226,7 @@ namespace Cliver.Probidder
             return mask_separators_r.Replace(t, "");
         }
 
-        string strip_mask(string t)
+        public static string StripMask(string t)
         {
             if (t == null)
                 return null;
@@ -267,14 +267,14 @@ namespace Cliver.Probidder
             if (ignore_text_change)
                 return;
             do_not_change_tb_text = true;
-            string v = strip_mask(tb.Text);
+            string v = StripMask(tb.Text);
             if (v.Length > 0 && !delete_clicked)
             {
                 foreach (string i in Items)
                 {
                     if (string.IsNullOrEmpty(i))
                         continue;
-                    if (strip_mask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
+                    if (StripMask(i).StartsWith(v, StringComparison.InvariantCultureIgnoreCase))
                     {
                         if ((string)SelectedItem == i)
                             ComboBox_SelectionChanged(null, null);
@@ -307,7 +307,7 @@ namespace Cliver.Probidder
             }
             while (p < mask.Length && mask_separators_r.IsMatch(t[p].ToString()))
                 p++;
-            if(t[p] == '_')
+            if (t[p] == '_')
                 t = t.Remove(p, 1);
             t = t.Insert(p, e.Text);
             p++;

@@ -221,7 +221,7 @@ namespace Cliver.Probidder
                 foreach (D d in table.GetAll())
                 {
                     Dictionary<string, object> fs2v = get_record(d);
-                    if(!header_printed)
+                    if (!header_printed)
                     {
                         header_printed = true;
                         tw.WriteLine(FieldPreparation.GetCsvHeaderLine(fs2v.Keys, FieldPreparation.FieldSeparator.COMMA));
@@ -265,6 +265,9 @@ namespace Cliver.Probidder
 
                 if (fs2v["PIN"] != null)
                     fs2v["PIN"] = ((string)fs2v["PIN"]).Replace("____", "0000");
+
+                if (fs2v["DEF_PHONE"] != null && fs2v["DEF_PHONE"].ToString() == ComboBoxPhoneControl.Mask)
+                    fs2v["DEF_PHONE"] = null;
             }
             else if (typeof(D) == typeof(Db.Probate))
             {
@@ -276,6 +279,12 @@ namespace Cliver.Probidder
                     fs2v["Re_Property"] = fs2v["Re_Property"].ToString();
                 if (fs2v["Testate"] != null)
                     fs2v["Testate"] = fs2v["Testate"].ToString();
+
+                if (fs2v["Attorney_Phone"] != null && fs2v["Attorney_Phone"].ToString() == ComboBoxPhoneControl.Mask)
+                    fs2v["Attorney_Phone"] = null;
+
+                if (fs2v["Attorney_Phone"] != null && fs2v["Attorney_Phone"].ToString() == ComboBoxPhoneControl.Mask)
+                    fs2v["Attorney_Phone"] = null;
             }
 
             return fs2v;

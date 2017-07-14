@@ -30,8 +30,8 @@ namespace Cliver.Probidder
             Model.Filling_County = Settings.Location.County;
             Model.Deceased_County = Settings.Location.County;
             Model.Filling_State = "IL";
-            Model.Deceased_State = "IL";
-            Model.Administrator_State = "IL";
+            //Model.Deceased_State = "IL";
+            //Model.Administrator_State = "IL";
             Model.Case_Number = CASE_Ns?.FirstOrDefault();
         }
         
@@ -82,20 +82,22 @@ namespace Cliver.Probidder
         {
             get
             {
-                if (string.IsNullOrEmpty(Filling_County))
-                    return null;
-                return (new Db.ProbateAttorneys()).GetBy(Filling_County).OrderBy(x => x.attorney).Select(x => x.attorney);
+                //if (string.IsNullOrEmpty(Filling_County))
+                //    return null;
+                //return (new Db.ProbateAttorneys()).GetBy(Filling_County).OrderBy(x => x.attorney).Select(x => x.attorney);
+                return (new Db.ProbateAttorneys()).GetAll().OrderBy(x => x.attorney).Select(x => x.attorney);
             }
         }
         public IEnumerable<string> AttorneyPhones
         {
             get
             {
-                if (string.IsNullOrEmpty(Filling_County))
-                    return null;
+                //if (string.IsNullOrEmpty(Filling_County))
+                //    return null;
                 if (string.IsNullOrEmpty(Attorney))
                     return null;
-                return ComboBoxPhoneControl.GetItemsNormalized((new Db.ProbateAttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
+                //return ComboBoxPhoneControl.GetItemsNormalized((new Db.ProbateAttorneyPhones()).GetBy(Filling_County, Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
+                return ComboBoxPhoneControl.GetItemsNormalized((new Db.ProbateAttorneyPhones()).GetBy(Attorney).OrderBy(x => x.attorney_phone).Select(x => x.attorney_phone));
             }
         }
         public IEnumerable<string> YNs
@@ -195,7 +197,7 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                Model.Administrator_Phone = value;
+                Model.Administrator_Phone = value != ComboBoxPhoneControl.Mask ? value : null;
             }
         }
         public string Deceased_Medical_Center
@@ -262,7 +264,7 @@ namespace Cliver.Probidder
             set
             {
                 edited = true;
-                Model.Attorney_Phone = value;
+                Model.Attorney_Phone = value != ComboBoxPhoneControl.Mask ? value : null;
             }
         }
         public string Deceased_Address
