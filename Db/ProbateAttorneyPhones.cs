@@ -26,22 +26,13 @@ namespace Cliver.Probidder
                 refresh_json_file_by_request("https://i.probidder.com/api/fields/index.php?type=probates&field=attorney_phone");
             }
 
-            //public List<Attorney_Phone> GetBy(string county, string attorney)
-            //{
-            //    lock (table)
-            //    {
-            //        county = GetStringNormalized(county);
-            //        attorney = GetStringNormalized(attorney);
-            //        return table.Where(x => x.attorney == attorney && x.county == county).ToList();
-            //    }
-            //}
-
-            public List<Attorney_Phone> GetBy(string attorney)
+            public List<Attorney_Phone> GetBy(string county, string attorney)
             {
                 lock (table)
                 {
+                    county = GetStringNormalized(county);
                     attorney = GetStringNormalized(attorney);
-                    return table.Where(x => x.attorney == attorney).ToList();
+                    return table.Where(x => x.attorney == attorney && x.county == county).ToList();
                 }
             }
         }
