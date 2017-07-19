@@ -77,12 +77,7 @@ namespace Cliver.Probidder
             public Table()
             {
                 Name = GetType().Name;
-                get_table_info().Count++;
-            }
-            public readonly string Name;
-
-            protected TableInfo get_table_info()
-            {
+                //get_table_info(true).Count++;
                 lock (table_types2table_info)
                 {
                     TableInfo ti;
@@ -91,7 +86,29 @@ namespace Cliver.Probidder
                         ti = new TableInfo { Count = 0, Core = create_table_core() };
                         table_types2table_info[GetType()] = ti;
                     }
-                    return ti;
+                    ti.Count++;
+                }
+            }
+            public readonly string Name;
+
+            //protected TableInfo get_table_info(bool create = false)
+            //{
+            //    lock (table_types2table_info)
+            //    {
+            //        TableInfo ti;
+            //        if (!table_types2table_info.TryGetValue(GetType(), out ti) && create)
+            //        {
+            //            ti = new TableInfo { Count = 0, Core = create_table_core() };
+            //            table_types2table_info[GetType()] = ti;
+            //        }
+            //        return ti;
+            //    }
+            //}
+            protected TableInfo get_table_info()
+            {
+                lock (table_types2table_info)
+                {
+                    return table_types2table_info[GetType()];
                 }
             }
 
@@ -132,9 +149,10 @@ namespace Cliver.Probidder
                         return;
                     disposed = true;
 
-                    TableInfo ti;
-                    if (!table_types2table_info.TryGetValue(GetType(), out ti))
-                        return;
+                    //TableInfo ti;
+                    //if (!table_types2table_info.TryGetValue(GetType(), out ti))
+                    //    return;
+                    TableInfo ti = table_types2table_info[GetType()];
                     ti.Count--;
                     switch (mode)
                     {

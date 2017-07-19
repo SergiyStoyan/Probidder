@@ -249,6 +249,11 @@ namespace Cliver.Probidder
                 edited = true;
                 Model.Attorney = value;
                 OnPropertyChanged("AttorneyPhones");
+                //if (value != null)
+                //{
+                //    Attorney_Phone = AttorneyPhones.FirstOrDefault();
+                //    OnPropertyChanged("Attorney_Phone");
+                //}
             }
         }
         public string Attorney_Phone
@@ -514,33 +519,6 @@ namespace Cliver.Probidder
             }
         }
 
-        public string Heir_Name_0
-        {
-            get
-            {
-                check("Heir_Name_0", null);
-                return Model.Heir_Name_0;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Name_0 = value;
-            }
-        }
-        public string Heir_Address_0
-        {
-            get
-            {
-                check("Heir_Address_0", null);
-                return Model.Heir_Address_0;
-            }
-            set
-            {
-                edited = true;
-                Model.Heir_Address_0 = value;
-            }
-        }
-
         public string Heir_Name_1
         {
             get
@@ -619,6 +597,33 @@ namespace Cliver.Probidder
             {
                 edited = true;
                 Model.Heir_Address_3 = value;
+            }
+        }
+
+        public string Heir_Name_4
+        {
+            get
+            {
+                check("Heir_Name_4", null);
+                return Model.Heir_Name_4;
+            }
+            set
+            {
+                edited = true;
+                Model.Heir_Name_4 = value;
+            }
+        }
+        public string Heir_Address_4
+        {
+            get
+            {
+                check("Heir_Address_4", null);
+                return Model.Heir_Address_4;
+            }
+            set
+            {
+                edited = true;
+                Model.Heir_Address_4 = value;
             }
         }
     }

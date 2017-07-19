@@ -161,23 +161,23 @@
         <TextBox Grid.Column="1" Grid.Row="12" x:Name="Heirs_Or_Legatees" Text="{Binding Heirs_Or_Legatees, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  />
 
         <Label Grid.Column="0" Grid.Row="13" Content="Heir Name"/>
-        <TextBox Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" x:Name="Heir_Name_0" Text="{Binding Heir_Name_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" x:Name="Heir_Name_1" Text="{Binding Heir_Name_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
         <Label Grid.Column="4" Grid.Row="13" Content="Heir Address"/>
-        <TextBox Grid.Column="5" Grid.Row="13" Grid.ColumnSpan="3"  x:Name="Heir_Address_0" Text="{Binding Heir_Address_0, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="5" Grid.Row="13" Grid.ColumnSpan="3"  x:Name="Heir_Address_1" Text="{Binding Heir_Address_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
         <Label Grid.Column="0" Grid.Row="14" Content="Heir Name"/>
-        <TextBox Grid.Column="1" Grid.Row="14" x:Name="Heir_Name_1" Grid.ColumnSpan="3"  Text="{Binding Heir_Name_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="1" Grid.Row="14" x:Name="Heir_Name_2" Grid.ColumnSpan="3"  Text="{Binding Heir_Name_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
         <Label Grid.Column="4" Grid.Row="14" Content="Heir Address"/>
-        <TextBox Grid.Column="5" Grid.Row="14" Grid.ColumnSpan="3"  x:Name="Heir_Address_1" Text="{Binding Heir_Address_1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="5" Grid.Row="14" Grid.ColumnSpan="3"  x:Name="Heir_Address_2" Text="{Binding Heir_Address_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
         <Label Grid.Column="0" Grid.Row="15" Content="Heir Name"/>
-        <TextBox Grid.Column="1" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Name_2" Text="{Binding Heir_Name_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="1" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Name_3" Text="{Binding Heir_Name_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
         <Label Grid.Column="4" Grid.Row="15" Content="Heir Address"/>
-        <TextBox Grid.Column="5" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Address_2" Text="{Binding Heir_Address_2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="5" Grid.Row="15" Grid.ColumnSpan="3"  x:Name="Heir_Address_3" Text="{Binding Heir_Address_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
 
         <Label Grid.Column="0" Grid.Row="16" Content="Heir Name"/>
-        <TextBox Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Name_3" Text="{Binding Heir_Name_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Name_4" Text="{Binding Heir_Name_4, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
         <Label Grid.Column="4" Grid.Row="16" Content="Heir Address"/>
-        <TextBox Grid.Column="5" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Address_3" Text="{Binding Heir_Address_3, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
+        <TextBox Grid.Column="5" Grid.Row="16" Grid.ColumnSpan="3"  x:Name="Heir_Address_4" Text="{Binding Heir_Address_4, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" KeyboardNavigation.TabNavigation="None"/>
    </Grid>
 </UserControl>

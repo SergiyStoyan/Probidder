@@ -23,6 +23,7 @@ namespace Cliver.Probidder
                 public Table()
                 {
                 }
+
                 protected List<D> table
                 {
                     get

@@ -19,8 +19,7 @@ namespace Cliver.Probidder
             public abstract class Table<D> : Db.Table where D : Document, new()
             {
                 public Table()
-                {
-                   
+                {                   
                 }
 
                 protected LiteCollection<D> table

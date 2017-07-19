@@ -56,6 +56,7 @@ namespace Cliver.Probidder
             public string Deceased_City { get; set; }
             public string Deceased_County { get; set; }
             public string Deceased_State { get; set; }
+            public string Deceased_Zip { get; set; }
             
 
 
@@ -69,10 +70,10 @@ namespace Cliver.Probidder
             public string Administrator_City { get; set; }
             public string Administrator_State { get; set; }
             public string Administrator_Zip { get; set; }
-            public string Deceased_Zip { get; set; }
             [ObligatoryField]
             public DateTime? Death_Date { get; set; }
-
+            public DateTime? Will_Date { get; set; }
+            public YNs Testate { get; set; }
             public enum YNs
             {
                 Y,
@@ -81,20 +82,18 @@ namespace Cliver.Probidder
             [ObligatoryField]
             public YNs Re_Property { get; set; }
             [ObligatoryField]
-            public YNs Testate { get; set; }
-            public DateTime? Will_Date { get; set; }
             public string Re_Value { get; set; }
             public string Personal_Value { get; set; }
             public string Heirs_Or_Legatees { get; set; }
             
-            public string Heir_Name_0 { get; set; }
-            public string Heir_Address_0 { get; set; }
             public string Heir_Name_1 { get; set; }
             public string Heir_Address_1 { get; set; }
             public string Heir_Name_2 { get; set; }
             public string Heir_Address_2 { get; set; }
             public string Heir_Name_3 { get; set; }
             public string Heir_Address_3 { get; set; }
+            public string Heir_Name_4 { get; set; }
+            public string Heir_Address_4 { get; set; }
         }
     }
 }

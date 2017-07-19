@@ -27,7 +27,7 @@ namespace Cliver.Probidder
             public int RefreshRetryPeriodInSecs = 60 * 60;
             public DateTime NextRefreshTime = DateTime.MinValue;
             public DateTime? LastRefreshTime = null;
-            public Dictionary<string, int> TableNames2MinCount = new Dictionary<string, int> { { string.Empty, 11 }, { typeof(Db.Zips).Name, 4 } };
+            public Dictionary<string, int> TableNames2MinCount = new Dictionary<string, int> { { string.Empty, 11 }, { typeof(Db.Zips).Name, 4 }, { typeof(Db.ProbateAttorneys).Name, 2 }, };
             
             public int GetMinCountFor(Type type)
             {                

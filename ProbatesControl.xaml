@@ -504,38 +504,6 @@
         </DataGridTemplateColumn>
 
 
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_0">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Name_0</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Name_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox    Text="{Binding Heir_Name_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_0">
-            <DataGridTemplateColumn.Header>
-                <TextBlock>Heir_Address_0</TextBlock>
-            </DataGridTemplateColumn.Header>
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Heir_Address_0, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-            <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                    <TextBox    Text="{Binding Heir_Address_0, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
-                </DataTemplate>
-            </DataGridTemplateColumn.CellEditingTemplate>
-        </DataGridTemplateColumn>
-
-
         <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_1">
             <DataGridTemplateColumn.Header>
                 <TextBlock>Heir_Name_1</TextBlock>
@@ -627,6 +595,38 @@
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
                     <TextBox    Text="{Binding Heir_Address_3, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                </DataTemplate>
+            </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
+
+
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Name_4">
+            <DataGridTemplateColumn.Header>
+                <TextBlock>Heir_Name_4</TextBlock>
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Heir_Name_4, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+            <DataGridTemplateColumn.CellEditingTemplate>
+                <DataTemplate>
+                    <TextBox    Text="{Binding Heir_Name_4, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                </DataTemplate>
+            </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn IsReadOnly="False" SortMemberPath="Heir_Address_4">
+            <DataGridTemplateColumn.Header>
+                <TextBlock>Heir_Address_4</TextBlock>
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Heir_Address_4, TargetNullValue='', NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+            <DataGridTemplateColumn.CellEditingTemplate>
+                <DataTemplate>
+                    <TextBox    Text="{Binding Heir_Address_4, TargetNullValue='', Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>

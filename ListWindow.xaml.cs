@@ -60,7 +60,7 @@ namespace Cliver.Probidder
             Loaded += delegate
             {
                 AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)AutoComplete.Wpf.KeyDownHandler);
-                AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
+                PreviewKeyDown += ListWindow_PreviewKeyDown;
             };
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
@@ -124,9 +124,20 @@ namespace Cliver.Probidder
             }));
         }
 
-        public void KeyDownHandler(object sender, KeyEventArgs e)
+        private void ListWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            //   return key == Settings.AutoComplete.TriggerKey && (Keyboard.Modifiers & Settings.AutoComplete.TriggerModifierKey) == Settings.AutoComplete.TriggerModifierKey;
+            if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                e.Handled = true;
+                list.CanUserAddRows = false;
+                if(!list.CommitEdit())
+                {
+                    Message.Error("Cannot commit changes. Please fix the value.");
+                    return;
+                }
+                list.CanUserAddRows = true;
+                list.SelectedItem = list.Items[list.Items.Count - 1];
+            }
         }
 
         Table get_Table(Settings.ViewSettings.Tables table)
@@ -588,9 +599,16 @@ Ignore this error now?", null, Message.Icons.Error
             }
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
+            {
+                //views.Update(v);
+                //list.CanUserAddRows = false;//to make a new placeholder displayed
+                //list.CanUserAddRows = true;
                 views.Delete(v);
-            //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
-            views.Update(v);
+                views.Update(v);
+            }
+            else
+                //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
+                views.Update(v);
         }
 
         private void delete_Click(object sender, RoutedEventArgs e)
