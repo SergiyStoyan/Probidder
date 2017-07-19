@@ -67,6 +67,15 @@ namespace Cliver.Probidder
             {
                 foreach (var n2v in tables2Table)
                 {
+                    if (!is_table_ok(n2v.Key))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+
+                foreach (var n2v in tables2Table)
+                {
                     get_columns_order2settings(n2v.Key);
                     get_column_widths2settings(n2v.Key);
                 }
@@ -126,18 +135,30 @@ namespace Cliver.Probidder
 
         private void ListWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
                 e.Handled = true;
-                list.CanUserAddRows = false;
-                if(!list.CommitEdit())
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                if (cv != null)
                 {
-                    Message.Error("Cannot commit changes. Please fix the value.");
-                    return;
-                }
-                list.CanUserAddRows = true;
-                list.SelectedItem = list.Items[list.Items.Count - 1];
+                    if (cv.IsEditingItem)
+                        cv.CommitEdit();
+                    if (cv.IsAddingNew)
+                        cv.CommitNew();
+                    if (!cv.CanAddNew)
+                        Message.Error("A new item cannot be added.");
+                    //IView v = (IView)cv.AddNew();
+                    list.CanUserAddRows = false;
+                    list.CanUserAddRows = true;
+                }                
             }
+        }
+
+        bool is_table_ok(Settings.ViewSettings.Tables table)
+        {
+            Table t = get_Table(table);
+            return t.List.IsValid()
+             || !Message.YesNo("Table " + table + " has some error data that has not been saved. This data will be lost. Do you want to fix it before proceeding?", null, Message.Icons.Exclamation);
         }
 
         Table get_Table(Settings.ViewSettings.Tables table)
@@ -343,6 +364,8 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void export_Click(object sender, RoutedEventArgs e)
         {
+            if (!is_table_ok(Settings.View.ActiveTable))
+                return;
             switch (Settings.View.ActiveTable)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
@@ -358,13 +381,15 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void upload_Click(object sender, RoutedEventArgs e)
         {
+            if (!is_table_ok(Settings.View.ActiveTable))
+                return;
             switch (Settings.View.ActiveTable)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
-                    Export.BeginToServer(new Db.Foreclosures());
+                        Export.BeginToServer(new Db.Foreclosures());
                     break;
                 case Settings.ViewSettings.Tables.Probates:
-                    Export.BeginToServer(new Db.Probates());
+                        Export.BeginToServer(new Db.Probates());
                     break;
                 default:
                     throw new Exception("Unknown option: " + Settings.View.ActiveTable);
@@ -600,11 +625,18 @@ Ignore this error now?", null, Message.Icons.Error
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
             {
-                //views.Update(v);
-                //list.CanUserAddRows = false;//to make a new placeholder displayed
-                //list.CanUserAddRows = true;
-                views.Delete(v);
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                if (cv != null)//allow set CanUserAddRows = true, when it is frozen for some reason
+                {
+                    if (cv.IsEditingItem)
+                        cv.CommitEdit();
+                    if (cv.IsAddingNew)
+                        cv.CommitNew();
+                }
+                views.Delete(v);//to get rid from IsNewItem which is unclear how to update
                 views.Update(v);
+                list.CanUserAddRows = false;//to make a new placeholder displayed
+                list.CanUserAddRows = true;
             }
             else
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
@@ -623,6 +655,14 @@ Ignore this error now?", null, Message.Icons.Error
             views.Delete(v);
             if(new_row)
             {
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                if (cv != null)//allow set CanUserAddRows = true, when it is frozen for some reason
+                {
+                    if (cv.IsEditingItem)
+                        cv.CommitEdit();
+                    if (cv.IsAddingNew)
+                        cv.CommitNew();
+                }
                 list.CanUserAddRows = false;//to make a new placeholder displayed
                 list.CanUserAddRows = true;
             }
@@ -708,7 +748,10 @@ Ignore this error now?", null, Message.Icons.Error
     {
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
-            var v = (value as BindingGroup).Items[0] as IView;
+            BindingGroup bg = (BindingGroup)value;
+            if (bg.Items.Count < 1)
+                return ValidationResult.ValidResult;
+            var v = bg.Items[0] as IView;
             return v.HasErrors ? new ValidationResult(false, "error") : ValidationResult.ValidResult;
         }
     }

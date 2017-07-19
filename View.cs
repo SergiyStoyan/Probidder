@@ -21,7 +21,7 @@ using System.Windows;
 
 namespace Cliver.Probidder
 {
-    public interface IView : INotifyPropertyChanged, INotifyDataErrorInfo
+    public interface IView: INotifyPropertyChanged, INotifyDataErrorInfo, IEditableObject
     {
         int Id { get; }
 
@@ -30,7 +30,7 @@ namespace Cliver.Probidder
         bool Edited { get; }
     }
 
-    public partial class View<D> : IView where D: Db.Document, new()
+    public partial class View<D> : IView where D : Db.Document, new()
     {
         public View()
         {
@@ -64,15 +64,16 @@ namespace Cliver.Probidder
 
         public void ValidateAllProperties()
         {
-            forced_validation = true;
+           // forced_validation = true;
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(null));
-            forced_validation = false;
+            //forced_validation = false;
         }
+        //bool forced_validation = false;
 
       protected  void check(string property, string error)
         {
-            if (!edited && !forced_validation)
-                return;
+            //if (!edited && !forced_validation)
+            //    return;
             string e0 = null;
             if (columnNames2error.TryGetValue(property, out e0))
                 InitialControlSetting = false;
@@ -92,7 +93,6 @@ namespace Cliver.Probidder
                 return null;
             return columnNames2error.Where(x => x.Key == propertyName && x.Value != null).Select(x => x.Value);
         }
-        bool forced_validation = false;
 
         public bool HasErrors
         {
@@ -111,5 +111,17 @@ namespace Cliver.Probidder
             }
         }
         protected  bool edited;
+
+        void IEditableObject.BeginEdit()
+        {
+        }
+
+        void IEditableObject.CancelEdit()
+        {
+        }
+
+        void IEditableObject.EndEdit()
+        {            
+        }
     }
 }

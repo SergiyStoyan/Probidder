@@ -34,7 +34,7 @@ namespace Cliver.Probidder
         List<object> Get(Func<object, bool> query);
     }
 
-    public partial class View<D> : IView where D : Db.Document, new()
+    public partial class View<D> 
     {
         public class Views<V, T> : ObservableCollection<V>, IViews where V : View<D> where T : Db.LiteDb.Table<D>, new()
         {
@@ -45,7 +45,7 @@ namespace Cliver.Probidder
                 return new Views<V, T>(owner, t, vs);
             }
 
-            Views(Window owner, T table, List<V> vs):base(vs)
+            Views(Window owner, T table, List<V> vs) : base(vs)
             {
                 this.table = table;
                 this.owner = owner;

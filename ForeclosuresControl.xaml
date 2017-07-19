@@ -33,7 +33,7 @@
         </Style>
     </DataGrid.Resources>
     <DataGrid.RowValidationRules>
-        <local:RowValidationRule ValidationStep="UpdatedValue"/>
+        <local:RowValidationRule ValidationStep="ConvertedProposedValue"/>
     </DataGrid.RowValidationRules>
     <DataGrid.Columns>
                 <DataGridTemplateColumn>
