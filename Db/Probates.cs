@@ -64,9 +64,6 @@ namespace Cliver.Probidder
             public string Administrator_Business_Place { get; set; }
             public string Administrator_Address { get; set; }
             public string Administrator_Phone { get; set; }
-            public string Attorney { get; set; }
-            public string Attorney_Phone { get; set; }
-            public string Comments { get; set; }
             public string Administrator_City { get; set; }
             public string Administrator_State { get; set; }
             public string Administrator_Zip { get; set; }
@@ -84,6 +81,9 @@ namespace Cliver.Probidder
             [ObligatoryField]
             public string Re_Value { get; set; }
             public string Personal_Value { get; set; }
+            public string Attorney { get; set; }
+            public string Attorney_Phone { get; set; }
+            public string Comments { get; set; }
             public string Heirs_Or_Legatees { get; set; }
             
             public string Heir_Name_1 { get; set; }
