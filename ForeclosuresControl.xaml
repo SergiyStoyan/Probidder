@@ -35,6 +35,23 @@
     <DataGrid.RowValidationRules>
         <local:RowValidationRule ValidationStep="ConvertedProposedValue"/>
     </DataGrid.RowValidationRules>
+    <!--<Style TargetType="{x:Type DataGridRow}">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="Background" Value="Red"/>
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="ValidationErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <TextBlock Foreground="Red"
+                           Margin="2,0,0,0"
+                           Text="!"
+                           VerticalAlignment="Center" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
     <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>

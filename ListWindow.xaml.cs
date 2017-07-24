@@ -138,19 +138,7 @@ namespace Cliver.Probidder
             if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
                 e.Handled = true;
-                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-                if (cv != null)
-                {
-                    if (cv.IsEditingItem)
-                        cv.CommitEdit();
-                    if (cv.IsAddingNew)
-                        cv.CommitNew();
-                    if (!cv.CanAddNew)
-                        Message.Error("A new item cannot be added.");
-                    //IView v = (IView)cv.AddNew();
-                    list.CanUserAddRows = false;
-                    list.CanUserAddRows = true;
-                }                
+                commit_and_provide_blank_row();
             }
         }
 
@@ -289,9 +277,9 @@ namespace Cliver.Probidder
             ignore_list_ColumnDisplayIndexChanged = true;
             try
             {
-                DataGrid g = get_Table(table).List;
+                Table t = get_Table(table);
 
-                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(g.ItemsSource);
+                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(t.List.ItemsSource);
                 if (cv != null)
                 {
                     if (cv.IsEditingItem)
@@ -299,8 +287,9 @@ namespace Cliver.Probidder
                     if (cv.IsAddingNew)
                         cv.CommitNew();
                 }
+
                 int non_data_columns_count = 0;
-                foreach (DataGridColumn dgc in g.Columns)
+                foreach (DataGridColumn dgc in t.List.Columns)
                 {
                     string cn = get_column_name(dgc);
                     if (cn == null)
@@ -317,7 +306,7 @@ namespace Cliver.Probidder
                 for (int i = 0; i < Settings.View.Tables2Columns[table].Showed.Count; i++)
                 {
                     string cn = Settings.View.Tables2Columns[table].Showed[i];
-                    DataGridColumn dgc = g.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
+                    DataGridColumn dgc = t.List.Columns.Where(x => get_column_name(x) == cn).FirstOrDefault();
                     if (dgc == null)
                     {
                         string m = "Column " + cn + " does not exist.";
@@ -386,10 +375,10 @@ Ignore this error now?", null, Message.Icons.Error
             switch (Settings.View.ActiveTable)
             {
                 case Settings.ViewSettings.Tables.Foreclosures:
-                        Export.BeginToServer(new Db.Foreclosures());
+                    Export.BeginToServer(new Db.Foreclosures());
                     break;
                 case Settings.ViewSettings.Tables.Probates:
-                        Export.BeginToServer(new Db.Probates());
+                    Export.BeginToServer(new Db.Probates());
                     break;
                 default:
                     throw new Exception("Unknown option: " + Settings.View.ActiveTable);
@@ -499,11 +488,9 @@ Ignore this error now?", null, Message.Icons.Error
         void filter()
         {
             string k = keyword.Text;
+
+            commit_and_provide_blank_row(false);
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (cv.IsEditingItem)
-                cv.CommitEdit();
-            if (cv.IsAddingNew)
-                cv.CommitNew();
 
             if (string.IsNullOrEmpty(k) || keyword.Visibility != Visibility.Visible)
             {
@@ -619,29 +606,28 @@ Ignore this error now?", null, Message.Icons.Error
             v.ValidateAllProperties();
             if (v.HasErrors)
             {
-                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.
+                if (row_error_template != null)
+                    e.Row.ValidationErrorTemplate = row_error_template;
+                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.                
                 return;
+            }
+            if (e.Row.ValidationErrorTemplate != null)//once the exclamation mark is shown, it does not disppear upon validation
+            {
+                row_error_template = e.Row.ValidationErrorTemplate;
+                e.Row.ValidationErrorTemplate = null;
             }
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
             {
-                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-                if (cv != null)//allow set CanUserAddRows = true, when it is frozen for some reason
-                {
-                    if (cv.IsEditingItem)
-                        cv.CommitEdit();
-                    if (cv.IsAddingNew)
-                        cv.CommitNew();
-                }
                 views.Delete(v);//to get rid from IsNewItem which is unclear how to update
                 views.Update(v);
-                list.CanUserAddRows = false;//to make a new placeholder displayed
-                list.CanUserAddRows = true;
+                commit_and_provide_blank_row();
             }
             else
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
                 views.Update(v);
         }
+        ControlTemplate row_error_template = null;
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
@@ -653,20 +639,33 @@ Ignore this error now?", null, Message.Icons.Error
             if (!new_row && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
-            if(new_row)
-            {
-                ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-                if (cv != null)//allow set CanUserAddRows = true, when it is frozen for some reason
-                {
-                    if (cv.IsEditingItem)
-                        cv.CommitEdit();
-                    if (cv.IsAddingNew)
-                        cv.CommitNew();
-                }
-                list.CanUserAddRows = false;//to make a new placeholder displayed
-                list.CanUserAddRows = true;
-            }
+            commit_and_provide_blank_row();
             //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
+        }
+
+        void commit_and_provide_blank_row(bool provide_blank_row = true)
+        {
+            if (list == null)
+                return;
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (cv == null)
+                return;
+            //allow set CanUserAddRows = true, when it is frozen for some reason
+            if (cv.IsEditingItem)
+                cv.CommitEdit();
+            if (cv.IsAddingNew)
+                cv.CommitNew();
+            if (!provide_blank_row)
+                return;
+            if (!cv.CanAddNew)
+            {
+                Message.Error("A new item cannot be added. Please correct the existing data.");
+                return;
+            }
+            //IView v = (IView)cv.AddNew();
+            list.CanUserAddRows = false;//to make a new placeholder displayed
+            list.CanUserAddRows = true;
+            //return true;
         }
 
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
@@ -732,9 +731,10 @@ Ignore this error now?", null, Message.Icons.Error
         {
             if (Settings.View.ActiveTable == (Settings.ViewSettings.Tables)tables.SelectedItem)
                 return;
-            if (!list.CommitEdit(DataGridEditingUnit.Row, true))
+            commit_and_provide_blank_row();
+            if (!list.IsValid())
             {
-                Message.Error("Cannot save the last change. Please correct the data.");
+                Message.Error("The table contains errors. Please correct the data.");
                 tables.SelectedItem = Settings.View.ActiveTable;
             }
             Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;
@@ -744,7 +744,7 @@ Ignore this error now?", null, Message.Icons.Error
     /// <summary>
     /// allows to display/hide the exclamation mark on row
     /// </summary>
-    public class RowValidationRule : ValidationRule
+    public class RowValidationRule : ValidationRule //sometimes exclamation mark freezes, for unclear reason!
     {
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
@@ -752,7 +752,9 @@ Ignore this error now?", null, Message.Icons.Error
             if (bg.Items.Count < 1)
                 return ValidationResult.ValidResult;
             var v = bg.Items[0] as IView;
-            return v.HasErrors ? new ValidationResult(false, "error") : ValidationResult.ValidResult;
+            if (v.HasErrors)
+                return new ValidationResult(false, "error");
+            return ValidationResult.ValidResult;
         }
     }
 
