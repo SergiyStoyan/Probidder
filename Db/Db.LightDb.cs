@@ -42,7 +42,7 @@ namespace Cliver.Probidder
                 {
                     lock (table_types2table_info)
                     {
-                        if (disposed)
+                        if (disposing)
                             return;
                         base.Dispose();
                         if (db == null)

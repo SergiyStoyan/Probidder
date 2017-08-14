@@ -30,6 +30,12 @@ namespace Cliver.Probidder
         {
             set
             {
+                lock (table_types2table_info)
+                {
+                    if (table_types2table_info.Count > 0)
+                        throw new Exception("Database mode must be set only before opening a table and cannot be changed!");
+                }
+
                 mode = value;
                 switch (mode)
                 {
@@ -48,20 +54,21 @@ namespace Cliver.Probidder
                 return mode;
             }
         }
-        static Modes mode = Db.Modes.KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE;
+        static Modes mode = Modes.KEEP_ALL_OPEN_TABLES_FOREVER;
 
         public enum Modes
         {
-            KEEP_ALL_OPEN_TABLES_FOREVER,//requires explicite call Close()
+            KEEP_ALL_OPEN_TABLES_FOREVER,
             KEEP_ALL_OPEN_TABLES_WHILE_AT_LEAST_ONE_TABLE_IN_USE,
             CLOSE_TABLE_ON_DISPOSE,
         }
 
-        static public void Close()
+        static public void Reopen()
         {
             lock (table_types2table_info)
             {
-                table_types2table_info.Clear();
+                foreach (TableInfo ti in table_types2table_info.Values)
+                    ti.Reopen();
             }
         }
 
@@ -77,13 +84,12 @@ namespace Cliver.Probidder
             public Table()
             {
                 Name = GetType().Name;
-                //get_table_info(true).Count++;
                 lock (table_types2table_info)
                 {
                     TableInfo ti;
                     if (!table_types2table_info.TryGetValue(GetType(), out ti))
                     {
-                        ti = new TableInfo { Count = 0, Core = create_table_core() };
+                        ti = new TableInfo(create_table_core);
                         table_types2table_info[GetType()] = ti;
                     }
                     ti.Count++;
@@ -91,19 +97,6 @@ namespace Cliver.Probidder
             }
             public readonly string Name;
 
-            //protected TableInfo get_table_info(bool create = false)
-            //{
-            //    lock (table_types2table_info)
-            //    {
-            //        TableInfo ti;
-            //        if (!table_types2table_info.TryGetValue(GetType(), out ti) && create)
-            //        {
-            //            ti = new TableInfo { Count = 0, Core = create_table_core() };
-            //            table_types2table_info[GetType()] = ti;
-            //        }
-            //        return ti;
-            //    }
-            //}
             protected TableInfo get_table_info()
             {
                 lock (table_types2table_info)
@@ -114,28 +107,6 @@ namespace Cliver.Probidder
 
             protected abstract object create_table_core();
 
-            //protected object table_core
-            //{
-            //    get
-            //    {
-            //        lock (table_types2table_core)
-            //        {
-            //            object tc;
-            //            if (table_types2table_core.TryGetValue(GetType(), out tc))
-            //                return tc;
-            //            else
-            //                return null;
-            //        }
-            //    }
-            //    set
-            //    {
-            //        lock (table_types2table_core)
-            //        {
-            //            table_types2table_core[GetType()] = value;
-            //        }
-            //    }
-            //}
-
             ~Table()
             {
                 Dispose();
@@ -145,9 +116,9 @@ namespace Cliver.Probidder
             {
                 lock (table_types2table_info)
                 {
-                    if (disposed)
+                    if (disposing)
                         return;
-                    disposed = true;
+                    disposing = true;
 
                     //TableInfo ti;
                     //if (!table_types2table_info.TryGetValue(GetType(), out ti))
@@ -172,12 +143,39 @@ namespace Cliver.Probidder
                     }
                 }
             }
-            protected bool disposed = false;
+            protected bool disposing = false;
         }
-        public class TableInfo
+        public class TableInfo//:IDisposable
         {
-            public int Count = 0;
-            public object Core = null;
+            internal TableInfo(Func<object> create_table_core)
+            {
+                Count = 0;
+                this.create_table_core = create_table_core;
+                Core = create_table_core();
+            }
+            readonly Func<object> create_table_core;
+            internal int Count = 0;
+            internal object Core { get; private set; }
+
+            internal void Reopen()
+            {
+                if (Core != null && Core is IDisposable)
+                    ((IDisposable)Core).Dispose();
+                Core = create_table_core();
+            }
+
+            //public void Dispose()
+            //{
+            //    lock (this)
+            //    {
+            //        if (disposing)
+            //            return;
+            //        disposing = true;
+            //    }
+            //    if (Core != null && Core is IDisposable)
+            //        ((IDisposable)Core).Dispose();
+            //}
+            //bool disposing = false;
 
             public delegate void SavedHandler(Document document, bool inserted);
             public event SavedHandler Saved = null;

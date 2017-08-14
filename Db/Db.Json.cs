@@ -56,7 +56,7 @@ namespace Cliver.Probidder
                         refresh(true);
                         if (!File.Exists(file))
                         {
-                            Message.Error("Unfrotunately the required data has not been downloaded. Please try later.");
+                            Message.Error("Unfortunately the required data has not been downloaded. Please try later.");
                             return new List<D>();
                         }
                     }

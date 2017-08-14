@@ -144,7 +144,7 @@ namespace Cliver.Probidder
                     Settings.Database.Save();
                     if (Settings.Database.RefreshPeriodInSecs > 0)
                         Settings.Database.NextRefreshTime = refresh_started.AddSeconds(Settings.Database.RefreshPeriodInSecs);
-                    Db.Close();
+                    Db.Reopen();
                     try
                     {
                         mf?.Close();
