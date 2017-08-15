@@ -59,14 +59,14 @@
                             <Button Name="open" Click="open_Click" VerticalAlignment="Center" Padding="5,0,5,0">
                                 Open
                             </Button>
-                            <DataTemplate.Triggers>
+                            <!--<DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                   AncestorType={x:Type DataGridRow}}, 
                                             NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True,
                                   Path=IsNewItem}" Value="True">
                                     <Setter TargetName="open" Property="Content" Value="New"></Setter>
                                 </DataTrigger>
-                            </DataTemplate.Triggers>
+                            </DataTemplate.Triggers>-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -75,15 +75,18 @@
                         <DataTemplate>
                             <Button x:Name="delete" Click="delete_Click" VerticalAlignment="Center" Padding="5,0,5,0">
                                 Delete
-                            </Button>
-                            <DataTemplate.Triggers>
+                    </Button>
+                    <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                   AncestorType={x:Type DataGridRow}}, 
                                   Path=IsNewItem}" Value="True">
                                     <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Id}" Value="0">
+                                    <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
+                                </DataTrigger>
                             </DataTemplate.Triggers>
-                        </DataTemplate>
+                </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 

@@ -135,11 +135,11 @@ namespace Cliver.Probidder
 
         private void ListWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-            {
-                e.Handled = true;
-                commit_and_provide_blank_row();
-            }
+            //if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            //{
+            //    e.Handled = true;
+            //    commit_and_provide_blank_row();
+            //}
         }
 
         bool is_table_ok(Settings.ViewSettings.Tables table)
@@ -190,9 +190,19 @@ namespace Cliver.Probidder
                     g.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
                     g.SelectionChanged += list_SelectionChanged;
                     g.BeginningEdit += list_BeginningEdit;
-                    g.RowEditEnding += list_RowEditEnding;
+                    g.RowEditEnding += list_RowEditEnding;                    
                     g.CellEditEnding += list_CellEditEnding;
+                    //g.LostKeyboardFocus += delegate { };
                     g.GotKeyboardFocus += list_KeyboardFocusChangedEventHandler;
+                    g.PreviewLostKeyboardFocus += delegate (object sender, KeyboardFocusChangedEventArgs e)
+                    {
+                        Control c = e.NewFocus as Control;
+                        if (c == null)
+                            return;
+                        DataGridCell dgc = c.FindVisualParentOfType<DataGridCell>();
+                        if (dgc == null)//when moving out of rows, force committing
+                            commit_and_provide_blank_row();
+                    };
                     g.PreviewGotKeyboardFocus += list_PreviewKeyboardFocusChangedEventHandler;
                     g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
                 }
@@ -541,6 +551,9 @@ Ignore this error now?", null, Message.Icons.Error
                 return false;
             };
 
+           //foreach(DataGridRow r in list.FindChildrenOfType<DataGridRow>())
+           //     validate_row(r);
+
             int count = 0;
             foreach (object o in cv)
                 if (o is IView)
@@ -595,77 +608,87 @@ Ignore this error now?", null, Message.Icons.Error
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
         }
-
+        
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            var v = e.Row.DataContext as IView;
+            IView v = e.Row.DataContext as IView;
             if (v == null)
                 return;
             if (v.Id != 0 && !v.Edited)
                 return;
-            v.ValidateAllProperties();
-            if (v.HasErrors)
-            {
-                if (row_error_template != null)
-                    e.Row.ValidationErrorTemplate = row_error_template;
-                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.                
+            if (!validate_row(e.Row))
                 return;
-            }
-            if (e.Row.ValidationErrorTemplate != null)//once the exclamation mark is shown, it does not disppear upon validation
-            {
-                row_error_template = e.Row.ValidationErrorTemplate;
-                e.Row.ValidationErrorTemplate = null;
-            }
             e.Cancel = false;
             if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
             {
                 views.Delete(v);//to get rid from IsNewItem which is unclear how to update
                 views.Update(v);
-                commit_and_provide_blank_row();
             }
             else
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
                 views.Update(v);
         }
-        ControlTemplate row_error_template = null;
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
             IView v = list.SelectedItem as IView;
             if (v == null)
                 return;
-            DataGridRow r = ((Control)sender).FindVisualParentOfType<DataGridRow>();
-            bool new_row = r.IsNewItem;
-            if (!new_row && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
+            //DataGridRow r = ((Control)sender).FindVisualParentOfType<DataGridRow>();
+            if (v.Id != 0 && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
-            commit_and_provide_blank_row();
+            provide_blank_row();
             //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
         }
 
-        void commit_and_provide_blank_row(bool provide_blank_row = true)
+        bool commit_and_provide_blank_row(bool provide_blank_row = true)
+        {
+            if (list == null)
+                return true;
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+            if (cv == null)
+                return true;
+
+            //foreach (DataGridRow r in list.FindChildrenOfType<DataGridRow>())
+            //    if (r.IsNewItem || r.IsEditing)
+            //        break;
+
+            //allow set CanUserAddRows = true, when it is frozen for some reason
+            //if (cv.IsEditingItem)
+            //    cv.CommitEdit();
+            //if (cv.IsAddingNew)
+            //    cv.CommitNew();
+            list.CommitEdit();
+
+            if (provide_blank_row)
+                this.provide_blank_row();
+            return true;
+        }
+
+        void provide_blank_row()
         {
             if (list == null)
                 return;
             ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
             if (cv == null)
                 return;
-            //allow set CanUserAddRows = true, when it is frozen for some reason
-            if (cv.IsEditingItem)
-                cv.CommitEdit();
-            if (cv.IsAddingNew)
-                cv.CommitNew();
-            if (!provide_blank_row)
-                return;
-            if (!cv.CanAddNew)
+
+            foreach (object o in cv)
             {
-                Message.Error("A new item cannot be added. Please correct the existing data.");
-                return;
+                IView v = o as IView;
+                if (v != null && v.Id == 0)
+                    return;
             }
-            //IView v = (IView)cv.AddNew();
+
+            //if (!cv.CanAddNew/*|| !list.IsValid()*/)
+            //{
+            //    //Message.Error("The table contains errors. Please correct the data.");
+            //    return;
+            //}
+            //IView iv = (IView)cv.AddNew();
             list.CanUserAddRows = false;//to make a new placeholder displayed
             list.CanUserAddRows = true;
-            //return true;
         }
 
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
@@ -678,7 +701,35 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
+            //validate_row(e.Row);
+            //commit_and_provide_blank_row();
         }
+
+        private bool validate_row(DataGridRow row)
+        {
+            var v = row.DataContext as IView;
+            if (v == null)
+                return false;
+            if (v.Id != 0 && !v.Edited)
+                return true;
+            v.ValidateAllProperties();
+            if (v.HasErrors)
+            {
+                row.MarkInvalid("error");
+                if (row_error_template != null)
+                    row.ValidationErrorTemplate = row_error_template;
+                //e.Cancel = true;//needed to prevent auto-creating one more blank row//when using ValidationRule, it prevents validation though.                
+                return false;
+            }
+            row.MarkValid();
+            if (row.ValidationErrorTemplate != null)//once the exclamation mark is shown, it does not disppear upon validation
+            {
+                row_error_template = row.ValidationErrorTemplate;
+                row.ValidationErrorTemplate = null;
+            }
+            return true;
+        }
+        ControlTemplate row_error_template = null;
 
         public void list_KeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -698,7 +749,7 @@ Ignore this error now?", null, Message.Icons.Error
         //List<KeyboardFocusChangedEventArgs> es = new List<KeyboardFocusChangedEventArgs>();
 
         public void list_PreviewKeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
-        {
+        {//provides editing cell on TAB
             DataGridCell dgc = e.NewFocus as DataGridCell;
             if (dgc == null)
             {
@@ -731,8 +782,7 @@ Ignore this error now?", null, Message.Icons.Error
         {
             if (Settings.View.ActiveTable == (Settings.ViewSettings.Tables)tables.SelectedItem)
                 return;
-            commit_and_provide_blank_row();
-            if (!list.IsValid())
+            if (/*!commit_and_provide_blank_row() || */!list.IsValid())
             {
                 Message.Error("The table contains errors. Please correct the data.");
                 tables.SelectedItem = Settings.View.ActiveTable;
