@@ -145,8 +145,23 @@ namespace Cliver.Probidder
         bool is_table_ok(Settings.ViewSettings.Tables table)
         {
             Table t = get_Table(table);
-            return t.List.IsValid()
+            return is_grid_valid(t.List)
              || !Message.YesNo("Table " + table + " has some error data that has not been saved. This data will be lost. Do you want to fix it before proceeding?", null, Message.Icons.Exclamation);
+        }
+
+        bool is_grid_valid(DataGrid dg)
+        {
+            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(dg.ItemsSource);
+            if (cv != null)
+            {
+                foreach (object o in cv)
+                {
+                    IView v = o as IView;
+                    if (v != null && v.HasErrors)
+                        return false;
+                }
+            }
+            return true;
         }
 
         Table get_Table(Settings.ViewSettings.Tables table)
@@ -725,29 +740,11 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
+            list.SelectedItem = e.Row.DataContext as IView;
             validate_row(e.Row);
             if (current_editing_row != e.Row)
             {
                 current_editing_row = e.Row;
-
-                //if (list != null)
-                //{
-                //    ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-                //    if (cv != null)
-                //    {
-                //        IView current_v = e.Row.DataContext as IView;
-                //        List<IView> empty_rows = new List<IView>();
-                //        foreach (object o in cv)
-                //        {
-                //            IView v = o as IView;
-                //            if (v != null && v.Id == 0 && !v.Edited && v != current_v)
-                //                empty_rows.Add(v);
-                //        }
-                //        foreach (IView v in empty_rows)
-                //            views.Delete(v);
-                //    }
-                //}
-
                 commit_and_provide_blank_row();
             }
         }
@@ -781,20 +778,7 @@ Ignore this error now?", null, Message.Icons.Error
 
         public void list_KeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
-            ////es.Add(e);
-            //DataGridCell c = e.NewFocus as DataGridCell;
-            //if (c == null)
-            //    return;
-            ////list.BeginEdit(e);
-            //Control co = c.FindVisualChildrenOfType<Control>().FirstOrDefault();
-            //if (co == null)
-            //    return;
-            //if (co.IsFocused)
-            //    return;
-            //bool? g = co.Focus();
-            //e.Handled = true;
         }
-        //List<KeyboardFocusChangedEventArgs> es = new List<KeyboardFocusChangedEventArgs>();
 
         public void list_PreviewKeyboardFocusChangedEventHandler(object sender, KeyboardFocusChangedEventArgs e)
         {//provides editing cell on TAB
@@ -830,7 +814,8 @@ Ignore this error now?", null, Message.Icons.Error
         {
             if (Settings.View.ActiveTable == (Settings.ViewSettings.Tables)tables.SelectedItem)
                 return;
-            if (/*!commit_and_provide_blank_row() || */!list.IsValid())
+
+            if (/*!commit_and_provide_blank_row() || !list.IsValid()*/!is_grid_valid(list))
             {
                 Message.Error("The table contains errors. Please correct the data.");
                 tables.SelectedItem = Settings.View.ActiveTable;
