@@ -201,7 +201,8 @@ namespace Cliver.Probidder
                             return;
                         DataGridCell dgc = c.FindVisualParentOfType<DataGridCell>();
                         if (dgc == null)//when moving out of rows, force committing
-                            commit_and_provide_blank_row();
+                            //commit_and_provide_blank_row();
+                            list.CommitEdit();
                     };
                     g.PreviewGotKeyboardFocus += list_PreviewKeyboardFocusChangedEventHandler;
                     g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
@@ -611,6 +612,7 @@ Ignore this error now?", null, Message.Icons.Error
         
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
+            //commit_and_provide_blank_row();
             IView v = e.Row.DataContext as IView;
             if (v == null)
                 return;
@@ -627,10 +629,12 @@ Ignore this error now?", null, Message.Icons.Error
             else
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
                 views.Update(v);
+            //provide_blank_row();
         }
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
+            //IView v = e..Row.DataContext as IView;
             IView v = list.SelectedItem as IView;
             if (v == null)
                 return;
@@ -638,7 +642,7 @@ Ignore this error now?", null, Message.Icons.Error
             if (v.Id != 0 && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
-            provide_blank_row();
+            commit_and_provide_blank_row();
             //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
         }
 
@@ -654,41 +658,32 @@ Ignore this error now?", null, Message.Icons.Error
             //    if (r.IsNewItem || r.IsEditing)
             //        break;
 
+            //list.CommitEdit();
             //allow set CanUserAddRows = true, when it is frozen for some reason
-            //if (cv.IsEditingItem)
-            //    cv.CommitEdit();
-            //if (cv.IsAddingNew)
-            //    cv.CommitNew();
-            list.CommitEdit();
+            if (cv.IsEditingItem)
+                cv.CommitEdit();
+            if (cv.IsAddingNew)
+                cv.CommitNew();
 
             if (provide_blank_row)
-                this.provide_blank_row();
-            return true;
-        }
-
-        void provide_blank_row()
-        {
-            if (list == null)
-                return;
-            ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
-            if (cv == null)
-                return;
-
-            foreach (object o in cv)
             {
-                IView v = o as IView;
-                if (v != null && v.Id == 0)
-                    return;
-            }
+                //foreach (object o in cv)
+                 //{
+                 //    IView v = o as IView;
+                 //    if (v != null && v.Id == 0)
+                 //        return;
+                 //}
 
-            //if (!cv.CanAddNew/*|| !list.IsValid()*/)
-            //{
-            //    //Message.Error("The table contains errors. Please correct the data.");
-            //    return;
-            //}
-            //IView iv = (IView)cv.AddNew();
-            list.CanUserAddRows = false;//to make a new placeholder displayed
-            list.CanUserAddRows = true;
+                //if (!cv.CanAddNew/*|| !list.IsValid()*/)
+                //{
+                //    //Message.Error("The table contains errors. Please correct the data.");
+                //    return;
+                //}
+                //IView iv = (IView)cv.AddNew();
+                list.CanUserAddRows = false;//to make a new placeholder displayed
+                list.CanUserAddRows = true;
+            }
+            return true;
         }
 
         private void list_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
@@ -701,10 +696,34 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void list_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            //validate_row(e.Row);
-            //commit_and_provide_blank_row();
-        }
+            validate_row(e.Row);
+            if (current_editing_row != e.Row)
+            {
+                current_editing_row = e.Row;
 
+                //if (list != null)
+                //{
+                //    ListCollectionView cv = (ListCollectionView)CollectionViewSource.GetDefaultView(list.ItemsSource);
+                //    if (cv != null)
+                //    {
+                //        IView current_v = e.Row.DataContext as IView;
+                //        List<IView> empty_rows = new List<IView>();
+                //        foreach (object o in cv)
+                //        {
+                //            IView v = o as IView;
+                //            if (v != null && v.Id == 0 && !v.Edited && v != current_v)
+                //                empty_rows.Add(v);
+                //        }
+                //        foreach (IView v in empty_rows)
+                //            views.Delete(v);
+                //    }
+                //}
+
+                commit_and_provide_blank_row();
+            }
+        }
+        DataGridRow current_editing_row = null;
+        
         private bool validate_row(DataGridRow row)
         {
             var v = row.DataContext as IView;

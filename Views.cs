@@ -31,7 +31,7 @@ namespace Cliver.Probidder
         IView GetNext(IView v);
         IView GetFirst_();
         IView GetLast_();
-        List<object> Get(Func<object, bool> query);
+        List<object> Get(Func<object, bool> query = null);
     }
 
     public partial class View<D> 

@@ -29,7 +29,6 @@ namespace Cliver.Probidder
         {
             Model.COUNTY = Settings.Location.County;
             Model.TYPE_OF_EN = "CHA";
-            Model.CASE_N = CASE_Ns?.FirstOrDefault();
             Model.ENTRY_DATE = DateTime.Now;
             Model.IS_ORG = false;
             Model.DECEASED = false;
@@ -37,6 +36,15 @@ namespace Cliver.Probidder
             Model.TYPE_OF_MO = "CNV";
             Model.PROP_DESC = "SINGLE FAMILY";
             Model.TERM_OF_MTG = 30;
+
+            Model.CASE_N = CASE_Ns?.FirstOrDefault();
+            //if (ListWindow.This.Views is Views<ForeclosureView, Db.Foreclosures>)
+            //{
+            //    var used_cns = ListWindow.This.Views.Get().Select(x => ((ForeclosureView)x).CASE_N);
+            //    Model.CASE_N = CASE_Ns?.Where(x => !used_cns.Contains(x)).FirstOrDefault();
+            //}
+            //else
+            //    Model.CASE_N = CASE_Ns?.FirstOrDefault();
         }
 
         public IEnumerable<string> CASE_Ns

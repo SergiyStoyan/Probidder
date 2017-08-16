@@ -58,16 +58,19 @@
                         <DataTemplate>
                             <Button Name="open" Click="open_Click" VerticalAlignment="Center" Padding="5,0,5,0">
                                 Open
-                            </Button>
-                            <!--<DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                    </Button>
+                    <DataTemplate.Triggers>
+                        <!--<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                   AncestorType={x:Type DataGridRow}}, 
                                             NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True,
                                   Path=IsNewItem}" Value="True">
-                                    <Setter TargetName="open" Property="Content" Value="New"></Setter>
-                                </DataTrigger>
-                            </DataTemplate.Triggers>-->
-                        </DataTemplate>
+                            <Setter TargetName="open" Property="Content" Value="New"></Setter>
+                        </DataTrigger>-->
+                        <DataTrigger Binding="{Binding Id}" Value="{x:Null}">
+                            <Setter TargetName="open" Property="Visibility" Value="Hidden"></Setter>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn>
@@ -77,15 +80,16 @@
                                 Delete
                     </Button>
                     <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                        <!--<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                   AncestorType={x:Type DataGridRow}}, 
                                   Path=IsNewItem}" Value="True">
-                                    <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Id}" Value="0">
-                                    <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
+                            <Setter TargetName="delete" Property="Content" Value="Clear"></Setter>
+                        </DataTrigger>-->
+                        <DataTrigger Binding="{Binding Id}" Value="{x:Null}">
+                            <!--<Setter TargetName="delete" Property="Content" Value="Clear"></Setter>-->
+                            <Setter TargetName="delete" Property="Visibility" Value="Hidden"></Setter>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

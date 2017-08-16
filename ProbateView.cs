@@ -32,7 +32,15 @@ namespace Cliver.Probidder
             Model.Filling_State = "IL";
             //Model.Deceased_State = "IL";
             //Model.Administrator_State = "IL";
+
             Model.Case_Number = CASE_Ns?.FirstOrDefault();
+            //if (ListWindow.This.Views is Views<ProbateView, Db.Probates>)
+            //{
+            //    var used_cns = ListWindow.This.Views.Get().Select(x => ((ProbateView)x).Case_Number);
+            //    Model.Case_Number = CASE_Ns?.Where(x => !used_cns.Contains(x)).FirstOrDefault();
+            //}
+            //else
+            //    Model.Case_Number = CASE_Ns?.FirstOrDefault();
         }
         
         public IEnumerable<string> CASE_Ns
