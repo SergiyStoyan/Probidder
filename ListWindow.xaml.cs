@@ -199,10 +199,18 @@ namespace Cliver.Probidder
                         Control c = e.NewFocus as Control;
                         if (c == null)
                             return;
-                        DataGridCell dgc = c.FindVisualParentOfType<DataGridCell>();
-                        if (dgc == null)//when moving out of rows, force committing
-                            //commit_and_provide_blank_row();
+                        DataGridRow next_r = c.FindVisualParentOfType<DataGridRow>();
+                        if (!(c is DataGridRow) && next_r == null)//when moving out of rows, force committing
+                        {
                             list.CommitEdit();
+                            //commit_and_provide_blank_row();
+                            //save_all_rows();//!!!for unknown reason it does not fire list_RowEditEnding implicitly
+                            if (list.SelectedItem != null)//!!!for unknown reason it does not fire list_RowEditEnding implicitly
+                            {
+                                var r = list.ItemContainerGenerator.ContainerFromItem(list.SelectedItem) as DataGridRow;
+                                save_row(r);
+                            }
+                        }
                     };
                     g.PreviewGotKeyboardFocus += list_PreviewKeyboardFocusChangedEventHandler;
                     g.ColumnDisplayIndexChanged += list_ColumnDisplayIndexChanged;
@@ -609,24 +617,45 @@ Ignore this error now?", null, Message.Icons.Error
         private void list_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
         }
-        
+
         private void list_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            //commit_and_provide_blank_row();
-            IView v = e.Row.DataContext as IView;
+            //save_all_rows();
+            save_row(e.Row);
+        }
+
+        //private void save_all_rows()
+        //{
+        //    foreach (DataGridRow r in list.FindChildrenOfType<DataGridRow>())
+        //        if (r.IsNewItem || r.IsEditing)
+        //            save_row(r);
+        //}
+
+        private void save_row(DataGridRow row)
+        {
+            IView v = row.DataContext as IView;
             if (v == null)
                 return;
             if (v.Id != 0 && !v.Edited)
                 return;
-            if (!validate_row(e.Row))
-                return;
-            e.Cancel = false;
-            if (e.Row.IsNewItem)//added from the grid (not clear how to commit it?)
+            if (v.Id == 0 && !v.Edited)
             {
-                views.Delete(v);//to get rid from IsNewItem which is unclear how to update
-                views.Update(v);
+                //DataGridRow prev_r = null;
+                //int i = row.GetIndex() - 1;
+                //if (i >= 0)
+                //    prev_r = list.FindChildrenOfType<DataGridRow>().ElementAt(i);
+                views.Delete(v);
+                //prev_r?.Focus();
+                return;
             }
-            else
+            if (!validate_row(row))
+                return;
+            //if (row.IsNewItem)//added from the grid (not clear how to commit it?)
+            //{
+            //    views.Delete(v);//to get rid from IsNewItem which is unclear how to update
+            //    views.Update(v);
+            //}
+            //else
                 //e.Row.FindParentOfType<DataGrid>().CommitEdit(DataGridEditingUnit.Row, true);
                 views.Update(v);
             //provide_blank_row();
@@ -634,7 +663,7 @@ Ignore this error now?", null, Message.Icons.Error
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-            //IView v = e..Row.DataContext as IView;
+            //IView v = e.Row.DataContext as IView;
             IView v = list.SelectedItem as IView;
             if (v == null)
                 return;
@@ -642,7 +671,7 @@ Ignore this error now?", null, Message.Icons.Error
             if (v.Id != 0 && !Message.YesNo("You are about deleting record [Id=" + v.Id + "]. Proceed?"))
                 return;
             views.Delete(v);
-            commit_and_provide_blank_row();
+            //commit_and_provide_blank_row();
             //if(list.SelectedItem == CollectionView.NewItemPlaceholder)
         }
 
