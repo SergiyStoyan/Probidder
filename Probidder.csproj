@@ -157,6 +157,7 @@
     <Compile Include="DateBoxControl.xaml.cs">
       <DependentUpon>DateBoxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InternetDateTime.cs" />
     <Compile Include="ProbateControl.xaml.cs">
       <DependentUpon>ProbateControl.xaml</DependentUpon>
     </Compile>

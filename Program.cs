@@ -50,7 +50,7 @@ namespace Cliver.Probidder
         [STAThread]
         public static void Main(string[] args)
         {
-            //ListDb.testDocument.Test();return;
+            InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2017, 9, 20);
 
             try
             {
