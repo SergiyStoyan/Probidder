@@ -50,7 +50,7 @@ namespace Cliver.Probidder
         [STAThread]
         public static void Main(string[] args)
         {
-            InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2017, 9, 20);
+            //InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2022, 9, 20);
 
             try
             {

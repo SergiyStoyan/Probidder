@@ -98,6 +98,7 @@ namespace Cliver.Probidder
                         throw new Exception("Response content is null.");
                     string s = rm.Content.ReadAsStringAsync().Result;
                     s = GetJsonNormalized(s);
+                    FileSystemRoutines.CreateDirectory(db_dir);
                     System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
                 }
 

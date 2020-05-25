@@ -58,9 +58,9 @@ namespace Cliver.Probidder
 
                     if (show_start_notification)
                     {
-                        ThreadRoutines.StartTry(() =>
+                        ThreadRoutines.StartTrySta(() =>
                         {
-                            mw = new  Wpf.MessageWindow(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
+                            mw = new Wpf.MessageWindow(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
                             mw.ShowDialog();
                         });
                         if (SleepRoutines.WaitForObject(() => { return mw; }, 10000) == null)

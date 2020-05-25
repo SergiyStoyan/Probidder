@@ -28,7 +28,7 @@ namespace Cliver
 
         public delegate void ErrorHandler(Exception e);
 
-        public static Thread StartTry(Action code, ErrorHandler on_error = null, Action on_finally = null, bool background = true, ApartmentState state = ApartmentState.Unknown)
+        public static Thread StartTry(Action code, ErrorHandler onError = null, Action onFinally = null, bool background = true, ApartmentState state = ApartmentState.Unknown)
         {
             Thread t = new Thread(
                 () =>
@@ -45,9 +45,9 @@ namespace Cliver
                     {
                         try
                         {
-                            if (on_error == null)
+                            if (onError  == null)
                                 throw e;
-                            on_error.Invoke(e);
+                            onError.Invoke(e);
                         }
                         catch (ThreadAbortException)
                         {
@@ -56,7 +56,7 @@ namespace Cliver
                     }
                     finally
                     {
-                        on_finally?.Invoke();
+                        onFinally?.Invoke();
                     }
                 }
             );
@@ -65,6 +65,11 @@ namespace Cliver
             t.IsBackground = background;
             t.Start();
             return t;
+        }
+
+        public static Thread StartTrySta(Action code, ErrorHandler onError = null, Action onFinally = null, bool background = true)
+        {
+            return StartTry(code, onError, onFinally, background, ApartmentState.STA);
         }
 
         //static HashSet<Thread> threads = new HashSet<Thread>();
