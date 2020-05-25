@@ -33,7 +33,7 @@ namespace Cliver.Probidder
                 //    return;
                 //}
                 //ccns.Add(get_CountyCaseNumbers(Settings.Location.County));
-                string s = SerializationRoutines.Json.Serialize(ccns);
+                string s = Serialization.Json.Serialize(ccns);
                 s = GetJsonNormalized(s);
                 System.IO.File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
             }
@@ -49,7 +49,7 @@ namespace Cliver.Probidder
                     throw new Exception("Response content is null.");
                 string s = rm.Content.ReadAsStringAsync().Result;
                 List<string> case_ns = new List<string>();
-                dynamic ccns = SerializationRoutines.Json.Deserialize<dynamic>(s);
+                dynamic ccns = Serialization.Json.Deserialize<dynamic>(s);
                 foreach (dynamic ccn in ccns)
                     case_ns.Add(((string)ccn.Name).Trim());
                 return new CountyForeclosureCaseNumbers { county = county, case_ns = case_ns };

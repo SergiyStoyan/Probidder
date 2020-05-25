@@ -19,7 +19,7 @@ namespace Cliver.Probidder
 {
     public partial class Db
     {
-        static readonly string db_dir = Log.GetAppCommonDataDir();
+        static readonly string db_dir = Log.AppCommonDataDir;
         static readonly string db_file = db_dir + "\\db.litedb";
 
         static Db()
@@ -207,8 +207,8 @@ namespace Cliver.Probidder
 
             s = Regex.Replace(s, @"(?'quotation'(?<![^\\]\\)\"").*?(?'-quotation'(?<![^\\]\\)\"")", (Match m) =>
             {
-                string v = SerializationRoutines.Json.Deserialize<string>(m.Value);
-                v = SerializationRoutines.Json.Serialize(GetStringNormalized(v));
+                string v = Serialization.Json.Deserialize<string>(m.Value);
+                v = Serialization.Json.Serialize(GetStringNormalized(v));
                 return v;
             });
             return s;

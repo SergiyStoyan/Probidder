@@ -38,7 +38,7 @@ namespace Cliver.Probidder
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIconImageSource();
+            Icon = Win.AssemblyRoutines.GetAppIconImageSource();
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
@@ -50,7 +50,7 @@ namespace Cliver.Probidder
 
             ContentRendered += delegate
             {
-                WpfRoutines.TrimWindowSize(this);
+                Wpf.Routines.TrimWindowSize(this);
             };
 
             set(Settings.Location);

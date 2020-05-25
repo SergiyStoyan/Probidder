@@ -40,7 +40,7 @@ namespace Cliver.Probidder
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIconImageSource();
+            Icon = Win.AssemblyRoutines.GetAppIconImageSource();
 
             Closing += delegate (object sender, System.ComponentModel.CancelEventArgs e)
             {
@@ -52,7 +52,7 @@ namespace Cliver.Probidder
 
             ContentRendered += delegate
             {
-                WpfRoutines.TrimWindowSize(this);
+                Wpf.Routines.TrimWindowSize(this);
             };
 
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)KeyDownHandler);
@@ -123,7 +123,7 @@ namespace Cliver.Probidder
             }
             catch (Exception ex)
             {
-                Message.Exclaim(ex.Message);
+                Wpf.Message.Exclaim(ex.Message);
             }
         }
 

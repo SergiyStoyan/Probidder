@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using Cliver.Wpf;
 
 namespace Cliver.Probidder
 {

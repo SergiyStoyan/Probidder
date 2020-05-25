@@ -49,7 +49,7 @@ namespace Cliver.Probidder
             lock (o1)
             {
                 DateTime refresh_started = DateTime.Now;
-                MessageForm mf = null;
+                Wpf.MessageWindow mw = null;
 
                 try
                 {
@@ -60,10 +60,10 @@ namespace Cliver.Probidder
                     {
                         ThreadRoutines.StartTry(() =>
                         {
-                            mf = new MessageForm(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
-                            mf.ShowDialog();
+                            mw = new  Wpf.MessageWindow(System.Windows.Forms.Application.ProductName, System.Drawing.SystemIcons.Exclamation, "Getting data from the net. Please wait...", new string[1] { "OK" }, 0, null);
+                            mw.ShowDialog();
                         });
-                        if (SleepRoutines.WaitForObject(() => { return mf; }, 10000) == null)
+                        if (SleepRoutines.WaitForObject(() => { return mw; }, 10000) == null)
                             Log.Main.Exit("SleepRoutines.WaitForObject got null");
                         //InfoWindow iw = InfoWindow.Create("Foreclosures", "Refreshing database... Please wait for completion.", null, "OK", null);
                     }
@@ -147,7 +147,7 @@ namespace Cliver.Probidder
                     Db.Reopen();
                     try
                     {
-                        mf?.Close();
+                        mw?.Close();
                     }
                     catch { }
                     InfoWindow.Create(ProgramRoutines.GetAppName(), "Database has been refreshed successfully.", null, "OK", null, System.Windows.Media.Brushes.White, System.Windows.Media.Brushes.Green);
@@ -161,7 +161,7 @@ namespace Cliver.Probidder
 
                     try
                     {
-                        mf?.Close();
+                        mw?.Close();
                     }
                     catch { }
                     InfoWindow.Create(ProgramRoutines.GetAppName() + ": database could not be refreshed. Check connection to the internet.", Log.GetExceptionMessage(e), null, "OK", null, System.Windows.Media.Brushes.WhiteSmoke, System.Windows.Media.Brushes.Red);

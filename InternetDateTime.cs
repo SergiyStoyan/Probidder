@@ -64,13 +64,18 @@ namespace Cliver
                     //    return;
                     //LogMessage.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
                     Log.Main.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
-                    if (new DateTime(year, month, day) < GetOverHttp())
-                        LogMessage.Exit("The test time expired. \nPlease contact the vendor if you want to use this software.");
+                if (new DateTime(year, month, day) < GetOverHttp())
+                {
+                    string m = "The test time expired. \nPlease contact the vendor if you want to use this software.";
+                    Wpf.Message.Exclaim(m);
+                    Log.Main.Exit(m);
+                }
                 }
                 catch (Exception e)
                 {
-                    LogMessage.Exit(e);
-                }
+                Wpf.Message.Error(e);
+                Log.Main.Exit(e);
+            }
            // });
         }
         static Thread t = null;
@@ -132,7 +137,9 @@ namespace Cliver
             }
             catch (Exception e)
             {
-                LogMessage.Exit("Test period validation failed.\n\n" + e.Message);
+                string m = "Test period validation failed.\n\n" + e.Message;
+                Wpf.Message.Exclaim(m);
+                Log.Main.Exit(m);
             }
             return new DateTime(2100, 1, 1);
         }

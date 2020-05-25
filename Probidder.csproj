@@ -14,7 +14,7 @@
     </StartupObject>
     <ApplicationIcon>3RINGS~1.ICO</ApplicationIcon>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -246,12 +246,6 @@
     <Content Include="Resources\3RINGS~1.ICO" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj">
-      <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
-      <Name>CliverRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -333,6 +327,20 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="CliverRoutines\CliverRoutines.csproj">
+      <Project>{2816821b-96bb-4a09-904c-21cae554cd1d}</Project>
+      <Name>CliverRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
+      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
+      <Name>CliverWinRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="CliverWpfRoutines\CliverWpfRoutines.csproj">
+      <Project>{7ba069e2-96ce-4edf-85a0-afe4191913cb}</Project>
+      <Name>CliverWpfRoutines</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

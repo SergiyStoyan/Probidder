@@ -100,14 +100,14 @@ namespace Cliver.Probidder
                 if (!loginByUsername(ref http_client, null, Settings.Network.UserName, Settings.Network.Password()))
                     throw new Exception("Could not login with Username: " + Settings.Network.UserName);
 
-                string s = SerializationRoutines.Json.Serialize(records);
+                string s = Serialization.Json.Serialize(records);
                 StringContent post_data = new StringContent(s);
                 post_data.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 HttpResponseMessage rm = http_client.PostAsync(url, post_data).Result;
                 if (!rm.IsSuccessStatusCode)
                     throw new Exception(rm.StatusCode + "\r\n" + rm.ReasonPhrase);
                 string r = rm.Content.ReadAsStringAsync().Result;
-                JObject jo = SerializationRoutines.Json.Deserialize<JObject>(r);
+                JObject jo = Serialization.Json.Deserialize<JObject>(r);
                 Log.Main.Inform("Inserted records: " + jo["records_inserted"].ToString());
                 try
                 {
@@ -177,7 +177,7 @@ namespace Cliver.Probidder
             HttpResponseMessage rm = http_client.PostAsync("https://dev-auth.probidder.com/api/oauth/token", fuec).Result;
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not get AuthTAccessToken: " + rm.StatusCode + "\r\n" + rm.ReasonPhrase);
-            dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
+            dynamic d = Serialization.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
             return (string)d["access_token"];
         }
 
@@ -199,7 +199,7 @@ namespace Cliver.Probidder
             HttpResponseMessage rm = http_client.SendAsync(hrm).Result;
             if (!rm.IsSuccessStatusCode)
                 throw new Exception("Could not get login: " + rm.StatusCode + "\r\n" + rm.ReasonPhrase);
-            dynamic d = SerializationRoutines.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
+            dynamic d = Serialization.Json.Deserialize<dynamic>(rm.Content.ReadAsStringAsync().Result);
             return d["status"];
         }
 
@@ -238,7 +238,8 @@ namespace Cliver.Probidder
             }
             catch (Exception ex)
             {
-                LogMessage.Error(ex);
+                Log.Main.Error(ex);
+                Wpf.Message.Error(ex);
             }
             return false;
         }

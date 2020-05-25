@@ -1,4 +1,9 @@
-﻿using System;
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        http://www.cliversoft.com
+********************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +20,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Reflection;
+using Cliver.Wpf;
 
 namespace Cliver.Probidder
 {

@@ -22,6 +22,7 @@ using System.Net;
 using System.IO;
 using System.Management;
 using System.Threading;
+using Cliver.Wpf;
 
 namespace Cliver.Probidder
 {
@@ -38,7 +39,7 @@ namespace Cliver.Probidder
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIconImageSource();
+            Icon = Win.AssemblyRoutines.GetAppIconImageSource();
 
             this.vs = vs;
             this.table = table;
@@ -69,7 +70,7 @@ namespace Cliver.Probidder
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
             {
                 SizeToContent = SizeToContent.Manual;
-                WpfRoutines.TrimWindowSize(this);
+                Wpf.Routines.TrimWindowSize(this);
             }));
 
             Thread check_validity_t = ThreadRoutines.StartTry(() =>
@@ -206,7 +207,7 @@ namespace Cliver.Probidder
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (!Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
+            if (!Wpf.Message.YesNo("The entry is about deletion. Are you sure to proceed?"))
                 return;
 
             IView v = (IView)fields.DataContext;

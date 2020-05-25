@@ -54,7 +54,7 @@ namespace Cliver.Probidder
 
             try
             {
-                ProcessRoutines.RunSingleProcessOnly();
+                Win.ProcessRoutines.RunSingleProcessOnly();
                 
                 if (string.IsNullOrWhiteSpace(Settings.Network.UserName) || string.IsNullOrWhiteSpace(Settings.Network.EncryptedPassword))
                     NetworkWindow.OpenDialog();

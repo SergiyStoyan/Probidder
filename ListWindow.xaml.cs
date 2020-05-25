@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using Cliver.Wpf;
 
 namespace Cliver.Probidder
 {
@@ -55,7 +56,7 @@ namespace Cliver.Probidder
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIconImageSource();
+            Icon = Win.AssemblyRoutines.GetAppIconImageSource();
 
             Loaded += delegate
             {
@@ -129,7 +130,7 @@ namespace Cliver.Probidder
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
             {
                 SizeToContent = SizeToContent.Manual;
-                WpfRoutines.TrimWindowSize(this);
+                Wpf.Routines.TrimWindowSize(this);
             }));
         }
 
@@ -817,7 +818,7 @@ Ignore this error now?", null, Message.Icons.Error
 
             if (/*!commit_and_provide_blank_row() || !list.IsValid()*/!is_grid_valid(list))
             {
-                Message.Error("The table contains errors. Please correct the data.");
+                Wpf.Message.Error("The table contains errors. Please correct the data.");
                 tables.SelectedItem = Settings.View.ActiveTable;
             }
             Settings.View.ActiveTable = (Settings.ViewSettings.Tables)tables.SelectedItem;

@@ -40,7 +40,7 @@ namespace Cliver.Probidder
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIconImageSource();
+            Icon = Win.AssemblyRoutines.GetAppIconImageSource();
 
             this.table = table;
 
@@ -54,7 +54,7 @@ namespace Cliver.Probidder
 
             ContentRendered += delegate
             {
-                WpfRoutines.TrimWindowSize(this);
+                Wpf.Routines.TrimWindowSize(this);
             };
 
             switch (table)

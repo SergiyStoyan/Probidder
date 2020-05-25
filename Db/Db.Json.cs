@@ -51,18 +51,18 @@ namespace Cliver.Probidder
                     string file = db_dir + "\\" + Name + ".json";
                     if (!File.Exists(file))
                     {
-                        if (!Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
+                        if (!Wpf.Message.YesNo("The app needs data which should be downloaded over the internet. Make sure your computer is connected to the internet and then click Yes. Otherwise, the app will exit."))
                             Environment.Exit(0);
                         refresh(true);
                         if (!File.Exists(file))
                         {
-                            Message.Error("Unfortunately the required data has not been downloaded. Please try later.");
+                            Wpf.Message.Error("Unfortunately the required data has not been downloaded. Please try later.");
                             return new List<D>();
                         }
                     }
 
                     string s = System.IO.File.ReadAllText(file);
-                    return SerializationRoutines.Json.Deserialize<List<D>>(s);
+                    return Serialization.Json.Deserialize<List<D>>(s);
                 }
 
                 public List<D> GetAll()
@@ -120,7 +120,7 @@ namespace Cliver.Probidder
                             pi.SetValue(d, vs[hs2i[pi.Name]]);
                         ds.Add(d);
                     }
-                    string s = SerializationRoutines.Json.Serialize(ds);
+                    string s = Serialization.Json.Serialize(ds);
                     s = GetJsonNormalized(s);
                     File.WriteAllText(db_dir + "\\" + t.Name + ".json", s);
                 }

@@ -35,7 +35,7 @@ namespace Cliver.Probidder
                 }
                 catch (Exception e)
                 {
-                    Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
+                    Wpf.Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
                 }
                 return null;
             }
@@ -48,7 +48,7 @@ namespace Cliver.Probidder
                 }
                 catch (Exception e)
                 {
-                    Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
+                    Wpf.Message.Error("Could not decrypt string: " + Log.GetExceptionMessage(e));
                 }
                 return null;
             }
@@ -58,7 +58,7 @@ namespace Cliver.Probidder
                 return c.Encrypt(s);
             }
 
-            CryptoRijndael c = new CryptoRijndael("poiuytrewq");
+           Cliver.Crypto.Rijndael c = new Crypto.Rijndael("poiuytrewq");
         }
     }
 }

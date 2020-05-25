@@ -1,4 +1,9 @@
-﻿using System;
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        http://www.cliversoft.com
+********************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Cliver
 {
-    partial class AboutForm : BaseForm//Form //
+    partial class AboutForm : Form //
     {
         AboutForm()
         {
@@ -18,7 +23,7 @@ namespace Cliver
 
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = "Version: " + AssemblyRoutines.GetAppVersion(); //String.Format("Version {0}", AssemblyVersion);
+            this.labelVersion.Text = "Version: " + AssemblyRoutines.GetAppCompilationVersion(); //String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;// + "\r\n\r\nThis app is not intended and must not be used for any malicious activity!";
